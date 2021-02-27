@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_all;
+// use App\Models\Model_all;
 use CodeIgniter\I18n\Time;
 //use CodeIgniter\HTTP\RequestInterface;
 
@@ -9,7 +9,7 @@ class Auth extends BaseController
 {
 	public function __construct(){
 
-		$this->model = new Model_all();
+		// $this->model = new Model_all();
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 		$this->email = \Config\Services::email();
@@ -81,14 +81,10 @@ class Auth extends BaseController
 		$email = $this->request->getPost('email');
 		$sandi = $this->request->getPost('sandi');
 		// $user  = $this->model->GetUserEmail($email);
-		$user = $this->user_model->select('id_user, sandi, nama, email, role_id, is_active')->asArray()->where('email', $email)->first();
-		// $users = $userModel->asArray()->where('email', $email)->findAll();
-
-		// $builder = $this->db->table($this->user);
-        // return $query =  $builder->select('id_user, sandi, nama, email, role_id, is_active')->where('email', $email)->get()->getRowArray();
+		$user = $this->user_model->select('id_user, sandi, nama, email, role_id, is_active')
+				->asArray()->where('email', $email)->first();
 
 		//jika usernya ada
-		
 		if($user){
 			//jika usernya aktif
 			if($user['is_active'] == 1){
