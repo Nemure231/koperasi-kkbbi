@@ -323,6 +323,7 @@ width:100%!important;
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open_multipart(base_url().'/barang/editbarang', $form_edit_barang);    ?>
       <?php echo csrf_field(); ?>
+      <!-- <input type="hidden" name="_method" value="PUT" /> -->
       <?php echo form_input($hidden_id_barangE); ?>
       <?php echo form_input($hidden_gambar_barang_lama); ?>
       <?php echo form_input($hidden_nama_barang_old); ?>
