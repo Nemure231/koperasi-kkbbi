@@ -13,6 +13,7 @@ class Auth extends BaseController
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 		$this->email = \Config\Services::email();
+		$this->user_model = new \App\Models\Model_user();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos'];
@@ -79,7 +80,12 @@ class Auth extends BaseController
 			
 		$email = $this->request->getPost('email');
 		$sandi = $this->request->getPost('sandi');
-		$user  = $this->model->GetUserEmail($email);
+		// $user  = $this->model->GetUserEmail($email);
+		$user = $this->user_model->select('id_user, sandi, nama, email, role_id, is_active')->asArray()->where('email', $email)->first();
+		// $users = $userModel->asArray()->where('email', $email)->findAll();
+
+		// $builder = $this->db->table($this->user);
+        // return $query =  $builder->select('id_user, sandi, nama, email, role_id, is_active')->where('email', $email)->get()->getRowArray();
 
 		//jika usernya ada
 		
