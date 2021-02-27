@@ -3,15 +3,27 @@
 use CodeIgniter\Controller;
 use App\Models\Model_all;
 use App\Models\Model_barang;
+use App\Models\Model_user_menu;
+use App\Models\Model_user;
+use App\Models\Model_satuan;
+use App\Models\Model_merek;
+use App\Models\Model_kategori;
+use App\Models\Model_pengirim_barang;
 
 class Barang extends BaseController{
 
 	public function __construct(){
         $this->model = new Model_all();
-        $this->model2 = new Model_barang();
+        $this->model_barang = new Model_barang();
+        $this->model_user_menu = new Model_user_menu();
+		$this->model_user = new Model_user();
+        $this->model_satuan = new Model_satuan();
+        $this->model_merek = new Model_merek();
+        $this->model_kategori = new Model_kategori();
+        $this->model_pengirim_barang = new Model_pengirim_barang();
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
-		
+		$this->db = \Config\Database::connect();
 	}
 	protected $helpers = ['url', 'array', 'form', 'kpos'];
 
@@ -27,6 +39,8 @@ class Barang extends BaseController{
         if ($userAccess < 1) {
             return redirect()->to(base_url('blokir'));
         }
+        $email = $this->session->get('email');
+
         
     
         //$auto = $this->model->AutoID();
@@ -40,13 +54,33 @@ class Barang extends BaseController{
         $harga_pokok = set_value('harga_pokok', '');
         $data = [
             'title' => ucfirst('Daftar Barang'),
-            'user' => $this->model->UserLogin(),
-            'menu' => $this->model->MenuAll(),
-            'barang' => $this->model->GetAllBarang(),
-            'satuan' => $this->model->GetAllSatuan(),
-            'merek' => $this->model->GetAllMerek(),
-            'kategori' => $this->model->GetAllKategori(),
-            'supplier' => $this->model->GetAllSupplier(),
+            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')
+						->join('user_role', 'user_role.id_role = user.role_id')
+						->where('email', $email)
+						->first(),
+			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')
+						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
+						->where('user_access_menu.role_id =', $role)
+						->orderBy('user_access_menu.menu_id', 'ASC')
+						->orderBy('user_access_menu.role_id', 'ASC')
+						->findAll(),
+            'barang' => $this->model_barang->select('id_barang, deskripsi_barang, harga_pokok,gambar_barang, 
+                        nama_barang, nama_pengirim_barang, pengirim_barang_id, nama_kategori, kode_barang,
+                        stok_barang, tanggal, tanggal_update,nama_merek, nama_satuan, kategori_id, satuan_id, 
+                        merek_id, harga_anggota, harga_konsumen')
+                        ->join('kategori', 'kategori.id_kategori = barang.kategori_id')
+                        ->join('satuan', 'satuan.id_satuan = barang.satuan_id')
+                        ->join('merek', 'merek.id_merek = barang.merek_id')
+                        ->join('pengirim_barang', 'pengirim_barang.id_pengirim_barang = barang.pengirim_barang_id')
+                        ->findAll(),
+            'satuan' => $this->model_satuan->select('id_satuan, nama_satuan')
+                        ->findAll(),
+            'merek' =>  $this->model_merek->select('id_merek, nama_merek')
+                        ->findAll(),
+            'kategori'=>$this->model_kategori->select('id_kategori, nama_kategori')
+                        ->findAll(),
+            'supplier'=>$this->model_pengirim_barang->select('id_pengirim_barang, nama_pengirim_barang')
+                        ->findAll(),
             'validation' => $this->validation,
             'session' => $this->session,
             'form_tambah_barang' => ['id' => 'formTambahBarang', 'name'=>'formTambahBarang'],
@@ -300,7 +334,8 @@ class Barang extends BaseController{
                 if (is_numeric($sap)){
                     $sem = $sap;
                 }else{
-                    $sem = $this->model->TambahSatuan1($sap);   
+                    $this->model_satuan->set('nama_satuan', $sap)->insert();
+                    $sem = $this->db->insertID();
                 }
 
                 $kat = $this->request->getPost('kategori_id');
@@ -308,7 +343,8 @@ class Barang extends BaseController{
                 if (is_numeric($kat)){
                     $ket = $kat;
                 }else{
-                    $ket = $this->model->TambahKategori1($kat);   
+                    $this->model_kategori->set('nama_kategori', $kat)->insert();
+                    $ket = $this->db->insertID();   
                 }
 
                 $mer = $this->request->getPost('merek_id');
@@ -316,7 +352,8 @@ class Barang extends BaseController{
                 if (is_numeric($mer)){
                     $mar = $mer;
                 }else{
-                    $mar = $this->model->TambahMerek1($mer);   
+                    $this->model_merek->set('nama_merek', $mer)->insert();
+                    $mar = $this->db->insertID();    
                 }
 
                 $sop = $this->request->getPost('supplier_id');
@@ -324,7 +361,8 @@ class Barang extends BaseController{
                 if (is_numeric($sop)){
                     $sup = $sop;
                 }else{
-                    $sup = $this->model->TambahSupplier1($sop);   
+                    $this->model_pengirim_barang->set('nama_pengirim_barang', $sop)->insert();
+                    $sup = $this->db->insertID(); 
                 }
 
                 date_default_timezone_set("Asia/Jakarta");
@@ -346,11 +384,11 @@ class Barang extends BaseController{
                     'tanggal' => date('Y-m-d H:i:s')
                 );
     
-                    $this->model->TambahBarang($data);
+                $this->model_barang->insert($data);
                 
                
-                    $this->session->setFlashdata('pesan_barang', 'Barang baru berhasil ditambahkan!');
-                    return redirect()->to(base_url('/barang'));
+                $this->session->setFlashdata('pesan_barang', 'Barang baru berhasil ditambahkan!');
+                return redirect()->to(base_url('/barang'));
                 
         $role = $this->session->get('role_id');
         if (!$role){
@@ -488,12 +526,13 @@ class Barang extends BaseController{
                 $nama_barang = htmlspecialchars($this->request->getPost('nama_barangE'), ENT_QUOTES);
                 
                 
-                $sop = $this->request->getPost('satuan_idE');
+                $sap = $this->request->getPost('satuan_idE');
 
-                if (is_numeric($sop)){
-                    $sem = $sop;
+                if (is_numeric($sap)){
+                    $sem = $sap;
                 }else{
-                    $sem = $this->model->TambahSatuan1($sop);   
+                    $this->model_satuan->set('nama_satuan', $sap)->insert();
+                    $sem = $this->db->insertID();
                 }
 
                 $kat = $this->request->getPost('kategori_idE');
@@ -501,7 +540,8 @@ class Barang extends BaseController{
                 if (is_numeric($kat)){
                     $ket = $kat;
                 }else{
-                    $ket = $this->model->TambahKategori1($kat);   
+                    $this->model_kategori->set('nama_kategori', $kat)->insert();
+                    $ket = $this->db->insertID();   
                 }
 
                 $mer = $this->request->getPost('merek_idE');
@@ -509,7 +549,8 @@ class Barang extends BaseController{
                 if (is_numeric($mer)){
                     $mar = $mer;
                 }else{
-                    $mar = $this->model->TambahMerek1($mer);   
+                    $this->model_merek->set('nama_merek', $mer)->insert();
+                    $mar = $this->db->insertID();
                 }
 
                 $sop = $this->request->getPost('supplier_idE');
@@ -517,7 +558,8 @@ class Barang extends BaseController{
                 if (is_numeric($sop)){
                     $sup = $sop;
                 }else{
-                    $sup = $this->model->TambahSupplier1($sop);   
+                    $this->model_pengirim_barang->set('nama_pengirim_barang', $sop)->insert();
+                    $sup = $this->db->insertID(); 
                 }
                 
                 
@@ -537,7 +579,9 @@ class Barang extends BaseController{
                     'tanggal_update' => date('Y-m-d H:i:s')
                 );
                 
-                $this->model->EditBarang($data, $id);
+                // $this->model->EditBarang($data, $id);
+                $this->model_barang->update($id, $data);
+
                 $this->session->setFlashdata('pesan_barang', 'Barang berhasil diedit!');
                 return redirect()->to(base_url('/barang'));
                 
@@ -568,12 +612,12 @@ class Barang extends BaseController{
     public function hapusbarang($barang_id){
 
        
-            $hapus = $this->model2->find($barang_id);
+            $hapus = $this->model_barang->find($barang_id);
 
             if($hapus['gambar_barang'] != 'default.jpg'){
                 unlink('admin/assets/barang/'. $hapus['gambar_barang']);
             }
-            $this->model->HapusBarang($barang_id);
+            $this->model_barang->delete($barang_id);
             $this->session->setFlashdata('hapus_barang', 'Barang berhasil dihapus!');
             return redirect()->to(base_url('/barang'));
 
