@@ -117,6 +117,7 @@
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open(base_url().'/barang/tambahsatuan', $form_tambah_satuan);    ?>
+
       <?php echo csrf_field(); ?>
       <div class="modal-body">
         <div class="row">
@@ -157,7 +158,8 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'barang/editsatuan', $form_edit_satuan);    ?>
+      <?php echo form_open(base_url().'/barang/editsatuan', $form_edit_satuan);    ?>
+      <input type="hidden" name="_method" value="PUT">
       <?php echo csrf_field(); ?>
       <?php echo form_input($hidden_id_satuan); ?>
       <?php echo form_input($hidden_old_nama_satuan); ?>
