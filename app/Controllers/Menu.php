@@ -2,12 +2,13 @@
 
 use CodeIgniter\Controller;
 use App\Models\Model_all;
-
+use App\Models\Model_user_menu;
 class Menu extends BaseController{
 
     public function __construct(){
 
 		$this->model = new Model_all();
+        $this->model_menu = new Model_user_menu();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
 	}

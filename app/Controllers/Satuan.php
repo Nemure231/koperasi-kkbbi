@@ -38,11 +38,11 @@ class Satuan extends BaseController
 
         $data = [
             'title' => ucfirst('Daftar Satuan'),
-            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')
+            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
 						->join('user_role', 'user_role.id_role = user.role_id')
 						->where('email', $email)
 						->first(),
-			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')
+			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
 						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
 						->where('user_access_menu.role_id =', $role)
 						->orderBy('user_access_menu.menu_id', 'ASC')

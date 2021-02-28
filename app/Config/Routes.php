@@ -126,12 +126,14 @@ $routes->add('/barang/editkoderetur', 'Barang::editkoderetur');
 $routes->get('/barang/stok', 'Barang::stok');
 $routes->add('/barang/editstok', 'Barang::editstok');
 
-$routes->get('/barang/masuk', 'Barang::masuk');
-$routes->add('/barang/barangmasuk', 'Barang::barangmasuk');
-$routes->add('/barang/tambahpengirim', 'Barang::tambahpengirim');
-$routes->add('/barang/tambahbarangmasuk', 'Barang::tambahbarangmasuk');
-$routes->get('/barang/ambilbarang', 'Barang::ambilbarang');
-$routes->add('/barang/ambilidbarang', 'Barang::ambilidbarang');
+
+
+$routes->get('/barang/masuk', 'BarangMasuk::index');
+$routes->post('/barang/barangmasuk', 'BarangMasuk::barangmasuk');
+$routes->post('/barang/tambahpengirim', 'BarangMasuk::tambahpengirim');
+$routes->post('/barang/tambahbarangmasuk', 'BarangMasuk::tambahbarangmasuk');
+$routes->get('/barang/ambilbarang', 'BarangMasuk::ambilbarang');
+$routes->post('/barang/ambilidbarang', 'BarangMasuk::ambilidbarang');
 
 
 
