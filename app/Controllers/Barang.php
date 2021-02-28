@@ -64,7 +64,7 @@ class Barang extends BaseController{
 						->orderBy('user_access_menu.menu_id', 'ASC')
 						->orderBy('user_access_menu.role_id', 'ASC')
 						->findAll(),
-            'barang' => $this->model_barang->select('id_barang, deskripsi_barang, harga_pokok,gambar_barang, 
+            'barang' => $this->model_barang->select('id_barang, deskripsi_barang, harga_pokok, 
                         nama_barang, nama_pengirim_barang, pengirim_barang_id, nama_kategori, kode_barang,
                         stok_barang, tanggal, tanggal_update,nama_merek, nama_satuan, kategori_id, satuan_id, 
                         merek_id, harga_anggota, harga_konsumen')
@@ -139,12 +139,6 @@ class Barang extends BaseController{
                 'value' => ''.$deskripsi_barang.'',
                 'class' => 'form-control',
                 'style' => 'min-height:145px;'
-            ],
-            'hidden_gambar_barang_lama' => [
-                'type' => 'hidden',
-                'name' => 'gambar_barang_lama',
-                'id' => 'gambar_barang_lama',
-                'class' => 'form-control'
             ],
             'hidden_id_barangE' => [
                 'type' => 'hidden',
@@ -296,38 +290,12 @@ class Barang extends BaseController{
                     'required' => 'Dskripsi barang harus diisi!'
                     ]
                 ]
-                // ,
-                // 'gambar_barang' => [
-                //     'label'  => 'Gambar Barang',
-                //     'rules'  => 'max_size[gambar_barang,1024]|is_image[gambar_barang]|mime_in[gambar_barang,image/jpg,image/jpeg,image/png]',
-                //     'errors' => [
-                //     //'uploaded' => 'Sampul buku harus dipilih!',
-                //     'max_size' => 'Ukuran gambar tidak boleh lebih dari 1MB!',
-                //     'is_image' => 'Format file yang anda upload bukan gambar!',
-                //     'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
-                //     ]
-                // ]
 
             ])) {
                 
                 return redirect()->to(base_url('/barang'))->withInput();
 
             }
-
-                // $gambar_barang = $this->request->getFile('gambar_barang');
-                // //dd($gambar_barang);
-
-                // if($gambar_barang->getError() == 4){
-                //     $nama_gambar = 'default.jpg';
-                // }else{
-                //     ///pindahkan gambar
-
-                //     $nama_gambar = $gambar_barang->getRandomName();
-                //     $gambar_barang->move('admin/assets/barang/', $nama_gambar);
-                //     ///ambil namam gambar
-                   
-                // }
-
 
                 $sap = $this->request->getPost('satuan_id');
 
@@ -380,7 +348,6 @@ class Barang extends BaseController{
                     'harga_anggota' => $this->request->getPost('harga_anggota'),
                     'stok_barang' => $this->request->getPost('stok_barang'),
                     'deskripsi_barang' => htmlspecialchars($this->request->getPost('deskripsi_barang'), ENT_QUOTES),
-                    'gambar_barang' => 'default.jpg',
                     'tanggal' => date('Y-m-d H:i:s')
                 );
     
@@ -492,35 +459,14 @@ class Barang extends BaseController{
                     'errors' => [
                     'required' => 'Dskripsi barang harus diisi!'
                     ]
-                ],
-                'gambar_barangE' => [
-                    'label'  => 'Gambar Barang',
-                    'rules'  => 'max_size[gambar_barangE,1024]|is_image[gambar_barangE]|mime_in[gambar_barangE,image/jpg,image/jpeg,image/png]',
-                    'errors' => [
-                    //'uploaded' => 'Sampul buku harus dipilih!',
-                    'max_size' => 'Ukuran gambar tidak boleh lebih dari 1MB!',
-                    'is_image' => 'Format file yang anda upload bukan gambar!',
-                    'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
-                    ]
                 ]
-
             ])) {
                 
                 return redirect()->to(base_url('/barang'))->withInput();
 
             }
 
-                $gambar_barang = $this->request->getFile('gambar_barangE');
 
-                //cek gambar aapakah tetap gambar lama
-                if($gambar_barang->getError() == 4){
-                    $nama_gambar = $this->request->getPost('gambar_barang_lama');
-                }else{
-                    $nama_gambar = $gambar_barang->getRandomName();
-                    $gambar_barang->move('admin/assets/barang/', $nama_gambar);
-                    //hapus file lama
-                    unlink('admin/assets/barang/'. $this->request->getPost('gambar_barang_lama'));
-                }
                 date_default_timezone_set("Asia/Jakarta");
                 $id = $this->request->getPost('id_barangE');
                 $nama_barang = htmlspecialchars($this->request->getPost('nama_barangE'), ENT_QUOTES);
@@ -575,7 +521,6 @@ class Barang extends BaseController{
                     'harga_anggota' => $this->request->getPost('harga_anggotaE'),
                     'stok_barang' => $this->request->getPost('stok_barangE'),
                     'deskripsi_barang' => $this->request->getPost('deskripsi_barangE'),
-                    'gambar_barang' => $nama_gambar,
                     'tanggal_update' => date('Y-m-d H:i:s')
                 );
                 
@@ -612,11 +557,6 @@ class Barang extends BaseController{
     public function hapusbarang($barang_id){
 
        
-            $hapus = $this->model_barang->find($barang_id);
-
-            if($hapus['gambar_barang'] != 'default.jpg'){
-                unlink('admin/assets/barang/'. $hapus['gambar_barang']);
-            }
             $this->model_barang->delete($barang_id);
             $this->session->setFlashdata('hapus_barang', 'Barang berhasil dihapus!');
             return redirect()->to(base_url('/barang'));
@@ -629,181 +569,6 @@ class Barang extends BaseController{
         if ($userAccess < 1) {
             return redirect()->to(base_url('blokir'));
         }
-        
-    
-    }
-
-   
-    /////////////////////////////////////////SATUAN//////////////////////////////////
-
-
-    public function daftarsatuan(){
-		
-		$role = $this->session->get('role_id');
-		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
-        
-
-        $data = [
-            'title' => ucfirst('Daftar Satuan'),
-            'user' => $this->model->UserLogin(),
-            'menu' => $this->model->MenuAll(),
-            'satuan' => $this->model->GetAllSatuan(),
-            'validation' => $this->validation,
-            'session' => $this->session,
-            'form_tambah_satuan' => ['id' => 'formTambahSatuan', 'name'=>'formTambahSatuan'],
-            'form_edit_satuan' =>  ['id' => 'formEditSatuan', 'name'=>'formEditSatuan'],
-            'hidden_id_satuan' => ['name' => 'id_satuanE', 'id'=>'id_satuanE', 'type'=> 'hidden'],
-            'input_satuan' => [
-                'type' => 'text',
-                'name' => 'nama_satuan',
-                'class' => 'form-control'
-                
-            ],
-            'input_satuanE' => [
-                'type' => 'text',
-                'name' => 'edit_nama_satuan',
-                'id' => 'edit_nama_satuan',
-                'class' => 'form-control'
-                
-            ],
-            'hidden_old_nama_satuan' => [
-                'type' => 'hidden',
-                'name' => 'old_nama_satuan',
-                'id' => 'old_nama_satuan',
-                'class' => 'form-control'
-                
-            ]
-            
-        ];
-
-        tampilan_admin('admin/admin-satuan/v_satuan', 'admin/admin-satuan/v_js_satuan', $data);
-     
-    }
-
-    public function tambahsatuan(){
-
-      
-        
-
-            if(!$this->validate([
-                'nama_satuan' => [
-                    'label'  => 'Nama Satuan',
-                    'rules'  => 'required|is_unique[satuan.nama_satuan]',
-                    'errors' => [
-                    'required' => 'Nama satuan harus diisi!',
-                    'is_unique' => 'Nama satuan sudah ada!'
-                    ]
-                ]
-                
-            ])) {
-                
-                return redirect()->to(base_url('/barang/daftarsatuan'))->withInput();
-
-            }
-
-                $data = array(
-                    'nama_satuan' => htmlspecialchars($this->request->getPost('nama_satuan'), ENT_QUOTES)
-                );
-
-                $this->model->TambahSatuan($data);
-            
-                $this->session->setFlashdata('pesan_satuan', 'Satuan baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/barang/daftarsatuan'));
-                
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
-        
-    }
-
-    public function editsatuan(){
-
-        $new = $this->request->getPost('edit_nama_satuan');
-        $old = $this->request->getPost('old_nama_satuan');
-
-        $nama = 'required';
-
-        if($old != $new){
-            $nama =  'required|is_unique[satuan.nama_satuan]';
-        }
-
-
-            if(!$this->validate([
-                'edit_nama_satuan' => [
-                    'label'  => 'Nama Satuan',
-                    'rules'  => $nama,
-                    'errors' => [
-                    'required' => 'Nama satuan harus diisi!',
-                    'is_unique' => 'Nama satuan sudah ada!'
-                    ]
-                ]
-                
-            ])) {
-                
-                return redirect()->to(base_url('/barang/daftarsatuan'))->withInput();
-
-            }
-
-                $id = $this->request->getPost('id_satuanE');
-                $data = array(
-                    'nama_satuan' => htmlspecialchars($this->request->getPost('edit_nama_satuan'), ENT_QUOTES)
-                );
-
-                $this->model->EditSatuan($data, $id);
-            
-                $this->session->setFlashdata('pesan_satuan', 'Satuan baru berhasil diedit!');
-                return redirect()->to(base_url('/barang/daftarsatuan'));
-                
-                $role = $this->session->get('role_id');    
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
-        
-    }
-
-
-
-    public function kecohhapusatuan(){
-        $role = $this->session->get('role_id');
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapussatuan($id_satuan){
-
-    
-            $this->model->HapusSatuan($id_satuan);
-            $this->session->setFlashdata('pesan_hapus_satuan', 'Satuan berhasil dihapus!');
-            return redirect()->to(base_url('/barang/daftarsatuan'));
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
         
     
     }
@@ -1876,8 +1641,7 @@ class Barang extends BaseController{
             'kategori_id' => htmlspecialchars($ket, ENT_QUOTES),
             'merek_id' => htmlspecialchars($mar, ENT_QUOTES),
             'deskripsi_barang' => htmlspecialchars($this->request->getPost('keterangan'), ENT_QUOTES),
-            'tanggal' => date('Y-m-d H:i:s'),
-            'gambar_barang' => 'default.jpg'
+            'tanggal' => date('Y-m-d H:i:s')
             );
 
             //dd($data);

@@ -50,7 +50,7 @@ width:100%!important;
                       <th data-priority="4">Harga Konsumen</th>
                       <th data-priority="5">Harga Anggota</th>
                       <th data-priority="6">Stok</th>
-                      <!-- <th>Gambar Barang</th> -->
+                
                      
                       <th >Tanggal Input</th>
                       <th>Tanggal Update</th>
@@ -73,10 +73,7 @@ width:100%!important;
                       <td><?php echo $b['harga_konsumen']; ?></td>
                       <td><?php echo $b['harga_anggota']; ?></td>
                       <td class="text-center"><?php echo $b['stok_barang']; ?></td>
-                      <!-- <td>
-                        <img alt="image" src="< //?php echo base_url('admin/assets/barang').'/'. $b//['gambar_barang']; ?>"
-                          style="height: 110px; width: 70px; object-fit:cover;">
-                      </td> -->
+                    
                       <td><?php echo $b['tanggal']; ?></td>
                       <td><?php echo $b['tanggal_update']; ?></td>
                       
@@ -92,13 +89,11 @@ width:100%!important;
                           data-harga_konsumen="<?php echo $b['harga_konsumen'];?>"
                           data-harga_anggota="<?php echo $b['harga_anggota'];?>"
                           data-deskripsi_barang="<?php echo $b['deskripsi_barang'];?>"
-                          data-gambar_barang="<?php echo $b['gambar_barang'];?>"
                           data-harga_pokok="<?php echo $b['harga_pokok']; ?>"
                           >
                           <i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" id="tombolHapusBarang" class="btn mb-3 btn-danger"
-                          data-id_barang="<?php echo $b['id_barang'];?>"
-                          data-gambar_barang="<?php echo $b['gambar_barang'];?>">
+                          data-id_barang="<?php echo $b['id_barang'];?>">
                           <i class="fas fa-trash"></i>
                         </a>    
                       </td>
@@ -178,36 +173,12 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open_multipart(base_url().'/barang/tambahbarang', $form_tambah_barang);    ?>
+      <?php echo form_open(base_url().'/barang/tambahbarang', $form_tambah_barang);    ?>
       <?php echo form_input($hidden_kode_barang); ?>
       <?php echo csrf_field(); ?>
       <div class="modal-body">
         <div class="row">
-          <!-- <div class="col-lg-4">
-            <div class="row">
-            <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                <label>Gambar Barang</label>
-                <div class="row">
-
-
-                  <div class="col-sm-12 col-md-12 col-lg-12 mb-4 pb-3">
-                    <img src="< ?php echo base_url('admin/assets/barang').'/'. 'default.jpg' ?>"
-                      class="img-thumbnail img-prev" style="height: 260px; width: 180px; object-fit:cover;">
-                  </div>
-                  
-                  <div class="col-sm-12 col-md-8 col-lg-12">
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="gambar_barang" name="gambar_barang"
-                        onchange="previewImg()">
-                      <label class="custom-file-label text-left" for="GambarBarang">Pilih gambar</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-
-            </div>
-          </div> -->
+    
 
           <div class="col-lg-6">
             <div class="row">
@@ -315,46 +286,22 @@ width:100%!important;
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
-        <h5 class="modal-title text-light">Tambah Barang</h5>
+        <h5 class="modal-title text-light">Edit Barang</h5>
         <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open_multipart(base_url().'/barang/editbarang', $form_edit_barang);    ?>
+      <?php echo form_open(base_url().'/barang/editbarang', $form_edit_barang);    ?>
+      <input type="hidden" name="_method" value="PUT" />
       <?php echo csrf_field(); ?>
-      <!-- <input type="hidden" name="_method" value="PUT" /> -->
       <?php echo form_input($hidden_id_barangE); ?>
-      <?php echo form_input($hidden_gambar_barang_lama); ?>
+      <!-- <//?php echo form_input($hidden_gambar_barang_lama); ?> -->
       <?php echo form_input($hidden_nama_barang_old); ?>
      
       <div class="modal-body">
         <div class="row">
-          <!-- <div class="col-lg-4">
-            <div class="row">
-            <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                <label>Gambar Barang</label>
-                <div class="row">
-
-                  <div class="col-sm-12 col-md-12 col-lg-12 mb-4 pb-3">
-                    <img id="img-edit" 
-                      class="img-thumbnail img-prevE" style="height: 260px; width: 180px; object-fit:cover;">
-                  </div>
-                 
-                  <div class="col-sm-12 col-md-8 col-lg-12">
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input cuss" id="gambar_barangE" name="gambar_barangE"
-                        onchange="previewImg1()">
-                      <label id="img-edit-label" class="custom-file-label text-left" for="GambarBarang">Pilih gambar</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-
-            </div>
-          </div> -->
-          
+        
           <div class="col-lg-6">
             <div class="row">
 
@@ -444,8 +391,6 @@ width:100%!important;
           </div>
         </div>
       </div>
-      <input type="file" class="custom-file-input cuss invisible" id="gambar_barangE" name="gambar_barangE"
-        onchange="previewImg1()">
 
       <?php echo form_close(); ?>
     </div>
@@ -470,7 +415,6 @@ width:100%!important;
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <div class="modal-body">
-        <input type="hidden" value="" name="old_gambar" id="old_gambar">
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12" id="yappa">
             <div class="card">

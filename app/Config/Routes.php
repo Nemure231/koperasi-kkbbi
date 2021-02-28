@@ -84,12 +84,12 @@ $routes->add('/barang/kecohhapusbarang/(:any)', 'Barang::kecohhapusbarang');
 $routes->delete('/barang/kecohhapusbarang/(:num)', 'Barang::hapusbarang/$1');
 
 
-$routes->get('/barang/daftarsatuan', 'Barang::daftarsatuan');
-$routes->add('/barang/tambahsatuan', 'Barang::tambahsatuan');
-$routes->add('/barang/editsatuan', 'Barang::editsatuan');
-$routes->add('/barang/uniksatuan', 'Barang::uniksatuan');
-$routes->add('/barang/kecohhapussatuan/(:any)', 'Barang::kecohhapussatuan');
-$routes->delete('/barang/kecohhapussatuan/(:num)', 'Barang::hapussatuan/$1');
+$routes->get('/barang/daftarsatuan', 'Satuan::index');
+$routes->add('/barang/tambahsatuan', 'Satuan::tambahsatuan');
+$routes->put('/barang/editsatuan', 'Satuan::editsatuan');
+$routes->add('/barang/uniksatuan', 'Satuan::uniksatuan');
+$routes->add('/barang/kecohhapussatuan/(:any)', 'Satuan::kecohhapussatuan');
+$routes->delete('/barang/kecohhapussatuan/(:num)', 'Satuan::hapussatuan/$1');
 
 ///tambah daftar kategori
 $routes->get('/barang/daftarkategori', 'Barang::daftarkategori');
