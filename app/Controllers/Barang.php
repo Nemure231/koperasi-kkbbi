@@ -224,7 +224,6 @@ class Barang extends BaseController{
                     'rules'  => 'required',
                     'errors' => [
                     'required' => 'Kategori harus dipilih!',
-                    // 'numeric' => 'Kategori harus angka!'
                     ]
                 ],
                 'satuan_id' => [
