@@ -98,9 +98,9 @@ $routes->add('/barang/kecohhapuskategori/(:any)', 'Kategori::kecohhapuskategori'
 $routes->delete('/barang/kecohhapuskategori/(:num)', 'Kategori::hapuskategori/$1');
 
 ///tambah daftar merek
-$routes->get('/barang/daftarmerek', 'Merek::daftarmerek');
-$routes->add('/barang/tambahmerek', 'Merek::tambahmerek');
-$routes->add('/barang/editmerek', 'Merek::editmerek');
+$routes->get('/barang/daftarmerek', 'Merek::index');
+$routes->post('/barang/tambahmerek', 'Merek::tambahmerek');
+$routes->put('/barang/editmerek', 'Merek::editmerek');
 $routes->add('/barang/kecohhapusmerek/(:any)', 'Merek::kecohhapusmerek');
 $routes->delete('/barang/kecohhapusmerek/(:num)', 'Merek::hapusmerek/$1');
 
