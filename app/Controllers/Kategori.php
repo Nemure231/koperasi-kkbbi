@@ -88,9 +88,6 @@ class Kategori extends BaseController
 
             
         ];
-        // $id_buku = $this->request->getPost('id_buku');
-        // $data = $this->model->AmbilBukuByPenerbit($id_buku);
-        // dd($data['id_buku']);
         tampilan_admin('admin/admin-kategori/v_kategori', 'admin/admin-kategori/v_js_kategori', $data);
      
     }
@@ -107,16 +104,6 @@ class Kategori extends BaseController
                     'is_unique' => 'Nama kategori sudah ada!'
                     ]
                 ]
-                // ,
-                // 'kode_kategori' => [
-                //     'label'  => 'Kode Kategori',
-                //     'rules'  => 'required|is_unique[kategori.kode_kategori]',
-                //     'errors' => [
-                //     'required' => 'Kode kategori harus diisi!',
-                //     'is_unique' => 'Kode kategori sudah ada!'
-                //     ]
-                // ]
-
                 
             ])) {
                 

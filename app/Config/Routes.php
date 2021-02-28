@@ -106,12 +106,11 @@ $routes->delete('/barang/kecohhapusmerek/(:num)', 'Merek::hapusmerek/$1');
 
 
 ///tambah daftar kategori
-$routes->get('/barang/daftarsupplier', 'Barang::daftarsupplier');
-$routes->add('/barang/tambahsupplier', 'Barang::tambahsupplier');
-$routes->add('/barang/editsupplier', 'Barang::editsupplier');
-$routes->add('/barang/uniksupplier', 'Barang::uniksupplier');
-$routes->add('/barang/kecohhapussupplier/(:any)', 'Barang::kecohhapussupplier');
-$routes->delete('/barang/kecohhapussupplier/(:num)', 'Barang::hapussupplier/$1');
+$routes->get('/barang/daftarsupplier', 'Supplier::index');
+$routes->post('/barang/tambahsupplier', 'Supplier::tambahsupplier');
+$routes->put('/barang/editsupplier', 'Supplier::editsupplier');
+$routes->add('/barang/kecohhapussupplier/(:any)', 'Supplier::kecohhapussupplier');
+$routes->delete('/barang/kecohhapussupplier/(:num)', 'Supplier::hapussupplier/$1');
 
 
 ///ubah kode barang
