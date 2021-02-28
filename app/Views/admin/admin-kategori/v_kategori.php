@@ -166,8 +166,9 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'barang/editkategori', $form_edit_kategori);    ?>
+      <?php echo form_open(base_url().'/barang/editkategori', $form_edit_kategori);    ?>
       <?php echo form_input($hidden_id_kategori); ?>
+      <input type="hidden" name="_method" value="PUT">
       <!-- <//?php echo form_input($hidden_old_kategori); ?> -->
       <!-- <//?php echo form_input($hidden_old_kode_kategori); ?> -->
       <?php echo csrf_field(); ?>

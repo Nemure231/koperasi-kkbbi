@@ -78,34 +78,31 @@ $routes->add('/pengguna/editkatasandi', 'Pengguna::editkatasandi');
 
 
 $routes->get('/barang', 'Barang::index');
-$routes->add('/barang/tambahbarang', 'Barang::tambahbarang');
-$routes->add('/barang/editbarang', 'Barang::editbarang');
+$routes->post('/barang/tambahbarang', 'Barang::tambahbarang');
+$routes->put('/barang/editbarang', 'Barang::editbarang');
 $routes->add('/barang/kecohhapusbarang/(:any)', 'Barang::kecohhapusbarang');
 $routes->delete('/barang/kecohhapusbarang/(:num)', 'Barang::hapusbarang/$1');
 
 
 $routes->get('/barang/daftarsatuan', 'Satuan::index');
-$routes->add('/barang/tambahsatuan', 'Satuan::tambahsatuan');
+$routes->post('/barang/tambahsatuan', 'Satuan::tambahsatuan');
 $routes->put('/barang/editsatuan', 'Satuan::editsatuan');
-$routes->add('/barang/uniksatuan', 'Satuan::uniksatuan');
 $routes->add('/barang/kecohhapussatuan/(:any)', 'Satuan::kecohhapussatuan');
 $routes->delete('/barang/kecohhapussatuan/(:num)', 'Satuan::hapussatuan/$1');
 
 ///tambah daftar kategori
-$routes->get('/barang/daftarkategori', 'Barang::daftarkategori');
-$routes->add('/barang/tambahkategori', 'Barang::tambahkategori');
-$routes->add('/barang/editkategori', 'Barang::editkategori');
-$routes->add('/barang/unikkategori', 'Barang::unikkategori');
-$routes->add('/barang/kecohhapuskategori/(:any)', 'Barang::kecohhapuskategori');
-$routes->delete('/barang/kecohhapuskategori/(:num)', 'Barang::hapuskategori/$1');
+$routes->get('/barang/daftarkategori', 'Kategori::index');
+$routes->post('/barang/tambahkategori', 'Kategori::tambahkategori');
+$routes->put('/barang/editkategori', 'Kategori::editkategori');
+$routes->add('/barang/kecohhapuskategori/(:any)', 'Kategori::kecohhapuskategori');
+$routes->delete('/barang/kecohhapuskategori/(:num)', 'Kategori::hapuskategori/$1');
 
 ///tambah daftar merek
-$routes->get('/barang/daftarmerek', 'Barang::daftarmerek');
-$routes->add('/barang/tambahmerek', 'Barang::tambahmerek');
-$routes->add('/barang/editmerek', 'Barang::editmerek');
-$routes->add('/barang/unikmerek', 'Barang::unikmerek');
-$routes->add('/barang/kecohhapusmerek/(:any)', 'Barang::kecohhapusmerek');
-$routes->delete('/barang/kecohhapusmerek/(:num)', 'Barang::hapusmerek/$1');
+$routes->get('/barang/daftarmerek', 'Merek::daftarmerek');
+$routes->add('/barang/tambahmerek', 'Merek::tambahmerek');
+$routes->add('/barang/editmerek', 'Merek::editmerek');
+$routes->add('/barang/kecohhapusmerek/(:any)', 'Merek::kecohhapusmerek');
+$routes->delete('/barang/kecohhapusmerek/(:num)', 'Merek::hapusmerek/$1');
 
 
 ///tambah daftar kategori
