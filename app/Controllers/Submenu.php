@@ -305,7 +305,7 @@ class Submenu extends BaseController{
 
     public function hapussubmenu($id_submenu){
 
-            $this->model_user_submenu->delete($id_submenu);
+            $this->model_user_sub_menu->delete($id_submenu);
             $this->session->setFlashdata('pesan_hapus_submenu', 'Submenu berhasil dihapus!');
             return redirect()->to(base_url('/menu/submenu'));
         
