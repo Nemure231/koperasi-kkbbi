@@ -112,10 +112,9 @@ $routes->put('/barang/editsupplier', 'Supplier::editsupplier');
 $routes->add('/barang/kecohhapussupplier/(:any)', 'Supplier::kecohhapussupplier');
 $routes->delete('/barang/kecohhapussupplier/(:num)', 'Supplier::hapussupplier/$1');
 
-
 ///ubah kode barang
-$routes->get('/barang/pengaturankodebarang', 'Barang::pengaturankodebarang');
-$routes->add('/barang/editkodebarang', 'Barang::editkodebarang');
+$routes->get('/barang/pengaturankodebarang', 'KodeBarang::index');
+$routes->put('/barang/editkodebarang', 'KodeBarang::editkodebarang');
 ///
 $routes->get('/barang/pengaturankodetransaksi', 'Barang::pengaturankodetransaksi');
 $routes->add('/barang/editkodetransaksi', 'Barang::editkodetransaksi');
