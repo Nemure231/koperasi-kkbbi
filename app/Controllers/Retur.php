@@ -2,9 +2,9 @@
 
 use CodeIgniter\Controller;
 use App\Models\Model_all;
-//use CodeIgniter\I18n\Time;
 
-class Form extends BaseController{
+
+class Retur extends BaseController{
 
 	protected $helpers = ['form', 'url', 'array', 'kpos'];
 
@@ -18,7 +18,6 @@ class Form extends BaseController{
 
 	public function index(){
 
-		
 		$role = $this->session->get('role_id');
 		
 		if (!$role){
@@ -97,14 +96,6 @@ class Form extends BaseController{
            ],
 
 		];
-
-		// $myTime = new Time('now', 'Asia/Jakarta');
-		// $time = Time::parse($myTime);
-		// $mk = $time->getDayOfWeek();
-
-		// dd($myTime);
-		
-
 
 		tampilan_admin('admin/admin-form-retur/v_form_retur', 'admin/admin-form-retur/v_js_form_retur', $data);
 		
@@ -311,11 +302,7 @@ class Form extends BaseController{
            'retur_new' => $this->model->GetAllReturSementaraNew(),
            'row_retur' => $tk,
            'form_invoice' => ['id' => 'formInvoice', 'name'=>'formInvoice'],
-        //    'hidden_tt_kode_transaksi' => ['name' => 'tt_kode_transaksi', 'id'=>'tt_kode_transaksi', 'type'=> 'hidden', 'value' => ''.$ts['ts_kode_transaksi'].''],
-        //    'hidden_tt_kembalian' => ['name' => 'tt_kembalian', 'id'=>'tt_kembalian', 'type'=> 'hidden', 'value' => ''.$ts['ts_kembalian'].''],
-        //    'hidden_tt_jumlah_uang' => ['name' => 'tt_jumlah_uang', 'id'=>'tt_jumlah_uang', 'type'=> 'hidden', 'value' => ''.$ts['ts_jumlah_uang'].'']
         ];
-        //dd(time());
         tampilan_admin('admin/admin-invoice-retur/v_invoice_retur', 'admin/admin-invoice-retur/v_js_invoice_retur', $data);
     }
 
@@ -352,9 +339,6 @@ class Form extends BaseController{
 
 
     public function tambahtransaksiretur(){
-        // $kode = $this->request->getPost('tt_kode_transaksi');
-        
-        ///TAMBAH VALIDASI JUGA NANTII///////
         
             if(!$this->validate([
                 'tt_tanggal_beli' => [
@@ -369,12 +353,12 @@ class Form extends BaseController{
                 return redirect()->to(base_url('/form/invoiceretur'))->withInput();
             }
 
-				    $this->model->GetAllTransaksiSemantaraReturForInsertRetur();
-				    $this->model->HapusTransaksiSementaraRetur();
-                    $this->session->setFlashdata('pesan_transaksi', 'Transaksi retur berhasil disimpan!');
-                    return redirect()->to(base_url('/form'));
+				$this->model->GetAllTransaksiSemantaraReturForInsertRetur();
+				$this->model->HapusTransaksiSementaraRetur();
+                $this->session->setFlashdata('pesan_transaksi', 'Transaksi retur berhasil disimpan!');
+                return redirect()->to(base_url('/form'));
                 
-            //}
+        
             $role = $this->session->get('role_id');
 
          if (!$role){
