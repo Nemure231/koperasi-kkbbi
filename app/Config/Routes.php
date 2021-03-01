@@ -119,11 +119,11 @@ $routes->put('/barang/editkodebarang', 'KodeBarang::editkodebarang');
 $routes->get('/barang/pengaturankodetransaksi', 'KodeTransaksi::index');
 $routes->put('/barang/editkodetransaksi', 'KodeTransaksi::editkodetransaksi');
 
-$routes->get('/barang/pengaturankoderetur', 'Barang::index');
-$routes->put('/barang/editkoderetur', 'Barang::editkoderetur');
+$routes->get('/barang/pengaturankoderetur', 'KodeRetur::index');
+$routes->put('/barang/editkoderetur', 'KodeRetur::editkoderetur');
 
-$routes->get('/barang/stok', 'Barang::stok');
-$routes->add('/barang/editstok', 'Barang::editstok');
+$routes->get('/barang/stok', 'Stok::index');
+$routes->put('/barang/editstok', 'Stok::editstok');
 
 
 
