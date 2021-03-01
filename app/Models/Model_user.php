@@ -5,6 +5,7 @@ class Model_user extends Model{
 
     protected $table = 'user';
     protected $primaryKey = 'id_user';
+    protected $returnType = 'array';
     protected $allowedFields = ['nama', 'email', 'gambar', 'sandi', 'telepon', 'alamat', 'role_id', 'is_active', 'date_created'];
     protected $useAutoIncrement = true;
     

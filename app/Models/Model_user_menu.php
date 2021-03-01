@@ -9,6 +9,7 @@ class Model_user_menu extends Model{
 
     protected $table = 'user_menu';
     protected $primaryKey = 'id_menu';
+    protected $returnType = 'array';
     protected $allowedFields = ['menu'];
     protected $useAutoIncrement = true;
 
