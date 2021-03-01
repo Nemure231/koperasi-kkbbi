@@ -217,6 +217,7 @@ width:100%!important;
       
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
 			<?php echo form_open(base_url().'/menu/editsubmenu', $attr); ?>
+      <input type="hidden" name="_method" value="PUT">
 		<?php echo csrf_field(); ?>
 		<?php echo form_input($hidden_submenu_id); ?>
 		<?php echo form_input($hidden_judul_old); ?>

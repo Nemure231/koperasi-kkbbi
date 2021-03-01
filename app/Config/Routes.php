@@ -151,28 +151,20 @@ $routes->get('/role/roleakses/(:num)', 'Role::roleakses/$1');
 $routes->add('/role/ubahakses', 'Role::ubahakses');
 
 
-$routes->get('/menu', 'Menu::index');
-$routes->add('/menu/ambilidm', 'Menu::ambilidm');
-$routes->add('/menu/tambahneditmenu', 'Menu::tambahneditmenu');
-$routes->add('/menu/unikmenu', 'Menu::unikmenu');
-$routes->add('/menu/hapusmenu', 'Menu::hapusmenu');
-///
-$routes->get('/menu/submenu', 'Menu::submenu');
-$routes->add('/menu/ambilids', 'Menu::ambilids');
-$routes->add('/menu/tambahneditsubmenu', 'Menu::tambahneditsubmenu');
-$routes->add('/menu/uniksubmenu', 'Menu::uniksubmenu');
-$routes->add('/menu/uniksubmenuurl', 'Menu::uniksubmenuurl');
-$routes->add('/menu/hapussubmenu', 'Menu::hapussubmenu');
 
-$routes->add('/menu/tambahmenu', 'Menu::tambahmenu');
-$routes->add('/menu/editmenu', 'Menu::editmenu');
-$routes->add('/menu/kecohhapusmenu/(:any)', 'Menu::kecohhapusmenu');
+$routes->get('/menu', 'Menu::index');
+$routes->post('/menu/tambahmenu', 'Menu::tambahmenu');
+$routes->put('/menu/editmenu', 'Menu::editmenu');
+$routes->get('/menu/kecohhapusmenu/(:any)', 'Menu::kecohhapusmenu');
 $routes->delete('/menu/kecohhapusmenu/(:num)', 'Menu::hapusmenu/$1');
 
-$routes->add('/menu/tambahsubmenu', 'Menu::tambahsubmenu');
-$routes->add('/menu/editsubmenu', 'Menu::editsubmenu');
-$routes->add('/menu/kecohhapussubmenu/(:any)', 'Menu::kecohhapussubmenu');
-$routes->delete('/menu/kecohhapussubmenu/(:num)', 'Menu::hapussubmenu/$1');
+
+///
+$routes->get('/menu/submenu', 'Submenu::index');
+$routes->post('/menu/tambahsubmenu', 'Submenu::tambahsubmenu');
+$routes->put('/menu/editsubmenu', 'Submenu::editsubmenu');
+$routes->get('/menu/kecohhapussubmenu/(:any)', 'Submenu::kecohhapussubmenu');
+$routes->delete('/menu/kecohhapussubmenu/(:num)', 'Submenu::hapussubmenu/$1');
 
 
 
