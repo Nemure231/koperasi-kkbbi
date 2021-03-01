@@ -6,6 +6,7 @@ class Model_sandi extends Model{
 
     protected $table = 'user';
     protected $allowedFields = 'sandi';
+    protected $returnType    = 'array';
 
 
     public function EditKataSandi($password_hash){

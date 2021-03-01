@@ -5,6 +5,7 @@ class Model_merek extends Model{
 
     protected $table = 'merek';
     protected $primaryKey = 'id_merek';
+    protected $returnType = 'array';
     protected $allowedFields = ['nama_merek'];
     
 }
