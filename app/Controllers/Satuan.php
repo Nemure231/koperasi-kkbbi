@@ -38,7 +38,7 @@ class Satuan extends BaseController
 
         $data = [
             'title' => ucfirst('Daftar Satuan'),
-            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
+            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')
 						->join('user_role', 'user_role.id_role = user.role_id')
 						->where('email', $email)
 						->first(),
