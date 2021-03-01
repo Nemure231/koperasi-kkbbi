@@ -12,6 +12,7 @@
 
         <div class="col-sm-12 col-md-12 col-lg-12">
           <?php echo form_open(base_url().'/barang/editkodetransaksi', $form_kodetransaksi);    ?>
+          <input type="hidden" name="_method" value="PUT">
           <?php echo csrf_field(); ?>
           <?php echo form_input($hidd_id_kode_transaksi); ?>
             <div class="card card-primary">
