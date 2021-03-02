@@ -8,7 +8,6 @@ class Model_user_role extends Model
 {
 	protected $table                = 'user_role';
 	protected $primaryKey           = 'id_role';
-	protected $returnType           = 'array';
 	protected $allowedFields        = ['role'];
 
 
