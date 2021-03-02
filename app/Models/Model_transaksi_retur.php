@@ -3,6 +3,7 @@ use CodeIgniter\Model;
  
 class Model_transaksi_retur extends Model{
 
+
     protected $table = 'transaksi_retur';
     protected $primaryKey = 'id_transaksi_retur';
     protected $returnType = 'array';
@@ -11,6 +12,11 @@ class Model_transaksi_retur extends Model{
         'n_barang_id', 'n_qty', 'n_subtotal'
 
     ];
+
+
+    
+
+
     
 }
 ?>
