@@ -44,7 +44,7 @@ class Stok extends BaseController
         $stok = $this->model->GetRowStok();
 		$data = [
 			'title' => ucfirst('Pengaturan Stok'),
-            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')
+            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
 						->join('user_role', 'user_role.id_role = user.role_id')
 						->where('email', $email)
 						->first(),

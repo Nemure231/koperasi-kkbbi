@@ -37,12 +37,12 @@ class KodeBarang extends BaseController
         
 
 		
-        $kode = $this->model_kode_barang->select('id_tb_kode_barang, huruf_kode_barang, jumlah_angka')
+        $kode = $this->model_kode_barang->select('id_tb_kode_barang, huruf_kode_barang, jumlah_angka')->asArray()
                 ->first();
 
 		$data = [
 			'title' => ucfirst('Pengaturan Kode Barang'),
-			'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')
+			'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
 						->join('user_role', 'user_role.id_role = user.role_id')
 						->where('email', $email)
 						->first(),
