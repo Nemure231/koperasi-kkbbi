@@ -1846,8 +1846,6 @@ class Model_all extends Model{
         $builder->delete();
 
         $this->db->transComplete();
-
-        
     }
 
     public function TambahTransaksiSementararRetur($data, $data1){

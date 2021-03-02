@@ -5,6 +5,7 @@ class Model_transaksi_sementara_retur extends Model{
 
     public function __construct(){
         $this->db = \Config\Database::connect();
+        $this->session = \Config\Services::session();
      }
 
 
@@ -12,12 +13,10 @@ class Model_transaksi_sementara_retur extends Model{
     protected $primaryKey = 'id_transaksi_sementara_retur';
     protected $returnType = 'array';
     protected $allowedFields = [
-        'tsr_transaksi_total_retur_id', 'tsr_role_id',
-        'tsr_user_id', 'tsr_kode_retur', 'tsr_r_barang_id',
-        'tsr_r_qty', 'tsr_subtotal', 'tsr_n_barang_id',
-        'tsr_n_qty', 'tsr_n_subtotal', 'tsr_kembalian_pl',
-        'tsr_total_bayar_k', 'tsr_jumlah_uang_k', 'tsr_kembalian_k'
-
+    'tsr_transaksi_total_id','tsr_role_id', 'tsr_user_id',
+    'tsr_kode_retur','tsr_r_barang_id','tsr_r_qty','tsr_r_subtotal',
+    'tsr_n_barang_id','tsr_n_qty','tsr_n_subtotal','tsr_kembalian_pl',
+    'tsr_total_bayar_k','tsr_jumlah_uang_k','tsr_kembalian_k'
     ];
 
     public function GetAllTransaksiSemantaraReturForInsertRetur(){
@@ -123,6 +122,40 @@ class Model_transaksi_sementara_retur extends Model{
         $builder3->insertBatch($data1);
         $builder3->insertBatch($data2);
         $this->db->transComplete();
+    }
+
+
+    public function HapusAllInvoiceRetur(){
+        $id_user = $this->session->get('id_user');
+        $this->db->transStart();
+        $builder1 = $this->db->table('transaksi_sementara_retur');
+        $builder1->select('tsr_n_barang_id, tsr_n_qty');
+        $builder1->where('tsr_n_barang_id >', 0);
+        $builder1->where('tsr_user_id', $id_user);
+        $builder1->join('barang', 'barang.id_barang = transaksi_sementara_retur.tsr_n_barang_id');
+        //$builder1->groupBy('k_kode_keranjang');
+        $query = $builder1->get()->getResultArray();
+        //dd($query);
+        
+        foreach ($query as  $qt2):
+            $data[] = array(
+                'qty' =>  $qt2['tsr_n_qty'],
+                'bi' => $qt2['tsr_n_barang_id']
+            );
+            $qty = $qt2['tsr_n_qty'];
+            $idb = $qt2['tsr_n_barang_id'];
+            $qtyesc = $this->db->escapeString($qty);
+            $idbesc = $this->db->escapeString($idb);
+            $stok = $this->db->query("update barang set stok_barang=stok_barang+'$qtyesc' where id_barang='$idbesc'");
+        endforeach;
+
+        $builder = $this->db->table('transaksi_sementara_retur');
+        $builder->where('tsr_user_id', $id_user);
+        $builder->delete();
+
+        $this->db->transComplete();
+
+        
     }
     
 }
