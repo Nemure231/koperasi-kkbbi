@@ -11,7 +11,6 @@ class Model_keranjang_retur extends Model{
 
     protected $table = 'keranjang_retur';
     protected $primaryKey = 'id_keranjang_retur';
-    protected $returnType = 'array';
     protected $allowedFields = [
         'id_keranjang_retur', 'kr_barang_id', 'kr_qty',
         'kr_harga',	'kr_user_id', 'kr_kode_keranjang'

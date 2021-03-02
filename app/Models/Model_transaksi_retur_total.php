@@ -11,7 +11,6 @@ class Model_transaksi_retur_total extends Model{
 
     protected $table = 'transaksi_retur_total';
     protected $primaryKey = 'id_transaksi_retur_total';
-    protected $returnType = 'array';
     protected $allowedFields = [
         'trt_transaksi_total_id', 'trt_kode_retur', 'trt_role_id',
         'trt_user_id', 'trt_r_total_harga', 'trt_r_qty','trt_n_total_harga',

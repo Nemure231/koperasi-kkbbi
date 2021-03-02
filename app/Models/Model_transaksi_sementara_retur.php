@@ -11,7 +11,6 @@ class Model_transaksi_sementara_retur extends Model{
 
     protected $table = 'transaksi_sementara_retur';
     protected $primaryKey = 'id_transaksi_sementara_retur';
-    protected $returnType = 'array';
     protected $allowedFields = [
     'tsr_transaksi_total_id','tsr_role_id', 'tsr_user_id',
     'tsr_kode_retur','tsr_r_barang_id','tsr_r_qty','tsr_r_subtotal',
