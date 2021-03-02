@@ -299,7 +299,7 @@ class Retur extends BaseController{
         $this->model_transaksi_retur_sementara->insertBatch($data);
         $this->model_transaksi_retur_sementara->insertBatch($data1);
         $this->model_keranjang_retur->where('kr_user_id', $id_user)->delete();
-        $this->model_keranjang->where('k_user_id', $id_user)->delete();
+        $this->model_keranjang_retur->where('kr_user_id', $id_user)->delete();
         $this->session->setFlashdata('pesan_transaksi_sementara_retur', 'Transaksi retur berhasil disimpan ke dalam invoice!');
         return redirect()->to(base_url('form/invoiceretur'));
 
@@ -313,111 +313,6 @@ class Retur extends BaseController{
 
     }
 
-
-    public function tambahtransaksiretur(){
-        
-        if(!$this->validate([
-            'tt_tanggal_beli' => [
-                'label'  => 'Tanggal Beli',
-                'rules'  => 'required',
-                'errors' => [
-                'required' => 'Tanggal beli harus diisi!'
-                ]
-            ]
-
-        ])) {
-            return redirect()->to(base_url('/form/invoiceretur'))->withInput();
-        }
-            $id_user = $this->session->get('id_user');
-            $this->model_transaksi_retur_sementara->GetAllTransaksiSemantaraReturForInsertRetur();
-            $this->model->where('tsr_user_id', $id_user)->delete();
-            $this->session->setFlashdata('pesan_transaksi', 'Transaksi retur berhasil disimpan!');
-            return redirect()->to(base_url('/form'));
-            
-    
-        $role = $this->session->get('role_id');
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }
-    }
-
-
-
-    public function invoiceretur(){
-		
-		$role = $this->session->get('role_id');
-		
-		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
-        
-
-        $tk = $this->model->GetRowReturSementara();
-
-        if(!$tk){
-            return redirect()->to(base_url('/form'));
-        }
-
-        $id_session = $this->session->get('role_id');
-        $data = [
-           'title' => ucfirst('Invoice'),
-           'user' => $this->model->UserLogin(),
-           'menu' => $this->model->MenuAll(),
-           'session' => $this->session,
-           'id_session' => $id_session,
-           'validation' => $this->validation,
-           'toko' => $this->model->GetRowToko(),
-           'retur_riwayat' => $this->model->GetAllReturSementaraRiwayat(),
-           'retur_new' => $this->model->GetAllReturSementaraNew(),
-           'row_retur' => $tk,
-           'form_invoice' => ['id' => 'formInvoice', 'name'=>'formInvoice'],
-        ];
-        tampilan_admin('admin/admin-invoice-retur/v_invoice_retur', 'admin/admin-invoice-retur/v_js_invoice_retur', $data);
-    }
-
-    public function kecohhapusinvoiceretur(){
-        $role = $this->session->get('role_id');
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapusinvoiceretur(){
-
-        
-      
-            $this->model->HapusAllInvoiceRetur();
-			$this->session->setFlashdata('pesan_hapus_invoice', 'Invoice berhasil dihapus!');
-            return redirect()->to(base_url('/form'));
-        $role = $this->session->get('role_id');
-        
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
-        
-    
-    }
-
-
-    
     
 }
 ?>

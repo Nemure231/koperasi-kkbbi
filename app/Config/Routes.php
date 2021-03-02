@@ -201,19 +201,20 @@ $routes->add('tambahttt', 'Transaksi::tambahttt');
 $routes->add('/menu/getmenuu', 'Menu::getmenuu');
 
 $routes->add('form', 'Retur::index');
-$routes->add('/form/ambilkodetransaksi', 'Retur::ambilkodetransaksi');
-$routes->add('/form/tambahkeranjangretur', 'Retur::tambahkeranjangretur');
-$routes->add('/form/ubahjeniskasir', 'Retur::ubahjeniskasir');
-$routes->add('/form/tambahretursementara', 'Retur::tambahretursementara');
-$routes->add('/form/kecohhapuskeranjangretur/(:any)', 'Retur::kecohhapuskeranjangretur');
+$routes->post('/form/ambilkodetransaksi', 'Retur::ambilkodetransaksi');
+$routes->post('/form/tambahkeranjangretur', 'Retur::tambahkeranjangretur');
+// $routes->add('/form/ubahjeniskasir', 'Retur::ubahjeniskasir');
+$routes->post('/form/tambahretursementara', 'Retur::tambahretursementara');
+$routes->get('/form/kecohhapuskeranjangretur/(:any)', 'Retur::kecohhapuskeranjangretur');
 $routes->delete('/form/kecohhapuskeranjangretur/(:num)', 'Retur::hapuskeranjangretur/$1');
-$routes->add('/form/kecohhapusallkeranjangretur/(:any)', 'Retur::kecohhapusallkeranjangretur');
+$routes->get('/form/kecohhapusallkeranjangretur/(:any)', 'Retur::kecohhapusallkeranjangretur');
 $routes->delete('/form/kecohhapusallkeranjangretur/(:num)', 'Retur::hapusallkeranjangretur/$1');
 
-$routes->get('/form/invoiceretur', 'Retur::invoiceretur');
-$routes->add('/form/tambahtransaksiretur', 'Retur::tambahtransaksiretur');
-$routes->add('/form/kecohhapusinvoiceretur/(:any)', 'Retur::kecohhapusinvoiveretur');
-$routes->delete('/form/kecohhapusinvoiceretur/(:num)', 'Retur::hapusinvoiceretur/$1');
+
+$routes->get('/form/invoiceretur', 'InvoiceRetur::index');
+$routes->post('/form/tambahtransaksiretur', 'InvoiceRetur::tambahtransaksiretur');
+$routes->get('/form/kecohhapusinvoiceretur/(:any)', 'InvoiceRetur::kecohhapusinvoiveretur');
+$routes->delete('/form/kecohhapusinvoiceretur/(:num)', 'InvoiceRetur::hapusinvoiceretur/$1');
 
 
 $routes->add('laporan', 'Laporan::index');
