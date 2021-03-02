@@ -248,9 +248,8 @@ $(document).ready(function () {
          }
 
          var kel =  $('.tab-total-bayar').val();
-
          if (kel >= 0){
-            $('.jum-ung').prop('readonly', true);
+            $('.jum-ung').prop('readonly', false);
 
          }
          

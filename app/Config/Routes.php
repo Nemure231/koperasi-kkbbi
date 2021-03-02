@@ -200,20 +200,20 @@ $routes->add('tambahttt', 'Transaksi::tambahttt');
 
 $routes->add('/menu/getmenuu', 'Menu::getmenuu');
 
-$routes->add('form', 'Form::index');
-$routes->add('/form/ambilkodetransaksi', 'Form::ambilkodetransaksi');
-$routes->add('/form/tambahkeranjangretur', 'Form::tambahkeranjangretur');
-$routes->add('/form/ubahjeniskasir', 'Form::ubahjeniskasir');
-$routes->add('/form/tambahretursementara', 'Form::tambahretursementara');
-$routes->add('/form/kecohhapuskeranjangretur/(:any)', 'Form::kecohhapuskeranjangretur');
-$routes->delete('/form/kecohhapuskeranjangretur/(:num)', 'Form::hapuskeranjangretur/$1');
-$routes->add('/form/kecohhapusallkeranjangretur/(:any)', 'Form::kecohhapusallkeranjangretur');
-$routes->delete('/form/kecohhapusallkeranjangretur/(:num)', 'Form::hapusallkeranjangretur/$1');
+$routes->add('form', 'Retur::index');
+$routes->add('/form/ambilkodetransaksi', 'Retur::ambilkodetransaksi');
+$routes->add('/form/tambahkeranjangretur', 'Retur::tambahkeranjangretur');
+$routes->add('/form/ubahjeniskasir', 'Retur::ubahjeniskasir');
+$routes->add('/form/tambahretursementara', 'Retur::tambahretursementara');
+$routes->add('/form/kecohhapuskeranjangretur/(:any)', 'Retur::kecohhapuskeranjangretur');
+$routes->delete('/form/kecohhapuskeranjangretur/(:num)', 'Retur::hapuskeranjangretur/$1');
+$routes->add('/form/kecohhapusallkeranjangretur/(:any)', 'Retur::kecohhapusallkeranjangretur');
+$routes->delete('/form/kecohhapusallkeranjangretur/(:num)', 'Retur::hapusallkeranjangretur/$1');
 
-$routes->get('/form/invoiceretur', 'Form::invoiceretur');
-$routes->add('/form/tambahtransaksiretur', 'Form::tambahtransaksiretur');
-$routes->add('/form/kecohhapusinvoiceretur/(:any)', 'Form::kecohhapusinvoiveretur');
-$routes->delete('/form/kecohhapusinvoiceretur/(:num)', 'Form::hapusinvoiceretur/$1');
+$routes->get('/form/invoiceretur', 'Retur::invoiceretur');
+$routes->add('/form/tambahtransaksiretur', 'Retur::tambahtransaksiretur');
+$routes->add('/form/kecohhapusinvoiceretur/(:any)', 'Retur::kecohhapusinvoiveretur');
+$routes->delete('/form/kecohhapusinvoiceretur/(:num)', 'Retur::hapusinvoiceretur/$1');
 
 
 $routes->add('laporan', 'Laporan::index');

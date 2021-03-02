@@ -55,7 +55,7 @@ class Dashboard extends BaseController{
 						->findAll(),
 			'session' => $this->session,
 			'row_masuk_hari' => $this->model_barang_masuk->selectSUM('total_harga_pokok', 'total_bmh')
-						->selectSUM('jumlah_barang_masuk', 'total_jbm')
+						->selectSUM('jumlah_barang_masuk', 'total_jbm')->asArray()
 						->groupBy('DAY(tanggal_masuk)')
 						->where('DAY(tanggal_masuk)', $hari)
 						->where('MONTH(tanggal_masuk)', $bulan)
