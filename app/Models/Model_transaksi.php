@@ -13,5 +13,8 @@ class Model_transaksi extends Model{
 
 
     
+
+
+    
 }
 ?>

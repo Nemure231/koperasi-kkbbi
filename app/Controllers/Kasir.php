@@ -29,7 +29,7 @@ class Kasir extends BaseController{
         $this->model_barang = new Model_barang();
         $this->model_transaksi_total = new Model_transaksi_total();
         $this->model_jenis_kasir = new Model_jenis_kasir();
-        $this->model_transaksi_semenatara = new Model_transaksi_sementara();
+        $this->model_transaksi_sementara = new Model_transaksi_sementara();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
         // $this->connector = new FilePrintConnector();
@@ -241,12 +241,13 @@ class Kasir extends BaseController{
                     'ts_status_transaksi' => $status
 				);			
             endforeach;
-		$this->model_transaksi_sementara->insertBatch($data);
+		// $this->model_transaksi_sementara->TambahTransaksiSementara($data);
+        $this->model_transaksi_sementara->insertBatch($data);
         $this->model_keranjang->where('k_user_id', $id_user)->delete();
 
         if($status != 2){
             $this->session->setFlashdata('pesan_transaksi_sementara', 'Transaksi berhasil disimpan ke dalam invoice!');
-            return redirect()->to(base_url('/kasir/invoice/'.$mm.''));
+            return redirect()->to(base_url('/kasir/invoice/'.$kode.''));
         }else{
             $this->session->setFlashdata('pesan_transaksi_sementara_utang', 'Utang berhasil disimpan!');
             return redirect()->to(base_url('/kasir'));
@@ -305,42 +306,6 @@ class Kasir extends BaseController{
         }    
     }
 
-    public function invoice($kod){
-		$role = $this->session->get('role_id');
-		
-		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
-        
-
-        $tk = $this->model->GetRowTransaksiSementaraAdmin($kod);
-        if(!$tk){
-            return redirect()->to(base_url('/kasir'));
-        }
-
-        $id_session = $this->session->get('role_id');
-        $data = [
-           'title' => ucfirst('Invoice'),
-           'user' => $this->model->UserLogin(),
-           'menu' => $this->model->MenuAll(),
-           'session' => $this->session,
-           'id_session' => $id_session,
-           'validation' => $this->validation,
-           'toko' => $this->model->GetRowToko(),
-           'transaksi_sementara' => $this->model->GetAllTransaksiSementaraAdmin($kod),
-           'row_transaksi_sementara' => $tk,
-           'form_invoice' => ['id' => 'formInvoice', 'name'=>'formInvoice'],
-           'hidden_tt_kode_transaksi' => ['name' => 'tt_kode_transaksi', 'id'=>'tt_kode_transaksi', 'type'=> 'hidden', 'value' => ''.$tk['ts_kode_transaksi'].''],
-           'hidden_tt_kembalian' => ['name' => 'tt_kembalian', 'id'=>'tt_kembalian', 'type'=> 'hidden', 'value' => ''.$tk['ts_kembalian'].''],
-           'hidden_tt_jumlah_uang' => ['name' => 'tt_jumlah_uang', 'id'=>'tt_jumlah_uang', 'type'=> 'hidden', 'value' => ''.$tk['ts_jumlah_uang'].'']
-        ];
-        tampilan_admin('admin/admin-invoice/v_invoice', 'admin/admin-invoice/v_js_invoice', $data);
-    }
 
     public function utang(){
 		$role = $this->session->get('role_id');
@@ -363,95 +328,6 @@ class Kasir extends BaseController{
 
         ];
         tampilan_admin('admin/admin-utang/v_utang', 'admin/admin-utang/v_js_utang', $data);
-    }
-
-
-    public function kecohhapusinvoice(){
-        $role = $this->session->get('role_id');
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapusinvoice($kod){
-            $uri = $this->request->getPost('ts_uri');
-        
-            $this->model->HapusAllInvoiceAdmin($kod, $uri);
-			$this->session->setFlashdata('pesan_hapus_invoice', 'Invoice berhasil dihapus!');
-            return redirect()->to(base_url('/kasir'));
-
-
-            $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
-        
-        
-        
-    
-    }
-
-    // public function cetaksetruk(){
-    //     $connector = new FilePrintConnector("php://stdout");
-    //     $printer = new Printer($connector);
-    //     $printer->initialize();
-    //     $printer->text("Hello World!\n");
-    //     $printer->cut();
-    //     $printer->close();
-
-    // }
-
-
-    public function tambahtransaksi($kod){
-		$uri = $this->request->getPost('ts_uri');
-	
-		
-        
-            if(!$this->validate([
-                'tt_tanggal_beli' => [
-                    'label'  => 'Tanggal Beli',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Tanggal beli harus diisi!'
-                    ]
-                ],
-                    'tt_telepon_penerima' => [
-                        'label'  => 'Nomor Telepon',
-                        'rules'  => 'numeric',
-                        'errors' => [
-                        'numeric' => 'Nomor telepon harus angka!'
-                        ]
-                ]
-
-            ])) {
-                return redirect()->to(base_url('/kasir/invoice/'.$kod.''))->withInput();
-            }
-
-				    $this->model->GetAllTransaksiSemantaraForInsertAdmin($kod);
-				    $this->model->HapusTransaksiSementaraAdmin($uri);
-
-                    $this->session->setFlashdata('pesan_transaksi', 'Transaksi berhasil disimpan!');
-                    return redirect()->to(base_url('/kasir'));
-        
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }
-                
-            
-        
     }
     
     public function invoice_utang($kod){
@@ -481,38 +357,6 @@ class Kasir extends BaseController{
 		tampilan_admin('admin/admin-invoice-utang/v_invoice_utang', 'admin/admin-invoice-utang/v_js_invoice_utang', $data);
     }
     
-
-    // public function kecohhapusinvoiceutang(){
-    //     $role = $this->session->get('role_id');
-
-    //     if (!$role){
-    //         return redirect()->to(base_url('/'));
-    //     }
-    //     if ($role > 0) {
-    //             return redirect()->to(base_url('blokir'));
-    //     }
-    // }
-
-    // public function hapusinvoiceutang($kod){
-
-    //     // dd($kod);
-
-       
-    //         $uri = $this->request->getPost('tt_kode_transaksi');
-    //         $this->model->HapusAllInvoiceUtang($kod, $uri);
-	// 		$this->session->setFlashdata('pesan_hapus_invoice_utang', 'Invoice berhasil dihapus!');
-    //         return redirect()->to(base_url('/kasir/utang'));
-    //     $role = $this->session->get('role_id');
-        
-    //     if (!$role){
-    //         return redirect()->to(base_url('/'));
-    //     }
-    //         $userAccess = $this->model->Tendang();
-    //         if ($userAccess < 1) {
-    //             return redirect()->to(base_url('blokir'));
-    //         }
-    // }
-
     public function simpan_invoice_utang(){
         $uri = $this->request->getPost('tt_kode_transaksi');
         $kod = $this->request->getPost('tt_kode_transaksi2');
