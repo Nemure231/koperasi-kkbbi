@@ -232,7 +232,7 @@
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12">
             <?php echo form_open(base_url().'/kasir/ubahjeniskasir', $form_jenis_kasir);    ?>
-
+            <input type="hidden" name="_method" value="PUT">
             <?php echo form_input($hidden_id_jenis_kasir); ?>
             <div class="form-group">
               <label>Jenis Kasir</label>
