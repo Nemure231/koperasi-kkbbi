@@ -115,7 +115,7 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open_multipart(base_url().'/barang/tambahmerek', $form_tambah_merek);    ?>
+      <?php echo form_open(base_url().'/barang/tambahmerek', $form_tambah_merek);    ?>
       
       <!-- < ?php echo form_input($id_hidd); ?> -->
       <?php echo csrf_field(); ?>

@@ -43,13 +43,15 @@ $routes->add('/dashboard/keluar', 'Dashboard::keluar');
 
 ///routes kasir
 $routes->get('/kasir', 'Kasir::index');
-$routes->add('/kasir/tambahkeranjangadmin', 'Kasir::tambahkeranjangadmin');
-$routes->add('/kasir/tambahtransaksisementarakonsumen', 'Kasir::tambahtransaksisementarakonsumen');
-$routes->add('/kasir/ubahjeniskasir', 'Kasir::ubahjeniskasir');
-$routes->add('/kasir/kecohhapuskeranjangadmin/(:any)', 'Kasir::kecohhapuskeranjangadmin');
+$routes->post('/kasir/tambahkeranjangadmin', 'Kasir::tambahkeranjangadmin');
+$routes->post('/kasir/tambahtransaksisementarakonsumen', 'Kasir::tambahtransaksisementarakonsumen');
+$routes->put('/kasir/ubahjeniskasir', 'Kasir::ubahjeniskasir');
+$routes->get('/kasir/kecohhapuskeranjangadmin/(:any)', 'Kasir::kecohhapuskeranjangadmin');
 $routes->delete('/kasir/kecohhapuskeranjangadmin/(:num)', 'Kasir::hapuskeranjangadmin/$1');
-$routes->add('/kasir/kecohhapusallkeranjangadmin/(:any)', 'Kasir::kecohhapusallkeranjangadmin');
+$routes->get('/kasir/kecohhapusallkeranjangadmin/(:any)', 'Kasir::kecohhapusallkeranjangadmin');
 $routes->delete('/kasir/kecohhapusallkeranjangadmin/(:num)', 'Kasir::hapusallkeranjangadmin/$1');
+
+
 
 $routes->get('/kasir/invoice/(:any)', 'Kasir::invoice/$1');
 $routes->add('/kasir/utang', 'Kasir::utang');
