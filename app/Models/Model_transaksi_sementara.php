@@ -101,5 +101,54 @@ class Model_transaksi_sementara extends Model
         $this->db->transComplete();
     }
 
+    public function GetAllTransaksiSemantaraForInsertUtang($kod){
+        $id_session = $this->session->get('id_user');
+        $this->db->transStart();
+        $builder = $this->db->table('transaksi_sementara');
+        $builder->select('ts_kode_transaksi, ts_nama_pengutang ,ts_nomor_pengutang ,ts_user_id, ts_kembalian, ts_jumlah_uang, ts_role_id');
+        $builder->selectSUM('ts_qty');
+        $builder->selectSUM('ts_harga');
+        $builder->where('ts_kode_transaksi', $kod);
+        $builder->groupBy('ts_kode_transaksi');
+        $query = $builder->get()->getRowArray();
+
+            $data = array(
+                'tt_kode_transaksi' => $query['ts_kode_transaksi'],
+                'tt_user_id' => $query['ts_user_id'],
+                'tt_role_id' => $query['ts_role_id'],
+                'tt_total_harga' => $query['ts_harga'],
+                'tt_total_qty' => $query['ts_qty'],
+                'tt_jumlah_uang' => $this->request->getPost('tt_jumlah_uang'),
+                'tt_kembalian' => $this->request->getPost('tt_kembalian'),
+                'tt_nama_penerima' => $query['ts_nama_pengutang'],
+                'tt_telepon_penerima' => $query['ts_nomor_pengutang'],
+                //'tt_alamat_penerima' => htmlspecialchars($this->request->getPost('tt_alamat_penerima'), ENT_QUOTES),
+                //'tt_keterangan' =>  htmlspecialchars($this->request->getPost('tt_keterangan'), ENT_QUOTES),
+                'tt_tanggal_beli' => $this->request->getPost('tt_tanggal_beli'),
+            );
+        
+        $builder1 = $this->db->table('transaksi_total');
+        $builder1->insert($data);
+        $lastID = $this->db->insertID();
+
+        $builder2 = $this->db->table('transaksi_sementara');
+        $builder2->select('ts_barang_id, ts_qty, ts_harga');
+        $builder2->where('ts_kode_transaksi', $kod);
+        $query2 = $builder2->get()->getResultArray();
+
+        foreach ($query2 as  $qt2):
+            $data1[] = array(
+                't_transaksi_total_id' => $lastID,
+                't_barang_id' => $qt2['ts_barang_id'],
+                't_harga' => $qt2['ts_harga'],
+                't_qty' => $qt2['ts_qty']
+            );
+        endforeach;
+        $builder3 = $this->db->table('transaksi');
+        $builder3->insertBatch($data1);
+        $this->db->transComplete();
+    }
+
+
 	
 }
