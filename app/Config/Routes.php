@@ -54,17 +54,18 @@ $routes->delete('/kasir/kecohhapusallkeranjangadmin/(:num)', 'Kasir::hapusallker
 
 
 $routes->get('/kasir/invoice/(:any)', 'Invoice::index/$1');
-// $routes->add('/kasir/cetaksetruk', 'Invoice::cetaksetruk');
 $routes->post('/kasir/tambahtransaksi/(:any)', 'Invoice::tambahtransaksi/$1');
 $routes->get('/kasir/kecohhapusinvoice/(:num)', 'Invoice::kecohhapusinvoive');
 $routes->delete('/kasir/kecohhapusinvoice/(:any)', 'Invoice::hapusinvoice/$1');
 
-$routes->get('/kasir/utang', 'Kasir::utang');
-$routes->get('/kasir/invoice_utang/(:any)', 'Kasir::invoice_utang/$1');
-$routes->add('/kasir/kecohhapusinvoiceutang/(:num)', 'Kasir::kecohhapusinvoiveutang');
-$routes->delete('/kasir/kecohhapusinvoiceutang/(:any)', 'Kasir::hapusinvoiceutang/$1');
 
-$routes->add('/kasir/simpan_invoice_utang', 'Kasir::simpan_invoice_utang');
+$routes->get('/kasir/utang', 'Utang::index');
+
+
+$routes->get('/kasir/invoice_utang/(:any)', 'InvoiceUtang::index/$1');
+$routes->get('/kasir/kecohhapusinvoiceutang/(:num)', 'InvoiceUtang::kecohhapusinvoiveutang');
+$routes->delete('/kasir/kecohhapusinvoiceutang/(:any)', 'InvoiceUtang::hapusinvoiceutang/$1');
+$routes->post('/kasir/simpan_invoice_utang', 'InvoiceUtang::simpan_invoice_utang');
 
 
 
