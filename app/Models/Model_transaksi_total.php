@@ -235,6 +235,58 @@ class Model_transaksi_total extends Model{
         return $query;
     }
 
+    public function GetAllSummaryTanggalKeluar($bulan = null, $tahun = null){
+
+        date_default_timezone_set("Asia/Jakarta");
+        if(!$bulan && !$tahun){
+            $bulan= date('m');
+            $tahun= date('Y');
+        }
+        
+        $builder = $this->db->table('transaksi_total');
+        $builder->select('DATE(tt_tanggal_beli) as nama_tanggal');
+        $builder->selectSUM('tt_total_harga', 'hargasum');
+        $builder->where('tt_total_harga>', 0);
+        $builder->where('MONTH(tt_tanggal_beli)', $bulan);
+        $builder->where('YEAR(tt_tanggal_beli)', $tahun);
+        $builder->groupBy('DATE(tt_tanggal_beli)');
+        $builder->orderBy('tt_tanggal_beli', 'ASC');
+        $query = $builder->get()->getResultArray();
+        return $query;
+    }
+
+    public function GetAllSummaryBulanKeluar($tahun = null){
+
+        date_default_timezone_set("Asia/Jakarta");
+        if(!$tahun){
+            $tahun= date('Y');
+        }
+        
+        $builder = $this->db->table('transaksi_total');
+        $builder->select('MONTHNAME(tt_tanggal_beli) as nama_bulan');
+        $builder->selectSUM('tt_total_harga', 'hargasum');
+        $builder->where('tt_total_harga>', 0);
+        $builder->where('YEAR(tt_tanggal_beli)', $tahun);
+        $builder->groupBy('MONTH(tt_tanggal_beli)');
+        $builder->orderBy('tt_tanggal_beli', 'ASC');
+        $query = $builder->get()->getResultArray();
+        return $query;
+    }
+
+    public function GetAllSummaryTahunKeluar($awal, $akhir){
+        
+        $builder = $this->db->table('transaksi_total');
+        $builder->select('YEAR(tt_tanggal_beli) as nama_tahun');
+        $builder->selectSUM('tt_total_harga', 'hargasum');
+        $builder->where('tt_total_harga>', 0);
+        $builder->where('YEAR(tt_tanggal_beli)>=', $awal);
+        $builder->where('YEAR(tt_tanggal_beli)<=', $akhir);
+        $builder->groupBy('YEAR(tt_tanggal_beli)');
+        $builder->orderBy('YEAR(tt_tanggal_beli)', 'ASC');
+        $query = $builder->get()->getResultArray();
+        return $query;
+    }
+
 
 }
 ?>
