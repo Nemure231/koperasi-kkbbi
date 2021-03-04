@@ -223,7 +223,7 @@ $routes->add('laporan', 'LaporanRetur::index');
 
 
 
-$routes->add('/laporan/summary_tanggal', 'LaporanSummary::summary_tanggal');
+$routes->add('/laporan/summary_tanggal', 'LaporanSummary::index');
 $routes->add('/laporan/summary_bulan', 'LaporanSummary::summary_bulan');
 $routes->add('/laporan/summary_tahun', 'LaporanSummary::summary_tahun');
 

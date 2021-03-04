@@ -125,6 +125,57 @@ class Model_barang_masuk extends Model{
         $query = $builder->get()->getResultArray();
         return $query;
     }
+
+    public function GetAllSummaryTanggalMasuk($bulan = null, $tahun = null){
+
+        date_default_timezone_set("Asia/Jakarta");
+        if(!$bulan && !$tahun){
+            $bulan= date('m');
+            $tahun= date('Y');
+        }
+        
+        $builder = $this->db->table('barang_masuk');
+        $builder->select('DATE(tanggal_masuk) as nama_tanggal');
+        $builder->selectSUM('total_harga_pokok', 'hargasum');
+        $builder->where('MONTH(tanggal_masuk)', $bulan);
+        $builder->where('YEAR(tanggal_masuk)', $tahun);
+        $builder->groupBy('DATE(tanggal_masuk)');
+        $builder->orderBy('tanggal_masuk', 'ASC');
+        $query = $builder->get()->getResultArray();
+        return $query;
+    }
+
+    public function GetAllSummaryBulanMasuk($tahun = null){
+
+        date_default_timezone_set("Asia/Jakarta");
+        if(!$tahun){
+            $tahun= date('Y');
+        }
+        
+        $builder = $this->db->table('barang_masuk');
+        $builder->select('MONTHNAME(tanggal_masuk) as nama_bulan');
+        $builder->selectSUM('total_harga_pokok', 'hargasum');
+        $builder->where('YEAR(tanggal_masuk)', $tahun);
+        $builder->groupBy('MONTH(tanggal_masuk)');
+        $builder->orderBy('tanggal_masuk', 'ASC');
+        $query = $builder->get()->getResultArray();
+        return $query;
+    }
+
+    public function GetAllSummaryTahunMasuk($awal, $akhir){
+
+        $builder = $this->db->table('barang_masuk');
+        $builder->select('YEAR(tanggal_masuk) as nama_tahun');
+        $builder->selectSUM('total_harga_pokok', 'hargasum');
+        $builder->where('YEAR(tanggal_masuk)>=', $awal);
+        $builder->where('YEAR(tanggal_masuk)<=', $akhir);
+        $builder->groupBy('YEAR(tanggal_masuk)');
+        $builder->orderBy('YEAR(tanggal_masuk)', 'ASC');
+        $query = $builder->get()->getResultArray();
+        return $query;
+    }
+
+
     
 }
 ?>
