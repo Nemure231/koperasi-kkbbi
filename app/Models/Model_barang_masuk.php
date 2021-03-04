@@ -52,6 +52,79 @@ class Model_barang_masuk extends Model{
         $this->db->transComplete();
 
     }
+
+    public function GetAllBarangMasukHariCari($tanggal = null) {
+
+        date_default_timezone_set("Asia/Jakarta");
+        
+        if(!$tanggal){
+        $tanggal= date('Y-m-d');
+        }
+        $builder = $this->db->table('barang_masuk');
+        $builder->select('jumlah_barang_masuk,nama_barang, total_harga_pokok ,harga_pokok_pb, nama_pengirim_barang, tanggal_masuk, tanggal_masuk as jam');
+        //$builder->selectSum('total_harga_pokok')->where('pengirim_barang_id', 'pengirim_barang_id');
+        $builder->join('pengirim_barang', 'pengirim_barang.id_pengirim_barang = barang_masuk.pengirim_barang_id');
+        $builder->join('barang', 'barang.id_barang = barang_masuk.barang_id');
+        $builder->where('DATE(tanggal_masuk)', $tanggal);
+        $builder->orderBy('tanggal_masuk', 'ASC');
+        $query = $builder->get()->getResultArray();
+        return $query;
+    }
+
+
+    public function GetAllBarangMasukMingguCari($awal_minggu, $akhir_minggu) {
+
+        $builder = $this->db->table('barang_masuk');
+        $builder->select('jumlah_barang_masuk,nama_barang, total_harga_pokok ,harga_pokok_pb, nama_pengirim_barang, tanggal_masuk, tanggal_masuk as jam');
+        $builder->join('pengirim_barang', 'pengirim_barang.id_pengirim_barang = barang_masuk.pengirim_barang_id');
+        $builder->join('barang', 'barang.id_barang = barang_masuk.barang_id');
+        $builder->where('DATE(tanggal_masuk)>=', $awal_minggu);
+        $builder->where('DATE(tanggal_masuk)<=', $akhir_minggu);
+        $query = $builder->get()->getResultArray();
+        return $query;
+    }
+
+
+
+    public function GetAllBarangMasukBulanCari($bulan = null, $tahun = null) {
+
+        date_default_timezone_set("Asia/Jakarta");
+        
+        if(!$bulan && !$tahun){
+        $bulan= date('m');
+        $tahun= date('Y');
+        }
+
+        $builder = $this->db->table('barang_masuk');
+        $builder->select('jumlah_barang_masuk, total_harga_pokok, nama_barang, harga_pokok_pb, nama_pengirim_barang, tanggal_masuk as bulan');
+        $builder->join('pengirim_barang', 'pengirim_barang.id_pengirim_barang = barang_masuk.pengirim_barang_id');
+        $builder->join('barang', 'barang.id_barang = barang_masuk.barang_id');
+        //$builder->where('DAY(tanggal_masuk)', $day);
+        $builder->where('MONTH(tanggal_masuk)', $bulan);
+        $builder->where('YEAR(tanggal_masuk)', $tahun);
+        $builder->orderBy('tanggal_masuk', 'ASC');
+        $query = $builder->get()->getResultArray();
+        return $query;
+    }
+
+    public function GetAllBarangMasukTahunCari($cari_tahun = null) {
+
+        date_default_timezone_set("Asia/Jakarta");
+        if(!$cari_tahun){
+            $cari_tahun = date('Y');
+        }
+
+        $builder = $this->db->table('barang_masuk');
+        $builder->select('jumlah_barang_masuk, total_harga_pokok, nama_barang, harga_pokok_pb, nama_pengirim_barang, tanggal_masuk');
+        $builder->join('pengirim_barang', 'pengirim_barang.id_pengirim_barang = barang_masuk.pengirim_barang_id');
+        $builder->join('barang', 'barang.id_barang = barang_masuk.barang_id');
+        //$builder->where('DAY(tanggal_masuk)', $day);
+        // $builder->where('MONTH(tanggal_masuk)', $month);
+        $builder->where('YEAR(tanggal_masuk)', $cari_tahun);
+        $builder->orderBy('tanggal_masuk', 'ASC');
+        $query = $builder->get()->getResultArray();
+        return $query;
+    }
     
 }
 ?>

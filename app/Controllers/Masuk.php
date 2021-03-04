@@ -2,12 +2,20 @@
 
 use CodeIgniter\Controller;
 use App\Models\Model_all;
+use App\Models\Model_user;
+use App\Models\Model_toko;
+use App\Models\Model_user_menu;
+use App\Models\Model_barang_masuk;
 
 class Masuk extends BaseController{
 
     public function __construct(){
 
 		$this->model = new Model_all();
+        $this->model_user_menu = new Model_user_menu();
+		$this->model_user = new Model_user();
+        $this->model_toko = new Model_toko();
+        $this->model_barang_masuk = new Model_barang_masuk();
 		$this->request = \Config\Services::request();
 	}
 
@@ -17,6 +25,7 @@ class Masuk extends BaseController{
     public function index(){
 		
 		$role = $this->session->get('role_id');
+        $email = $this->session->get('email');
 		
 		if (!$role){
             return redirect()->to(base_url('/'));
@@ -28,12 +37,12 @@ class Masuk extends BaseController{
 
 		$tanggal = $this->request->getPost('cari_tanggal');
 
-        $hari = $this->model->GetAllBarangMasukHariCari();
+        $hari = $this->model_barang_masuk->GetAllBarangMasukHariCari();
         $tanggal_ini = date('Y-m-d');
         $pesan =  '';
 
         if($tanggal){
-            $hari = $this->model->GetAllBarangMasukHariCari($tanggal);
+            $hari = $this->model_barang_masuk->GetAllBarangMasukHariCari($tanggal);
             $tanggal_ini = $tanggal;
             $pesan = '<div class="alert alert-success alert-dismissible show fade">
             <div class="alert-body">
@@ -60,11 +69,21 @@ class Masuk extends BaseController{
     
         $data = [
            
-           'title' => ucfirst('Laporan Barang Masuk Harian'),
-           'user' => $this->model->UserLogin(),
-           'menu' => $this->model->MenuAll(),
-           'session' => $this->session,
-           'toko' => $this->model->GetRowTokoForLaporan(),
+            'title' => ucfirst('Laporan Barang Masuk Harian'),
+            'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
+                    ->join('user_role', 'user_role.id_role = user.role_id')
+                    ->where('email', $email)
+                    ->first(),
+            'menu'  =>$this->model_user_menu->select('id_menu, menu')->asArray()
+                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
+                    ->where('user_access_menu.role_id =', $role)
+                    ->orderBy('user_access_menu.menu_id', 'ASC')
+                    ->orderBy('user_access_menu.role_id', 'ASC')
+                    ->findAll(),
+            'session' => $this->session,
+            'toko' => $this->model_toko->select('nama_toko, telepon_toko, alamat_toko, logo_toko, logo_koperasi_inter')
+                    ->asArray()->where('id_toko', 1)
+                    ->first(),
            'hari' => $hari,
            'pesan_hari' => $pesan,
            'tanggal_ini' => $tanggal_ini,
@@ -87,6 +106,7 @@ class Masuk extends BaseController{
     public function barangmasukminggu(){
 		
 		$role = $this->session->get('role_id');
+        $email = $this->session->get('email');
 		
 		if (!$role){
             return redirect()->to(base_url('/'));
@@ -106,7 +126,7 @@ class Masuk extends BaseController{
         $pesan =  '';
 
         if($awal_minggu && $akhir_minggu){
-            $minggu = $this->model->GetAllBarangMasukMingguCari($awal_minggu, $akhir_minggu);
+            $minggu = $this->model_barang_masuk->GetAllBarangMasukMingguCari($awal_minggu, $akhir_minggu);
             $minggu_ini = $awal_minggu.' ~ '.$akhir_minggu;
             $pesan = '<div class="alert alert-success alert-dismissible show fade">
             <div class="alert-body">
@@ -134,30 +154,40 @@ class Masuk extends BaseController{
     
         $data = [
            
-           'title' => ucfirst('Laporan Barang Masuk Mingguan'),
-           'user' => $this->model->UserLogin(),
-           'menu' => $this->model->MenuAll(),
-           'session' => $this->session,
-           'toko' => $this->model->GetRowTokoForLaporan(),
-           'minggu' => $minggu,
-           'pesan_minggu' => $pesan,
-           'form_minggu' =>  ['id' => 'formMinggu', 'name'=>'formMinggu'],
-           'minggu_ini' => $minggu_ini,
-           'input_awal_minggu' => [
-            'type' => 'text',
-            'name' => 'cari_awal_minggu',
-            'id' => 'cari_awal_minggu',
-            'placeholder' => 'Cari awal minggu ....',
-            'class' => 'form-control',
-            'required' => ''
-           ],
-           'input_akhir_minggu' => [
-            'type' => 'text',
-            'name' => 'cari_akhir_minggu',
-            'id' => 'cari_akhir_minggu',
-            'placeholder' => 'Cari akhir minggu....',
-            'class' => 'form-control',
-            'required' => ''
+            'title' => ucfirst('Laporan Barang Masuk Mingguan'),
+            'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
+                    ->join('user_role', 'user_role.id_role = user.role_id')
+                    ->where('email', $email)
+                    ->first(),
+            'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
+                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
+                    ->where('user_access_menu.role_id =', $role)
+                    ->orderBy('user_access_menu.menu_id', 'ASC')
+                    ->orderBy('user_access_menu.role_id', 'ASC')
+                    ->findAll(),
+            'session' => $this->session,
+            'toko' => $this->model_toko->select('nama_toko, telepon_toko, alamat_toko, logo_toko, logo_koperasi_inter')
+                    ->asArray()->where('id_toko', 1)
+                    ->first(),
+            'minggu' => $minggu,
+            'pesan_minggu' => $pesan,
+            'form_minggu' =>  ['id' => 'formMinggu', 'name'=>'formMinggu'],
+            'minggu_ini' => $minggu_ini,
+            'input_awal_minggu' => [
+                'type' => 'text',
+                'name' => 'cari_awal_minggu',
+                'id' => 'cari_awal_minggu',
+                'placeholder' => 'Cari awal minggu ....',
+                'class' => 'form-control',
+                'required' => ''
+            ],
+            'input_akhir_minggu' => [
+                'type' => 'text',
+                'name' => 'cari_akhir_minggu',
+                'id' => 'cari_akhir_minggu',
+                'placeholder' => 'Cari akhir minggu....',
+                'class' => 'form-control',
+                'required' => ''
         ]
            
         ];
@@ -171,6 +201,7 @@ class Masuk extends BaseController{
     public function barangmasukbulan(){
 		
 		$role = $this->session->get('role_id');
+        $email = $this->session->get('email');
 		
 		if (!$role){
             return redirect()->to(base_url('/'));
@@ -185,11 +216,11 @@ class Masuk extends BaseController{
         $bulan= $this->request->getPost('cari_bulan');
         $tahun = $this->request->getPost('cari_tahun');
 
-        $bulan1 = $this->model->GetAllBarangMasukBulanCari();
+        $bulan1 = $this->model_barang_masuk->GetAllBarangMasukBulanCari();
         $tanggal_ini = date('Y-m');
         $pesan =  '';
         if($bulan && $tahun){
-            $bulan1 = $this->model->GetAllBarangMasukBulanCari($bulan, $tahun);
+            $bulan1 = $this->model_barang_masuk->GetAllBarangMasukBulanCari($bulan, $tahun);
             $tanggal_ini = $tahun.'-'.$bulan;
             $pesan = '<div class="alert alert-success alert-dismissible show fade">
                         <div class="alert-body">
@@ -214,43 +245,49 @@ class Masuk extends BaseController{
         }
 
         $data = [
-           
-           'title' => ucfirst('Laporan Barang Masuk Bulanan'),
-           'user' => $this->model->UserLogin(),
-           'menu' => $this->model->MenuAll(),
-           'session' => $this->session,
-           'toko' => $this->model->GetRowTokoForLaporan(),
-           'bulan' => $bulan1,
-           'pesan_bulan' => $pesan,
-           'form_bulan' =>  ['id' => 'formBulan', 'name'=>'formBulan'],
-           'tanggal' => $tanggal_ini,
-           'input_bulan' => [
-            'type' => 'text',
-            'name' => 'cari_bulan',
-            'id' => 'cari_bulan',
-            'placeholder' => 'Cari cari bulan....',
-            'class' => 'form-control',
-            'required' => ''
-           ],
-           'input_tahun' => [
-            'type' => 'text',
-            'name' => 'cari_tahun',
-            'id' => 'cari_tahun',
-            'placeholder' => 'Cari tahun....',
-            'class' => 'form-control',
-            'required' => ''
+            'title' => ucfirst('Laporan Barang Masuk Bulanan'),
+            'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
+                    ->join('user_role', 'user_role.id_role = user.role_id')
+                    ->where('email', $email)
+                    ->first(),
+            'menu'=> $this->model_user_menu->select('id_menu, menu')->asArray()
+                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
+                    ->where('user_access_menu.role_id =', $role)
+                    ->orderBy('user_access_menu.menu_id', 'ASC')
+                    ->orderBy('user_access_menu.role_id', 'ASC')
+                    ->findAll(),
+            'session'=> $this->session,
+            'toko'  =>$this->model_toko->select('nama_toko, telepon_toko, alamat_toko, logo_toko, logo_koperasi_inter')
+                    ->asArray()->where('id_toko', 1)
+                    ->first(),
+            'bulan' => $bulan1,
+            'pesan_bulan' => $pesan,
+            'form_bulan' =>  ['id' => 'formBulan', 'name'=>'formBulan'],
+            'tanggal' => $tanggal_ini,
+            'input_bulan' => [
+                'type' => 'text',
+                'name' => 'cari_bulan',
+                'id' => 'cari_bulan',
+                'placeholder' => 'Cari cari bulan....',
+                'class' => 'form-control',
+                'required' => ''
+            ],
+            'input_tahun' => [
+                'type' => 'text',
+                'name' => 'cari_tahun',
+                'id' => 'cari_tahun',
+                'placeholder' => 'Cari tahun....',
+                'class' => 'form-control',
+                'required' => ''
         ]
-           
-        ];
-
-    
-        //dd();
+    ];
         tampilan_admin($body, 'admin/admin-laporan-masuk-bulan/v_js_laporan_masuk_bulan', $data);
     }
 
     public function barangmasuktahun(){
 		
 		$role = $this->session->get('role_id');
+        $email = $this->session->get('email');
 		
 		if (!$role){
             return redirect()->to(base_url('/'));
@@ -264,12 +301,12 @@ class Masuk extends BaseController{
 
         $cari_tahun = $this->request->getPost('cari_tahun');
 
-        $tahun = $this->model->GetAllBarangMasukTahunCari();
+        $tahun = $this->model_barang_masuk->GetAllBarangMasukTahunCari();
         $tahun_ini = date('Y');
         $pesan =  '';
 
         if($cari_tahun){
-            $tahun = $this->model->GetAllBarangMasukTahunCari($cari_tahun);
+            $tahun = $this->model_barang_masuk->GetAllBarangMasukTahunCari($cari_tahun);
             $tahun_ini = $cari_tahun;
             $pesan = '<div class="alert alert-success alert-dismissible show fade">
             <div class="alert-body">
@@ -294,29 +331,34 @@ class Masuk extends BaseController{
         }
         
         $data = [
-           
-           'title' => ucfirst('Laporan Barang Masuk Tahunan'),
-           'user' => $this->model->UserLogin(),
-           'menu' => $this->model->MenuAll(),
-           'session' => $this->session,
-           'toko' => $this->model->GetRowTokoForLaporan(),
-           'tahun' => $tahun,
-           'pesan_tahun' => $pesan,
-           'tahun_ini' => $tahun_ini,
-           'form_tahun' =>  ['id' => 'formTahun', 'name'=>'formTahun'],
-           'input_tahun' => [
-            'type' => 'text',
-            'name' => 'cari_tahun',
-            'id' => 'cari_tahun',
-            'placeholder' => 'Cari tahun ....',
-            'class' => 'form-control',
-            'required' => ''
-           ],
-           
+            'title'  => ucfirst('Laporan Barang Masuk Tahunan'),
+            'user' 	=>$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
+                    ->join('user_role', 'user_role.id_role = user.role_id')
+                    ->where('email', $email)
+                    ->first(),
+            'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
+                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
+                    ->where('user_access_menu.role_id =', $role)
+                    ->orderBy('user_access_menu.menu_id', 'ASC')
+                    ->orderBy('user_access_menu.role_id', 'ASC')
+                    ->findAll(),
+            'session'=> $this->session,
+            'toko'  =>$this->model_toko->select('nama_toko, telepon_toko, alamat_toko, logo_toko, logo_koperasi_inter')
+                    ->asArray()->where('id_toko', 1)
+                    ->first(),
+            'tahun' => $tahun,
+            'pesan_tahun' => $pesan,
+            'tahun_ini' => $tahun_ini,
+            'form_tahun' =>  ['id' => 'formTahun', 'name'=>'formTahun'],
+            'input_tahun' => [
+                'type' => 'text',
+                'name' => 'cari_tahun',
+                'id' => 'cari_tahun',
+                'placeholder' => 'Cari tahun ....',
+                'class' => 'form-control',
+                'required' => ''
+            ],
         ];
-
-    
-        //dd();
         tampilan_admin($body, 'admin/admin-laporan-masuk-tahun/v_js_laporan_masuk_tahun', $data);
     }
 
