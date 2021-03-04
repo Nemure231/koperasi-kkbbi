@@ -45,7 +45,7 @@
         <div class="col-12 col-md-12 col-lg-7">
           <div class="card card-primary">
           <?php echo form_open(base_url().'/pengguna/editpengguna', $form_pengguna); ?>
-             
+          <input type="hidden" name="_method" value="PUT">
               <?php echo csrf_field(); ?>
               <div class="card-header">
                 <h4>Edit Profile</h4>

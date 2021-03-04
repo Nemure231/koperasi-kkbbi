@@ -71,12 +71,11 @@ $routes->post('/kasir/simpan_invoice_utang', 'InvoiceUtang::simpan_invoice_utang
 
 
 $routes->get('/pengguna', 'Pengguna::index');
-$routes->add('/pengguna', 'Pengguna::index');
-$routes->add('/pengguna/editpengguna', 'Pengguna::editpengguna');
+$routes->put('/pengguna/editpengguna', 'Pengguna::editpengguna');
 
 
-$routes->get('/pengguna/katasandi', 'Pengguna::katasandi');
-$routes->add('/pengguna/editkatasandi', 'Pengguna::editkatasandi');
+$routes->get('/pengguna/katasandi', 'UbahKataSandi::index');
+$routes->put('/pengguna/editkatasandi', 'UbahKataSandi::editkatasandi');
 
 
 $routes->get('/barang', 'Barang::index');
