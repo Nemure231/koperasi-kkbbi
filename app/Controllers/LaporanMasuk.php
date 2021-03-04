@@ -7,7 +7,7 @@ use App\Models\Model_toko;
 use App\Models\Model_user_menu;
 use App\Models\Model_barang_masuk;
 
-class Masuk extends BaseController{
+class LaporanMasuk extends BaseController{
 
     public function __construct(){
 
