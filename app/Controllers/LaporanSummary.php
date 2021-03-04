@@ -3,7 +3,7 @@
 use CodeIgniter\Controller;
 use App\Models\Model_all;
 
-class Laporan extends BaseController{
+class LaporanRetur extends BaseController{
 
     public function __construct(){
 
@@ -13,75 +13,7 @@ class Laporan extends BaseController{
 
 	protected $helpers = ['form', 'url', 'array', 'kpos'];
 
-    public function index(){
-		
-		$role = $this->session->get('role_id');
-		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
-
-        date_default_timezone_set("Asia/Jakarta");
-
-        $awal = $this->request->getPost('cari_awal');
-        $akhir = $this->request->getPost('cari_akhir');
-
-        $retur = '';
-        $retur_ini = '';
-        $pesan =  '';
-
-        if($awal && $akhir){
-            $retur = $this->model->GetAllReturCari($awal, $akhir);
-            $retur_ini = $awal.' ~ '.$akhir;
-            $pesan = '<div class="alert alert-success alert-dismissible show fade">
-            <div class="alert-body">
-                <button class="close" data-dismiss="alert">
-                    <span>&times;</span>
-                </button>
-                Transaksi berhasil dicari!
-            </div>
-            </div>
-        ';
-        }
-        
-        $data = [
-           
-           'title' => ucfirst('Laporan Retur'),
-           'user' => $this->model->UserLogin(),
-           'menu' => $this->model->MenuAll(),
-           'session' => $this->session,
-           //'man' => $this->model->Man(),
-           'toko' => $this->model->GetRowTokoForLaporan(),
-           'retur' => $retur,
-           'pesan_retur' => $pesan,
-           'form_retur' =>  ['id' => 'formRetur', 'name'=>'formRetur'],
-           'retur_ini' => $retur_ini,
-           'input_awal' => [
-            'type' => 'text',
-            'name' => 'cari_awal',
-            'id' => 'cari_awal',
-            'placeholder' => 'Cari awal ....',
-            'class' => 'form-control',
-            'required' => ''
-           ],
-           'input_akhir' => [
-            'type' => 'text',
-            'name' => 'cari_akhir',
-            'id' => 'cari_akhir',
-            'placeholder' => 'Cari akhir ....',
-            'class' => 'form-control',
-            'required' => ''
-        ]
-           
-        ];
-        tampilan_admin('admin/admin-laporan-retur/v_laporan_retur', 'admin/admin-laporan-retur/v_js_laporan_retur', $data);
-    }
-
-
+    
     public function summary_tanggal(){
 
         // for($i =1; $i <= date('t'); $i++){

@@ -183,17 +183,17 @@ $routes->get('/toko/profiltoko', 'Toko::profiltoko');
 $routes->post('/toko/editprofiltoko', 'Toko::editprofiltoko');
 
 ///LAPORAN///
-$routes->add('/masuk', 'Masuk::index');
-$routes->add('/masuk/barangmasukminggu', 'Masuk::barangmasukminggu');
-$routes->add('/masuk/ambilbarangmasukmingguan', 'Masuk::ambilbarangmasukmingguan');
-$routes->add('/masuk/barangmasukbulan', 'Masuk::barangmasukbulan');
-$routes->add('/masuk/barangmasuktahun', 'Masuk::barangmasuktahun');
+$routes->add('/masuk', 'LaporanMasuk::index');
+$routes->add('/masuk/barangmasukminggu', 'LaporanMasuk::barangmasukminggu');
+$routes->add('/masuk/ambilbarangmasukmingguan', 'LaporanMasuk::ambilbarangmasukmingguan');
+$routes->add('/masuk/barangmasukbulan', 'LaporanMasuk::barangmasukbulan');
+$routes->add('/masuk/barangmasuktahun', 'LaporanMasuk::barangmasuktahun');
 
-$routes->add('/keluar', 'Keluar::index');
-$routes->add('/keluar/barangkeluarminggu', 'Keluar::barangkeluarminggu');
-$routes->add('/keluar/ambilbarangkeluarmingguan', 'Keluar::ambilbarangkeluarmingguan');
-$routes->add('/keluar/barangkeluarbulan', 'Keluar::barangkeluarbulan');
-$routes->add('/keluar/barangkeluartahun', 'Keluar::barangkeluartahun');
+$routes->add('/keluar', 'LaporanKeluar::index');
+$routes->add('/keluar/barangkeluarminggu', 'LaporanKeluar::barangkeluarminggu');
+$routes->add('/keluar/ambilbarangkeluarmingguan', 'LaporanKeluar::ambilbarangkeluarmingguan');
+$routes->add('/keluar/barangkeluarbulan', 'LaporanKeluar::barangkeluarbulan');
+$routes->add('/keluar/barangkeluartahun', 'LaporanKeluar::barangkeluartahun');
 
 
 $routes->get('transaksi', 'Transaksi::index');
@@ -219,10 +219,13 @@ $routes->get('/form/kecohhapusinvoiceretur/(:any)', 'InvoiceRetur::kecohhapusinv
 $routes->delete('/form/kecohhapusinvoiceretur/(:num)', 'InvoiceRetur::hapusinvoiceretur/$1');
 
 
-$routes->add('laporan', 'Laporan::index');
-$routes->add('/laporan/summary_tanggal', 'Laporan::summary_tanggal');
-$routes->add('/laporan/summary_bulan', 'Laporan::summary_bulan');
-$routes->add('/laporan/summary_tahun', 'Laporan::summary_tahun');
+$routes->add('laporan', 'LaporanRetur::index');
+
+
+
+$routes->add('/laporan/summary_tanggal', 'LaporanSummary::summary_tanggal');
+$routes->add('/laporan/summary_bulan', 'LaporanSummary::summary_bulan');
+$routes->add('/laporan/summary_tahun', 'LaporanSummary::summary_tahun');
 
 
 
