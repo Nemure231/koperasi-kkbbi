@@ -1,12 +1,10 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_all;
 use App\Models\Model_barang_masuk;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
 use App\Models\Model_transaksi_total;
-use CodeIgniter\I18n\Time;
 
 class Dashboard extends BaseController{
 
@@ -16,7 +14,7 @@ class Dashboard extends BaseController{
 		$this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
 		$this->model_transaksi_total = new Model_transaksi_total();
-		$this->time = new Time('now', 'Asia/Jakarta', 'en_US');
+
 		date_default_timezone_set("Asia/Jakarta");
 
 		

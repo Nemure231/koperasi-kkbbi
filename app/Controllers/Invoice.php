@@ -1,7 +1,6 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_all;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
 use App\Models\Model_toko;
@@ -13,7 +12,7 @@ class Invoice extends BaseController{
 
 	public function __construct(){
 
-		$this->model = new Model_all();
+		
         
         $this->model_toko = new Model_toko();
         $this->model_transaksi_sementara = new Model_transaksi_sementara();

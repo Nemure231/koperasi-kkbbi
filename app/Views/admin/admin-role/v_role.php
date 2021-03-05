@@ -146,6 +146,7 @@
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah role ini berasal dari controler role di fungsi index -->
       <?php echo form_open(base_url().'/role/editrole', $attr);    ?>
       <?php echo csrf_field(); ?>
+      <input type="hidden" name="_method" value="PUT">
       <?php echo form_input($hidden_role_id); ?>
       <?php echo form_input($hidden_old_role); ?>
 				<div class="modal-body">

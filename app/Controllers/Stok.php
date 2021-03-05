@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\Model_stok;
-use App\Models\Model_all;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
 
@@ -12,7 +11,7 @@ class Stok extends BaseController
 {
 	
 	public function __construct(){
-        $this->model = new Model_all();
+        
         $this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
         $this->model_stok = new Model_stok();
@@ -41,7 +40,8 @@ class Stok extends BaseController
         
 
 		
-        $stok = $this->model->GetRowStok();
+        $stok = $this->model_stok->select('min_stok, id_stok')->asArray()
+                ->where('id_stok', 58)->first();
 		$data = [
 			'title' => ucfirst('Pengaturan Stok'),
             'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
@@ -55,7 +55,7 @@ class Stok extends BaseController
 						->orderBy('user_access_menu.role_id', 'ASC')
 						->findAll(),
             'stok' => $stok,
-            'habis' => $this->model->GetAllStokHampirHabis(),
+            'habis' => $this->model_stok->GetAllStokHampirHabis(),
             'session' => $this->session,
             'validation' => $this->validation,
             'form_stok' => [
@@ -102,7 +102,7 @@ class Stok extends BaseController
         if (!$role){
             return redirect()->to(base_url('/'));
         }
-        $userAccess = $this->model->Tendang() ;
+        $userAccess = $this->model_user_menu->Tendang() ;
         if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
         }

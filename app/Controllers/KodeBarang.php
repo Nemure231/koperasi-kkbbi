@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\Model_kode_barang;
-use App\Models\Model_all;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
 
@@ -12,7 +11,6 @@ class KodeBarang extends BaseController
 {
 	
 	public function __construct(){
-        $this->model = new Model_all();
         $this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
         $this->model_kode_barang = new Model_kode_barang();

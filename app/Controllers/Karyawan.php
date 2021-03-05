@@ -1,7 +1,6 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_all;
 use App\Models\Model_user;
 use App\Models\Model_user_menu;
 use App\Models\Model_user_role;
@@ -9,7 +8,6 @@ use App\Models\Model_user_role;
 class Karyawan extends BaseController{
 
 	public function __construct(){
-        $this->model = new Model_all();
         $this->model_user_role = new Model_user_role();
         $this->model_user = new Model_user();
         $this->model_user_menu = new Model_user_menu();

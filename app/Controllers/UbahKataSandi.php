@@ -1,7 +1,6 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_all;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
 
@@ -11,7 +10,6 @@ class UbahKataSandi extends BaseController{
 
 	public function __construct(){
 
-		$this->model = new Model_all();
 		$this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
 		$this->request = \Config\Services::request();

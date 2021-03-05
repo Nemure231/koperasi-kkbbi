@@ -1,7 +1,6 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_all;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
 use App\Models\Model_user_role;
@@ -19,8 +18,6 @@ class Retur extends BaseController{
 	protected $helpers = ['form', 'url', 'array', 'kpos'];
 
 	public function __construct(){
-
-		$this->model = new Model_all();
         $this->model_barang = new Model_barang();
         $this->model_transaksi_retur = new Model_transaksi_retur();
         $this->model_transaksi = new Model_transaksi();
