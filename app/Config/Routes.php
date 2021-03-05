@@ -138,18 +138,13 @@ $routes->post('/barang/ambilidbarang', 'BarangMasuk::ambilidbarang');
 
 
 $routes->get('/role', 'Role::index');
-$routes->add('/role/ambilidr', 'Role::ambilidr');
-$routes->add('/role/tambahneditrole', 'Role::tambahneditrole');
-$routes->add('/role/unikrole', 'Role::unikrole');
-$routes->add('/role/hapusrole', 'Role::hapusrole');
-
-$routes->add('/role/tambahrole', 'Role::tambahrole');
-$routes->add('/role/editrole', 'Role::editrole');
-$routes->add('/role/kecohhapusrole/(:any)', 'Role::kecohhapusrole');
+$routes->post('/role/tambahrole', 'Role::tambahrole');
+$routes->put('/role/editrole', 'Role::editrole');
+$routes->get('/role/kecohhapusrole/(:any)', 'Role::kecohhapusrole');
 $routes->delete('/role/kecohhapusrole/(:num)', 'Role::hapusrole/$1');
 ///
-$routes->get('/role/roleakses/(:num)', 'Role::roleakses/$1');
-$routes->add('/role/ubahakses', 'Role::ubahakses');
+$routes->get('/role/roleakses/(:num)', 'RoleAkses::index/$1');
+$routes->post('/role/ubahakses', 'RoleAkses::ubahakses');
 
 
 

@@ -3,7 +3,6 @@
 //require ROOTPATH. 'vendor/autoload.php';
 
 use CodeIgniter\Controller;
-use App\Models\Model_all;
 use App\Models\Model_barang;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
@@ -21,7 +20,7 @@ class Kasir extends BaseController{
 
     public function __construct(){
 
-		$this->model = new Model_all();
+
         $this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
         $this->model_user_role = new Model_user_role();

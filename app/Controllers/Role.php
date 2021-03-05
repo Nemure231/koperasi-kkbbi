@@ -1,15 +1,16 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_all;
 use App\Models\Model_user_menu;
+use App\Models\Model_user;
+use App\Models\Model_user_role;
 
 class Role extends BaseController{
 
     public function __construct(){
-
-		$this->model = new Model_all();
         $this->model_user_menu = new Model_user_menu();
+        $this->model_user = new Model_user();
+        $this->model_user_role = new Model_user_role();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
 	}
@@ -21,6 +22,7 @@ class Role extends BaseController{
 		
         
 		$role = $this->session->get('role_id');
+        $email = $this->session->get('email');
 		
 		if (!$role){
             return redirect()->to(base_url('/'));
@@ -32,17 +34,26 @@ class Role extends BaseController{
 
 		
         $data = [
-           
-           'title' => ucfirst('Role'),
-           'user' => $this->model->UserLogin(),
-           'menu' => $this->model->MenuAll(),
-           'role' => $this->model->GetAllRole(),
-           'session' => $this->session,
-           'validation' => $this->validation,
-           'attr' => ['id' => 'formRole', 'name'=>'formRole'],
-           'hidden_role_id' => ['name' => 'role_id', 'id'=>'role_id', 'type'=> 'hidden'],
-           'hidden_old_role' => ['name' => 'old_role', 'id'=>'old_role', 'type'=> 'hidden'],
-           'nama_role' => [
+            'title' => ucfirst('Role'),
+            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
+                    ->join('user_role', 'user_role.id_role = user.role_id')
+                    ->where('email', $email)
+                    ->first(),
+            'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
+                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
+                    ->where('user_access_menu.role_id =', $role)
+                    ->orderBy('user_access_menu.menu_id', 'ASC')
+                    ->orderBy('user_access_menu.role_id', 'ASC')
+                    ->findAll(),
+            'role' => $this->model_user_role->select('id_role, role')->asArray()
+                    ->where('id_role!=', 4)->where('id_role!=', 5)
+                    ->findAll(),
+            'session' => $this->session,
+            'validation' => $this->validation,
+            'attr' => ['id' => 'formRole', 'name'=>'formRole'],
+            'hidden_role_id' => ['name' => 'role_id', 'id'=>'role_id', 'type'=> 'hidden'],
+            'hidden_old_role' => ['name' => 'old_role', 'id'=>'old_role', 'type'=> 'hidden'],
+            'nama_role' => [
                 'type' => 'text',
                 'name' => 'role',
                 'id' => 'role',
@@ -82,7 +93,7 @@ class Role extends BaseController{
                 'role' => htmlspecialchars($this->request->getPost('role'), ENT_QUOTES)
             );
 
-            $this->model->TambahRole($data);
+            $this->model_user_role->insert($data);
         
             $this->session->setFlashdata('pesan_role', 'Role baru berhasil ditambahkan!');
             return redirect()->to(base_url('/role'));
@@ -128,7 +139,7 @@ class Role extends BaseController{
                     'role' => htmlspecialchars($this->request->getPost('roleE'), ENT_QUOTES)
                 );
 
-                $this->model->EditRole($data, $id_role);
+                $this->model_user_role->update($id_role, $data);
                 $this->session->setFlashdata('pesan_edit_role', 'Role baru berhasil diedit!');
                 return redirect()->to(base_url('/role'));
                 
@@ -156,7 +167,7 @@ class Role extends BaseController{
 
     public function hapusrole($id_role){
         
-            $this->model->HapusRole($id_role);
+            $this->model_user_role->delete($id_role);
             $this->session->setFlashdata('pesan_hapus_role', 'Role berhasil dihapus!');
             return redirect()->to(base_url('/role'));
         
@@ -173,130 +184,7 @@ class Role extends BaseController{
     }
 
 
-	// public function ambilidr(){
-		
-		
-    //     $id = $this->request->getPost('id');
-    //     $data = $this->model->GetIdRole($id);
-    //     $arr = array('success' => false, 'data' => '');
-    //     if($data){
-    //         $arr = array('success' => true, 'data' => $data);
-    //     }
-    //         echo json_encode($arr);
-
-        
-	// 	$role = $this->session->get('role_id');
-		
-	// 	if (!$role){
-    //         return redirect()->to(base_url('/'));
-    //     }
-	// 		$userAccess = $this->model_user_menu->Tendang();
-    //         if ($userAccess < 1) {
-    //             return redirect()->to(base_url('blokir'));
-    //         }
-    // }
-
-    // public function tambahneditrole(){
-		
-		
-    //     $data = array(
-    //     'role' => htmlspecialchars($this->request->getPost('role'), ENT_QUOTES),
-    //     );
-    //     $status = false;
-    //     $id = $this->request->getPost('role_id');
-    //     if($id){
-    //         $update = $this->model->EditRole($data);
-    //         $status = true;
-    //     }
-    //     if(!$id){
-    //         $id = $this->model->TambahRole($data);
-    //         $status = true;
-    //         $this->session->setFlashdata('pesan', 'Role baru berhasil ditambahkan!');
-    //     }
-    //     $data = $this->model->GetIdRole($id);
-    //     echo json_encode(array("status" => $status , 'data' => $data));
-
-
-	// 	$role = $this->session->get('role_id');
-		
-	// 	if (!$role){
-    //         return redirect()->to(base_url('/'));
-    //     }
-	// 		$userAccess = $this->model_user_menu->Tendang();
-    //         if ($userAccess < 1) {
-    //             return redirect()->to(base_url('blokir'));
-    //         }
-    // }
-
-    // public function hapusrole($id = null){
-		
-    //     $this->model->HapusRole($id);
-    //     echo json_encode(array("status" => TRUE));
-
-
-	// 	$role = $this->session->get('role_id');
-		
-	// 	if (!$role){
-    //         return redirect()->to(base_url('/'));
-    //     }
-	// 		$userAccess = $this->model_user_menu->Tendang();
-    //         if ($userAccess < 1) {
-    //             return redirect()->to(base_url('blokir'));
-    //         }
-    // }
-
-    // public function unikrole($uniq = null){
-		
-    //     $get= $this->model->UnikRole($uniq);
-
-    //     if($get == 0){
-    //         echo 'true';
-    //     }else{
-    //         echo 'false';
-    //     }
-    // }
-
-    public function roleakses($role_id = null){
-        //$session = \Config\Services::session();
-        //$view = \Config\Services::renderer();
-		
-		
-		$role = $this->session->get('role_id');
-		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
 	
-        $data = [
-            'title' => ucfirst('Role Akses'),
-            'user' => $this->model->UserLogin(),
-            'menu' => $this->model->MenuAll(),
-            'idrole' => $this->model->GetIdRole2($role_id),
-            'menurole' => $this->model->GetAllMenuNRole(),
-            'session' => $this->session,
-
-        ];
-        tampilan_admin('admin/admin-roleakses/v_roleakses', 'admin/admin-roleakses/v_js_roleakses', $data);
-    }
-    
-    public function ubahakses($menu_id = null, $role_id = null){
-       
-            $this->model->UbahRole($menu_id, $role_id);
-            $this->session->setFlashdata('pesan_akses', 'Role akses berhasil diubah!');
-        
-		$role = $this->session->get('role_id');
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
-	}
    
 
 }
