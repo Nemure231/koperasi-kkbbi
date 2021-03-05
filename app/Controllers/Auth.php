@@ -105,24 +105,24 @@ class Auth extends BaseController
 					if($user['role_id']==1){
 
 						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('/dashboard'));
+						return redirect()->to(base_url('beranda/dashboard_masuk'));
 
 					}
 					if($user['role_id']==2){
 						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('/dashboard'));
+						return redirect()->to(base_url('beranda/dashboard_masuk'));
 
 					}
 					
 					if($user['role_id']==3){
 						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('/pengguna'));
+						return redirect()->to(base_url('akun/profil'));
 
 					}
 
 					if($user['role_id']==6){
 						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('/pengguna'));
+						return redirect()->to(base_url('akun/profil'));
 
 					}
 

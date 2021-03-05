@@ -20,13 +20,13 @@
               <?php foreach ($escape as $sub): ?>
               <?php $mainId = $sub['id_menu_utama']?>
 
-                <!-- <//?php if($title == $sub['judul']):  ?> -->
+                <!-- </?php if//($title == $sub['judul']):  ?> -->
               
-                <li class="active dropdown">
-                <!-- <//?php else  : ?>
+                <!-- <li class="active dropdown">
+                    </?php else  : ?> -->
                 <li class="dropdown">
 
-                <//?php endif; ?> -->
+                  <!-- </?php endif; ?> -->
 
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span><?php echo $sub['nama_menu_utama']; ?></span></a>
                   <ul class="dropdown-menu">
@@ -36,7 +36,7 @@
                         
                   ?>
                   <?php foreach ($escape2 as $sub2): ?>
-                    <li><a class="nav-link" href="<?php echo base_url($sub2['url']);  ?>"><?php echo $sub2['judul']; ?></a></li>
+                    <li><a class="nav-link" href="<?php echo base_url($sub2['url']);  ?>"><i class="<?php echo $sub2['icon']; ?>"></i><?php echo $sub2['judul']; ?></a></li>
                   <?php endforeach; ?>
 
 

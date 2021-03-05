@@ -10,7 +10,6 @@ class Dashboard extends BaseController{
 
 	public function __construct(){
 		$this->model_barang_masuk = new Model_barang_masuk();
-		$this->model = new Model_all();
 		$this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
 		$this->model_transaksi_total = new Model_transaksi_total();

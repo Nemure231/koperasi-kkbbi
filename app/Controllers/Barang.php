@@ -43,7 +43,7 @@ class Barang extends BaseController{
     
         //$auto = $this->model->AutoID();
         //var_dump($um); die;
-        $kode_barang = $this->model->AutoKodeBarang();
+        $kode_barang = $this->model_barang->AutoKodeBarang();
         $nama_barang = set_value('nama_barang', '');
         $harga_konsumen = set_value('harga_konsumen', '');
         $harga_anggota = set_value('harga_anggota', '');
