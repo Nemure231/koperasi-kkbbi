@@ -30,7 +30,7 @@ class LaporanMasuk extends BaseController{
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-			$userAccess = $this->model->Tendang();
+			$userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }
@@ -111,7 +111,7 @@ class LaporanMasuk extends BaseController{
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-			$userAccess = $this->model->Tendang();
+			$userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }
@@ -206,7 +206,7 @@ class LaporanMasuk extends BaseController{
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-			$userAccess = $this->model->Tendang();
+			$userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }
@@ -292,7 +292,7 @@ class LaporanMasuk extends BaseController{
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-			$userAccess = $this->model->Tendang();
+			$userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }

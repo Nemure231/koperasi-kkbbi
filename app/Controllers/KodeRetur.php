@@ -32,12 +32,13 @@ class KodeRetur extends BaseController
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-		$userAccess = $this->model->Tendang();
+		$userAccess = $this->model_user_menu->Tendang();
         if ($userAccess < 1) {
             return redirect()->to(base_url('blokir'));
         }
         
-        $kode = $this->model->GetRowTbKodeRetur();
+        $kode = $this->model_kode_retur->select('id_tb_kode_retur, huruf_kode_retur, jumlah_angka')->asArray()
+                ->first();
 		$data = [
 			'title' =>  ucfirst('Pengaturan Kode Retur'),
             'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
@@ -109,7 +110,7 @@ class KodeRetur extends BaseController
             return redirect()->to(base_url('/'));
         
         }
-        if ($userAccess = $this->model->Tendang() < 1) {
+        if ($userAccess = $this->model_user_menu->Tendang() < 1) {
                 return redirect()->to(base_url('blokir'));
         }
         
