@@ -81,16 +81,10 @@ class Auth extends BaseController
 		$email = $this->request->getPost('email');
 		$sandi = $this->request->getPost('sandi');
 		// $user  = $this->model->GetUserEmail($email);
-<<<<<<< HEAD
+
 		$user = $this->user_model->select('id_user, sandi, nama, email, role_id, is_active')->asArray()->where('email', $email)->first();
 	
-		
-=======
-		$user = $this->user_model->select('id_user, sandi, nama, email, role_id, is_active')
-				->asArray()->where('email', $email)->first();
-
-		//jika usernya ada
->>>>>>> Menghubungkan controller dashboard dengan model-model
+	
 		if($user){
 			//jika usernya aktif
 			if($user['is_active'] == 1){
