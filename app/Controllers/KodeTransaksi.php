@@ -32,13 +32,15 @@ class KodeTransaksi extends BaseController
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-		$userAccess = $this->model->Tendang();
+		$userAccess = $this->model_user_menu->Tendang();
         if ($userAccess < 1) {
             return redirect()->to(base_url('blokir'));
         }
         
-        $kode = $this->model->GetRowTbKodetransaksi();
-        //$va = '$validation->hasError';
+        $kode = $this->model_kode_transaksi->select('id_tb_kode_transaksi, huruf_kode_transaksi, jumlah_angka')
+                ->asArray()
+                ->first();
+
 
 		$data = [
 			'title' => ucfirst('Pengaturan Kode Transaksi'),
@@ -109,7 +111,7 @@ class KodeTransaksi extends BaseController
         if (!$role){
             return redirect()->to(base_url('/'));
         }
-        $userAccess = $this->model->Tendang();
+        $userAccess = $this->model_user_menu->Tendang();
         if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
         }

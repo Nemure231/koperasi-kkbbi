@@ -38,7 +38,7 @@ class LaporanSummary extends BaseController{
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-			$userAccess = $this->model->Tendang();
+			$userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }
@@ -119,7 +119,7 @@ class LaporanSummary extends BaseController{
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-			$userAccess = $this->model->Tendang();
+			$userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }
@@ -192,7 +192,7 @@ class LaporanSummary extends BaseController{
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-			$userAccess = $this->model->Tendang();
+			$userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }

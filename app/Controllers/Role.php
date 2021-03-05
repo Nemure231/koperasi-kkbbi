@@ -2,12 +2,14 @@
 
 use CodeIgniter\Controller;
 use App\Models\Model_all;
+use App\Models\Model_user_menu;
 
 class Role extends BaseController{
 
     public function __construct(){
 
 		$this->model = new Model_all();
+        $this->model_user_menu = new Model_user_menu();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
 	}
@@ -23,7 +25,7 @@ class Role extends BaseController{
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-			$userAccess = $this->model->Tendang();
+			$userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }
@@ -89,7 +91,7 @@ class Role extends BaseController{
             if (!$role){
                 return redirect()->to(base_url('/'));
             }
-            $userAccess = $this->model->Tendang();
+            $userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }
@@ -135,7 +137,7 @@ class Role extends BaseController{
                 if (!$role){
                     return redirect()->to(base_url('/'));
                 }
-                $userAccess = $this->model->Tendang();
+                $userAccess = $this->model_user_menu->Tendang();
                 if ($userAccess < 1) {
                     return redirect()->to(base_url('blokir'));
                 }    
@@ -162,7 +164,7 @@ class Role extends BaseController{
         if (!$role){
             return redirect()->to(base_url('/'));
         }
-            $userAccess = $this->model->Tendang();
+            $userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }
@@ -188,7 +190,7 @@ class Role extends BaseController{
 	// 	if (!$role){
     //         return redirect()->to(base_url('/'));
     //     }
-	// 		$userAccess = $this->model->Tendang();
+	// 		$userAccess = $this->model_user_menu->Tendang();
     //         if ($userAccess < 1) {
     //             return redirect()->to(base_url('blokir'));
     //         }
@@ -220,7 +222,7 @@ class Role extends BaseController{
 	// 	if (!$role){
     //         return redirect()->to(base_url('/'));
     //     }
-	// 		$userAccess = $this->model->Tendang();
+	// 		$userAccess = $this->model_user_menu->Tendang();
     //         if ($userAccess < 1) {
     //             return redirect()->to(base_url('blokir'));
     //         }
@@ -237,7 +239,7 @@ class Role extends BaseController{
 	// 	if (!$role){
     //         return redirect()->to(base_url('/'));
     //     }
-	// 		$userAccess = $this->model->Tendang();
+	// 		$userAccess = $this->model_user_menu->Tendang();
     //         if ($userAccess < 1) {
     //             return redirect()->to(base_url('blokir'));
     //         }
@@ -264,7 +266,7 @@ class Role extends BaseController{
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-			$userAccess = $this->model->Tendang();
+			$userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }
@@ -290,7 +292,7 @@ class Role extends BaseController{
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-			$userAccess = $this->model->Tendang();
+			$userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }

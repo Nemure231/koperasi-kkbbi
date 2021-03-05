@@ -170,15 +170,14 @@ $routes->delete('/menu/kecohhapussubmenu/(:num)', 'Submenu::hapussubmenu/$1');
 
 
 ///
-$routes->get('/toko', 'Toko::index');
-$routes->add('/toko/tambahkaryawan', 'Toko::tambahkaryawan');
-$routes->add('/toko/editkaryawan/(:num)', 'Toko::editkaryawan/$1');
-
-$routes->add('/toko/kecohhapuskaryawan/(:any)', 'Toko::kecohhapuskaryawan');
-$routes->delete('/toko/kecohhapuskaryawan/(:num)', 'Toko::hapuskaryawan/$1');
+$routes->get('/toko', 'Karyawan::index');
+$routes->post('/toko/tambahkaryawan', 'Karyawan::tambahkaryawan');
+$routes->post('/toko/editkaryawan/(:num)', 'Karyawan::editkaryawan/$1');
+$routes->get('/toko/kecohhapuskaryawan/(:any)', 'Karyawan::kecohhapuskaryawan');
+$routes->delete('/toko/kecohhapuskaryawan/(:num)', 'Karyawan::hapuskaryawan/$1');
 
 ///
-$routes->get('/toko/profiltoko', 'Toko::profiltoko');
+$routes->get('/toko/profiltoko', 'Toko::index');
 $routes->post('/toko/editprofiltoko', 'Toko::editprofiltoko');
 
 ///LAPORAN///

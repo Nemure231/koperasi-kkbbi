@@ -30,7 +30,7 @@ class KodeBarang extends BaseController
 		if (!$role){
             return redirect()->to(base_url('/'));
         }
-			$userAccess = $this->model->Tendang();
+			$userAccess = $this->model_user_menu->Tendang();
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }
@@ -111,7 +111,7 @@ class KodeBarang extends BaseController
                     return redirect()->to(base_url('/'));
                 }
                 
-                if ($userAccess = $this->model->Tendang() < 1) {
+                if ($userAccess = $this->model_user_menu->Tendang() < 1) {
                         return redirect()->to(base_url('blokir'));
                 }
         
