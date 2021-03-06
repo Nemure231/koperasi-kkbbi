@@ -67,7 +67,7 @@ class InvoiceUtang extends BaseController{
 		tampilan_admin('admin/admin-invoice-utang/v_invoice_utang', 'admin/admin-invoice-utang/v_js_invoice_utang', $data);
     }
     
-    public function simpan_invoice_utang(){
+    public function tambah(){
         $uri = $this->request->getPost('tt_kode_transaksi');
         $kod = $this->request->getPost('tt_kode_transaksi2');
         $id_user = $this->session->get('id_user');
@@ -105,7 +105,7 @@ class InvoiceUtang extends BaseController{
             $this->model_transaksi_sementara->GetAllTransaksiSemantaraForInsertUtang($kod);
 			$this->model_transaksi_sementara->where('ts_uri', $uri)->delete();
             $this->session->setFlashdata('pesan_simpan_invoice_utang', 'Transaksi berhasil disimpan!');
-            return redirect()->to(base_url('/kasir/utang'));
+            return redirect()->to(base_url('/fitur/utang'));
             
             $role = $this->session->get('role_id');
             if (!$role){

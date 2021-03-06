@@ -88,6 +88,9 @@ if (flashDataInvoice) {
 }
 
 const flashDataUtang = $('.flash-data-utang').data('flashdata');
+// var base = window.location.origin;
+var getUrl = window.location;
+var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 if (flashDataUtang) {
    Swal.fire({
       title: 'Berhasil',
@@ -96,7 +99,7 @@ if (flashDataUtang) {
       },
       text: ' ' + flashDataUtang,
       icon: 'success',
-      footer: '<a href="kasir/utang">Lihat daftar utang.</a>'
+      footer: '<a href="'+ baseUrl + '/public/fitur/utang' +'">Lihat daftar utang.</a>'
    });
 }
 

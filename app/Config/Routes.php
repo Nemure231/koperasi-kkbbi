@@ -90,14 +90,12 @@ $routes->group('fitur', function($routes){
 
 	$routes->get('kasir/invoice/(:any)', 'Invoice::index/$1');
 	$routes->post('kasir/invoice/tambah', 'Invoice::tambah');
-	// $routes->get('kasir/kecohhapusinvoice/(:num)', 'Invoice::kecohhapusinvoive');
 	$routes->delete('kasir/invoice/hapus', 'Invoice::hapus');	
 
 	$routes->get('utang', 'Utang::index');
-	$routes->get('utang/invoice_utang/(:any)', 'InvoiceUtang::index/$1');
-	$routes->get('utang/kecohhapusinvoiceutang/(:num)', 'InvoiceUtang::kecohhapusinvoiveutang');
-	$routes->delete('utang/kecohhapusinvoiceutang/(:any)', 'InvoiceUtang::hapusinvoiceutang/$1');
-	$routes->post('utang/simpan_invoice_utang', 'InvoiceUtang::simpan_invoice_utang');
+	$routes->get('utang/invoice/(:any)', 'InvoiceUtang::index/$1');
+	// $routes->delete('utang/kecohhapusinvoiceutang/(:any)', 'InvoiceUtang::hapusinvoiceutang/$1');
+	$routes->post('utang/invoice/tambah', 'InvoiceUtang::tambah');
 
 	$routes->get('barang_masuk', 'BarangMasuk::index');
 	$routes->post('barang_masuk/barangmasuk', 'BarangMasuk::barangmasuk');

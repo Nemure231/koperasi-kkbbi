@@ -56,7 +56,7 @@
                       <td><?php echo $u['ts_tanggal_sementara']; ?></td>
                       <td class="text-center"><span class="badge badge-danger"><?php echo $u['waktu']; ?></span></td>
                       <td>
-                      <a href="<?php echo base_url().'/kasir/invoice_utang'.'/'.''.$u['ts_uri'].'' ?>" class="btn btn-primary"><i class="fas fa-eye"></i></a>
+                      <a href="<?php echo base_url().'/fitur/utang/invoice'.'/'.''.$u['ts_uri'].'' ?>" class="btn btn-primary"><i class="fas fa-eye"></i></a>
                       </td>
                     </tr>
                     <?php $i++;  ?>

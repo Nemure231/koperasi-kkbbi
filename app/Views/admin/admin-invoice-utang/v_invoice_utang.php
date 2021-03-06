@@ -21,7 +21,7 @@
            
             </div>
             <div class="card-body">
-            <?php echo form_open(base_url().'/kasir/simpan_invoice_utang', $form_utang);    ?>
+            <?php echo form_open(base_url().'/fitur/utang/invoice/tambah', $form_utang);    ?>
             <?php echo csrf_field(); ?>
             <div class="invoice">
               <div class="invoice-print">
