@@ -4,7 +4,7 @@ use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
 
-class UbahKataSandi extends BaseController{
+class Sandi extends BaseController{
 
 	protected $helpers = ['form', 'url', 'array', 'kpos'];
 
@@ -54,7 +54,7 @@ class UbahKataSandi extends BaseController{
 
 
 
-	public function editkatasandi(){
+	public function ubah(){
 
 
 		if(!$this->validate([
@@ -86,7 +86,7 @@ class UbahKataSandi extends BaseController{
 			]
 
 		])) {
-			return redirect()->to(base_url('/pengguna/katasandi'))->withInput();
+			return redirect()->to(base_url('/akun/sandi'))->withInput();
 
 		}
 		$id_user = $this->session->get('id_user');
@@ -97,16 +97,16 @@ class UbahKataSandi extends BaseController{
 		$pass_baru = $this->request->getPost('katasandi_baru');
 		if (!password_verify($pass_sebelum, $data['sandi'])) {
 			$this->session->setFlashdata('salah', 'Kata sandi sebelumnya salah!');
-			return redirect()->to(base_url('/pengguna/katasandi'));
+			return redirect()->to(base_url('/akun/sandi'));
 		}else{
 			if ($pass_sebelum == $pass_baru) {
 				$this->session->setFlashdata('sama', 'Kata sandi baru tidak boleh sama dengan kata sandi sebelumnya!');
-				return redirect()->to(base_url('/pengguna/katasandi'));
+				return redirect()->to(base_url('/akun/sandi'));
 			}else{
 				$password_hash = password_hash($pass_baru, PASSWORD_DEFAULT);
 				$this->model_user->set('sandi', $password_hash)->where('id_user', $id_user)->update();
 				$this->session->setFlashdata('pesan', 'Kata sandi berhasil diubah!');
-				return redirect()->to(base_url('/pengguna/katasandi'));
+				return redirect()->to(base_url('/akun/sandi'));
 			}
 		}
 				

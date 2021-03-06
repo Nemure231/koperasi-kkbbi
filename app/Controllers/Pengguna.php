@@ -58,7 +58,7 @@ class Pengguna extends BaseController{
 	}
 
 
-	public function editpengguna(){
+	public function ubah(){
 
        
         
@@ -88,7 +88,7 @@ class Pengguna extends BaseController{
                 ]
 
             ])) {
-                return redirect()->to(base_url('/pengguna'))->withInput();
+                return redirect()->to(base_url('akun/profil'))->withInput();
 
             }
 
@@ -103,7 +103,7 @@ class Pengguna extends BaseController{
 				$this->model_user->update($id, $edit);
 				
                 $this->session->setFlashdata('pesan_pengguna', 'Profil berhasil diperbarui');
-				return redirect()->to(base_url('/pengguna'));
+				return redirect()->to(base_url('akun/profil'));
 		
 				$role = $this->session->get('role_id');
 		

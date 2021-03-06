@@ -21,7 +21,7 @@
       <div class="row">
 
         <div class="col-sm-12 col-md-12 col-lg-12">
-        <?php echo form_open(base_url().'/pengguna/editkatasandi', $attr);    ?>
+        <?php echo form_open(base_url().'/akun/sandi/ubah', $attr);    ?>
         <input type="hidden" name="_method" value="PUT">
           <?php echo csrf_field(); ?>
       

@@ -37,11 +37,10 @@ $routes->get('logout', 'Auth::logout');
 $routes->add('blokir', 'Auth::blokir');
 
 $routes->group('akun', function($routes){
-
 	$routes->get('profil', 'Pengguna::index');
-	$routes->put('profil/editpengguna', 'Pengguna::editpengguna');
-	$routes->get('sandi/katasandi', 'UbahKataSandi::index');
-	$routes->put('sandi/editkatasandi', 'UbahKataSandi::editkatasandi');
+	$routes->put('profil/ubah', 'Pengguna::ubah');
+	$routes->get('sandi', 'Sandi::index');
+	$routes->put('sandi/ubah', 'Sandi::ubah');
 });
 
 $routes->group('beranda', function($routes){
