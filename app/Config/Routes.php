@@ -82,18 +82,16 @@ $routes->group('suplai', function($routes){
 $routes->group('fitur', function($routes){
 
 	$routes->get('kasir', 'Kasir::index');
-	$routes->post('kasir/tambahkeranjangadmin', 'Kasir::tambahkeranjangadmin');
-	$routes->post('kasir/tambahtransaksisementarakonsumen', 'Kasir::tambahtransaksisementarakonsumen');
-	$routes->put('kasir/ubahjeniskasir', 'Kasir::ubahjeniskasir');
-	$routes->get('kasir/kecohhapuskeranjangadmin/(:any)', 'Kasir::kecohhapuskeranjangadmin');
-	$routes->delete('kasir/kecohhapuskeranjangadmin/(:num)', 'Kasir::hapuskeranjangadmin/$1');
-	$routes->get('kasir/kecohhapusallkeranjangadmin/(:any)', 'Kasir::kecohhapusallkeranjangadmin');
-	$routes->delete('kasir/kecohhapusallkeranjangadmin/(:num)', 'Kasir::hapusallkeranjangadmin/$1');
+	$routes->post('kasir/tambah_keranjang', 'Kasir::tambah_keranjang');
+	$routes->post('kasir/tambah_transaksi_sementara', 'Kasir::tambah_transaksi_sementara');
+	$routes->put('kasir/ubah_jenis_kasir', 'Kasir::ubah_jenis_kasir');
+	$routes->delete('kasir/hapus_barang', 'Kasir::hapus_barang');
+	$routes->delete('kasir/hapus_keranjang', 'Kasir::hapus_keranjang');
 
 	$routes->get('kasir/invoice/(:any)', 'Invoice::index/$1');
-	$routes->post('kasir/tambahtransaksi/(:any)', 'Invoice::tambahtransaksi/$1');
-	$routes->get('kasir/kecohhapusinvoice/(:num)', 'Invoice::kecohhapusinvoive');
-	$routes->delete('kasir/kecohhapusinvoice/(:any)', 'Invoice::hapusinvoice/$1');	
+	$routes->post('kasir/invoice/tambah', 'Invoice::tambah');
+	// $routes->get('kasir/kecohhapusinvoice/(:num)', 'Invoice::kecohhapusinvoive');
+	$routes->delete('kasir/invoice/hapus', 'Invoice::hapus');	
 
 	$routes->get('utang', 'Utang::index');
 	$routes->get('utang/invoice_utang/(:any)', 'InvoiceUtang::index/$1');

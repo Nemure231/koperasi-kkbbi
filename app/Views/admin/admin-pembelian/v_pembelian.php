@@ -26,7 +26,7 @@
       <div id="idjk" data-role_id_jenis_kasir="<?php echo $role_id_jenis_kasir; ?>" class="invisible"></div>
       <div class="row">
         <div class="col-lg-12" id="purgeall">
-          <?php echo form_open(base_url().'/kasir/tambahtransaksisementarakonsumen', $form_pembelian);    ?>
+          <?php echo form_open(base_url().'/fitur/kasir/tambah_transaksi_sementara', $form_pembelian);    ?>
           <?php echo csrf_field(); ?>
           <?php echo form_input($hidden_kode_transaksi); ?>
           <div class="card card-primary">
@@ -231,8 +231,9 @@
 
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12">
-            <?php echo form_open(base_url().'/kasir/ubahjeniskasir', $form_jenis_kasir);    ?>
+            <?php echo form_open(base_url().'/fitur/kasir/ubah_jenis_kasir', $form_jenis_kasir);    ?>
             <input type="hidden" name="_method" value="PUT">
+            <?php echo csrf_field(); ?>
             <?php echo form_input($hidden_id_jenis_kasir); ?>
             <div class="form-group">
               <label>Jenis Kasir</label>
@@ -341,10 +342,12 @@
       </div>
       <div class="modal-footer">
 
-        <form id="btn-hapus-keranjang" class="btn btn-block" method="post">
+      <?php echo form_open(base_url().'/fitur/kasir/hapus_barang', $form_hapus_barang);    ?>
+        <?php echo form_input($hidden_kode_hapus_barang); ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
-        </form>
+        <?php echo  form_close(); ?>
 
       </div>
 
@@ -383,12 +386,11 @@
       </div>
       <div class="modal-footer">
 
-        <form class="btn btn-block"
-          action="<?php echo base_url().'/kasir/kecohhapusallkeranjangadmin'.'/'.''.$id_session.'' ?>" method="post"
-          accept-charset="utf-8">
+      <?php echo form_open(base_url().'/fitur/kasir/hapus_keranjang', $form_hapus_keranjang);    ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Hapus keranjang</button>
-        </form>
+        <?php echo form_close(); ?>
 
       </div>
 

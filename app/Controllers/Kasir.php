@@ -108,17 +108,27 @@ class Kasir extends BaseController{
                     ->join('barang', 'barang.id_barang = keranjang.k_barang_id')
                     ->groupBy('k_barang_id')
                     ->findAll(),
-           'hidden_kode_transaksi' => ['name' => 'kode_transaksi', 'id'=>'kode_transaksi', 'type'=> 'hidden', 'value' => ''.$kode.''],
-           'hidden_id_jenis_kasir' => ['name' => 'id_jenis_kasir', 'id'=>'id_jenis_kasir', 'type'=> 'hidden', 'value' => ''.$jenis_kasir['id_jenis_kasir'].''],
-           'hidden_role_id' => ['name' => 'role_id', 'id'=>'role_id', 'type'=> 'hidden', 'value' => ''.$jenis_kasir['role_id'].''],
-           'form_pembelian' => ['id' => 'formPembelian', 'name'=>'formPembelian', 'class' => 'formPembelian'],
-           'form_jenis_kasir' => ['id' => 'formJenisKasir', 'name'=>'formJenisKasir'],
-           
+            'hidden_kode_transaksi' => ['name' => 'kode_transaksi', 'id'=>'kode_transaksi', 'type'=> 'hidden', 'value' => ''.$kode.''],
+            'hidden_id_jenis_kasir' => ['name' => 'id_jenis_kasir', 'id'=>'id_jenis_kasir', 'type'=> 'hidden', 'value' => ''.$jenis_kasir['id_jenis_kasir'].''],
+            'hidden_role_id' => ['name' => 'role_id', 'id'=>'role_id', 'type'=> 'hidden', 'value' => ''.$jenis_kasir['role_id'].''],
+            'form_pembelian' => ['id' => 'formPembelian', 'name'=>'formPembelian', 'class' => 'formPembelian'],
+            'form_jenis_kasir' => ['id' => 'formJenisKasir', 'name'=>'formJenisKasir'],
+            'form_hapus_barang' => ['id' => 'formHapusBarang', 'name'=>'formHapusBarang', 'class' => 'btn btn-block'],
+            'hidden_kode_hapus_barang' => [
+                'name' => 'kode_hapus_barang', 
+                'id'=>'kode_hapus_barang', 
+                'type'=> 'hidden'
+            ],
+            'form_hapus_keranjang' => [
+                'name' => 'formHapusKeranjang', 
+                'id'=>'formHapusKeranjang', 
+                'class'=> 'btn btn-block'
+            ],
         ];
         tampilan_admin('admin/admin-pembelian/v_pembelian', 'admin/admin-pembelian/v_js_pembelian', $data);
     }
 
-    public function ubahjeniskasir(){
+    public function ubah_jenis_kasir(){
     
         if(!$this->validate([
             'role_idE' => [
@@ -132,14 +142,14 @@ class Kasir extends BaseController{
                 
         ])) {
 
-            return redirect()->to(base_url('/kasir'))->withInput();
+            return redirect()->to(base_url('/fitur/kasir'))->withInput();
 
         }
             $id_user = $this->session->get('id_user');
             $postRole = $this->request->getPost('role_idE');
             $this->model_jenis_kasir->where('user_id', $id_user)->set('role_id', $postRole)->update();
             $this->session->setFlashdata('pesan_jenis_kasir', 'Jenis kasir berhasil diubah!');
-            return redirect()->to(base_url('/kasir'));
+            return redirect()->to(base_url('/fitur/kasir'));
 
         $role = $this->session->get('role_id');
         if (!$role){
@@ -151,7 +161,7 @@ class Kasir extends BaseController{
         }
     }
     
-    public function tambahkeranjangadmin(){ 
+    public function tambah_keranjang(){ 
         $barang = $this->request->getPost('k_barang_id');
         if (!$barang) {
             return redirect()->to(base_url('blokir'));
@@ -163,10 +173,9 @@ class Kasir extends BaseController{
         }
         echo json_encode($arr);        
         
-		
     }
     
-    public function tambahtransaksisementarakonsumen(){
+    public function tambah_transaksi_sementara(){
 
         $role = $this->session->get('role_id');
         $id_user = $this->session->get('id_user');
@@ -198,7 +207,7 @@ class Kasir extends BaseController{
             ]
                 
         ])) {
-            return redirect()->to(base_url('/kasir'))->withInput();
+            return redirect()->to(base_url('/fitur/kasir'))->withInput();
 
         }
         $loop = $this->model_keranjang->select('id_keranjang, k_qty, k_kode_keranjang, 
@@ -246,29 +255,20 @@ class Kasir extends BaseController{
 
         if($status != 2){
             $this->session->setFlashdata('pesan_transaksi_sementara', 'Transaksi berhasil disimpan ke dalam invoice!');
-            return redirect()->to(base_url('/kasir/invoice/'.$kode.''));
+            return redirect()->to(base_url('/fitur/kasir/invoice/'.$kode.''));
         }else{
             $this->session->setFlashdata('pesan_transaksi_sementara_utang', 'Utang berhasil disimpan!');
-            return redirect()->to(base_url('/kasir'));
+            return redirect()->to(base_url('/fitur/kasir'));
         }
 
     }
 
-    public function kecohhapuskeranjangadmin(){
-        $role = $this->session->get('role_id');
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapuskeranjangadmin($kode){
+    public function hapus_barang(){
+        $kode = $this->request->getPost('kode_hapus_barang');
         $this->model_keranjang->HapusKeranjangAdmin($kode);
 		$this->session->setFlashdata('pesan_hapus_keranjang_admin', 'Berhasil dihapus!');
-        return redirect()->to(base_url('/kasir'));
+        return redirect()->to(base_url('/fitur/kasir'));
         $role = $this->session->get('role_id');
         if (!$role){
             return redirect()->to(base_url('/'));
@@ -279,22 +279,11 @@ class Kasir extends BaseController{
         }
         
     }
-    
-    public function kecohhapusallkeranjangadmin(){
-        $role = $this->session->get('role_id');
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapusallkeranjangadmin(){
+    public function hapus_keranjang(){
         $this->model_keranjang->HapusAllKeranjangAdmin();
 		$this->session->setFlashdata('pesan_hapus_all_keranjang_admin', 'Semua barang berhasil dihapus!');
-        return redirect()->to(base_url('/kasir'));
+        return redirect()->to(base_url('/fitur/kasir/'));
         $role = $this->session->get('role_id');
         if (!$role){
             return redirect()->to(base_url('/'));

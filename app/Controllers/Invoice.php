@@ -12,8 +12,7 @@ class Invoice extends BaseController{
 
 	public function __construct(){
 
-		
-        
+	
         $this->model_toko = new Model_toko();
         $this->model_transaksi_sementara = new Model_transaksi_sementara();
         $this->model_user = new Model_user();
@@ -84,18 +83,19 @@ class Invoice extends BaseController{
     }
 
 
-    public function kecohhapusinvoice(){
-        $role = $this->session->get('role_id');
+    // public function kecohhapusinvoice(){
+    //     $role = $this->session->get('role_id');
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
+    //     if (!$role){
+    //         return redirect()->to(base_url('/'));
+    //     }
+    //     if ($role > 0) {
+    //             return redirect()->to(base_url('blokir'));
+    //     }
+    // }
 
-    public function hapusinvoice($kod){
+    public function hapus($kod){
+
             $uri = $this->request->getPost('ts_uri');
             $this->model_transaksi_sementara->HapusAllInvoiceAdmin($kod, $uri);
 			$this->session->setFlashdata('pesan_hapus_invoice', 'Invoice berhasil dihapus!');

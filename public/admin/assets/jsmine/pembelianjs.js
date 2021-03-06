@@ -308,7 +308,7 @@ $(document).ready(function () {
 
       } else {
          $.ajax({
-            url: 'kasir/tambahkeranjangadmin',
+            url: 'kasir/tambah_keranjang',
             //method: "POST",
             //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
             //yang kemuidan di kanannya harus disamakan dengan data yang diambil dari data- jquery
@@ -339,11 +339,13 @@ $(document).ready(function () {
    $('table').on('click', '#tombolhapusk', function () {
       var kode = $(this).data("kode");
       $('#modalhapusk').modal('show');
-      $('#btn-hapus-keranjang').attr("action", "kasir/kecohhapuskeranjangadmin/" + kode);
+      $('#kode_hapus_barang').val(kode);
+      // $('#btn-hapus-keranjang').attr("action", "kasir/kecohhapuskeranjangadmin/" + kode);
       //$('#genre_id').val('');
       //$('#formGenre').trigger("reset");
       //$('#judulk').html("");
   });
+  
 
   $('#tombolhapuskalladmin').click(function () {
 
