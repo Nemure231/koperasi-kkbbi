@@ -94,15 +94,14 @@ $routes->group('fitur', function($routes){
 
 	$routes->get('utang', 'Utang::index');
 	$routes->get('utang/invoice/(:any)', 'InvoiceUtang::index/$1');
-	// $routes->delete('utang/kecohhapusinvoiceutang/(:any)', 'InvoiceUtang::hapusinvoiceutang/$1');
 	$routes->post('utang/invoice/tambah', 'InvoiceUtang::tambah');
 
 	$routes->get('barang_masuk', 'BarangMasuk::index');
-	$routes->post('barang_masuk/barangmasuk', 'BarangMasuk::barangmasuk');
-	$routes->post('barang_masuk/tambahpengirim', 'BarangMasuk::tambahpengirim');
-	$routes->post('barang_masuk/tambahbarangmasuk', 'BarangMasuk::tambahbarangmasuk');
-	$routes->get('barang_masuk/ambilbarang', 'BarangMasuk::ambilbarang');
-	$routes->post('barang_masuk/ambilidbarang', 'BarangMasuk::ambilidbarang');
+	$routes->post('barang_masuk/tambah_barang', 'BarangMasuk::tambah_barang');
+	$routes->post('barang_masuk/tambah_pengirim', 'BarangMasuk::tambah_pengirim');
+	$routes->post('barang_masuk/tambah', 'BarangMasuk::tambah');
+	$routes->get('barang_masuk/ambil_detail', 'BarangMasuk::ambil_detail');
+	$routes->post('barang_masuk/ambil_harga', 'BarangMasuk::ambil_harga');
 
 	$routes->add('retur', 'Retur::index');
 	$routes->post('retur/ambilkodetransaksi', 'Retur::ambilkodetransaksi');

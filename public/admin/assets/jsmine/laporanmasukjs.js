@@ -74,7 +74,7 @@ $(document).ready(function () {
     // $('div').find('.harga_pokok', )
 
     $.ajax({
-      url: 'ambilidbarang',
+      url: 'barang_masuk/ambil_harga',
       //method: "POST",
       //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
       //yang kemuidan di kanannya harus disamakan dengan data yang diambil dari data- jquery
@@ -264,7 +264,7 @@ $(document).ready(function () {
 
 
       $.ajax({
-        url: 'tambahpengirim',
+        url: 'barang_masuk/tambah_pengirim',
         //method: "POST",
         //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
         //yang kemuidan di kanannya harus disamakan dengan data yang diambil dari data- jquery
@@ -348,7 +348,7 @@ $(document).ready(function () {
     } else {
 
       $.ajax({
-        url: 'barangmasuk',
+        url: 'barang_masuk/tambah_barang',
         //method: "POST",
         //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
         //yang kemuidan di kanannya harus disamakan dengan data yang diambil dari data- jquery
@@ -382,7 +382,7 @@ $(document).ready(function () {
     
 
     $.ajax({
-      url: 'ambilbarang',
+      url: 'barang_masuk/ambil_detail',
       type: 'get',
       dataType: 'json',
       headers: {

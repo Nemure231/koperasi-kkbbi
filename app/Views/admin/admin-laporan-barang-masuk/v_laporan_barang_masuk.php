@@ -147,7 +147,7 @@ width:100%!important;
                     <a class="btn btn-icon btn-primary" id="tambah_input" href="javascript:void(0)">Tambah Input</a>
                   </div>
                 </div>
-                <?php echo form_open(base_url().'/barang/tambahbarangmasuk', $form_tambah_barang_masuk);    ?>
+                <?php echo form_open(base_url().'/fitur/barang_masuk/tambah', $form_tambah_barang_masuk);    ?>
                 <div class="card-body vim" id="tampil_input">
 
 

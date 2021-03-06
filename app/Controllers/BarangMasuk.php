@@ -153,7 +153,7 @@ class BarangMasuk extends BaseController
         tampilan_admin('admin/admin-laporan-barang-masuk/v_laporan_barang_masuk', 'admin/admin-laporan-barang-masuk/v_js_laporan_barang_masuk', $data);
     }
     
-    public function tambahpengirim(){
+    public function tambah_pengirim(){
             $nama = $this->request->getPost('nama_pengirim_barang');
 
             if (!$nama) {
@@ -177,7 +177,7 @@ class BarangMasuk extends BaseController
             echo json_encode(array("status" => $status , 'data' => $data));
     }
 
-    public function barangmasuk(){
+    public function tambah_barang(){
         $kodeb = $this->request->getPost('kode_barang');
         
         // if (!$kodeb) {
@@ -235,7 +235,7 @@ class BarangMasuk extends BaseController
         
     }
 
-    public function ambilbarang(){
+    public function ambil_detail(){
 
         $role = $this->session->get('role_id');
         if (!$role){
@@ -260,7 +260,7 @@ class BarangMasuk extends BaseController
 
     }
 
-    public function ambilidbarang(){
+    public function ambil_harga(){
 
         $role = $this->session->get('role_id');
         if (!$role){
@@ -284,7 +284,7 @@ class BarangMasuk extends BaseController
 
     }
 
-     public function tambahbarangmasuk(){
+     public function tambah(){
         ////////PERLU VALIDASI NATI AJA///////
 
         if(!$this->validate([
@@ -335,7 +335,7 @@ class BarangMasuk extends BaseController
 
         $this->model_barang_masuk->TambahBarangMasuk($data, $data2);
         $this->session->setFlashdata('pesan_barang_masuk', 'Barang masuk berhasil ditambahkan!');
-        return redirect()->to(base_url('/barang/masuk'));
+        return redirect()->to(base_url('/fitur/barang_masuk'));
 
 
         $role = $this->session->get('role_id');
