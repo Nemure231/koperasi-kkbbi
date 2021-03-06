@@ -247,7 +247,7 @@ $(document).ready(function () {
       var harga_anggota = $(this).data('harga_anggota');
       var harga_pokok = $(this).data('harga_pokok');
       var stok_barang = $(this).data('stok');
-      $('#formEditBarang').attr("action", "barang/editbarang");
+      // $('#formEditBarang').attr("action", "suplai/barang/ubah");
       $('#img-edit').attr("src", "admin/assets/barang/" + gambar_barang);
       $('#img-edit-label').text(gambar_barang);
       $('#id_barangE').val(id_barang);
@@ -286,22 +286,15 @@ $(document).ready(function () {
 
    });
 
-   $('.nama_barangE').on('change', function () {
-      $('.nama_barangE').rules('add', {
-         remote: {
-            url: "barang/unikbarang",
-            type: "post"
-         }
-      });
-   });
-
-   $('table').on('click', '#tombolHapusBarang', function () {
+   $('table').on('click', '.tombolHapusBarang', function () {
 
       var barang_id = $(this).data("id_barang");
       var gambar_barang = $(this).data('gambar_barang');
 
-      $('#btn-simpan-hapus').attr("href", "barang/hapusbarang/" + barang_id);
-      $('#btn-simpan-hapus2').attr("action", "barang/kecohhapusbarang/" + barang_id);
+      // $('#btn-simpan-hapus').attr("href", "suplai/barang/hapus/" + barang_id);
+      $('#id_barangH').val(barang_id);
+      // $('#btn-simpan-hapus2').attr("action", "suplai/barang/kecoh/" + barang_id);
+
       $('#old_gambar').val(gambar_barang);
       //$('#formGenre').trigger("reset");
       //$('#judulBukuHapus').html("");

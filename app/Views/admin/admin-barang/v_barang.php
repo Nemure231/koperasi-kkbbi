@@ -92,7 +92,7 @@ width:100%!important;
                           data-harga_pokok="<?php echo $b['harga_pokok']; ?>"
                           >
                           <i class="fas fa-pencil-alt"></i></a>
-                        <a href="javascript:void(0)" id="tombolHapusBarang" class="btn mb-3 btn-danger"
+                        <a href="javascript:void(0)" id="tombolHapusBarang" class="btn mb-3 btn-danger tombolHapusBarang"
                           data-id_barang="<?php echo $b['id_barang'];?>">
                           <i class="fas fa-trash"></i>
                         </a>    
@@ -173,7 +173,7 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/barang/tambahbarang', $form_tambah_barang);    ?>
+      <?php echo form_open(base_url().'/suplai/barang/tambah', $form_tambah_barang);    ?>
       <?php echo form_input($hidden_kode_barang); ?>
       <?php echo csrf_field(); ?>
       <div class="modal-body">
@@ -292,7 +292,7 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/barang/editbarang', $form_edit_barang);    ?>
+      <?php echo form_open(base_url().'/suplai/barang/ubah', $form_edit_barang);    ?>
       <input type="hidden" name="_method" value="PUT" />
       <?php echo csrf_field(); ?>
       <?php echo form_input($hidden_id_barangE); ?>
@@ -437,10 +437,11 @@ width:100%!important;
       <div class="modal-footer" id="yahaloo">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <form id="btn-simpan-hapus2" class="btn btn-block" method="post">
+        <?php echo form_open(base_url().'/suplai/barang/hapus', $form_hapus_barang);    ?>
           <input type="hidden" name="_method" value="DELETE">
+          <?php echo form_input($hidden_id_barangH); ?>
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
-        </form>
+        <?php echo form_close(); ?>
 
       </div>
 

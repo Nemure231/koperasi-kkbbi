@@ -14,11 +14,7 @@ class Dashboard extends BaseController{
 		$this->model_user = new Model_user();
 		$this->model_transaksi_total = new Model_transaksi_total();
 
-		date_default_timezone_set("Asia/Jakarta");
-
-		
-		
-		
+		date_default_timezone_set("Asia/Jakarta");	
 	}
 	protected $helpers = ['url', 'array', 'kpos', 'date'];
 
@@ -109,8 +105,6 @@ class Dashboard extends BaseController{
         }
 		
 		
-		
-// dd($this->model->GetChartMasukBulan());
 		$data = [
 			'title' => ucfirst('Dashboard Keluar'),
 			'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()

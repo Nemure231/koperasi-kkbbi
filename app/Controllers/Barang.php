@@ -83,6 +83,7 @@ class Barang extends BaseController{
             'session' => $this->session,
             'form_tambah_barang' => ['id' => 'formTambahBarang', 'name'=>'formTambahBarang'],
             'form_edit_barang' =>  ['id' => 'formEditBarang', 'name'=>'formEditBarang'],
+            'form_hapus_barang' =>  ['id' => 'formHapusBarang', 'name'=>'formHapusBarang', 'class' => 'btn btn-block'],
             'hidden_kode_barang' => [
                 'type' => 'hidden',
                 'name' => 'kode_barang',
@@ -192,14 +193,20 @@ class Barang extends BaseController{
                 'id' => 'deskripsi_barangE',
                 'class' => 'form-control',
                 'style' => 'min-height:145px;'
-            ]
+            ],
+            'hidden_id_barangH' => [
+                'type' => 'hidden',
+                'name' => 'id_barangH',
+                'id' => 'id_barangH',
+                'class' => 'form-control',
+                'autofocus' => ''
+            ],
         ];
         tampilan_admin('admin/admin-barang/v_barang', 'admin/admin-barang/v_js_barang', $data);
      
     }
 
-    public function tambahbarang(){
-        
+    public function tambah(){
 
             if(!$this->validate([
                 'nama_barang' => [
@@ -290,7 +297,7 @@ class Barang extends BaseController{
 
             ])) {
                 
-                return redirect()->to(base_url('/barang'))->withInput();
+                return redirect()->to(base_url('/suplai/barang'))->withInput();
 
             }
 
@@ -352,7 +359,7 @@ class Barang extends BaseController{
                 
                
                 $this->session->setFlashdata('pesan_barang', 'Barang baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/barang'));
+                return redirect()->to(base_url('/suplai/barang'));
                 
         $role = $this->session->get('role_id');
         if (!$role){
@@ -365,7 +372,7 @@ class Barang extends BaseController{
         
     }
 
-    public function editbarang(){
+    public function ubah(){
 
         $old = $this->request->getPost('nama_barang_old');
         $new = $this->request->getPost('nama_barangE');
@@ -459,7 +466,7 @@ class Barang extends BaseController{
                 ]
             ])) {
                 
-                return redirect()->to(base_url('/barang'))->withInput();
+                return redirect()->to(base_url('/suplai/barang'))->withInput();
 
             }
 
@@ -525,7 +532,7 @@ class Barang extends BaseController{
                 $this->model_barang->update($id, $data);
 
                 $this->session->setFlashdata('pesan_barang', 'Barang berhasil diedit!');
-                return redirect()->to(base_url('/barang'));
+                return redirect()->to(base_url('/suplai/barang'));
                 
         $role = $this->session->get('role_id');    
         if (!$role){
@@ -540,23 +547,23 @@ class Barang extends BaseController{
 
     
 
-    public function kecohhapusbarang(){
-        $role = $this->session->get('role_id');
+    // public function kecoh(){
+    //     $role = $this->session->get('role_id');
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-            return redirect()->to(base_url('blokir'));
-        }
-    }
+    //     if (!$role){
+    //         return redirect()->to(base_url('/'));
+    //     }
+    //     if ($role > 0) {
+    //         return redirect()->to(base_url('blokir'));
+    //     }
+    // }
 
-    public function hapusbarang($barang_id){
-
-       
-            $this->model_barang->delete($barang_id);
+    
+    public function hapus(){     
+            $id_barang = $this->request->getPost('id_barangH');  
+            $this->model_barang->delete($id_barang);
             $this->session->setFlashdata('hapus_barang', 'Barang berhasil dihapus!');
-            return redirect()->to(base_url('/barang'));
+            return redirect()->to(base_url('/suplai/barang'));
 
         $role = $this->session->get('role_id');
         if (!$role){

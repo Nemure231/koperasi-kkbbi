@@ -51,12 +51,11 @@ $routes->group('beranda', function($routes){
 
 
 $routes->group('suplai', function($routes){
-
 	$routes->get('barang', 'Barang::index');
-	$routes->post('barang/tambahbarang', 'Barang::tambahbarang');
-	$routes->put('barang/editbarang', 'Barang::editbarang');
-	$routes->add('barang/kecohhapusbarang/(:any)', 'Barang::kecohhapusbarang');
-	$routes->delete('barang/kecohhapusbarang/(:num)', 'Barang::hapusbarang/$1');
+	$routes->post('barang/tambah', 'Barang::tambah');
+	$routes->put('barang/ubah', 'Barang::ubah');
+	$routes->delete('barang/hapus', 'Barang::hapus');
+	// $routes->delete('barang/kecoh', 'Barang::hapus');
 
 
 	$routes->get('satuan', 'Satuan::index');
