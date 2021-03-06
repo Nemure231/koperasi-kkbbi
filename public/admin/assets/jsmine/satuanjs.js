@@ -80,19 +80,19 @@ $(document).ready(function () {
       
    });
 
-   $('.edit_nama_satuan').on('change', function () {
-      $('.edit_nama_satuan').rules('add', {remote: {
-         url: "unikbuku",
-         type: "post"
-      }});
-   });
+   // $('.edit_nama_satuan').on('change', function () {
+   //    $('.edit_nama_satuan').rules('add', {remote: {
+   //       url: "unikbuku",
+   //       type: "post"
+   //    }});
+   // });
 
-   $('table').on('click', '#tombolHapusSatuan', function () {
+   $('table').on('click', '.tombolHapusSatuan', function () {
 
       var id_satuan = $(this).data("id_satuan");
-   
-      $('#btn-simpan-hapus').attr("action", "kecohhapussatuan/" + id_satuan);
       $('#modalSatuanHapus').modal('show');
+      $('#id_satuanH').val(id_satuan);
+      // $('#btn-simpan-hapus').attr("action", "kecohhapussatuan/" + id_satuan);
    
      
    });

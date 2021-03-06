@@ -52,7 +52,9 @@ class Satuan extends BaseController
             'session' => $this->session,
             'form_tambah_satuan' => ['id' => 'formTambahSatuan', 'name'=>'formTambahSatuan'],
             'form_edit_satuan' =>  ['id' => 'formEditSatuan', 'name'=>'formEditSatuan'],
+            'form_hapus_satuan' =>  ['id' => 'formHapusSatuan', 'name'=>'formHapusSatuan', 'class' => 'btn btn-block'],
             'hidden_id_satuan' => ['name' => 'id_satuanE', 'id'=>'id_satuanE', 'type'=> 'hidden'],
+            'hidden_id_satuanH' => ['name' => 'id_satuanH', 'id'=>'id_satuanH', 'type'=> 'hidden', 'class' => 'id_satuanH'],
             'input_satuan' => [
                 'type' => 'text',
                 'name' => 'nama_satuan',
@@ -79,7 +81,7 @@ class Satuan extends BaseController
      
     }
 
-    public function tambahsatuan(){
+    public function tambah(){
 
         if(!$this->validate([
                 'nama_satuan' => [
@@ -93,7 +95,7 @@ class Satuan extends BaseController
                 
             ])) {
                 
-                return redirect()->to(base_url('/barang/daftarsatuan'))->withInput();
+                return redirect()->to(base_url('/suplai/satuan'))->withInput();
 
             }
 
@@ -104,7 +106,7 @@ class Satuan extends BaseController
                 $this->model_satuan->insert($data);
             
                 $this->session->setFlashdata('pesan_satuan', 'Satuan baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/barang/daftarsatuan'));
+                return redirect()->to(base_url('/suplai/satuan'));
                 
         $role = $this->session->get('role_id');
         if (!$role){
@@ -117,7 +119,7 @@ class Satuan extends BaseController
         
     }
 
-    public function editsatuan(){
+    public function ubah(){
 
         $new = $this->request->getPost('edit_nama_satuan');
         $old = $this->request->getPost('old_nama_satuan');
@@ -139,7 +141,7 @@ class Satuan extends BaseController
                 
             ])) {
                 
-                return redirect()->to(base_url('/barang/daftarsatuan'))->withInput();
+                return redirect()->to(base_url('/suplai/satuan'))->withInput();
 
             }
 
@@ -151,7 +153,7 @@ class Satuan extends BaseController
                 $this->model_satuan->update($id, $data);
             
                 $this->session->setFlashdata('pesan_satuan', 'Satuan baru berhasil diedit!');
-                return redirect()->to(base_url('/barang/daftarsatuan'));
+                return redirect()->to(base_url('/suplai/satuan'));
                 
                 $role = $this->session->get('role_id');    
         if (!$role){
@@ -166,22 +168,21 @@ class Satuan extends BaseController
 
 
 
-    public function kecohhapusatuan(){
-        $role = $this->session->get('role_id');
+    // public function kecohhapusatuan(){
+    //     $role = $this->session->get('role_id');
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapussatuan($id_satuan){
-
+    //     if (!$role){
+    //         return redirect()->to(base_url('/'));
+    //     }
+    //     if ($role > 0) {
+    //             return redirect()->to(base_url('blokir'));
+    //     }
+    // }
+    public function hapus(){
+            $id_satuan = $this->request->getPost('id_satuanH');
             $this->model_satuan->delete($id_satuan);
             $this->session->setFlashdata('pesan_hapus_satuan', 'Satuan berhasil dihapus!');
-            return redirect()->to(base_url('/barang/daftarsatuan'));
+            return redirect()->to(base_url('/suplai/satuan'));
 
         if (!$role){
             return redirect()->to(base_url('/'));

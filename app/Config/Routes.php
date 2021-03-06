@@ -55,14 +55,11 @@ $routes->group('suplai', function($routes){
 	$routes->post('barang/tambah', 'Barang::tambah');
 	$routes->put('barang/ubah', 'Barang::ubah');
 	$routes->delete('barang/hapus', 'Barang::hapus');
-	// $routes->delete('barang/kecoh', 'Barang::hapus');
-
 
 	$routes->get('satuan', 'Satuan::index');
-	$routes->post('satuan/tambahsatuan', 'Satuan::tambahsatuan');
-	$routes->put('satuan/editsatuan', 'Satuan::editsatuan');
-	$routes->add('satuan/kecohhapussatuan/(:any)', 'Satuan::kecohhapussatuan');
-	$routes->delete('satuan/kecohhapussatuan/(:num)', 'Satuan::hapussatuan/$1');
+	$routes->post('satuan/tambah', 'Satuan::tambah');
+	$routes->put('satuan/ubah', 'Satuan::ubah');
+	$routes->delete('satuan/hapus', 'Satuan::hapus');
 
 	///tambah daftar kategori
 	$routes->get('kategori', 'Kategori::index');
