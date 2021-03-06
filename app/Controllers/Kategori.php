@@ -55,7 +55,9 @@ class Kategori extends BaseController
             'session' => $this->session,
             'form_tambah_kategori' => ['id' => 'formTambahKategori', 'name'=>'formTambahKategori'],
             'form_edit_kategori' =>  ['id' => 'formEditKategori', 'name'=>'formEditKategori'],
+            'form_hapus_kategori' =>  ['id' => 'formHapusKategori', 'name'=>'formHapusKategori', 'class' => 'btn btn-block'],
             'hidden_id_kategori' => ['name' => 'id_kategoriE', 'id'=>'id_kategoriE', 'type'=> 'hidden'],
+            'hidden_id_kategoriH' => ['name' => 'id_kategoriH', 'id'=>'id_kategoriH', 'type'=> 'hidden'],
             'hidden_old_kategori' => ['name' => 'old_nama_kategori', 'id'=>'old_nama_kategori', 'type'=> 'hidden'],
             'hidden_old_kode_kategori' => ['name' => 'old_kode_kategori', 'id'=>'old_kode_kategori', 'type'=> 'hidden'],
             // 'edit_kode_kategori' => [
@@ -90,7 +92,7 @@ class Kategori extends BaseController
      
     }
 
-    public function tambahkategori(){
+    public function tambah(){
 
         
             if(!$this->validate([
@@ -105,7 +107,7 @@ class Kategori extends BaseController
                 
             ])) {
                 
-                return redirect()->to(base_url('/barang/daftarkategori'))->withInput();
+                return redirect()->to(base_url('/suplai/kategori'))->withInput();
             }
             
            // if($this->validation->withRequest($this->request)->run() == TRUE){
@@ -115,7 +117,7 @@ class Kategori extends BaseController
                 );
                 $this->model_kategori->insert($data);
                 $this->session->setFlashdata('pesan_kategori', 'Kategori baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/barang/daftarkategori'));
+                return redirect()->to(base_url('/suplai/kategori'));
            // }
 
 
@@ -130,7 +132,7 @@ class Kategori extends BaseController
     
     }
 
-    public function editkategori(){
+    public function ubah(){
        
         $old =  $this->request->getPost('old_nama_kategori');
         $new =  $this->request->getPost('edit_nama_kategori');
@@ -171,7 +173,7 @@ class Kategori extends BaseController
                 
             ])) {
                 
-                return redirect()->to(base_url('/barang/daftarkategori'))->withInput();
+                return redirect()->to(base_url('/suplai/kategori'))->withInput();
 
             }
                 $id = $this->request->getPost('id_kategoriE');
@@ -182,7 +184,7 @@ class Kategori extends BaseController
 
                 $this->model_kategori->update($id, $data);
                 $this->session->setFlashdata('pesan_kategori', 'Kategori baru berhasil diedit!');
-                return redirect()->to(base_url('/barang/daftarkategori'));
+                return redirect()->to(base_url('/suplai/kategori'));
                 
                 $role = $this->session->get('role_id');
 
@@ -196,23 +198,23 @@ class Kategori extends BaseController
                 
     }
 
-    public function kecohhapuskategori(){
-        $role = $this->session->get('role_id');
+    // public function kecohhapuskategori(){
+    //     $role = $this->session->get('role_id');
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
+    //     if (!$role){
+    //         return redirect()->to(base_url('/'));
+    //     }
+    //     if ($role > 0) {
+    //             return redirect()->to(base_url('blokir'));
+    //     }
+    // }
 
-    public function hapuskategori($id_kategori){
-
+    public function hapus(){
+            $id_kategori = $this->request->getPost('id_kategoriH');
         
             $this->model_kategori->delete($id_kategori);
             $this->session->setFlashdata('pesan_hapus_kategori', 'Kategori berhasil dihapus!');
-            return redirect()->to(base_url('/barang/daftarkategori'));
+            return redirect()->to(base_url('/suplai/kategori'));
         
         $role = $this->session->get('role_id');
         if (!$role){

@@ -63,17 +63,15 @@ $routes->group('suplai', function($routes){
 
 	///tambah daftar kategori
 	$routes->get('kategori', 'Kategori::index');
-	$routes->post('kategori/tambahkategori', 'Kategori::tambahkategori');
-	$routes->put('kategori/editkategori', 'Kategori::editkategori');
-	$routes->add('kategori/kecohhapuskategori/(:any)', 'Kategori::kecohhapuskategori');
-	$routes->delete('kategori/kecohhapuskategori/(:num)', 'Kategori::hapuskategori/$1');
+	$routes->post('kategori/tambah', 'Kategori::tambah');
+	$routes->put('kategori/ubah', 'Kategori::ubah');
+	$routes->delete('kategori/hapus', 'Kategori::hapus');
 
 	///tambah daftar merek
 	$routes->get('merek', 'Merek::index');
-	$routes->post('/merek/tambahmerek', 'Merek::tambahmerek');
-	$routes->put('/merek/editmerek', 'Merek::editmerek');
-	$routes->add('/merek/kecohhapusmerek/(:any)', 'Merek::kecohhapusmerek');
-	$routes->delete('/merek/kecohhapusmerek/(:num)', 'Merek::hapusmerek/$1');
+	$routes->post('merek/tambah', 'Merek::tambah');
+	$routes->put('merek/ubah', 'Merek::ubah');
+	$routes->delete('merek/hapus', 'Merek::hapus');
 
 
 	///tambah daftar kategori

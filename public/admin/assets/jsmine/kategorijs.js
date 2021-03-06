@@ -71,12 +71,13 @@ $(document).ready(function () {
       }});
    });
 
-   $('table').on('click', '#tombolHapusKategori', function () {
+   $('table').on('click', '.tombolHapusKategori', function () {
 
       var id_kategori = $(this).data("id_kategori");
-   
-      $('#btn-simpan-hapus').attr("action", "kecohhapuskategori/" + id_kategori);
+      
+      // $('#btn-simpan-hapus').attr("action", "kecohhapuskategori/" + id_kategori);
       $('#modalKategoriHapus').modal('show');
+      $('#id_kategoriH').val(id_kategori);
    
      
    });

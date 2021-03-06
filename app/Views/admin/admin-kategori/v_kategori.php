@@ -57,7 +57,7 @@
                           data-kode_kategori="<//?php echo $k ['kode_kategori'];?>"
                           data-nama_kategori="<?php echo $k['nama_kategori'];?>">
                           <i class="fas fa-pencil-alt"></i></a>
-                        <a href="javascript:void(0)" id="tombolHapusKategori" class="btn btn-danger"
+                        <a href="javascript:void(0)" id="tombolHapusKategori" class="btn btn-danger tombolHapusKategori"
                           data-id_kategori="<?php echo $k['id_kategori'];?>">
                           <i class="fas fa-trash"></i>
                         </a>
@@ -118,7 +118,7 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open_multipart(base_url().'/barang/tambahkategori', $form_tambah_kategori);    ?>
+      <?php echo form_open_multipart(base_url().'/suplai/kategori/tambah', $form_tambah_kategori);    ?>
       <!-- < ?php echo form_input($id_hidd); ?> -->
       <?php echo csrf_field(); ?>
       <div class="modal-body">
@@ -166,7 +166,7 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/barang/editkategori', $form_edit_kategori);    ?>
+      <?php echo form_open(base_url().'/suplai/kategori/ubah', $form_edit_kategori);    ?>
       <?php echo form_input($hidden_id_kategori); ?>
       <input type="hidden" name="_method" value="PUT">
       <!-- <//?php echo form_input($hidden_old_kategori); ?> -->
@@ -241,10 +241,11 @@
       <div class="modal-footer" id="yahaloo">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <form id="btn-simpan-hapus" class="btn btn-block" method="post">
+        <?php echo form_open(base_url().'/suplai/kategori/hapus', $form_hapus_kategori);    ?>
+          <?php echo form_input($hidden_id_kategoriH); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
-        </form>
+        <?php echo form_close(); ?>
 
       </div>
 

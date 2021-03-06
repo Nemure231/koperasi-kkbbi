@@ -53,6 +53,7 @@ class Merek extends BaseController
             'session' => $this->session,
             'form_tambah_merek' => ['id' => 'formTambahMerek', 'name'=>'formTambahMerek'],
             'form_edit_merek' =>  ['id' => 'formEditMerek', 'name'=>'formEditMerek'],
+            'form_hapus_merek' =>  ['id' => 'formEditMerek', 'name'=>'formEditMerek'],
             'hidden_id_merek' => ['name' => 'id_merekE', 'id'=>'id_merekE', 'type'=> 'hidden'],
             'input_nama_merek' => [
                 'type' => 'text',
