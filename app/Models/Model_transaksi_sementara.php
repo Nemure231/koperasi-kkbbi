@@ -20,12 +20,12 @@ class Model_transaksi_sementara extends Model
 	'ts_nama_pengutang','ts_nomor_pengutang','ts_status_transaksi','ts_tanggal_sementara'];
 
 
-	public function HapusAllInvoiceAdmin($kod, $uri){
+	public function HapusAllInvoiceAdmin($kode, $uri){
         $id_user = $this->session->get('id_user');
         $this->db->transStart();
         $builder1 = $this->db->table('transaksi_sementara');
         $builder1->select('ts_barang_id, ts_qty');
-        $builder1->where('ts_kode_transaksi', $kod);
+        $builder1->where('ts_kode_transaksi', $kode);
         $builder1->join('barang', 'barang.id_barang = transaksi_sementara.ts_barang_id');
         //$builder1->groupBy('k_kode_keranjang');
         $query = $builder1->get()->getResultArray();

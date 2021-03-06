@@ -9,7 +9,9 @@
 
     <div class="section-body">
       <?php if($transaksi_sementara):  ?>
-        <?php echo form_open(base_url().'/kasir/tambahtransaksi/'.$row_transaksi_sementara['ts_kode_transaksi'].'', $form_invoice);    ?>
+        <?php echo form_open(base_url().'/fitur/kasir/invoice/tambah', $form_invoice);    ?>
+        <?php echo form_input($hidden_kode_transaksi); ?>
+        <?php echo form_input($hidden_uri); ?>
           <?php echo csrf_field(); ?>
       <input type="hidden" name="ts_uri" value="<?php echo $row_transaksi_sementara['ts_uri']; ?>">
       <div class="invoice">
@@ -219,9 +221,10 @@
       </div>
       <div class="modal-footer">
 
-        <form class="btn btn-block"
-          action="<?php echo base_url().'/kasir/kecohhapusinvoice'.'/'.''.$row_transaksi_sementara['ts_uri'].'' ?>" method="post"
-          accept-charset="utf-8">
+      <?php echo form_open(base_url().'/fitur/kasir/invoice/hapus', $form_hapus_invoice);    ?>
+          <?php echo form_input($hidden_kode_transaksi); ?>
+          <?php echo form_input($hidden_uri); ?>
+          <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         </form>

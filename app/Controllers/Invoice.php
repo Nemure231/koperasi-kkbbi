@@ -73,33 +73,38 @@ class Invoice extends BaseController{
                     ->where('ts_status_transaksi', 1)
                     ->where('ts_kode_transaksi', $kod)
                     ->findAll(),
-           'row_transaksi_sementara' => $tk,
-           'form_invoice' => ['id' => 'formInvoice', 'name'=>'formInvoice'],
-           'hidden_tt_kode_transaksi' => ['name' => 'tt_kode_transaksi', 'id'=>'tt_kode_transaksi', 'type'=> 'hidden', 'value' => ''.$tk['ts_kode_transaksi'].''],
-           'hidden_tt_kembalian' => ['name' => 'tt_kembalian', 'id'=>'tt_kembalian', 'type'=> 'hidden', 'value' => ''.$tk['ts_kembalian'].''],
-           'hidden_tt_jumlah_uang' => ['name' => 'tt_jumlah_uang', 'id'=>'tt_jumlah_uang', 'type'=> 'hidden', 'value' => ''.$tk['ts_jumlah_uang'].'']
+            'row_transaksi_sementara' => $tk,
+            'form_invoice' => ['id' => 'formInvoice', 'name'=>'formInvoice'],
+            'form_hapus_invoice' => ['id' => 'formHapusInvoice', 'name'=>'formHapusInvoice', 'class' => 'btn btn-block'],
+            'hidden_kode_transaksi' => [
+                'name' => 'hidden_kode_transaksi', 
+                'id'=>'hidden_kode_transaksi', 
+                'type'=> 'hidden', 
+                'value' => ''.$tk['ts_kode_transaksi'].''
+            ],
+            'hidden_uri' => [
+                'name' => 'hidden_uri', 
+                'id'=>'hidden_uri', 
+                'type'=> 'hidden', 
+                'value' => ''.$tk['ts_uri'].''
+            ],
+            'hidden_tt_kembalian' => [
+                'name' => 'tt_kembalian', 
+                'id'=>'tt_kembalian', 
+                'type'=> 'hidden', 
+                'value' => ''.$tk['ts_kembalian'].''
+            ],
         ];
         tampilan_admin('admin/admin-invoice/v_invoice', 'admin/admin-invoice/v_js_invoice', $data);
     }
 
 
-    // public function kecohhapusinvoice(){
-    //     $role = $this->session->get('role_id');
-
-    //     if (!$role){
-    //         return redirect()->to(base_url('/'));
-    //     }
-    //     if ($role > 0) {
-    //             return redirect()->to(base_url('blokir'));
-    //     }
-    // }
-
-    public function hapus($kod){
-
-            $uri = $this->request->getPost('ts_uri');
-            $this->model_transaksi_sementara->HapusAllInvoiceAdmin($kod, $uri);
+    public function hapus(){
+            $uri = $this->request->getPost('hidden_uri');
+            $kode = $this->request->getPost('hidden_kode_transaksi');
+            $this->model_transaksi_sementara->HapusAllInvoiceAdmin($kode, $uri);
 			$this->session->setFlashdata('pesan_hapus_invoice', 'Invoice berhasil dihapus!');
-            return redirect()->to(base_url('/kasir'));
+            return redirect()->to(base_url('/fitur/kasir'));
 
 
             $role = $this->session->get('role_id');
@@ -127,8 +132,9 @@ class Invoice extends BaseController{
     // }
 
 
-    public function tambahtransaksi($kod){
-		$uri = $this->request->getPost('ts_uri');
+    public function tambah(){
+        $kod = $this->request->getPost('hidden_kode_transaksi');
+		$uri = $this->request->getPost('hidden_uri');
         $id_user = $this->session->get('id_user');
 
         if(!$this->validate([
@@ -155,7 +161,7 @@ class Invoice extends BaseController{
 		    $this->model_transaksi_sementara->where('ts_uri', $uri)->delete();
 
             $this->session->setFlashdata('pesan_transaksi', 'Transaksi berhasil disimpan!');
-            return redirect()->to(base_url('/kasir'));
+            return redirect()->to(base_url('/fitur/kasir'));
         
         $role = $this->session->get('role_id');
         if (!$role){
