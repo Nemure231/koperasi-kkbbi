@@ -59,7 +59,9 @@ class Supplier extends BaseController
             'session' => $this->session,
             'form_tambah_supplier' => ['id' => 'formTambahSupplier', 'name'=>'formTambahSupplier'],
             'form_edit_supplier' =>  ['id' => 'formEditSupplier', 'name'=>'formEditSupplier'],
+            'form_hapus_supplier' =>  ['id' => 'formHapusSupplier', 'name'=>'formHapusSupplier', 'class' => 'btn btn-block'],
             'hidden_id_supplier' => ['name' => 'id_supplierE', 'id'=>'id_supplierE', 'type'=> 'hidden'],
+            'hidden_id_supplierH' => ['name' => 'id_supplierH', 'id'=>'id_supplierH', 'type'=> 'hidden'],
             'hidden_old_nama_supplier' => [
                 'type' => 'hidden',
                 'name' => 'old_nama_supplier',
@@ -74,7 +76,7 @@ class Supplier extends BaseController
      
     }
 
-    public function tambahsupplier(){
+    public function tambah(){
 
         
        
@@ -90,7 +92,7 @@ class Supplier extends BaseController
                 
             ])) {
                 
-                return redirect()->to(base_url('/barang/daftarsupplier'))->withInput();
+                return redirect()->to(base_url('/suplai/supplier'))->withInput();
 
             }
 
@@ -101,7 +103,7 @@ class Supplier extends BaseController
                 $this->model_pengirim_barang->insert($data);
             
                 $this->session->setFlashdata('pesan_supplier', 'Supplier baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/barang/daftarsupplier'));
+                return redirect()->to(base_url('/suplai/supplier'));
                 
         $role = $this->session->get('role_id');
         if (!$role){
@@ -114,7 +116,7 @@ class Supplier extends BaseController
         
     }
 
-    public function editsupplier(){
+    public function ubah(){
 
         $old = $this->request->getPost('edit_nama_supplier');
         $new = $this->request->getPost('old_nama_supplier');
@@ -137,7 +139,7 @@ class Supplier extends BaseController
                 
             ])) {
                 
-                return redirect()->to(base_url('/barang/daftarsupplier'))->withInput();
+                return redirect()->to(base_url('/suplai/supplier'))->withInput();
 
             }
                 $id = $this->request->getPost('id_supplierE');
@@ -148,7 +150,7 @@ class Supplier extends BaseController
                 $this->model_pengirim_barang->update($id, $data);
             
                 $this->session->setFlashdata('pesan_supplier', 'Supplier baru berhasil diedit!');
-                return redirect()->to(base_url('/barang/daftarsupplier'));
+                return redirect()->to(base_url('/suplai/supplier'));
                 
         $role = $this->session->get('role_id');
         if (!$role){
@@ -162,24 +164,12 @@ class Supplier extends BaseController
     }
 
 
-
-    public function kecohhapussupplier(){
-        $role = $this->session->get('role_id');
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapussupplier($id_supplier){
+    public function hapus(){
            
-            
+        $id_supplier = $this->request->getPost('id_supplierH');
             $this->model_pengirim_barang->delete($id_supplier);
             $this->session->setFlashdata('pesan_hapus_supplier', 'Supplier berhasil dihapus!');
-            return redirect()->to(base_url('/barang/daftarsupplier'));
+            return redirect()->to(base_url('/supali/supplier'));
         
         $role = $this->session->get('role_id');
         if (!$role){

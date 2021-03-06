@@ -68,12 +68,11 @@ $(document).ready(function () {
       }});
    });
 
-   $('table').on('click', '#tombolHapusMerek', function () {
+   $('table').on('click', '.tombolHapusMerek', function () {
 
       var id_merek = $(this).data("id_merek");
-   
-      $('#btn-simpan-hapus').attr("action", "kecohhapusmerek/" + id_merek);
       $('#modalMerekHapus').modal('show');
+      $('#id_merekH').val(id_merek);
    
      
    });

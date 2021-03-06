@@ -54,7 +54,7 @@
                           data-id_merek="<?php echo $m['id_merek'];?>"
                           data-nama_merek="<?php echo $m['nama_merek'];?>">
                           <i class="fas fa-pencil-alt"></i></a>
-                        <a href="javascript:void(0)" id="tombolHapusMerek" class="btn btn-danger"
+                        <a href="javascript:void(0)" id="tombolHapusMerek" class="btn btn-danger tombolHapusMerek"
                           data-id_merek="<?php echo $m['id_merek'];?>">
                           <i class="fas fa-trash"></i>
                         </a>
@@ -115,7 +115,7 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/barang/tambahmerek', $form_tambah_merek);    ?>
+      <?php echo form_open(base_url().'/suplai/merek/tambah', $form_tambah_merek);    ?>
       
       <!-- < ?php echo form_input($id_hidd); ?> -->
       <?php echo csrf_field(); ?>
@@ -156,11 +156,12 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/barang/editmerek', $form_edit_merek);    ?>
+      <?php echo form_open(base_url().'/suplai/merek/ubah', $form_edit_merek);    ?>
       <input type="hidden" name="_method" value="PUT">
       <?php echo form_input($hidden_id_merek); ?>
-      <?php echo form_input($hidden_nama_merek); ?>
       <?php echo csrf_field(); ?>
+      <?php echo form_input($hidden_nama_merek); ?>
+      
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-12">
@@ -220,10 +221,13 @@
       <div class="modal-footer" id="yahaloo">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <form id="btn-simpan-hapus" class="btn btn-block" method="post">
+        <?php echo form_open(base_url().'/suplai/merek/hapus', $form_hapus_merek);    ?>
+        <input type="hidden" name="_method" value="PUT">
+        <?php echo form_input($hidden_id_merekH); ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
-        </form>
+        <?php echo form_close(); ?>
 
       </div>
 

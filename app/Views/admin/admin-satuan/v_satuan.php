@@ -225,6 +225,7 @@
         <!-- <form id="btn-simpan-hapus" class="btn btn-block" method="post"> -->
         <?php echo form_open(base_url().'/suplai/satuan/hapus', $form_hapus_satuan);    ?>
         <?php echo form_input($hidden_id_satuanH); ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         <?php echo form_close(); ?>

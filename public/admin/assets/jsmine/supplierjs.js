@@ -61,12 +61,12 @@ $(document).ready(function () {
       
    });
 
-   $('table').on('click', '#tombolHapusSupplier', function () {
+   $('table').on('click', '.tombolHapusSupplier', function () {
 
       var id_supplier = $(this).data("id_supplier");
-   
-      $('#btn-simpan-hapus').attr("action", "kecohhapussupplier/" + id_supplier);
+
       $('#modalSupplierHapus').modal('show');
+      $('#id_supplierH').val(id_supplier);
    
      
    });

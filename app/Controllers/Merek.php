@@ -53,8 +53,9 @@ class Merek extends BaseController
             'session' => $this->session,
             'form_tambah_merek' => ['id' => 'formTambahMerek', 'name'=>'formTambahMerek'],
             'form_edit_merek' =>  ['id' => 'formEditMerek', 'name'=>'formEditMerek'],
-            'form_hapus_merek' =>  ['id' => 'formEditMerek', 'name'=>'formEditMerek'],
+            'form_hapus_merek' =>  ['id' => 'formHapusMerek', 'name'=>'formHapusMerek', 'class' => 'btn btn-block'],
             'hidden_id_merek' => ['name' => 'id_merekE', 'id'=>'id_merekE', 'type'=> 'hidden'],
+            'hidden_id_merekH' => ['name' => 'id_merekH', 'id'=>'id_merekH', 'type'=> 'hidden'],
             'input_nama_merek' => [
                 'type' => 'text',
                 'name' => 'nama_merek',
@@ -81,7 +82,7 @@ class Merek extends BaseController
      
     }
 
-    public function tambahmerek(){
+    public function tambah(){
 
        
 
@@ -97,7 +98,7 @@ class Merek extends BaseController
                 
             ])) {
                 
-                return redirect()->to(base_url('/barang/daftarmerek'))->withInput();
+                return redirect()->to(base_url('/suplai/merek'))->withInput();
 
             }
 
@@ -108,7 +109,7 @@ class Merek extends BaseController
                 $this->model_merek->insert($data);
             
                 $this->session->setFlashdata('pesan_merek', 'Merek baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/barang/daftarmerek'));
+                return redirect()->to(base_url('/suplai/merek'));
                 
         $role = $this->session->get('role_id');
         if (!$role){
@@ -121,7 +122,7 @@ class Merek extends BaseController
         
     }
 
-    public function editmerek(){
+    public function ubah(){
 
         $old = $this->request->getPost('edit_nama_merek');
         $new = $this->request->getPost('old_nama_merek');
@@ -144,7 +145,7 @@ class Merek extends BaseController
                 
             ])) {
                 
-                return redirect()->to(base_url('/barang/daftarmerek'))->withInput();
+                return redirect()->to(base_url('/suplai/merek'))->withInput();
 
             }
                 $id = $this->request->getPost('id_merekE');
@@ -155,7 +156,7 @@ class Merek extends BaseController
                 $this->model_merek->update($id, $data);
             
                 $this->session->setFlashdata('pesan_merek', 'Merek baru berhasil diedit!');
-                return redirect()->to(base_url('/barang/daftarmerek'));
+                return redirect()->to(base_url('/suplai/merek'));
                 
         $role = $this->session->get('role_id');
         if (!$role){
@@ -169,24 +170,12 @@ class Merek extends BaseController
     }
 
 
-
-    public function kecohhapusmerek(){
-        $role = $this->session->get('role_id');
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapusmerek($id_merek){
-           
+    public function hapus(){
+        $id_merek = $this->request->getPost('id_merekH');
             
             $this->model_merek->delete($id_merek);
             $this->session->setFlashdata('pesan_hapus_merek', 'Merek berhasil dihapus!');
-            return redirect()->to(base_url('/barang/daftarmerek'));
+            return redirect()->to(base_url('/suplai/merek'));
         
         $role = $this->session->get('role_id');
         if (!$role){

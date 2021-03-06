@@ -76,10 +76,9 @@ $routes->group('suplai', function($routes){
 
 	///tambah daftar kategori
 	$routes->get('supplier', 'Supplier::index');
-	$routes->post('supplier/tambahsupplier', 'Supplier::tambahsupplier');
-	$routes->put('supplier/editsupplier', 'Supplier::editsupplier');
-	$routes->add('supplier/kecohhapussupplier/(:any)', 'Supplier::kecohhapussupplier');
-	$routes->delete('supplier/kecohhapussupplier/(:num)', 'Supplier::hapussupplier/$1');
+	$routes->post('supplier/tambah', 'Supplier::tambah');
+	$routes->put('supplier/ubah', 'Supplier::ubah');
+	$routes->delete('supplier/hapus', 'Supplier::hapus');
 
 	
 });

@@ -438,6 +438,7 @@ width:100%!important;
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
         <?php echo form_open(base_url().'/suplai/barang/hapus', $form_hapus_barang);    ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <?php echo form_input($hidden_id_barangH); ?>
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
