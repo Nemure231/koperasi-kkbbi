@@ -61,20 +61,16 @@ $routes->group('suplai', function($routes){
 	$routes->put('satuan/ubah', 'Satuan::ubah');
 	$routes->delete('satuan/hapus', 'Satuan::hapus');
 
-	///tambah daftar kategori
 	$routes->get('kategori', 'Kategori::index');
 	$routes->post('kategori/tambah', 'Kategori::tambah');
 	$routes->put('kategori/ubah', 'Kategori::ubah');
 	$routes->delete('kategori/hapus', 'Kategori::hapus');
 
-	///tambah daftar merek
 	$routes->get('merek', 'Merek::index');
 	$routes->post('merek/tambah', 'Merek::tambah');
 	$routes->put('merek/ubah', 'Merek::ubah');
 	$routes->delete('merek/hapus', 'Merek::hapus');
 
-
-	///tambah daftar kategori
 	$routes->get('supplier', 'Supplier::index');
 	$routes->post('supplier/tambah', 'Supplier::tambah');
 	$routes->put('supplier/ubah', 'Supplier::ubah');
@@ -104,7 +100,6 @@ $routes->group('fitur', function($routes){
 	$routes->get('utang/kecohhapusinvoiceutang/(:num)', 'InvoiceUtang::kecohhapusinvoiveutang');
 	$routes->delete('utang/kecohhapusinvoiceutang/(:any)', 'InvoiceUtang::hapusinvoiceutang/$1');
 	$routes->post('utang/simpan_invoice_utang', 'InvoiceUtang::simpan_invoice_utang');
-
 
 	$routes->get('barang_masuk', 'BarangMasuk::index');
 	$routes->post('barang_masuk/barangmasuk', 'BarangMasuk::barangmasuk');
