@@ -140,10 +140,11 @@ $routes->group('laporan', function($routes){
 $routes->group('pengaturan', function($routes){
 
 	$routes->get('role', 'Role::index');
-	$routes->post('role/tambahrole', 'Role::tambahrole');
-	$routes->put('role/editrole', 'Role::editrole');
-	$routes->get('role/kecohhapusrole/(:any)', 'Role::kecohhapusrole');
-	$routes->delete('role/kecohhapusrole/(:num)', 'Role::hapusrole/$1');
+	$routes->post('role/tambah', 'Role::tambah');
+	$routes->put('role/ubah', 'Role::ubah');
+	$routes->delete('role/hapus', 'Role::hapus');
+
+
 	$routes->get('role/roleakses/(:num)', 'RoleAkses::index/$1');
 	$routes->post('role/ubahakses', 'RoleAkses::ubahakses');
 

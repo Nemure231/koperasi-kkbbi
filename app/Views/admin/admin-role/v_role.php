@@ -113,7 +113,7 @@
 				</button>
 			</div>
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah role ini berasal dari controler role di fungsi index -->
-      <?php echo form_open(base_url().'/role/tambahrole', $attr);    ?>
+      <?php echo form_open(base_url().'/pengaturan/role/tambah', $attr);    ?>
       <?php echo csrf_field(); ?>
 				<div class="modal-body">
 
@@ -144,7 +144,7 @@
 				</button>
 			</div>
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah role ini berasal dari controler role di fungsi index -->
-      <?php echo form_open(base_url().'/role/editrole', $attr);    ?>
+      <?php echo form_open(base_url().'/pengaturan/role/ubah', $attr);    ?>
       <?php echo csrf_field(); ?>
       <input type="hidden" name="_method" value="PUT">
       <?php echo form_input($hidden_role_id); ?>
@@ -202,10 +202,12 @@
       <div class="modal-footer" id="yahaloo">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <form id="btn-simpan-hapus" class="btn btn-block" method="post">
+        <?php echo form_open(base_url().'/pengaturan/role/hapus', $form_hapus_role);    ?>
+        <?php echo form_input($hidden_role_id_hapus); ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
-        </form>
+        <?php echo form_close(); ?>
 
       </div>
 

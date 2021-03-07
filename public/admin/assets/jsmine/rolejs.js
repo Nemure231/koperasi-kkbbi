@@ -79,7 +79,8 @@ $(document).ready(function () {
    $('table').on('click', '.hapus-role', function () {
       var id_role = $(this).data('id');
       $('#modalHapusRole').modal('show');
-      $('#btn-simpan-hapus').attr("action", "role/kecohhapusrole/" + id_role);
+      $('#hidden_role_id_hapus').val(id_role);
+      // $('#btn-simpan-hapus').attr("action", "role/kecohhapusrole/" + id_role);
 
 
    });

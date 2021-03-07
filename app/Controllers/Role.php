@@ -51,7 +51,9 @@ class Role extends BaseController{
             'session' => $this->session,
             'validation' => $this->validation,
             'attr' => ['id' => 'formRole', 'name'=>'formRole'],
+            'form_hapus_role' => ['id' => 'formHapusRole', 'name'=>'formHapusRole', 'class' => 'btn btn-block'],
             'hidden_role_id' => ['name' => 'role_id', 'id'=>'role_id', 'type'=> 'hidden'],
+            'hidden_role_id_hapus' => ['name' => 'hidden_role_id_hapus', 'id'=>'hidden_role_id_hapus', 'type'=> 'hidden'],
             'hidden_old_role' => ['name' => 'old_role', 'id'=>'old_role', 'type'=> 'hidden'],
             'nama_role' => [
                 'type' => 'text',
@@ -72,7 +74,7 @@ class Role extends BaseController{
         tampilan_admin('admin/admin-role/v_role', 'admin/admin-role/v_js_role', $data);
     }
     
-    public function tambahrole(){
+    public function tambah(){
         if(!$this->validate([
             'role' => [
                 'label'  => 'Nama Role',
@@ -96,7 +98,7 @@ class Role extends BaseController{
             $this->model_user_role->insert($data);
         
             $this->session->setFlashdata('pesan_role', 'Role baru berhasil ditambahkan!');
-            return redirect()->to(base_url('/role'));
+            return redirect()->to(base_url('/pengaturan/role'));
             
             $role = $this->session->get('role_id');
             if (!$role){
@@ -108,7 +110,7 @@ class Role extends BaseController{
             }
     }
 
-    public function editrole(){
+    public function ubah(){
        
         $old =  $this->request->getPost('old_role');
         $new =  $this->request->getPost('roleE');
@@ -141,7 +143,7 @@ class Role extends BaseController{
 
                 $this->model_user_role->update($id_role, $data);
                 $this->session->setFlashdata('pesan_edit_role', 'Role baru berhasil diedit!');
-                return redirect()->to(base_url('/role'));
+                return redirect()->to(base_url('/pengaturan/role'));
                 
                 $role = $this->session->get('role_id');
 
@@ -154,22 +156,13 @@ class Role extends BaseController{
                 }    
     }
 
-    public function kecohhapusrole(){
-        $role = $this->session->get('role_id');
+  
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapusrole($id_role){
-        
+    public function hapus(){
+        $id_role =  $this->request->getPost('hidden_role_id_hapus');
             $this->model_user_role->delete($id_role);
             $this->session->setFlashdata('pesan_hapus_role', 'Role berhasil dihapus!');
-            return redirect()->to(base_url('/role'));
+            return redirect()->to(base_url('/pengaturan/role'));
         
         $role = $this->session->get('role_id');
         if (!$role){
