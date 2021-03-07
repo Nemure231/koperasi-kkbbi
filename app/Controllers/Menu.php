@@ -46,7 +46,9 @@ class Menu extends BaseController{
            'session' => $this->session,
            'attr' => ['id' => 'formMenu', 'name'=>'formMenu'],
            'form_edit_menu' => ['id' => 'formEditMenu', 'name'=>'formEditMenu'],
+           'form_hapus_menu' => ['id' => 'formHapusMenu', 'name'=>'formHapusMenu', 'class' => 'btn btn-block'],
            'hidden_menu_id' => ['name' => 'hidden_menu_id', 'id'=>'hidden_menu_id', 'type'=> 'hidden'],
+           'hidden_hapus_menu_id' => ['name' => 'hidden_hapus_menu_id', 'id'=>'hidden_hapus_menu_id', 'type'=> 'hidden'],
            'hidden_old_menu' => ['name' => 'old_menu', 'id'=>'old_menu', 'type'=> 'hidden'],
            'menunu' => [
                 'type' => 'text',
@@ -69,7 +71,7 @@ class Menu extends BaseController{
     }
     
 
-    public function tambahmenu(){
+    public function tambah(){
         if(!$this->validate([
             'menu' => [
                 'label'  => 'Nama Menu',
@@ -82,7 +84,7 @@ class Menu extends BaseController{
             
         ])) {
             
-            return redirect()->to(base_url('/menu'))->withInput();
+            return redirect()->to(base_url('/pengaturan/menu'))->withInput();
 
         }
 
@@ -93,7 +95,7 @@ class Menu extends BaseController{
             $this->model_user_menu->insert($data);
         
             $this->session->setFlashdata('pesan_menu', 'Menu baru berhasil ditambahkan!');
-            return redirect()->to(base_url('/menu'));
+            return redirect()->to(base_url('/pengaturan/menu'));
             
             $role = $this->session->get('role_id');
             if (!$role){
@@ -105,7 +107,7 @@ class Menu extends BaseController{
             }
     }
 
-    public function editmenu(){
+    public function ubah(){
        
         $old =  $this->request->getPost('old_menu');
         $new =  $this->request->getPost('menuE');
@@ -138,7 +140,7 @@ class Menu extends BaseController{
 
                 $this->model_user_menu->update($id, $data);
                 $this->session->setFlashdata('pesan_edit_menu', 'Menu baru berhasil diedit!');
-                return redirect()->to(base_url('/menu'));
+                return redirect()->to(base_url('/pengaturan/menu'));
                 
                 $role = $this->session->get('role_id');
 
@@ -151,32 +153,21 @@ class Menu extends BaseController{
                 }    
     }
 
-    public function kecohhapusmenu(){
-        $role = $this->session->get('role_id');
+    public function hapus(){
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapusmenu($id_menu){
-
-        
-            $this->model_user_menu->delete($id_menu);
-            $this->session->setFlashdata('pesan_hapus_menu', 'Menu berhasil dihapus!');
-            return redirect()->to(base_url('/menu'));
+        $id_menu = $this->request->getPost('hidden_hapus_menu_id');
+        $this->model_user_menu->delete($id_menu);
+        $this->session->setFlashdata('pesan_hapus_menu', 'Menu berhasil dihapus!');
+        return redirect()->to(base_url('/pengaturan/menu'));
         
         $role = $this->session->get('role_id');
         if (!$role){
             return redirect()->to(base_url('/'));
         }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+        $userAccess = $this->model_user_menu->Tendang();
+        if ($userAccess < 1) {
+            return redirect()->to(base_url('blokir'));
+        }
         
     
     }

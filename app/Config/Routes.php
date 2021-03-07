@@ -148,24 +148,20 @@ $routes->group('pengaturan', function($routes){
 	$routes->get('role/akses/(:num)', 'RoleAkses::index/$1');
 	$routes->post('role/akses/ubah', 'RoleAkses::ubah');
 
-
 	$routes->get('menu', 'Menu::index');
-	$routes->post('menu/tambahmenu', 'Menu::tambahmenu');
-	$routes->put('menu/editmenu', 'Menu::editmenu');
-	$routes->get('menu/kecohhapusmenu/(:any)', 'Menu::kecohhapusmenu');
-	$routes->delete('menu/kecohhapusmenu/(:num)', 'Menu::hapusmenu/$1');
+	$routes->post('menu/tambah', 'Menu::tambah');
+	$routes->put('menu/ubah', 'Menu::ubah');
+	$routes->delete('menu/hapus', 'Menu::hapus');
 
-	///
 	$routes->get('submenu', 'Submenu::index');
 	$routes->post('submenu/tambahsubmenu', 'Submenu::tambahsubmenu');
 	$routes->put('submenu/editsubmenu', 'Submenu::editsubmenu');
 	$routes->get('submenu/kecohhapussubmenu/(:any)', 'Submenu::kecohhapussubmenu');
 	$routes->delete('submenu/kecohhapussubmenu/(:num)', 'Submenu::hapussubmenu/$1');
 
-
 	$routes->get('kode_barang', 'KodeBarang::index');
 	$routes->put('kode_barang/editkodebarang', 'KodeBarang::editkodebarang');
-	///
+	
 	$routes->get('kode_transaksi', 'KodeTransaksi::index');
 	$routes->put('kode_transaksi/editkodetransaksi', 'KodeTransaksi::editkodetransaksi');
 

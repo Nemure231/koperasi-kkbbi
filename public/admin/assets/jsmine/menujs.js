@@ -82,7 +82,7 @@ if (flashDataSalah) {
    $('table').on('click', '.hapus-menu', function () {
       var id_menu = $(this).data('id');
       $('#modalHapusMenu').modal('show');
-      $('#btn-simpan-hapus').attr("action", "menu/kecohhapusmenu/" + id_menu);
+      $('#hidden_hapus_menu_id').val(id_menu);
 
      
       

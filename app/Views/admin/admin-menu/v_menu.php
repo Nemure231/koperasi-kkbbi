@@ -105,7 +105,7 @@
 				</button>
 			</div>
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/menu/tambahmenu', $attr);    ?>
+      <?php echo form_open(base_url().'/pengaturan/menu/tambah', $attr);    ?>
         <?php echo csrf_field(); ?>
 				<div class="modal-body">
 
@@ -137,7 +137,7 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/menu/editmenu', $form_edit_menu);    ?>
+      <?php echo form_open(base_url().'/pengaturan/menu/ubah', $form_edit_menu);    ?>
       <input type="hidden" name="_method" value="PUT">
       <?php echo form_input($hidden_menu_id); ?>
       <?php echo form_input($hidden_old_menu); ?>
@@ -201,10 +201,12 @@
       <div class="modal-footer" id="yahaloo">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <form id="btn-simpan-hapus" class="btn btn-block" method="post">
+        <?php echo form_open(base_url().'/pengaturan/menu/hapus', $form_hapus_menu);    ?>
+        <?php echo form_input($hidden_hapus_menu_id); ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
-        </form>
+        <?php echo form_close(); ?>
 
       </div>
 
