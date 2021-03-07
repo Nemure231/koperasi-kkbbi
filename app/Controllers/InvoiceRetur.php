@@ -46,7 +46,7 @@ class InvoiceRetur extends BaseController{
             ->first();
 
         if(!$tk){
-            return redirect()->to(base_url('/form'));
+            return redirect()->to(base_url('/fitur/retur'));
         }
 
         $data = [
@@ -84,26 +84,17 @@ class InvoiceRetur extends BaseController{
                     ->findAll(),
             'row_retur' => $tk,
             'form_invoice' => ['id' => 'formInvoice', 'name'=>'formInvoice'],
+            'form_hapus_invoice' => ['id' => 'formHapusInvoice', 'name'=>'formHapusInvoice', 'class' => 'btn btn-block'],
         ];
         tampilan_admin('admin/admin-invoice-retur/v_invoice_retur', 'admin/admin-invoice-retur/v_js_invoice_retur', $data);
     }
 
-    public function kecohhapusinvoiceretur(){
-        $role = $this->session->get('role_id');
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapusinvoiceretur(){
+    public function hapus(){
 
         $this->model_transaksi_retur_sementara->HapusAllInvoiceRetur();
 		$this->session->setFlashdata('pesan_hapus_invoice', 'Invoice berhasil dihapus!');
-        return redirect()->to(base_url('/form'));
+        return redirect()->to(base_url('/fitur/retur'));
         $role = $this->session->get('role_id');
         
         if (!$role){
@@ -117,7 +108,7 @@ class InvoiceRetur extends BaseController{
     
     }
     
-    public function tambahtransaksiretur(){
+    public function tambah(){
         
         if(!$this->validate([
             'tt_tanggal_beli' => [
@@ -129,13 +120,13 @@ class InvoiceRetur extends BaseController{
             ]
 
         ])) {
-            return redirect()->to(base_url('/form/invoiceretur'))->withInput();
+            return redirect()->to(base_url('/fitur/retur/invoice'))->withInput();
         }
             $id_user = $this->session->get('id_user');
             $this->model_transaksi_retur_sementara->GetAllTransaksiSemantaraReturForInsertRetur();
             $this->model_transaksi_retur_sementara->where('tsr_user_id', $id_user)->delete();
             $this->session->setFlashdata('pesan_transaksi', 'Transaksi retur berhasil disimpan!');
-            return redirect()->to(base_url('/form'));
+            return redirect()->to(base_url('/fitur/retur'));
             
     
         $role = $this->session->get('role_id');

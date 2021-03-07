@@ -8,7 +8,7 @@
     </div>
 
     <div class="section-body">
-        <?php echo form_open(base_url().'/form/tambahtransaksiretur', $form_invoice);    ?>
+        <?php echo form_open(base_url().'/fitur/retur/invoice/tambah', $form_invoice);    ?>
           <?php echo csrf_field(); ?>
 
       <div class="invoice">
@@ -264,12 +264,11 @@
       </div>
       <div class="modal-footer">
 
-        <form class="btn btn-block"
-          action="<?php echo base_url().'/form/kecohhapusinvoiceretur'.'/'.''.$id_session.'' ?>" method="post"
-          accept-charset="utf-8">
+        <?php echo form_open(base_url().'/fitur/retur/invoice/hapus', $form_hapus_invoice);    ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
-        </form>
+        <?php echo form_close(); ?>
 
       </div>
 
