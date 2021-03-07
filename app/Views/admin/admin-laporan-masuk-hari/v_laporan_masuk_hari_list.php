@@ -37,7 +37,7 @@
             </div>
 
             <div class="card-body">
-            <?php echo form_open(base_url().'/masuk', $form_hari);    ?>
+            <?php echo form_open(base_url().'/laporan/masuk/harian', $form_hari);    ?>
             <?php echo csrf_field(); ?>
                 <div class="row">
                   

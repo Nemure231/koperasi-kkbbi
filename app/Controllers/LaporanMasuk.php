@@ -101,7 +101,7 @@ class LaporanMasuk extends BaseController{
         tampilan_admin($body, 'admin/admin-laporan-masuk-hari/v_js_laporan_masuk_hari', $data);
     }
 
-    public function barangmasukminggu(){
+    public function mingguan(){
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
@@ -196,7 +196,7 @@ class LaporanMasuk extends BaseController{
     }
 
 
-    public function barangmasukbulan(){
+    public function bulanan(){
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
@@ -282,7 +282,7 @@ class LaporanMasuk extends BaseController{
         tampilan_admin($body, 'admin/admin-laporan-masuk-bulan/v_js_laporan_masuk_bulan', $data);
     }
 
-    public function barangmasuktahun(){
+    public function tahunan(){
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');

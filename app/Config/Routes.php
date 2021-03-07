@@ -118,18 +118,15 @@ $routes->group('fitur', function($routes){
 
 $routes->group('laporan', function($routes){
 
-	$routes->add('masuk_hari', 'LaporanMasuk::index');
-	$routes->add('masuk_minggu', 'LaporanMasuk::barangmasukminggu');
-	// $routes->add('/masuk/ambilbarangmasukmingguan', 'LaporanMasuk::ambilbarangmasukmingguan');
-	$routes->add('masuk_bulan', 'LaporanMasuk::barangmasukbulan');
-	$routes->add('masuk_tahun', 'LaporanMasuk::barangmasuktahun');
+	$routes->add('masuk/harian', 'LaporanMasuk::index');
+	$routes->add('masuk/mingguan', 'LaporanMasuk::mingguan');
+	$routes->add('masuk/bulanan', 'LaporanMasuk::bulanan');
+	$routes->add('masuk/tahunan', 'LaporanMasuk::tahunan');
 
 	$routes->add('keluar_hari', 'LaporanKeluar::index');
 	$routes->add('keluar_minggu', 'LaporanKeluar::barangkeluarminggu');
-	// $routes->add('keluar/ambilbarangkeluarmingguan', 'LaporanKeluar::ambilbarangkeluarmingguan');
 	$routes->add('keluar_bulan', 'LaporanKeluar::barangkeluarbulan');
 	$routes->add('keluar_tahun', 'LaporanKeluar::barangkeluartahun');
-
 
 	$routes->add('retur', 'LaporanRetur::index');
 
