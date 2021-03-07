@@ -230,9 +230,6 @@ $(document).ready(function () {
          var fake =  $('.tab-total-fake').val();
          $('.tab-total-real').val(fake - op);
          $('.tab-kembalian').val(op - fake);
-
-         // $('.tab-total-real').val(fake - op);
-         // $('.tab-kembalian').val(op - fake);
          $('.tab-total-bayar').val(fake - op);
 
          var top  = fake - op; 
@@ -347,7 +344,7 @@ $(document).ready(function () {
 
       } else {
          $.ajax({
-            url: 'form/tambahkeranjangretur',
+            url: 'retur/tambah_keranjang',
             //method: "POST",
             //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
             //yang kemuidan di kanannya harus disamakan dengan data yang diambil dari data- jquery
@@ -375,13 +372,10 @@ $(document).ready(function () {
       }
    });
 
-   $('table').on('click', '#tombolhapusk', function () {
+   $('table').on('click', '.tombolhapusk', function () {
       var kode = $(this).data("kode");
       $('#modalhapusk').modal('show');
-      $('#btn-hapus-keranjang').attr("action", "form/kecohhapuskeranjangretur/" + kode);
-      //$('#genre_id').val('');
-      //$('#formGenre').trigger("reset");
-      //$('#judulk').html("");
+      $('#kode_hapus_barang').val(kode);
   });
 
   $('#tombolhapuskalladmin').click(function () {

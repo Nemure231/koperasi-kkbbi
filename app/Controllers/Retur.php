@@ -90,7 +90,7 @@ class Retur extends BaseController{
             }
             $nama_jenis_kasir = ': '.$jenis_kasir['role'];
         }
-        
+
 		$data = [
 			'title' => ucfirst('Form Retur'),
             'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
@@ -124,12 +124,31 @@ class Retur extends BaseController{
                         ->groupBy('kr_barang_id')->findAll(),
             'riwayat' => $hasil_kode,
             'validation' => $this->validation,
-            'hidden_kode_transaksi' => ['name' => 'kode_transaksi', 'id'=>'kode_transaksi', 'type'=> 'hidden', 'value' => ''.$kode.''],
-        //'hidden_id_jenis_kasir' => ['name' => 'id_jenis_kasir', 'id'=>'id_jenis_kasir', 'type'=> 'hidden', 'value' => ''.$jenis_kasir['id_jenis_kasir'].''],
-        //'hidden_role_id' => ['name' => 'role_id', 'id'=>'role_id', 'type'=> 'hidden', 'value' => ''.$jenis_kasir['role_id'].''],
-            'form_retur' => ['id' => 'formRetur', 'name'=>'formRetur'],
-		   //'form_jenis_kasir' => ['id' => 'formJenisKasir', 'name'=>'formJenisKasir'],
-		    'form_kode_transaksi' => ['id' => 'formKodeTransaksi', 'name'=>'formKodeTransaksi', 'class' => 'card-header-form'],
+            'hidden_kode_transaksi' => [
+                'name' => 'kode_transaksi', 
+                'id'=>'kode_transaksi', 
+                'type'=> 'hidden', 
+                'value' => ''.$kode.''
+            ],
+            'form_retur' => [
+                'id' => 'formRetur', 
+                'name'=>'formRetur'
+            ],
+		    'form_hapus_barang' => [
+                'id' => 'formHapusBarang', 
+                'name'=>'formHapusBarang', 
+                'class' => 'btn btn-block'
+            ],
+            'form_hapus_keranjang' => [
+                'id' => 'formHapusKeranjang', 
+                'name'=>'formHapusKeranjang', 
+                'class' => 'btn btn-block'
+            ],
+		    'form_kode_transaksi' => [
+                'id' => 'formKodeTransaksi', 
+                'name'=>'formKodeTransaksi', 
+                'class' => 'card-header-form'
+            ],
 		    'input_kode_transaksi' => [
             'type' => 'text',
             'name' => 'kode_transaksi',
@@ -138,16 +157,20 @@ class Retur extends BaseController{
             'class' => 'form-control',
             'required' => ''
            ],
+           'hidden_kode_hapus_barang' => [
+            'type' => 'hidden',
+            'name' => 'kode_hapus_barang',
+            'id' => 'kode_hapus_barang',
+           ],
 
 		];
-
 		tampilan_admin('admin/admin-form-retur/v_form_retur', 'admin/admin-form-retur/v_js_form_retur', $data);
 		
 	}
 
 	
 
-	public function tambahkeranjangretur(){
+	public function tambah_keranjang(){
         $bu = $this->request->getPost('kr_barang_id');
         if ($bu == null) {
             return redirect()->to(base_url('blokir'));
@@ -165,21 +188,12 @@ class Retur extends BaseController{
 		
 	}
 	
-	public function kecohhapuskeranjangretur(){
-        $role = $this->session->get('role_id');
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapuskeranjangretur($kode){
+    public function hapus_barang(){
+        $kode = $this->request->getPost('kode_hapus_barang');
         $this->model_keranjang_retur->HapusKeranjangRetur($kode);
 		$this->session->setFlashdata('pesan_hapus_keranjang_admin', 'Berhasil dihapus!');
-        return redirect()->to(base_url('/form'))->withInput();
+        return redirect()->to(base_url('/fitur/retur'))->withInput();
         $role = $this->session->get('role_id');
 
         if (!$role){
@@ -191,23 +205,11 @@ class Retur extends BaseController{
             }
         
     }
-    
-    public function kecohhapusallkeranjangretur(){
-        $role = $this->session->get('role_id');
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapusallkeranjangretur(){
+    public function hapus_keranjang(){
         $this->model_keranjang_retur->HapusAllKeranjangRetur();
 		$this->session->setFlashdata('pesan_hapus_all_keranjang_admin', 'Semua barang berhasil dihapus!');
-        return redirect()->to(base_url('/form'))->withInput();
+        return redirect()->to(base_url('/fitur/retur'))->withInput();
         $role = $this->session->get('role_id');
         if (!$role){
             return redirect()->to(base_url('/'));
@@ -220,7 +222,7 @@ class Retur extends BaseController{
     
     }
 
-	public function ambilkodetransaksi(){
+	public function ambil_kode(){
         $kode = $this->request->getPost('kode_transaksi');
         $data = $this->model_transaksi->select('id_transaksi_total, t_harga, nama_barang, t_barang_id, 
                 t_qty, tt_total_harga, tt_total_qty, tt_role_id, harga_konsumen, harga_anggota')->asArray()
@@ -237,7 +239,7 @@ class Retur extends BaseController{
 
     }
 
-    public function tambahretursementara(){
+    public function tambah_transaksi_sementara(){
         $id_user = $this->session->get('id_user');
         $bu = $this->request->getPost('barang_id_riwayat');
         if ($bu == null) {
@@ -298,7 +300,7 @@ class Retur extends BaseController{
         $this->model_keranjang_retur->where('kr_user_id', $id_user)->delete();
         $this->model_keranjang_retur->where('kr_user_id', $id_user)->delete();
         $this->session->setFlashdata('pesan_transaksi_sementara_retur', 'Transaksi retur berhasil disimpan ke dalam invoice!');
-        return redirect()->to(base_url('form/invoiceretur'));
+        return redirect()->to(base_url('fitur/retur/invoice'));
 
         $role = $this->session->get('role_id');
 		

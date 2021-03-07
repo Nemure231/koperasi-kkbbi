@@ -104,18 +104,15 @@ $routes->group('fitur', function($routes){
 	$routes->post('barang_masuk/ambil_harga', 'BarangMasuk::ambil_harga');
 
 	$routes->add('retur', 'Retur::index');
-	$routes->post('retur/ambilkodetransaksi', 'Retur::ambilkodetransaksi');
-	$routes->post('retur/tambahkeranjangretur', 'Retur::tambahkeranjangretur');
-	$routes->post('retur/tambahretursementara', 'Retur::tambahretursementara');
-	$routes->get('retur/kecohhapuskeranjangretur/(:any)', 'Retur::kecohhapuskeranjangretur');
-	$routes->delete('retur/kecohhapuskeranjangretur/(:num)', 'Retur::hapuskeranjangretur/$1');
-	$routes->get('retur/kecohhapusallkeranjangretur/(:any)', 'Retur::kecohhapusallkeranjangretur');
-	$routes->delete('retur/kecohhapusallkeranjangretur/(:num)', 'Retur::hapusallkeranjangretur/$1');
+	$routes->post('retur/ambil_kode', 'Retur::ambil_kode');
+	$routes->post('retur/tambah_keranjang', 'Retur::tambah_keranjang');
+	$routes->post('retur/tambah_transaksi_sementara', 'Retur::tambah_transaksi_sementara');
+	$routes->delete('retur/hapus_barang', 'Retur::hapus_barang');
+	$routes->delete('retur/hapus_keranjang', 'Retur::hapus_keranjang');
 
-	$routes->get('retur/invoice_retur', 'InvoiceRetur::index');
-	$routes->post('retur/invoice_retur/tambahtransaksiretur', 'InvoiceRetur::tambahtransaksiretur');
-	$routes->get('retur/invoice_retur/kecohhapusinvoiceretur/(:any)', 'InvoiceRetur::kecohhapusinvoiveretur');
-	$routes->delete('retur/invoice_retur/kecohhapusinvoiceretur/(:num)', 'InvoiceRetur::hapusinvoiceretur/$1');
+	$routes->get('retur/invoice', 'InvoiceRetur::index');
+	$routes->post('retur/invoice/tambah', 'InvoiceRetur::tambah');
+	$routes->delete('retur/invoice/hapus', 'InvoiceRetur::hapus');
 });
 
 

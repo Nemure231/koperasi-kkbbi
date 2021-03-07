@@ -23,7 +23,7 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="row">
-            <div class="col-9">
+            <!-- <div class="col-9">
 
               <div class="alert alert-primary alert-has-icon">
                 <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
@@ -36,7 +36,7 @@
 
             <div class="col-2 text-left">
               <a href="" class="btn btn-icon btn-lg btn-primary"><i class="fas fa-redo"></i></a>
-            </div>
+            </div> -->
            
             <div class="col-lg-12">
            
@@ -59,7 +59,8 @@
                  
                   </h4>
 
-                  <?php echo form_open(base_url().'/form', $form_kode_transaksi);    ?>
+                  <?php echo form_open(base_url().'/fitur/retur', $form_kode_transaksi);    ?>
+                  <?php echo csrf_field(); ?>
                   <div class="input-group">
 
                     <?php echo form_input($input_kode_transaksi); ?>
@@ -73,7 +74,7 @@
                 <?php  $l =1;?>
                 
                 
-                <?php echo form_open(base_url().'/form/tambahretursementara', $form_retur);    ?>
+                <?php echo form_open(base_url().'/fitur/retur/tambah_transaksi_sementara', $form_retur);    ?>
                 <?php echo csrf_field(); ?>
                 <div class="card-body">
 
@@ -185,7 +186,7 @@
                               <?php $totals = $k['tt_qty'] * $k['harga'];?>
                               <?php $sum += $totals;?>
                               <td>
-                                <a href="javascript:void(0)" id="tombolhapusk" class="btn btn-danger"
+                                <a href="javascript:void(0)" class="btn btn-danger tombolhapusk"
                                   data-kode="<?php echo $k['kr_kode_keranjang']; ?>">Hapus</a>
                               </td>
 
@@ -436,10 +437,12 @@
       </div>
       <div class="modal-footer">
 
-        <form id="btn-hapus-keranjang" class="btn btn-block" method="post">
+      <?php echo form_open(base_url().'/fitur/retur/hapus_barang', $form_hapus_barang);    ?>
+        <?php echo form_input($hidden_kode_hapus_barang); ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
-        </form>
+        <?php echo form_close(); ?>
 
       </div>
 
@@ -476,18 +479,17 @@
                 </div>
               </div>
             </div>
-          </div><!--  card end -->
+          </div>
         </div>
 
       </div>
       <div class="modal-footer">
 
-        <form class="btn btn-block"
-          action="<?php echo base_url().'/form/kecohhapusallkeranjangretur'.'/'.''.$id_session.'' ?>" method="post"
-          accept-charset="utf-8">
+      <?php echo form_open(base_url().'/fitur/retur/hapus_keranjang', $form_hapus_keranjang);    ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Hapus keranjang</button>
-        </form>
+        <?php echo form_close(); ?>
 
       </div>
 
