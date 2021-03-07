@@ -70,7 +70,7 @@
             </div>
 
             <div class="card-body">
-              <?php echo form_open(base_url().'/laporan', $form_retur);    ?>
+              <?php echo form_open(base_url().'/laporan/retur', $form_retur);    ?>
               <div class="row">
                 <div class="col-lg-6 mb-3">
                   <div class="alert alert-primary alert-has-icon">
