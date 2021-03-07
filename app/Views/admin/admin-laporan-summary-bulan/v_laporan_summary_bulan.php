@@ -29,7 +29,7 @@
             </div>
 
             <div class="card-body">
-              <?php echo form_open(base_url().'/laporan/summary_bulan', $form_bulan);    ?>
+              <?php echo form_open(base_url().'/laporan/summary/bulan', $form_bulan);    ?>
               <div class="row">
                 <div class="col-lg-6 mb-3">
                   <div class="alert alert-primary alert-has-icon">

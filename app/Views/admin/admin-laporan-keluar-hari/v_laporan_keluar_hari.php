@@ -29,7 +29,7 @@
             </div>
 
             <div class="card-body">
-            <?php echo form_open(base_url().'/keluar', $form_hari);    ?>
+            <?php echo form_open(base_url().'/laporan/keluar/harian', $form_hari);    ?>
             <?php echo csrf_field(); ?>
                 <div class="row">
                 <div class="col-lg-6 mb-2">

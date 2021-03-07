@@ -123,16 +123,16 @@ $routes->group('laporan', function($routes){
 	$routes->add('masuk/bulanan', 'LaporanMasuk::bulanan');
 	$routes->add('masuk/tahunan', 'LaporanMasuk::tahunan');
 
-	$routes->add('keluar_hari', 'LaporanKeluar::index');
-	$routes->add('keluar_minggu', 'LaporanKeluar::barangkeluarminggu');
-	$routes->add('keluar_bulan', 'LaporanKeluar::barangkeluarbulan');
-	$routes->add('keluar_tahun', 'LaporanKeluar::barangkeluartahun');
+	$routes->add('keluar/harian', 'LaporanKeluar::index');
+	$routes->add('keluar/mingguan', 'LaporanKeluar::mingguan');
+	$routes->add('keluar/bulanan', 'LaporanKeluar::bulanan');
+	$routes->add('keluar/tahunan', 'LaporanKeluar::tahunan');
 
 	$routes->add('retur', 'LaporanRetur::index');
 
-	$routes->add('summary_tanggal', 'LaporanSummary::index');
-	$routes->add('summary_bulan', 'LaporanSummary::summary_bulan');
-	$routes->add('summary_tahun', 'LaporanSummary::summary_tahun');
+	$routes->add('summary/tanggal', 'LaporanSummary::index');
+	$routes->add('summary/bulan', 'LaporanSummary::bulan');
+	$routes->add('summary/tahun', 'LaporanSummary::tahun');
 });
 
 

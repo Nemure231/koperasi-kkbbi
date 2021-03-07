@@ -6,7 +6,7 @@ use App\Models\Model_toko;
 use App\Models\Model_user_menu;
 use App\Models\Model_transaksi_total;
 
-class Keluar extends BaseController{
+class LaporanKeluar extends BaseController{
 
     public function __construct(){
         $this->model_user_menu = new Model_user_menu();
@@ -103,7 +103,7 @@ class Keluar extends BaseController{
         tampilan_admin($body, 'admin/admin-laporan-keluar-hari/v_js_laporan_keluar_hari', $data);
     }
 
-    public function barangkeluarminggu(){
+    public function mingguan(){
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
@@ -199,7 +199,7 @@ class Keluar extends BaseController{
     }
 
 
-    public function barangkeluarbulan(){
+    public function bulanan(){
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
@@ -291,7 +291,7 @@ class Keluar extends BaseController{
         tampilan_admin($body, 'admin/admin-laporan-keluar-bulan/v_js_laporan_keluar_bulan', $data);
     }
 
-    public function barangkeluartahun(){
+    public function tahunan(){
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');

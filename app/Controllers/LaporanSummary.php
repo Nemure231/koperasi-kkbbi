@@ -110,7 +110,7 @@ class LaporanSummary extends BaseController{
     }
 
 
-    public function summary_bulan(){
+    public function bulan(){
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
@@ -183,7 +183,7 @@ class LaporanSummary extends BaseController{
 
 
 
-    public function summary_tahun(){
+    public function tahun(){
 
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');

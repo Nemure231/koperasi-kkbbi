@@ -38,7 +38,7 @@
             </div>
 
             <div class="card-body">
-              <?php echo form_open(base_url().'/keluar/barangkeluartahun', $form_tahun);    ?>
+              <?php echo form_open(base_url().'/laporan/keluar/tahunan', $form_tahun);    ?>
               <?php echo csrf_field(); ?>
               <div class="row">
 
