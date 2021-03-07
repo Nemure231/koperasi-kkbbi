@@ -154,10 +154,10 @@ $routes->group('pengaturan', function($routes){
 	$routes->delete('menu/hapus', 'Menu::hapus');
 
 	$routes->get('submenu', 'Submenu::index');
-	$routes->post('submenu/tambahsubmenu', 'Submenu::tambahsubmenu');
-	$routes->put('submenu/editsubmenu', 'Submenu::editsubmenu');
-	$routes->get('submenu/kecohhapussubmenu/(:any)', 'Submenu::kecohhapussubmenu');
-	$routes->delete('submenu/kecohhapussubmenu/(:num)', 'Submenu::hapussubmenu/$1');
+	$routes->post('submenu/tambah', 'Submenu::tambah');
+	$routes->put('submenu/ubah', 'Submenu::ubah');
+	// $routes->get('submenu/kecohhapussubmenu/(:any)', 'Submenu::kecohhapussubmenu');
+	$routes->delete('submenu/hapus', 'Submenu::hapus');
 
 	$routes->get('kode_barang', 'KodeBarang::index');
 	$routes->put('kode_barang/editkodebarang', 'KodeBarang::editkodebarang');

@@ -58,6 +58,7 @@ if (flashDataSalah) {
 $(document).ready(function () {
 
    $('#menu_id').select2({tags: true});
+   $('#menu_utama_id').select2({tags: true});
   // $('#menu_idE').select2();
    $('#swal2-content ul li').css("color", "#dc3545");
 
@@ -73,6 +74,7 @@ $(document).ready(function () {
       var judul = $(this).data("judul");
       var url = $(this).data("url");
       var menu_id = $(this).data("menu_id");
+      var menu_utama_id = $(this).data("menu_utama_id");
       var icon = $(this).data("icon");
       var is_active = $(this).data("is_active");
       $('#modalEditSubMenu').modal('show');
@@ -81,11 +83,16 @@ $(document).ready(function () {
       $('#url_old').val(url);
       $('#judulE').val(judul);
       $('#menu_idE').val(menu_id);
+      $('#menu_utama_idE').val(menu_utama_id);
       $('#urlE').val(url);
       $('#iconE').val(icon);
       $('#is_activeE').val(is_active);
       $('#is_activeE').prop('checked', false);
       $('#menu_idE').select2({
+         dropdownParent: $('#modalEditSubMenu'),
+         tags: true
+      });
+      $('#menu_utama_idE').select2({
          dropdownParent: $('#modalEditSubMenu'),
          tags: true
       });
@@ -100,7 +107,8 @@ $(document).ready(function () {
    $('table').on('click', '.hapus-submenu', function () {
       var id_submenu = $(this).data('id');
       $('#modalHapusSubMenu').modal('show');
-      $('#btn-simpan-hapus').attr("action", "kecohhapussubmenu/" + id_submenu);
+      $('#hidden_hapus_id_submenu').val(id_submenu);
+      // $('#btn-simpan-hapus').attr("action", "kecohhapussubmenu/" + id_submenu);
 
    });
 

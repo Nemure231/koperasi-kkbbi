@@ -3,12 +3,14 @@
 use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
 use App\Models\Model_user_sub_menu;
+use App\Models\Model_menu_utama;
 use App\Models\Model_user;
 class Submenu extends BaseController{
 
     public function __construct(){
         $this->db = \Config\Database::connect();
         $this->model_user = new Model_user();
+        $this->model_menu_utama = new Model_menu_utama();
         $this->model_user_menu = new Model_user_menu();
         $this->model_user_sub_menu = new Model_user_sub_menu();
         $this->request = \Config\Services::request();
@@ -46,13 +48,19 @@ class Submenu extends BaseController{
                     ->orderBy('user_access_menu.role_id', 'ASC')
                     ->findAll(),
             'mmenu' => $this->model_user_menu->select('id_menu, menu')->asArray()->findAll(),
-            'submenu'=>$this->model_user_sub_menu->select('id_menu, menu_id,menu, judul, url, icon, is_active, id_submenu')
-                    ->asArray()->join('user_menu', 'user_menu.id_menu = user_sub_menu.menu_id')
+            'menu_utama' => $this->model_menu_utama->select('id_menu_utama, nama_menu_utama, ikon_menu_utama')->asArray()->findAll(),
+            'submenu'=>$this->model_user_sub_menu->select('id_menu,menu, user_sub_menu.menu_id as menu_id, id_menu_utama,
+                    nama_menu_utama, judul, url, icon, is_active, id_submenu, menu_utama_id')
+                    ->asArray()
+                    ->join('user_menu', 'user_menu.id_menu = user_sub_menu.menu_id')
+                    ->join('menu_utama', 'menu_utama.id_menu_utama = user_sub_menu.menu_utama_id')
                     ->findAll(),
             'session' => $this->session,
             'validation' => $this->validation,
             'attr' => ['id' => 'formSubMenu', 'name'=>'formSubMenu'],
+            'form_hapus_submenu' => ['id' => 'formHapusSubmenu', 'name'=>'formHapusSubmenu', 'class' => 'btn btn-block'],
             'hidden_submenu_id' => ['name' => 'submenu_id', 'id'=>'submenu_id', 'type'=> 'hidden'],
+            'hidden_hapus_id_submenu' => ['name' => 'hidden_hapus_id_submenu', 'id'=>'hidden_hapus_id_submenu', 'type'=> 'hidden'],
             'hidden_judul_old' => ['name' => 'judul_old', 'id'=>'judul_old', 'type'=> 'hidden'],
             'hidden_url_old' => ['name' => 'url_old', 'id'=>'url_old', 'type'=> 'hidden'],
             'cecc' =>[
@@ -112,7 +120,7 @@ class Submenu extends BaseController{
     }
     
 
-    public function tambahsubmenu(){
+    public function tambah(){
         if(!$this->validate([
             'judul' => [
                 'label'  => 'Nama Submenu',
@@ -143,11 +151,18 @@ class Submenu extends BaseController{
                 'errors' => [
                 'required' => 'Menu harus dipilih!'
                 ]
+            ],
+            'menu_utama_id' => [
+                'label'  => 'Menu Utama',
+                'rules'  => 'required',
+                'errors' => [
+                'required' => 'Menu Utama harus dipilih!'
+                ]
             ]
             
         ])) {
             
-            return redirect()->to(base_url('/menu/submenu'))->withInput();
+            return redirect()->to(base_url('/pengaturan/submenu'))->withInput();
 
         }
             $isaktif = $this->request->getPost('is_active');
@@ -166,18 +181,28 @@ class Submenu extends BaseController{
             
                 }
 
+            $menu_utama = $this->request->getPost('menu_utama_id');
+
+            if (is_numeric($menu_utama)){
+                $mu = $menu_utama;
+            }else{
+                $this->model_menu_utama->set('nama_menu_utama', $menu_utama)->insert();
+                $mu = $this->db->insertID();
+            }
+
             $data = array(
                 'menu_id' => htmlspecialchars($me, ENT_QUOTES),
                 'judul' => htmlspecialchars($this->request->getPost('judul'), ENT_QUOTES),
                 'url' => htmlspecialchars($this->request->getPost('url'), ENT_QUOTES),
                 'icon' => htmlspecialchars($this->request->getPost('icon'), ENT_QUOTES),
-                'is_active' => $isaktif 
+                'is_active' => $isaktif,
+                'menu_utama_id' => htmlspecialchars($mu, ENT_QUOTES),
             );
 
             $this->model_user_sub_menu->insert($data);
         
             $this->session->setFlashdata('pesan_submenu', 'Menu baru berhasil ditambahkan!');
-            return redirect()->to(base_url('/menu/submenu'));
+            return redirect()->to(base_url('/pengaturan/submenu'));
             
             $role = $this->session->get('role_id');
             if (!$role){
@@ -189,7 +214,7 @@ class Submenu extends BaseController{
             }
     }
 
-    public function editsubmenu(){
+    public function ubah(){
        
         $old_judul =  $this->request->getPost('judul_old');
         $new_judul =  $this->request->getPost('judulE');
@@ -238,11 +263,18 @@ class Submenu extends BaseController{
                     'errors' => [
                     'required' => 'Menu harus dipilih!'
                     ]
+                ],
+                'menu_utama_idE' => [
+                    'label'  => 'Menu Utama',
+                    'rules'  => 'required',
+                    'errors' => [
+                    'required' => 'Menu Utama harus dipilih!'
+                    ]
                 ]
                 
             ])) {
                 
-                return redirect()->to(base_url('/menu/submenu'))->withInput();
+                return redirect()->to(base_url('/pengaturan/submenu'))->withInput();
             }
 
                 $isaktif = $this->request->getPost('is_activeE');
@@ -266,17 +298,27 @@ class Submenu extends BaseController{
             
                 }
 
+                $menu_utama = $this->request->getPost('menu_utama_idE');
+
+            if (is_numeric($menu_utama)){
+                $mu = $menu_utama;
+            }else{
+                $this->model_menu_utama->set('nama_menu_utama', $menu_utama)->insert();
+                $mu = $this->db->insertID();
+            }
+
                 $data = array(
                     'menu_id' => htmlspecialchars($me, ENT_QUOTES),
                     'judul' => htmlspecialchars($this->request->getPost('judulE'), ENT_QUOTES),
                     'url' => htmlspecialchars($this->request->getPost('urlE'), ENT_QUOTES),
                     'icon' => htmlspecialchars($this->request->getPost('iconE'), ENT_QUOTES),
-                    'is_active' => $isaktif 
+                    'is_active' => $isaktif,
+                    'menu_utama_id' => htmlspecialchars($mu, ENT_QUOTES)
                 );
 
                 $this->model_user_sub_menu->update($id, $data);
                 $this->session->setFlashdata('pesan_edit_submenu', 'Submenu baru berhasil diedit!');
-                return redirect()->to(base_url('/menu/submenu'));
+                return redirect()->to(base_url('/pengaturan/submenu'));
                 
                 $role = $this->session->get('role_id');
 
@@ -290,22 +332,12 @@ class Submenu extends BaseController{
                 
     }
 
-    public function kecohhapussubmenu(){
-        $role = $this->session->get('role_id');
 
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapussubmenu($id_submenu){
-
+    public function hapus(){
+        $id_submenu = $this->request->getPost('hidden_hapus_id_submenu');
             $this->model_user_sub_menu->delete($id_submenu);
             $this->session->setFlashdata('pesan_hapus_submenu', 'Submenu berhasil dihapus!');
-            return redirect()->to(base_url('/menu/submenu'));
+            return redirect()->to(base_url('/pengaturan/submenu'));
         
         $role = $this->session->get('role_id');
         if (!$role){

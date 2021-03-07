@@ -39,6 +39,7 @@ width:100%!important;
                       <th class="text-center">#</th>
                       <th>Submenu</th>
                       <th>Menu</th>
+                      <th>Menu Utama</th>
                       <th>Url</th>
                       <th>Ikon</th>
                       <th class="text-center">Status</th>
@@ -53,6 +54,7 @@ width:100%!important;
                       <td><?php echo $i; ?></td>
                       <td><?php echo $sm['judul']; ?></td>
                       <td><?php echo $sm['menu']; ?></td>
+                      <td><?php echo $sm['nama_menu_utama']; ?></td>
                       <td><?php echo $sm['url']; ?></td>
                       <td><?php echo $sm['icon']; ?></td>
                       <td class="text-center">
@@ -71,6 +73,7 @@ width:100%!important;
 						data-url="<?php echo $sm['url'];?>"
 						data-icon="<?php echo $sm['icon'];?>"
 						data-is_active="<?php echo $sm['is_active'];?>"
+            data-menu_utama_id="<?php echo $sm['menu_utama_id'];?>"
 						
 						
 						><i class="fas fa-pencil-alt"></i></a>
@@ -136,7 +139,7 @@ width:100%!important;
 
       
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-			<?php echo form_open(base_url().'/menu/tambahsubmenu', $attr); ?>
+			<?php echo form_open(base_url().'/pengaturan/submenu/tambah', $attr); ?>
       <?php echo csrf_field(); ?>
 				<div class="modal-body">
 
@@ -149,6 +152,18 @@ width:100%!important;
 							<label>Nama submenu</label>
 						
               <?php echo form_input($judul); ?>
+						</div>
+
+            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+							<label>Menu Utama</label>
+							<select class="custom-select" name="menu_utama_id" id="menu_utama_id">
+
+								<option></option>
+								<?php foreach ($menu_utama as $mu):?>
+								<option value="<?php echo $mu['id_menu_utama']; ?>"><?php echo $mu['nama_menu_utama']; ?></option>
+								<?php endforeach;  ?>
+
+							</select>
 						</div>
               
 						<div class="form-group col-lg-6 col-md-6 col-sm-12" id="yumi">
@@ -167,11 +182,11 @@ width:100%!important;
             
 
 
-						<div class="form-group col-lg-6 col-md-6">
+						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Url</label>
 							<?php echo form_input($url); ?>
 						</div>
-						<div class="form-group col-lg-12 col-md-12 col-sm-12">
+						<div class="form-group col-lg-6 col-md-6 col-sm-6">
 							<label>Ikon</label>
 							<?php echo form_input($icon); ?>
 						</div>
@@ -216,7 +231,7 @@ width:100%!important;
 
       
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-			<?php echo form_open(base_url().'/menu/editsubmenu', $attr); ?>
+			<?php echo form_open(base_url().'/pengaturan/submenu/ubah', $attr); ?>
       <input type="hidden" name="_method" value="PUT">
 		<?php echo csrf_field(); ?>
 		<?php echo form_input($hidden_submenu_id); ?>
@@ -235,6 +250,18 @@ width:100%!important;
 						
               <?php echo form_input($judulE); ?>
 						</div>
+
+            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+							<label>Menu Utama</label>
+							<select class="custom-select" name="menu_utama_idE" id="menu_utama_idE">
+
+								<option></option>
+								<?php foreach ($menu_utama as $mu):?>
+								<option value="<?php echo $mu['id_menu_utama']; ?>"><?php echo $mu['nama_menu_utama']; ?></option>
+								<?php endforeach;  ?>
+
+							</select>
+						</div>
               
 						<div class="form-group col-lg-6 col-md-6 col-sm-12" id="yumi">
 							<label>Menu</label>
@@ -252,11 +279,11 @@ width:100%!important;
             
 
 
-						<div class="form-group col-lg-6 col-md-6">
+						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Url</label>
 							<?php echo form_input($urlE); ?>
 						</div>
-						<div class="form-group col-lg-12 col-md-12 col-sm-12">
+						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Ikon</label>
 							<?php echo form_input($iconE); ?>
 						</div>
@@ -321,10 +348,12 @@ width:100%!important;
       <div class="modal-footer" id="yahaloo">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <form id="btn-simpan-hapus" class="btn btn-block" method="post">
+        <?php echo form_open(base_url().'/pengaturan/submenu/hapus', $form_hapus_submenu);    ?>
+        <?php echo form_input($hidden_hapus_id_submenu); ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
-        </form>
+        <?php echo form_close(); ?>
 
       </div>
 
