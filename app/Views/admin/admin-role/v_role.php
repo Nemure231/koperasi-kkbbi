@@ -47,7 +47,7 @@
                       <td>
                         <a href="javascript:void(0)" class="edit-role btn btn-warning mr-1" data-id="<?php echo $r['id_role'];?>" data-role="<?php echo $r['role'];?>" ><i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" class="hapus-role btn btn-danger mr-1" data-id="<?php echo $r['id_role'];?>" ><i class="fas fa-trash"></i></a>
-                        <a href="<?php echo base_url().'/role/roleakses/'. $r['id_role']; ?>" class="btn btn-info"><i class="fas fa-cogs"></i></a>
+                        <a href="<?php echo base_url().'/pengaturan/role/akses/'. $r['id_role']; ?>" class="btn btn-info"><i class="fas fa-cogs"></i></a>
 
                       </td>
                     </tr>

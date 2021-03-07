@@ -54,7 +54,7 @@ class RoleAkses extends BaseController{
         tampilan_admin('admin/admin-roleakses/v_roleakses', 'admin/admin-roleakses/v_js_roleakses', $data);
     }
     
-    public function ubahakses($menu_id = null, $role_id = null){
+    public function ubah($menu_id = null, $role_id = null){
        
             $this->model_user_access_menu->UbahRole($menu_id, $role_id);
             $this->session->setFlashdata('pesan_akses', 'Role akses berhasil diubah!');

@@ -69,7 +69,7 @@
                       <p class="lead">
                         Silakan tekan tombol dibawah untuk menambahan data
                       </p>
-                      <a href="<?php echo base_url().'/menu' ?>"  class="btn btn-icon icon-left btn-primary mt-4"><i class="fas fa-plus"></i> Tambah menu</a>
+                      <a href="<?php echo base_url().'/pengaturan/menu' ?>"  class="btn btn-icon icon-left btn-primary mt-4"><i class="fas fa-plus"></i> Tambah menu</a>
 
       
                     </div>

@@ -12,7 +12,7 @@
 		const roleId = $(this).data('role');
 
 		$.ajax({
-			url: "<?php echo base_url().'/role/ubahakses'; ?>",
+			url: "<?php echo base_url().'/pengaturan/role/akses/ubah'; ?>",
 			type: 'post',
 			headers: {
                'X-Requested-With': 'XMLHttpRequest'
@@ -23,7 +23,7 @@
 			},
 			success: function () {
 				//Swal.fire('Berhasil', 'Akses berhasil diubah!', 'success');
-				document.location.href = "<?php echo base_url().'/role/roleakses/'; ?>" + roleId;
+				document.location.href = "<?php echo base_url().'/pengaturan/role/akses/'; ?>" + roleId;
 			}
 
 		});

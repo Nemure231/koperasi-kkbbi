@@ -145,8 +145,8 @@ $routes->group('pengaturan', function($routes){
 	$routes->delete('role/hapus', 'Role::hapus');
 
 
-	$routes->get('role/roleakses/(:num)', 'RoleAkses::index/$1');
-	$routes->post('role/ubahakses', 'RoleAkses::ubahakses');
+	$routes->get('role/akses/(:num)', 'RoleAkses::index/$1');
+	$routes->post('role/akses/ubah', 'RoleAkses::ubah');
 
 
 	$routes->get('menu', 'Menu::index');
