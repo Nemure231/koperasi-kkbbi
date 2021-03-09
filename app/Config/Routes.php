@@ -184,11 +184,6 @@ $routes->group('tempat', function($routes){
 });
 
 
-$routes->get('transaksi', 'Transaksi::index');
-$routes->add('transaksi/(:segment)', 'Transaksi::detail_transaksi/$1');
-$routes->add('tambahttt', 'Transaksi::tambahttt');
-
-$routes->add('/menu/getmenuu', 'Menu::getmenuu');
 
 
 
