@@ -12,7 +12,7 @@
       <div class="row">
 
         <div class="col-sm-12 col-md-12 col-lg-12">
-          <?php echo form_open(base_url().'/barang/editstok', $form_stok);    ?>
+          <?php echo form_open(base_url().'/pengaturan/stok/ubah', $form_stok);    ?>
           <input type="hidden" name="_method" value="PUT">
           <?php echo csrf_field(); ?>
           <?php echo form_input($input_id_stokH); ?>

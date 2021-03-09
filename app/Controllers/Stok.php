@@ -72,7 +72,7 @@ class Stok extends BaseController
 		tampilan_admin('admin/admin-stok/v_stok', 'admin/admin-stok/v_js_stok', $data);
     }
 
-    public function editstok(){
+    public function ubah(){
         if(!$this->validate([
             'min_stok' => [
                 'label'  => 'Stok Minimal',
@@ -84,7 +84,7 @@ class Stok extends BaseController
             ]
         ])) {
         
-            return redirect()->to(base_url('/barang/stok'))->withInput();
+            return redirect()->to(base_url('/pengaturan/stok'))->withInput();
 
         }
 
@@ -96,7 +96,7 @@ class Stok extends BaseController
         $this->model_stok->update($id_stok, $edit);
 
         $this->session->setFlashdata('pesan_stok', 'Stok berhasil dicari!');
-        return redirect()->to(base_url('/barang/stok'));
+        return redirect()->to(base_url('/pengaturan/stok'));
 
         $role = $this->session->get('role_id');
         if (!$role){

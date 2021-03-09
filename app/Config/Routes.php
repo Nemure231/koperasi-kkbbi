@@ -168,7 +168,7 @@ $routes->group('pengaturan', function($routes){
 	$routes->put('kode/retur/ubah', 'KodeRetur::ubah');
 
 	$routes->get('stok', 'Stok::index');
-	$routes->put('stok/ubah', 'Stok::editstok');
+	$routes->put('stok/ubah', 'Stok::ubah');
 });
 
 $routes->group('tempat', function($routes){

@@ -10,13 +10,13 @@
             <div class="page-search">
               
               <div class="mt-3">
-                <a href="<?php echo base_url().'/pengguna' ?>">&larr; Kembali</a>
+                <a href="<?php echo base_url().'/akun/profil' ?>">&larr; Kembali</a>
               </div>
             </div>
           </div>
         </div>
         <div class="simple-footer mt-5">
-          Copyright &copy; Stisla 2018
+          Copyright &copy; Stisla <?php echo date('Y'); ?>
         </div>
       </div>
     </section>
