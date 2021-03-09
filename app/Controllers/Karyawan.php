@@ -39,6 +39,7 @@ class Karyawan extends BaseController{
        
         $data = [
             'title' => ucfirst('Daftar Karyawan'),
+            'nama_menu_utama' => ucfirst('Karyawan'),
             'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
                         ->join('user_role', 'user_role.id_role = user.role_id')
                         ->where('email', $email)

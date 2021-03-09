@@ -36,6 +36,7 @@ class Dashboard extends BaseController{
 
 		$data = [
 			'title' => 	ucfirst('Dashboard Masuk'),
+			'nama_menu_utama' => ucfirst('Dashboard'),
 			'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
 						->join('user_role', 'user_role.id_role = user.role_id')
 						->where('email', $email)
@@ -107,6 +108,7 @@ class Dashboard extends BaseController{
 		
 		$data = [
 			'title' => ucfirst('Dashboard Keluar'),
+			'nama_menu_utama' => ucfirst('Dashboard'),
 			'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
 						->join('user_role', 'user_role.id_role = user.role_id')
 						->where('email', $email)

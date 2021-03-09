@@ -48,7 +48,8 @@ class BarangMasuk extends BaseController
         $kode_barang = $this->model_barang->AutoKodeBarang();
         $data = [
            
-            'title'     => ucfirst('Tambah Barang Masuk'),
+            'title'     => ucfirst('Barang Masuk'),
+            'nama_menu_utama' => ucfirst('Pembelian'),
             'user' 	    =>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
                             ->join('user_role', 'user_role.id_role = user.role_id')
                             ->where('email', $email)

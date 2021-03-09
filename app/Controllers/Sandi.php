@@ -34,7 +34,8 @@ class Sandi extends BaseController{
         }
 
 		$data = [
-		'title' => ucfirst('Ubah Kata Sandi'),
+		'title' => ucfirst('Ubah Sandi'),
+		'nama_menu_utama' => ucfirst('Profil'),
 		'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
 				->join('user_role', 'user_role.id_role = user.role_id')
 				->where('email', $email)

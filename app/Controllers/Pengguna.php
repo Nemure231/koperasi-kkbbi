@@ -36,7 +36,8 @@ class Pengguna extends BaseController{
 				->first();
 
 		$data = [
-			'title' => ucfirst('Profile'),
+			'title' => ucfirst('Profil'),
+			'nama_menu_utama' => ucfirst('Profil'),
 			'user' => $user,
 			'validation' => $this->validation,
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()

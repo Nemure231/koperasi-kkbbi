@@ -20,23 +20,31 @@
               <?php foreach ($escape as $sub): ?>
               <?php $mainId = $sub['id_menu_utama']?>
 
-                <!-- </?php if//($title == $sub['judul']):  ?> -->
+                <?php if($nama_menu_utama == $sub['nama_menu_utama']):  ?>
               
-                <!-- <li class="active dropdown">
-                    </?php else  : ?> -->
+                <li class="active dropdown">
+                    <?php else  : ?>
                 <li class="dropdown">
 
-                  <!-- </?php endif; ?> -->
+                  <?php endif; ?>
 
-                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span><?php echo $sub['nama_menu_utama']; ?></span></a>
+                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="<?php echo $sub['ikon_menu_utama']; ?>"></i> <span><?php echo $sub['nama_menu_utama']; ?></span></a>
                   <ul class="dropdown-menu">
 
 
-                  <?php $escape2 = sub_menu_conex($menuId, $mainId);   
-                        
-                  ?>
+                  <?php $escape2 = sub_menu_conex($menuId, $mainId);?>
+
                   <?php foreach ($escape2 as $sub2): ?>
-                    <li><a class="nav-link" href="<?php echo base_url($sub2['url']);  ?>"><i class="<?php echo $sub2['icon']; ?>"></i><?php echo $sub2['judul']; ?></a></li>
+                    <?php if($title == $sub2['judul']):  ?>
+              
+                    <li class="active">
+                        <?php else  : ?>
+                    <li>
+
+                    <?php endif; ?>
+                    
+                    
+                    <a class="nav-link" href="<?php echo base_url($sub2['url']);  ?>"><i class="<?php echo $sub2['icon']; ?>"></i><?php echo $sub2['judul']; ?></a></li>
                   <?php endforeach; ?>
 
 

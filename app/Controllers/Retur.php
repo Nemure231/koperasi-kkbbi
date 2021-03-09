@@ -92,7 +92,8 @@ class Retur extends BaseController{
         }
 
 		$data = [
-			'title' => ucfirst('Form Retur'),
+			'title' => ucfirst('Retur'),
+            'nama_menu_utama' => ucfirst('Penjualan'),
             'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
 						->join('user_role', 'user_role.id_role = user.role_id')
 						->where('email', $email)

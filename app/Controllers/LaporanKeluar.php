@@ -71,7 +71,8 @@ class LaporanKeluar extends BaseController{
     
         $data = [
            
-            'title'  => ucfirst('Laporan Barang Keluar Harian'),
+            'title'  => ucfirst('Keluar Harian'),
+            'nama_menu_utama' => ucfirst('Barang Keluar'),
             'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
                     ->join('user_role', 'user_role.id_role = user.role_id')
                     ->where('email', $email)
@@ -159,7 +160,8 @@ class LaporanKeluar extends BaseController{
         
         $data = [
            
-            'title' => ucfirst('Laporan Barang Keluar Mingguan'),
+            'title' => ucfirst('Keluar Mingguan'),
+            'nama_menu_utama' => ucfirst('Barang Keluar'),
             'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
                     ->join('user_role', 'user_role.id_role = user.role_id')
                     ->where('email', $email)
@@ -252,7 +254,8 @@ class LaporanKeluar extends BaseController{
         }
         
         $data = [
-            'title' => ucfirst('Laporan Barang Keluar Bulanan'),
+            'title' => ucfirst('Keluar Bulanan'),
+            'nama_menu_utama' => ucfirst('Barang Keluar'),
             'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
                     ->join('user_role', 'user_role.id_role = user.role_id')
                     ->where('email', $email)
@@ -344,7 +347,8 @@ class LaporanKeluar extends BaseController{
         
     
         $data = [
-            'title' => ucfirst('Laporan Barang Keluar Tahunan'),
+            'title' => ucfirst('Keluar Tahunan'),
+            'nama_menu_utama' => ucfirst('Barang Keluar'),
             'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
                     ->join('user_role', 'user_role.id_role = user.role_id')
                     ->where('email', $email)

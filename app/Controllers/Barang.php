@@ -52,6 +52,7 @@ class Barang extends BaseController{
         $harga_pokok = set_value('harga_pokok', '');
         $data = [
             'title' => ucfirst('Daftar Barang'),
+            'nama_menu_utama' => ucfirst('Gudang'),
             'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
 						->join('user_role', 'user_role.id_role = user.role_id')
 						->where('email', $email)
