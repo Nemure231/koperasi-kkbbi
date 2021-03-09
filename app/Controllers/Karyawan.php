@@ -60,7 +60,9 @@ class Karyawan extends BaseController{
             'session' => $this->session,
             'formtambah' => ['id' => 'formTambahKaryawan', 'name'=>'formTambahKaryawan'],
             'formedit' =>  ['id' => 'formEditKaryawan', 'name'=>'formEditKaryawan'],
+            'form_hapus' =>  ['class' => 'btn btn-block'],
             'hiddenIdKaryawan' => ['name' => 'user_id', 'id'=>'user_id', 'type'=> 'hidden'],
+            'hidden_id_user' => ['name' => 'hidden_id_user', 'id'=>'hidden_id_user', 'type'=> 'hidden'],
             'nama' => [
                 'type' => 'text',
                 'name' => 'nama',
@@ -147,7 +149,7 @@ class Karyawan extends BaseController{
     }
 
 
-    public function tambahkaryawan(){
+    public function tambah(){
 
 
             if(!$this->validate([
@@ -216,7 +218,7 @@ class Karyawan extends BaseController{
 
 
             ])) {
-                return redirect()->to(base_url('/toko'))->withInput();
+                return redirect()->to(base_url('/tempat/karyawan'))->withInput();
 
             }
 
@@ -248,7 +250,7 @@ class Karyawan extends BaseController{
 
             
                 $this->session->setFlashdata('pesan', 'Karyawan baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/toko'));
+                return redirect()->to(base_url('/tempat/karyawan'));
                 
             
                 $role = $this->session->get('role_id');
@@ -262,9 +264,7 @@ class Karyawan extends BaseController{
                 }
     }
 
-    public function editkaryawan(){
-
-       
+    public function ubah(){
 
             if(!$this->validate([
                 'namaE' => [
@@ -317,7 +317,7 @@ class Karyawan extends BaseController{
 
             ])) {
                 
-                return redirect()->to(base_url('/toko'))->withInput();
+                return redirect()->to(base_url('/tempat/karyawan'))->withInput();
 
             }
 
@@ -347,7 +347,7 @@ class Karyawan extends BaseController{
 
                 $berhasil = $this->model_user->update($id_user, $edit);
                 $this->session->setFlashdata('pesan', 'Karyawan berhasil diedit!');
-                return redirect()->to(base_url('/toko'));
+                return redirect()->to(base_url('/tempat/karyawan'));
             
                 $role = $this->session->get('role_id');
 		
@@ -360,26 +360,16 @@ class Karyawan extends BaseController{
                     }
     }
 
-    public function kecohhapuskaryawan(){
-        $role = $this->session->get('role_id');
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        if ($role > 0) {
-                return redirect()->to(base_url('blokir'));
-        }
-    }
-
-    public function hapuskaryawan($user_id){
-
+  
+    public function hapus(){
+        $user_id = $this->request->getPost('hidden_id_user');
             $hapus = $this->model_user->asArray()->find($user_id);
             if($hapus['gambar'] != 'default.png'){
                 unlink('admin/assets/profile/'. $hapus['gambar']);
             }
             $this->model_user->HapusKaryawan($user_id);
             $this->session->setFlashdata('hapus_karyawan', 'Karyawan berhasil dihapus!');
-            return redirect()->to(base_url('/toko'));
+            return redirect()->to(base_url('/tempat/karyawan'));
 
         $role = $this->session->get('role_id');
 		

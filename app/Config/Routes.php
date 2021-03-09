@@ -173,12 +173,10 @@ $routes->group('pengaturan', function($routes){
 
 $routes->group('tempat', function($routes){
 
-	
 	$routes->get('karyawan', 'Karyawan::index');
-	$routes->post('karyawan/tambahkaryawan', 'Karyawan::tambahkaryawan');
-	$routes->post('karyawan/editkaryawan/(:num)', 'Karyawan::editkaryawan/$1');
-	$routes->get('karyawan/kecohhapuskaryawan/(:any)', 'Karyawan::kecohhapuskaryawan');
-	$routes->delete('karyawan/kecohhapuskaryawan/(:num)', 'Karyawan::hapuskaryawan/$1');
+	$routes->post('karyawan/tambah', 'Karyawan::tambah');
+	$routes->post('karyawan/ubah', 'Karyawan::ubah');
+	$routes->delete('karyawan/hapus', 'Karyawan::hapus');
 
 	$routes->get('toko', 'Toko::index');
 	$routes->post('toko/editprofiltoko', 'Toko::editprofiltoko');

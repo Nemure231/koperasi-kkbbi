@@ -114,9 +114,11 @@ $(document).ready(function () {
       var alamat = $(this).data('alamat');
       var aktif = $(this).data('is_active');
       var role = $(this).data('role_id');
+      var getUrl = window.location;
+      var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
       $('#judulKaryawanE').html("Ubah Karyawan");
-      $('#formEditKaryawan').attr("action", "toko/editkaryawan/" + id);
-      $('#imgE').attr("src", "admin/assets/profile/" + foto);
+      // $('#formEditKaryawan').attr("action", "toko/editkaryawan/" + id);
+      $('#imgE').attr("src", baseUrl + "/public/admin/assets/profile/" + foto);
       $('#img-labelE').text(foto);
       $('#user_id').val(id);
       $('#namaE').val(nama);
@@ -159,12 +161,10 @@ $(document).ready(function () {
 });
 
 
-$('table').on('click', '#tombolHapusUser', function () {
+$('table').on('click', '.tombolHapusUser', function () {
 
    var user_id = $(this).data("id_user");
-
-   $('#btn-simpan-hapus').attr("action", "toko/kecohhapuskaryawan/" + user_id);
-   $('#judulUserHapus').html("");
    $('#modalUserHapus').modal('show');
+   $('#hidden_id_user').val(user_id);
 
 });

@@ -79,7 +79,7 @@ width:100%!important;
                           data-role_id="<?php echo $k['role_id'];?>" data-is_active="<?php echo $k['is_active'];?>"
                           data-gambar="<?php echo $k['gambar'];?>" data-email="<?php echo $k['email'];?>">
                           <i class="fas fa-pencil-alt"></i></a>
-                        <a href="javascript:void(0)" id="tombolHapusUser" class="btn btn-danger"
+                        <a href="javascript:void(0)" id="tombolHapusUser" class="btn btn-danger tombolHapusUser"
                           data-id_user="<?php echo $k['id_user'];?>">
                           <i class="fas fa-trash"></i>
                         </a>
@@ -138,7 +138,7 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open_multipart(base_url().'/toko/tambahkaryawan', $formtambah);    ?>
+      <?php echo form_open_multipart(base_url().'/tempat/karyawan/tambah', $formtambah);    ?>
       <!-- < ?php echo form_input($id_hidd); ?> -->
       <?php echo csrf_field(); ?>
       <div class="modal-body">
@@ -254,7 +254,7 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open_multipart(base_url().'/toko/editkaryawan', $formedit);    ?>
+      <?php echo form_open_multipart(base_url().'/tempat/karyawan/ubah', $formedit);    ?>
       <!-- <input type="hidden" name="_method" value="PUT"> -->
       <?php echo csrf_field(); ?>
       <?php echo form_input($hiddenIdKaryawan); ?>
@@ -375,10 +375,12 @@ width:100%!important;
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
 
 
-        <form id="btn-simpan-hapus" class="btn btn-block" method="post">
+        <?php echo form_open(base_url().'/tempat/karyawan/hapus', $form_hapus);    ?>
+        <?php echo form_input($hidden_id_user); ?>
+        <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
-        </form>
+        <?php echo form_close(); ?>
 
       </div>
 
