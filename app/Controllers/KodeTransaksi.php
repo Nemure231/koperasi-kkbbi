@@ -71,7 +71,7 @@ class KodeTransaksi extends BaseController
     }
     
 
-    public function editkodetransaksi(){
+    public function ubah(){
 
             if(!$this->validate([
                 'huruf_kode_transaksi' => [
@@ -91,7 +91,7 @@ class KodeTransaksi extends BaseController
 
             ])) {
                
-                return redirect()->to(base_url('barang/pengaturankodetransaksi'))->withInput();
+                return redirect()->to(base_url('/pengaturan/kode/transaksi'))->withInput();
 
             }
 
@@ -104,7 +104,7 @@ class KodeTransaksi extends BaseController
                 
                 $this->model_kode_transaksi->update($id, $ubah);            
                 $this->session->setFlashdata('pesan_kode_transaksi', 'Kode transaksi berhasil diubah!');
-                return redirect()->to(base_url('/barang/pengaturankodetransaksi'));
+                return redirect()->to(base_url('/pengaturan/kode/transaksi'));
                 
         $role = $this->session->get('role_id');
         if (!$role){

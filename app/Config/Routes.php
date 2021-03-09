@@ -156,20 +156,19 @@ $routes->group('pengaturan', function($routes){
 	$routes->get('submenu', 'Submenu::index');
 	$routes->post('submenu/tambah', 'Submenu::tambah');
 	$routes->put('submenu/ubah', 'Submenu::ubah');
-	// $routes->get('submenu/kecohhapussubmenu/(:any)', 'Submenu::kecohhapussubmenu');
 	$routes->delete('submenu/hapus', 'Submenu::hapus');
 
-	$routes->get('kode_barang', 'KodeBarang::index');
-	$routes->put('kode_barang/editkodebarang', 'KodeBarang::editkodebarang');
+	$routes->get('kode/barang', 'KodeBarang::index');
+	$routes->put('kode/barang/ubah', 'KodeBarang::ubah');
 	
-	$routes->get('kode_transaksi', 'KodeTransaksi::index');
-	$routes->put('kode_transaksi/editkodetransaksi', 'KodeTransaksi::editkodetransaksi');
+	$routes->get('kode/transaksi', 'KodeTransaksi::index');
+	$routes->put('kode/transaksi/ubah', 'KodeTransaksi::ubah');
 
-	$routes->get('kode_retur', 'KodeRetur::index');
-	$routes->put('kode_retur/editkoderetur', 'KodeRetur::editkoderetur');
+	$routes->get('kode/retur', 'KodeRetur::index');
+	$routes->put('kode/retur/ubah', 'KodeRetur::ubah');
 
 	$routes->get('stok', 'Stok::index');
-	$routes->put('stok/editstok', 'Stok::editstok');
+	$routes->put('stok/ubah', 'Stok::editstok');
 });
 
 $routes->group('tempat', function($routes){

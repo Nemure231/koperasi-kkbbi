@@ -67,7 +67,7 @@ class KodeRetur extends BaseController
     }
     
 
-    public function editkoderetur(){
+    public function ubah(){
        
         if(!$this->validate([
             'huruf_kode_retur' => [
@@ -87,7 +87,7 @@ class KodeRetur extends BaseController
 
             ])) {
                
-                return redirect()->to(base_url('barang/pengaturankoderetur'))->withInput();
+                return redirect()->to(base_url('/pengaturan/kode/retur'))->withInput();
 
             }
 
@@ -101,7 +101,7 @@ class KodeRetur extends BaseController
                 $this->model_kode_retur->update($id, $ubah);
                 
                 $this->session->setFlashdata('pesan_kode_retur', 'Kode retur berhasil diubah!');
-                return redirect()->to(base_url('/barang/pengaturankoderetur'));
+                return redirect()->to(base_url('/pengaturan/kode/retur'));
                 
             
         if (!$role){

@@ -32,9 +32,7 @@ class KodeBarang extends BaseController
             if ($userAccess < 1) {
                 return redirect()->to(base_url('blokir'));
             }
-        
 
-		
         $kode = $this->model_kode_barang->select('id_tb_kode_barang, huruf_kode_barang, jumlah_angka')->asArray()
                 ->first();
 
@@ -68,7 +66,7 @@ class KodeBarang extends BaseController
     }
     
 
-    public function editkodebarang(){
+    public function ubah(){
       
     
             if(!$this->validate([
@@ -89,7 +87,7 @@ class KodeBarang extends BaseController
 
             ])) {
                
-                return redirect()->to(base_url('/barang/pengaturankodebarang'))->withInput();
+                return redirect()->to(base_url('/pengaturan/kode/barang'))->withInput();
 
             }
 
@@ -102,7 +100,7 @@ class KodeBarang extends BaseController
                 
                     $this->model_kode_barang->update($id, $ubah);
                     $this->session->setFlashdata('pesan_kode_barang', 'Kode barang berhasil diubah!');
-                    return redirect()->to(base_url('/barang/pengaturankodebarang'));
+                    return redirect()->to(base_url('/pengaturan/kode/barang'));
                         
                 $role = $this->session->get('role_id');
                 if (!$role){
