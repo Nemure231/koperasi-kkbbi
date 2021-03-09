@@ -179,7 +179,7 @@ $routes->group('tempat', function($routes){
 	$routes->delete('karyawan/hapus', 'Karyawan::hapus');
 
 	$routes->get('toko', 'Toko::index');
-	$routes->post('toko/editprofiltoko', 'Toko::editprofiltoko');
+	$routes->post('toko/ubah', 'Toko::ubah');
 
 });
 

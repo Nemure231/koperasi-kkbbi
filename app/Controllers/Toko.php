@@ -58,7 +58,7 @@ class Toko extends BaseController{
         tampilan_admin('admin/admin-toko/v_toko', 'admin/admin-toko/v_js_toko', $data);
     }
 
-    public function editprofiltoko(){
+    public function ubah(){
 
             if(!$this->validate([
                 'nama_toko' => [
@@ -111,7 +111,7 @@ class Toko extends BaseController{
 
             ])) {
                 
-                return redirect()->to(base_url('/toko/profiltoko'))->withInput();
+                return redirect()->to(base_url('/tempat/toko'))->withInput();
 
             }
                
@@ -139,7 +139,7 @@ class Toko extends BaseController{
     
                 $this->model_toko->update($id_toko, $edit);
                 $this->session->setFlashdata('pesan_toko', 'Toko berhasil diedit!');
-                return redirect()->to(base_url('/toko/profiltoko'));
+                return redirect()->to(base_url('/tempat/toko'));
                
                     $role = $this->session->get('role_id');
 		

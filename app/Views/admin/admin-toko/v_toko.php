@@ -43,7 +43,7 @@
         </div>
         <div class="col-12 col-md-12 col-lg-7">
           <div class="card card-primary">
-            <?php echo form_open_multipart(base_url().'/toko/editprofiltoko', $form_toko);    ?>
+            <?php echo form_open_multipart(base_url().'/tempat/toko/ubah', $form_toko);    ?>
             <!-- <input type="hidden" name="_method" value="PUT"> -->
             <?php echo form_input($hidden_id_toko); ?>
             <?php echo form_input($hidden_logo_lama); ?>
