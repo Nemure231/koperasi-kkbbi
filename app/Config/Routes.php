@@ -153,6 +153,11 @@ $routes->group('pengaturan', function($routes){
 	$routes->put('menu/ubah', 'Menu::ubah');
 	$routes->delete('menu/hapus', 'Menu::hapus');
 
+	$routes->get('menu_utama', 'MenuUtama::index');
+	$routes->post('menu_utama/tambah', 'MenuUtama::tambah');
+	$routes->put('menu_utama/ubah', 'MenuUtama::ubah');
+	$routes->delete('menu_utama/hapus', 'MenuUtama::hapus');
+
 	$routes->get('submenu', 'Submenu::index');
 	$routes->post('submenu/tambah', 'Submenu::tambah');
 	$routes->put('submenu/ubah', 'Submenu::ubah');
