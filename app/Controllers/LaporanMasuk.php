@@ -25,13 +25,7 @@ class LaporanMasuk extends BaseController{
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
+	
 
 		$tanggal = $this->request->getPost('cari_tanggal');
 
@@ -107,13 +101,7 @@ class LaporanMasuk extends BaseController{
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
+	
 
         date_default_timezone_set("Asia/Jakarta");
 
@@ -203,13 +191,7 @@ class LaporanMasuk extends BaseController{
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
+	
     
 
 
@@ -290,13 +272,7 @@ class LaporanMasuk extends BaseController{
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
+	
     
         date_default_timezone_set("Asia/Jakarta");
 

@@ -23,16 +23,11 @@ class RoleAkses extends BaseController{
 		
 		$role = $this->session->get('role_id');
 		$email = $this->session->get('email');
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
+		
 	
         $data = [
-            'title' => ucfirst('Role Akses'),
+            'title' => ucfirst('Role'),
+            'nama_menu_utama' => ucfirst('Role'),
             'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
                         ->join('user_role', 'user_role.id_role = user.role_id')
                         ->where('email', $email)
@@ -59,14 +54,7 @@ class RoleAkses extends BaseController{
             $this->model_user_access_menu->UbahRole($menu_id, $role_id);
             $this->session->setFlashdata('pesan_akses', 'Role akses berhasil diubah!');
         
-		$role = $this->session->get('role_id');
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+	
 	}
 
 	

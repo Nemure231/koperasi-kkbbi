@@ -24,14 +24,6 @@ class Satuan extends BaseController
 		
 		$role = $this->session->get('role_id');
 		$email = $this->session->get('email');
-		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
         
 
         $data = [
@@ -109,14 +101,6 @@ class Satuan extends BaseController
                 $this->session->setFlashdata('pesan_satuan', 'Satuan baru berhasil ditambahkan!');
                 return redirect()->to(base_url('/suplai/satuan'));
                 
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
         
     }
 
@@ -156,42 +140,16 @@ class Satuan extends BaseController
                 $this->session->setFlashdata('pesan_satuan', 'Satuan baru berhasil diedit!');
                 return redirect()->to(base_url('/suplai/satuan'));
                 
-                $role = $this->session->get('role_id');    
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+       
         
     }
 
 
-
-    // public function kecohhapusatuan(){
-    //     $role = $this->session->get('role_id');
-
-    //     if (!$role){
-    //         return redirect()->to(base_url('/'));
-    //     }
-    //     if ($role > 0) {
-    //             return redirect()->to(base_url('blokir'));
-    //     }
-    // }
     public function hapus(){
             $id_satuan = $this->request->getPost('id_satuanH');
             $this->model_satuan->delete($id_satuan);
             $this->session->setFlashdata('pesan_hapus_satuan', 'Satuan berhasil dihapus!');
             return redirect()->to(base_url('/suplai/satuan'));
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
         
     
     }

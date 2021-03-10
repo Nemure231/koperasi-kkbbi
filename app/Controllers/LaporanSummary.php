@@ -25,22 +25,12 @@ class LaporanSummary extends BaseController{
     
     public function index(){
 
-        // for($i =1; $i <= date('t'); $i++){
-        //     $dates[] = date('Y') . "-". date('m'). "-".str_pad($i, 2, '0', STR_PAD_LEFT);
-        // }
-
-        // dd($dates);
+      
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
+
         
 
         date_default_timezone_set("Asia/Jakarta");
@@ -115,16 +105,7 @@ class LaporanSummary extends BaseController{
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
-		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
-        
-
+	
         date_default_timezone_set("Asia/Jakarta");
 
         $tahun = $this->request->getPost('cari_tahun');
@@ -190,14 +171,6 @@ class LaporanSummary extends BaseController{
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
-        
 
         date_default_timezone_set("Asia/Jakarta");
 

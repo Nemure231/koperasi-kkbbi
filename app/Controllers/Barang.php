@@ -30,19 +30,9 @@ class Barang extends BaseController{
 		
 		$role = $this->session->get('role_id');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// $userAccess = $this->model_user_menu->Tendang();
-        // if ($userAccess < 1) {
-        //     return redirect()->to(base_url('blokir'));
-        // }
+
         $email = $this->session->get('email');
 
-        
-    
-        //$auto = $this->model->AutoID();
-        //var_dump($um); die;
         $kode_barang = $this->model_barang->AutoKodeBarang();
         $nama_barang = set_value('nama_barang', '');
         $harga_konsumen = set_value('harga_konsumen', '');
@@ -362,14 +352,6 @@ class Barang extends BaseController{
                 $this->session->setFlashdata('pesan_barang', 'Barang baru berhasil ditambahkan!');
                 return redirect()->to(base_url('/suplai/barang'));
                 
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
         
     }
 
@@ -535,29 +517,8 @@ class Barang extends BaseController{
                 $this->session->setFlashdata('pesan_barang', 'Barang berhasil diedit!');
                 return redirect()->to(base_url('/suplai/barang'));
                 
-        $role = $this->session->get('role_id');    
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-        }
-        
+       
     }
-
-    
-
-    // public function kecoh(){
-    //     $role = $this->session->get('role_id');
-
-    //     if (!$role){
-    //         return redirect()->to(base_url('/'));
-    //     }
-    //     if ($role > 0) {
-    //         return redirect()->to(base_url('blokir'));
-    //     }
-    // }
 
     
     public function hapus(){     
@@ -566,27 +527,8 @@ class Barang extends BaseController{
             $this->session->setFlashdata('hapus_barang', 'Barang berhasil dihapus!');
             return redirect()->to(base_url('/suplai/barang'));
 
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }
         
     
-    }
-
-
-   
-
-   
-
-
-
-   
-
-   
+    }   
 }
 ?>

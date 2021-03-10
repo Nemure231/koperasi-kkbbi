@@ -36,14 +36,6 @@ class BarangMasuk extends BaseController
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		
-		// if(!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// $userAccess = $this->model_user_menu->Tendang();
-        // if ($userAccess < 1) {
-        //     return redirect()->to(base_url('blokir'));
-        // }
         
         $kode_barang = $this->model_barang->AutoKodeBarang();
         $data = [
@@ -156,34 +148,23 @@ class BarangMasuk extends BaseController
     
     public function tambah_pengirim(){
             $nama = $this->request->getPost('nama_pengirim_barang');
-
-            if (!$nama) {
-                return redirect()->to(base_url('blokir'));
-            }
             
             $data = array(
             'nama_pengirim_barang' => htmlspecialchars($nama, ENT_QUOTES),
             );
 
-            $status = false;
             $this->session->setFlashdata('pesan_pengirim', 'Nama pengirim berhasil ditambahkan!');
             $this->model_pengirim_barang->insert($data);
             $this->db->insertID();
             $status = true;
             
-            $role = $this->session->get('role_id');
-            if (!$role){
-                return redirect()->to(base_url('/'));
-            }
+
             echo json_encode(array("status" => $status , 'data' => $data));
     }
 
     public function tambah_barang(){
         $kodeb = $this->request->getPost('kode_barang');
         
-        // if (!$kodeb) {
-        //     return redirect()->to(base_url('blokir'));
-        // }
 
         $sop = $this->request->getPost('satuan_id');
 
@@ -225,11 +206,7 @@ class BarangMasuk extends BaseController
     
         $this->session->setFlashdata('pesan_barangL', 'Barang berhasil ditambahkan!');
         $id = $this->model_barang->insert($data);
-        
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
+    
 
         echo json_encode(array('data' => $data));
 
@@ -238,15 +215,6 @@ class BarangMasuk extends BaseController
 
     public function ambil_detail(){
 
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }
 
         $data = $this->model_barang->select('nama_barang, id_barang')->asArray()
                 ->where('id_barang>', 0)->findAll();
@@ -263,14 +231,6 @@ class BarangMasuk extends BaseController
 
     public function ambil_harga(){
 
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-        }
 
         $id_barang = $this->request->getPost('barang_id');
         $data = $this->model_barang->select('harga_pokok, harga_anggota, harga_konsumen')->asArray()
@@ -338,15 +298,6 @@ class BarangMasuk extends BaseController
         $this->session->setFlashdata('pesan_barang_masuk', 'Barang masuk berhasil ditambahkan!');
         return redirect()->to(base_url('/fitur/barang_masuk'));
 
-
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-        }
     
 
     }

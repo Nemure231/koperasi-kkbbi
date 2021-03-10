@@ -28,13 +28,7 @@ class KodeTransaksi extends BaseController
         $email = $this->session->get('email');
 		
 
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// $userAccess = $this->model_user_menu->Tendang();
-        // if ($userAccess < 1) {
-        //     return redirect()->to(base_url('blokir'));
-        // }
+	
         
         $kode = $this->model_kode_transaksi->select('id_tb_kode_transaksi, huruf_kode_transaksi, jumlah_angka')
                 ->asArray()
@@ -107,14 +101,7 @@ class KodeTransaksi extends BaseController
                 $this->session->setFlashdata('pesan_kode_transaksi', 'Kode transaksi berhasil diubah!');
                 return redirect()->to(base_url('/pengaturan/kode/transaksi'));
                 
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-        }
+
         
     }
 

@@ -22,22 +22,13 @@ class Stok extends BaseController
 	protected $helpers = ['url', 'array', 'form', 'kpos'];
 
 
-     /////////////////////////////////////////////STOK//////////////////////////////////////////
 
-     public function index(){
+    public function index(){
 		
 
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
-        
 
 		
         $stok = $this->model_stok->select('min_stok, id_stok')->asArray()
@@ -99,14 +90,5 @@ class Stok extends BaseController
         $this->session->setFlashdata('pesan_stok', 'Stok berhasil dicari!');
         return redirect()->to(base_url('/pengaturan/stok'));
 
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang() ;
-        if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-        }
-        
     }
 }

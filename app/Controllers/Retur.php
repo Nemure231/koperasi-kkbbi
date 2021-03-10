@@ -38,13 +38,6 @@ class Retur extends BaseController{
 		$role = $this->session->get('role_id');
         $id_user = $this->session->get('id_user');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// $userAccess = $this->model_user_menu->Tendang();
-        // if ($userAccess < 1) {
-        //     return redirect()->to(base_url('blokir'));
-        // }
 		
 		$kode = $this->model_transaksi_total->AutoKodeTransaksi();
 
@@ -172,20 +165,10 @@ class Retur extends BaseController{
 	
 
 	public function tambah_keranjang(){
-        $bu = $this->request->getPost('kr_barang_id');
-        if ($bu == null) {
-            return redirect()->to(base_url('blokir'));
-        }
 		
 		$arr = $this->model_keranjang_retur->TambahKeranjangRetur();
         echo json_encode($arr);
         
-        $role = $this->session->get('role_id');
-		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-       
 		
 	}
 	
@@ -195,15 +178,6 @@ class Retur extends BaseController{
         $this->model_keranjang_retur->HapusKeranjangRetur($kode);
 		$this->session->setFlashdata('pesan_hapus_keranjang_admin', 'Berhasil dihapus!');
         return redirect()->to(base_url('/fitur/retur'))->withInput();
-        $role = $this->session->get('role_id');
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
         
     }
 
@@ -211,14 +185,7 @@ class Retur extends BaseController{
         $this->model_keranjang_retur->HapusAllKeranjangRetur();
 		$this->session->setFlashdata('pesan_hapus_all_keranjang_admin', 'Semua barang berhasil dihapus!');
         return redirect()->to(base_url('/fitur/retur'))->withInput();
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }
+
         
     
     }
@@ -303,12 +270,7 @@ class Retur extends BaseController{
         $this->session->setFlashdata('pesan_transaksi_sementara_retur', 'Transaksi retur berhasil disimpan ke dalam invoice!');
         return redirect()->to(base_url('fitur/retur/invoice'));
 
-        $role = $this->session->get('role_id');
-		
-		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
+       
 
 
     }

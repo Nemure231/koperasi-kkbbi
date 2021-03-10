@@ -23,13 +23,6 @@ class Karyawan extends BaseController{
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
 
         $nama = set_value('nama', '');
         $email_val = set_value('email', '');
@@ -254,15 +247,6 @@ class Karyawan extends BaseController{
                 return redirect()->to(base_url('/tempat/karyawan'));
                 
             
-                $role = $this->session->get('role_id');
-		
-                if (!$role){
-                    return redirect()->to(base_url('/'));
-                }
-                $userAccess = $this->model_user_menu->Tendang();
-                if ($userAccess < 1) {
-                    return redirect()->to(base_url('blokir'));
-                }
     }
 
     public function ubah(){
@@ -350,15 +334,7 @@ class Karyawan extends BaseController{
                 $this->session->setFlashdata('pesan', 'Karyawan berhasil diedit!');
                 return redirect()->to(base_url('/tempat/karyawan'));
             
-                $role = $this->session->get('role_id');
-		
-                if (!$role){
-                    return redirect()->to(base_url('/'));
-                }
-                    $userAccess = $this->model_user_menu->Tendang();
-                    if ($userAccess < 1) {
-                        return redirect()->to(base_url('blokir'));
-                    }
+             
     }
 
   
@@ -372,15 +348,7 @@ class Karyawan extends BaseController{
             $this->session->setFlashdata('hapus_karyawan', 'Karyawan berhasil dihapus!');
             return redirect()->to(base_url('/tempat/karyawan'));
 
-        $role = $this->session->get('role_id');
-		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+
     
     }
 

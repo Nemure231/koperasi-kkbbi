@@ -21,24 +21,12 @@ class Supplier extends BaseController
 
 	protected $helpers = ['url', 'array', 'form', 'kpos'];
 
-	
-
-     
-
-     /////////////////////////////////////////SUPPLIER//////////////////////////////////
 
 
-     public function index(){
+    public function index(){
 		
 		$role = $this->session->get('role_id');
 		$email = $this->session->get('email');
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
         
 
         $data = [
@@ -106,14 +94,7 @@ class Supplier extends BaseController
                 $this->session->setFlashdata('pesan_supplier', 'Supplier baru berhasil ditambahkan!');
                 return redirect()->to(base_url('/suplai/supplier'));
                 
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+       
         
     }
 
@@ -152,34 +133,17 @@ class Supplier extends BaseController
             
                 $this->session->setFlashdata('pesan_supplier', 'Supplier baru berhasil diedit!');
                 return redirect()->to(base_url('/suplai/supplier'));
-                
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+
         
     }
 
 
     public function hapus(){
-           
+
         $id_supplier = $this->request->getPost('id_supplierH');
-            $this->model_pengirim_barang->delete($id_supplier);
-            $this->session->setFlashdata('pesan_hapus_supplier', 'Supplier berhasil dihapus!');
-            return redirect()->to(base_url('/supali/supplier'));
-        
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+        $this->model_pengirim_barang->delete($id_supplier);
+        $this->session->setFlashdata('pesan_hapus_supplier', 'Supplier berhasil dihapus!');
+        return redirect()->to(base_url('/supali/supplier'));
         
     
     }

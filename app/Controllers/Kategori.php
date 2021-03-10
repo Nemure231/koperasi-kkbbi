@@ -20,7 +20,6 @@ class Kategori extends BaseController
 
 	protected $helpers = ['url', 'array', 'form', 'kpos'];
 
-	/////////////////////////////////////////KATEGORI//////////////////////////////////
 
 
     public function index(){
@@ -28,13 +27,6 @@ class Kategori extends BaseController
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
         
 
         $data = [
@@ -111,25 +103,15 @@ class Kategori extends BaseController
                 return redirect()->to(base_url('/suplai/kategori'))->withInput();
             }
             
-           // if($this->validation->withRequest($this->request)->run() == TRUE){
+          
                 $data = array(
-                   // 'kode_kategori' => htmlspecialchars($this->request->getPost('kode_kategori'), ENT_QUOTES),
                     'nama_kategori' => htmlspecialchars($this->request->getPost('nama_kategori'), ENT_QUOTES)
                 );
                 $this->model_kategori->insert($data);
                 $this->session->setFlashdata('pesan_kategori', 'Kategori baru berhasil ditambahkan!');
                 return redirect()->to(base_url('/suplai/kategori'));
-           // }
 
-
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-        }
+        
     
     }
 
@@ -187,28 +169,9 @@ class Kategori extends BaseController
                 $this->session->setFlashdata('pesan_kategori', 'Kategori baru berhasil diedit!');
                 return redirect()->to(base_url('/suplai/kategori'));
                 
-                $role = $this->session->get('role_id');
-
-                if (!$role){
-                    return redirect()->to(base_url('/'));
-                }
-                $userAccess = $this->model_user_menu->Tendang();
-                if ($userAccess < 1) {
-                    return redirect()->to(base_url('blokir'));
-                }
-                
+               
     }
 
-    // public function kecohhapuskategori(){
-    //     $role = $this->session->get('role_id');
-
-    //     if (!$role){
-    //         return redirect()->to(base_url('/'));
-    //     }
-    //     if ($role > 0) {
-    //             return redirect()->to(base_url('blokir'));
-    //     }
-    // }
 
     public function hapus(){
             $id_kategori = $this->request->getPost('id_kategoriH');
@@ -217,14 +180,7 @@ class Kategori extends BaseController
             $this->session->setFlashdata('pesan_hapus_kategori', 'Kategori berhasil dihapus!');
             return redirect()->to(base_url('/suplai/kategori'));
         
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+        
         
     
     }

@@ -18,19 +18,12 @@ class Role extends BaseController{
 	protected $helpers = ['form', 'url', 'array', 'kpos'];
 
 	public function index(){
-		//$session = \Config\Services::session();
 		
         
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
+
 
 		
         $data = [
@@ -101,14 +94,6 @@ class Role extends BaseController{
             $this->session->setFlashdata('pesan_role', 'Role baru berhasil ditambahkan!');
             return redirect()->to(base_url('/pengaturan/role'));
             
-            $role = $this->session->get('role_id');
-            if (!$role){
-                return redirect()->to(base_url('/'));
-            }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
     }
 
     public function ubah(){
@@ -145,16 +130,7 @@ class Role extends BaseController{
                 $this->model_user_role->update($id_role, $data);
                 $this->session->setFlashdata('pesan_edit_role', 'Role baru berhasil diedit!');
                 return redirect()->to(base_url('/pengaturan/role'));
-                
-                $role = $this->session->get('role_id');
-
-                if (!$role){
-                    return redirect()->to(base_url('/'));
-                }
-                $userAccess = $this->model_user_menu->Tendang();
-                if ($userAccess < 1) {
-                    return redirect()->to(base_url('blokir'));
-                }    
+                  
     }
 
   
@@ -165,14 +141,6 @@ class Role extends BaseController{
             $this->session->setFlashdata('pesan_hapus_role', 'Role berhasil dihapus!');
             return redirect()->to(base_url('/pengaturan/role'));
         
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
         
     
     }

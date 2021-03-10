@@ -23,15 +23,7 @@ class Sandi extends BaseController{
 		
 		$role = $this->session->get('role_id');
 		$email = $this->session->get('email');
-		
-		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// $userAccess = $this->model_user_menu->Tendang();
-        // if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        // }
+	
 
 		$data = [
 		'title' => ucfirst('Ubah Sandi'),
@@ -110,17 +102,6 @@ class Sandi extends BaseController{
 				return redirect()->to(base_url('/akun/sandi'));
 			}
 		}
-				
-		$role = $this->session->get('role_id');
-		
-		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-		$userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-        }
 
 			
 			

@@ -45,16 +45,6 @@ class Kasir extends BaseController{
         $id_user = $this->session->get('id_user');
         $email = $this->session->get('email');
 		
-		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
-        
-
 
         $jenis_kasir= $this->model_jenis_kasir->select('id_jenis_kasir, role_id, role')->asArray()
                     ->where('user_id', $id_user)
@@ -152,26 +142,11 @@ class Kasir extends BaseController{
             $this->session->setFlashdata('pesan_jenis_kasir', 'Jenis kasir berhasil diubah!');
             return redirect()->to(base_url('/fitur/kasir'));
 
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }
     }
     
     public function tambah_keranjang(){ 
         $barang = $this->request->getPost('k_barang_id');
-        if (!$barang) {
-            return redirect()->to(base_url('blokir'));
-        }
-
         $arr = $this->model_keranjang->TambahKeranjangAdmin();
-        if (!$arr){
-            return redirect()->to(base_url('/'));
-        }
         echo json_encode($arr);        
         
     }
@@ -180,10 +155,6 @@ class Kasir extends BaseController{
 
         $role = $this->session->get('role_id');
         $id_user = $this->session->get('id_user');
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
         
 
         if(!$this->validate([
@@ -270,14 +241,6 @@ class Kasir extends BaseController{
         $this->model_keranjang->HapusKeranjangAdmin($kode);
 		$this->session->setFlashdata('pesan_hapus_keranjang_admin', 'Berhasil dihapus!');
         return redirect()->to(base_url('/fitur/kasir'));
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }
         
     }
 
@@ -285,14 +248,7 @@ class Kasir extends BaseController{
         $this->model_keranjang->HapusAllKeranjangAdmin();
 		$this->session->setFlashdata('pesan_hapus_all_keranjang_admin', 'Semua barang berhasil dihapus!');
         return redirect()->to(base_url('/fitur/kasir/'));
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }    
+       
     }
 
 

@@ -28,14 +28,6 @@ class Invoice extends BaseController{
         $id_user = $this->session->get('id_user');
 
 		
-		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// $userAccess = $this->model_user_menu->Tendang();
-        // if ($userAccess < 1) {
-        //     return redirect()->to(base_url('blokir'));
-        // }
         
 
         $tk =   $this->model_transaksi_sementara->select('ts_kode_transaksi, telepon, 
@@ -105,18 +97,6 @@ class Invoice extends BaseController{
             $this->model_transaksi_sementara->HapusAllInvoiceAdmin($kode, $uri);
 			$this->session->setFlashdata('pesan_hapus_invoice', 'Invoice berhasil dihapus!');
             return redirect()->to(base_url('/fitur/kasir'));
-
-
-            $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
-        
-        
         
     
     }
@@ -163,15 +143,6 @@ class Invoice extends BaseController{
             $this->session->setFlashdata('pesan_transaksi', 'Transaksi berhasil disimpan!');
             return redirect()->to(base_url('/fitur/kasir'));
         
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }
-                
             
         
     }

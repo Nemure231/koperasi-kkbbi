@@ -25,14 +25,6 @@ class Merek extends BaseController
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
-		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
         
 
         $data = [
@@ -112,14 +104,6 @@ class Merek extends BaseController
                 $this->session->setFlashdata('pesan_merek', 'Merek baru berhasil ditambahkan!');
                 return redirect()->to(base_url('/suplai/merek'));
                 
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
         
     }
 
@@ -158,15 +142,7 @@ class Merek extends BaseController
             
                 $this->session->setFlashdata('pesan_merek', 'Merek baru berhasil diedit!');
                 return redirect()->to(base_url('/suplai/merek'));
-                
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+     
         
     }
 
@@ -178,14 +154,7 @@ class Merek extends BaseController
             $this->session->setFlashdata('pesan_hapus_merek', 'Merek berhasil dihapus!');
             return redirect()->to(base_url('/suplai/merek'));
         
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+      
         
     
     }

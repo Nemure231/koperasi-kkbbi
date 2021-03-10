@@ -21,14 +21,6 @@ class Toko extends BaseController{
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
-		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// $userAccess = $this->model_user_menu->Tendang();
-        // if ($userAccess < 1) {
-        //     return redirect()->to(base_url('blokir'));
-        // }
         
         $toko = $this->model_toko->select('id_toko, nama_toko, telepon_toko, email_toko, alamat_toko, 
                 deskripsi_toko, logo_toko')->asArray()
@@ -141,16 +133,7 @@ class Toko extends BaseController{
                 $this->model_toko->update($id_toko, $edit);
                 $this->session->setFlashdata('pesan_toko', 'Toko berhasil diedit!');
                 return redirect()->to(base_url('/tempat/toko'));
-               
-                    $role = $this->session->get('role_id');
-		
-                    if (!$role){
-                        return redirect()->to(base_url('/'));
-                    }
-                        $userAccess = $this->model_user_menu->Tendang();
-                        if ($userAccess < 1) {
-                            return redirect()->to(base_url('blokir'));
-                        }
+
     }
 
 }

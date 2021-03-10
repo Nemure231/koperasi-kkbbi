@@ -28,14 +28,7 @@ class InvoiceRetur extends BaseController{
         $email = $this->session->get('email');
         $id_user = $this->session->get('id_user');
 		
-		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// 	$userAccess = $this->model_user_menu->Tendang();
-        //     if ($userAccess < 1) {
-        //         return redirect()->to(base_url('blokir'));
-        //     }
+
         
 
         $tk=$this->model_transaksi_retur_sementara->select('tsr_kode_retur, tsr_kembalian_pl, 
@@ -95,15 +88,6 @@ class InvoiceRetur extends BaseController{
         $this->model_transaksi_retur_sementara->HapusAllInvoiceRetur();
 		$this->session->setFlashdata('pesan_hapus_invoice', 'Invoice berhasil dihapus!');
         return redirect()->to(base_url('/fitur/retur'));
-        $role = $this->session->get('role_id');
-        
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
         
     
     }
@@ -129,15 +113,6 @@ class InvoiceRetur extends BaseController{
             return redirect()->to(base_url('/fitur/retur'));
             
     
-        $role = $this->session->get('role_id');
-
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }
-    }    
+    }
 }
 ?>

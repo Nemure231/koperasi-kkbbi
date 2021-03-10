@@ -19,14 +19,6 @@ class Menu extends BaseController{
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		
-		// if (!$role){
-        //     return redirect()->to(base_url('/'));
-        // }
-		// $userAccess = $this->model_user_menu->Tendang();
-        // if ($userAccess < 1) {                
-        //     return redirect()->to(base_url('blokir'));
-        // }
         
         $data = [
         
@@ -97,15 +89,6 @@ class Menu extends BaseController{
         
             $this->session->setFlashdata('pesan_menu', 'Menu baru berhasil ditambahkan!');
             return redirect()->to(base_url('/pengaturan/menu'));
-            
-            $role = $this->session->get('role_id');
-            if (!$role){
-                return redirect()->to(base_url('/'));
-            }
-            $userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
     }
 
     public function ubah(){
@@ -143,15 +126,7 @@ class Menu extends BaseController{
                 $this->session->setFlashdata('pesan_edit_menu', 'Menu baru berhasil diedit!');
                 return redirect()->to(base_url('/pengaturan/menu'));
                 
-                $role = $this->session->get('role_id');
-
-                if (!$role){
-                    return redirect()->to(base_url('/'));
-                }
-                $userAccess = $this->model_user_menu->Tendang();
-                if ($userAccess < 1) {
-                    return redirect()->to(base_url('blokir'));
-                }    
+      
     }
 
     public function hapus(){
@@ -160,15 +135,6 @@ class Menu extends BaseController{
         $this->model_user_menu->delete($id_menu);
         $this->session->setFlashdata('pesan_hapus_menu', 'Menu berhasil dihapus!');
         return redirect()->to(base_url('/pengaturan/menu'));
-        
-        $role = $this->session->get('role_id');
-        if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-        $userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }
         
     
     }
