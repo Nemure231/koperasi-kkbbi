@@ -15,4 +15,8 @@
 
   <script>
     $("#modal-2").fireModal({body: '<a href="<?php echo base_url().'/logout' ?>" class="btn btn-block btn-danger">Ya!</a>',title: '<h5 class="text-center text-danger"><i class="fa fa-power-off mr-3"></i> Keluar?</h5>', center: true});
+
+    var nama = $('.namo').text();
+    $('.nama_Profil_sidebar').text(nama);
+  
   </script>

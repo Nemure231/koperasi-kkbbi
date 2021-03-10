@@ -28,7 +28,7 @@
 
                   <?php endif; ?>
 
-                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="<?php echo $sub['ikon_menu_utama']; ?>"></i> <span><?php echo $sub['nama_menu_utama']; ?></span></a>
+                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="<?php echo $sub['ikon_menu_utama']; ?>"></i> <span class="nama_<?php echo $sub['nama_menu_utama']; ?>_sidebar"><?php echo $sub['nama_menu_utama']; ?></span></a>
                   <ul class="dropdown-menu">
 
 
