@@ -21,13 +21,13 @@ class Pengguna extends BaseController{
 		$role = $this->session->get('role_id');
 		$email = $this->session->get('email');
 		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+		// if (!$role){
+        //     return redirect()->to(base_url('/'));
+        // }
+		// 	$userAccess = $this->model_user_menu->Tendang();
+        //     if ($userAccess < 1) {
+        //         return redirect()->to(base_url('blokir'));
+        //     }
         
 	
 		$user = $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()

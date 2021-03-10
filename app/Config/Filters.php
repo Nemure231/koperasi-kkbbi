@@ -10,7 +10,7 @@ class Filters extends BaseConfig
 		'csrf'     => \CodeIgniter\Filters\CSRF::class,
 		'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
 		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
-		// 'cek_akses'=> \App\Filters\HakAkses::class
+		'cek_akses'=> \App\Filters\HakAkses::class
 	];
 
 	// Always applied before every request

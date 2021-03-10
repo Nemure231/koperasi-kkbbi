@@ -25,13 +25,13 @@ class KodeBarang extends BaseController
 		
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+		// if (!$role){
+        //     return redirect()->to(base_url('/'));
+        // }
+		// 	$userAccess = $this->model_user_menu->Tendang();
+        //     if ($userAccess < 1) {
+        //         return redirect()->to(base_url('blokir'));
+        //     }
 
         $kode = $this->model_kode_barang->select('id_tb_kode_barang, huruf_kode_barang, jumlah_angka')->asArray()
                 ->first();

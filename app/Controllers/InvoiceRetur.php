@@ -29,13 +29,13 @@ class InvoiceRetur extends BaseController{
         $id_user = $this->session->get('id_user');
 		
 		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+		// if (!$role){
+        //     return redirect()->to(base_url('/'));
+        // }
+		// 	$userAccess = $this->model_user_menu->Tendang();
+        //     if ($userAccess < 1) {
+        //         return redirect()->to(base_url('blokir'));
+        //     }
         
 
         $tk=$this->model_transaksi_retur_sementara->select('tsr_kode_retur, tsr_kembalian_pl, 

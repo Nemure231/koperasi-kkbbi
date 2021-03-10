@@ -38,13 +38,13 @@ class Retur extends BaseController{
 		$role = $this->session->get('role_id');
         $id_user = $this->session->get('id_user');
 		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-		$userAccess = $this->model_user_menu->Tendang();
-        if ($userAccess < 1) {
-            return redirect()->to(base_url('blokir'));
-        }
+		// if (!$role){
+        //     return redirect()->to(base_url('/'));
+        // }
+		// $userAccess = $this->model_user_menu->Tendang();
+        // if ($userAccess < 1) {
+        //     return redirect()->to(base_url('blokir'));
+        // }
 		
 		$kode = $this->model_transaksi_total->AutoKodeTransaksi();
 

@@ -23,13 +23,13 @@ class Karyawan extends BaseController{
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+		// if (!$role){
+        //     return redirect()->to(base_url('/'));
+        // }
+		// 	$userAccess = $this->model_user_menu->Tendang();
+        //     if ($userAccess < 1) {
+        //         return redirect()->to(base_url('blokir'));
+        //     }
 
         $nama = set_value('nama', '');
         $email_val = set_value('email', '');

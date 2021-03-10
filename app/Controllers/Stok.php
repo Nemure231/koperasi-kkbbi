@@ -30,13 +30,13 @@ class Stok extends BaseController
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-		if (!$role){
-            return redirect()->to(base_url('/'));
-        }
-			$userAccess = $this->model_user_menu->Tendang();
-            if ($userAccess < 1) {
-                return redirect()->to(base_url('blokir'));
-            }
+		// if (!$role){
+        //     return redirect()->to(base_url('/'));
+        // }
+		// 	$userAccess = $this->model_user_menu->Tendang();
+        //     if ($userAccess < 1) {
+        //         return redirect()->to(base_url('blokir'));
+        //     }
         
 
 		
