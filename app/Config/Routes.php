@@ -76,7 +76,6 @@ $routes->group('suplai', function($routes){
 	$routes->put('supplier/ubah', 'Supplier::ubah');
 	$routes->delete('supplier/hapus', 'Supplier::hapus');
 
-	
 });
 
 $routes->group('fitur', function($routes){

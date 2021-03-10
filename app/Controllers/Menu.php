@@ -114,7 +114,7 @@ class Menu extends BaseController{
                 
             ])) {
                 
-                return redirect()->to(base_url('/menu'))->withInput();
+                return redirect()->to(base_url('/pengaturan/menu'))->withInput();
 
             }
                 $id = $this->request->getPost('hidden_menu_id');
