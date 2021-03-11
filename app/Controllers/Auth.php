@@ -9,7 +9,7 @@ class Auth extends BaseController
 {
 	public function __construct(){
 
-		// $this->model = new Model_all();
+
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 		$this->email = \Config\Services::email();
