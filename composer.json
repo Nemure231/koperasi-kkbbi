@@ -8,7 +8,8 @@
 		"php": ">=7.2",
 		"codeigniter4/framework": "^4",
 		"jason-napolitano/codeigniter4-cart-module": "^1.0",
-		"mike42/escpos-php": "^3.0"
+		"mike42/escpos-php": "^3.0",
+		"guzzlehttp/guzzle": "^7.0"
 	},
 	"require-dev": {
 		"fzaninotto/faker": "^1.9@dev",

@@ -4,6 +4,7 @@ use CodeIgniter\Controller;
 // use App\Models\Model_all;
 use CodeIgniter\I18n\Time;
 //use CodeIgniter\HTTP\RequestInterface;
+use GuzzleHttp\Client;
 
 class Auth extends BaseController
 {
