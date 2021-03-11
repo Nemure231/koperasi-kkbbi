@@ -95,7 +95,7 @@ class Auth extends BaseController
 			$respon_token = $this->_client->request(
 				'POST',
 				'auth/login',
-				['http_errors' => false],
+				// ['http_errors' => false],
 				['form_params' => 
 					[
 						'email' => $email,
@@ -115,19 +115,22 @@ class Auth extends BaseController
 				$ambil_token =  $token['access_token'];
 				$waktu_token = $token['expires_in'];
 
-				set_cookie([
-					'name' => 'jwt_token',
-					'value' => $ambil_token,
-					'expire' => $waktu_token,
-					'httponly' => true
-				]);
+				// set_cookie([
+				// 	'name' => 'jwt_token',
+				// 	'value' => $ambil_token,
+				// 	'expire' => $waktu_token,
+				// 	'httponly' => true
+				// ]);
 
+				set_cookie("jwt_token", "$ambil_token", $waktu_token);
+				
+			
 
 				///ambil user
 				$respon_ambil_user = $this->_client->request(
 					'GET',
 					'auth/me',
-					['http_errors' => false],
+					// ['http_errors' => false],
 					['headers' => 
 						[
 						'Authorization' => "Bearer {$ambil_token}"
@@ -137,22 +140,22 @@ class Auth extends BaseController
 
 				$user = json_decode($respon_ambil_user->getBody(), true);
 
-				dd($user);
-				$status_user = $respon->getStatusCode();
+				// dd($user);
+				$status_user = $respon_ambil_user->getStatusCode();
 
 
-				if($user){
+				if($status_user == 200){
 					//jika usernya aktif
-					if($user['is_active'] == 1){
+					if($user['status'] == 1){
 
 
 						//cek password
-						if(password_verify($sandi, $user['sandi'])){
+						if(password_verify($sandi, $user['password'])){
 
 							$data =[
 							'email' => $user['email'],
 							'role_id' => $user['role_id'],
-							'id_user' => $user['id_user']
+							'id_user' => $user['id']
 
 							];
 
