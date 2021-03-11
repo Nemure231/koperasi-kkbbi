@@ -2,7 +2,7 @@
 
 use CodeIgniter\Controller;
 // use App\Models\Model_all;
-use CodeIgniter\I18n\Time;
+// use CodeIgniter\I18n\Time;
 //use CodeIgniter\HTTP\RequestInterface;
 use GuzzleHttp\Client;
 // use GuzzleHttp\Stream\Stream;
@@ -92,13 +92,12 @@ class Auth extends BaseController
 			// 		->where('email', $email)
 			// 		->first();
 			
-
-			$respon = $this->_client->request(
+			$respon_token = $this->_client->request(
 				'POST',
 				'auth/login',
 				['http_errors' => false],
-				[
-					'form_params' => [
+				['form_params' => 
+					[
 						'email' => $email,
 						'password' => $sandi,
 					]
@@ -106,14 +105,42 @@ class Auth extends BaseController
 				]
 			);
 
-			
-			$token = json_decode($respon->getBody(), true);
-			$code = $respon->getStatusCode();
-			// $ambil_token =  $token['access_token'];
+			$token = json_decode($respon_token->getBody(), true);
+			// dd($token);
+			//ambil status code untuk penggunaan kondisi if
+			$status = $respon_token->getStatusCode();
+	
+			if($status == 200){
+				//ambil token buat nanti disimpen ke cookie
+				$ambil_token =  $token['access_token'];
+				$waktu_token = $token['expires_in'];
+
+				set_cookie([
+					'name' => 'jwt_token',
+					'value' => $ambil_token,
+					'expire' => $waktu_token,
+					'httponly' => true
+				]);
 
 
-			if($code == 200){
-		
+				///ambil user
+				$respon_ambil_user = $this->_client->request(
+					'GET',
+					'auth/me',
+					['http_errors' => false],
+					['headers' => 
+						[
+						'Authorization' => "Bearer {$ambil_token}"
+						]
+					]
+				);
+
+				$user = json_decode($respon_ambil_user->getBody(), true);
+
+				dd($user);
+				$status_user = $respon->getStatusCode();
+
+
 				if($user){
 					//jika usernya aktif
 					if($user['is_active'] == 1){
