@@ -5,8 +5,7 @@ use CodeIgniter\Controller;
 use CodeIgniter\I18n\Time;
 //use CodeIgniter\HTTP\RequestInterface;
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Stream;
+// use GuzzleHttp\Stream\Stream;
 
 class Auth extends BaseController
 {
@@ -97,6 +96,7 @@ class Auth extends BaseController
 			$respon = $this->_client->request(
 				'POST',
 				'auth/login',
+				['http_errors' => false],
 				[
 					'form_params' => [
 						'email' => $email,
@@ -108,10 +108,11 @@ class Auth extends BaseController
 
 			
 			$token = json_decode($respon->getBody(), true);
-			// dd($token);
-			$ambil_token =  $token['access_token'];
+			$code = $respon->getStatusCode();
+			// $ambil_token =  $token['access_token'];
 
-			if($ambil_token){
+
+			if($code == 200){
 		
 				if($user){
 					//jika usernya aktif
