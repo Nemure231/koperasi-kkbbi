@@ -5,19 +5,25 @@ use CodeIgniter\Controller;
 use CodeIgniter\I18n\Time;
 //use CodeIgniter\HTTP\RequestInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Stream;
 
 class Auth extends BaseController
 {
+
+
 	public function __construct(){
 
-		// $this->model = new Model_all();
+		$this->_client = new Client([
+			'base_uri' => 'http://localhost:8000/api/',
+		]);
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 		$this->email = \Config\Services::email();
 		$this->user_model = new \App\Models\Model_user();
 	}
 
-	protected $helpers = ['form', 'url', 'array', 'kpos'];
+	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
 
 	public function index(){
 		
@@ -79,96 +85,119 @@ class Auth extends BaseController
 			tampilan_login('user/user-login/v_login', 'user/user-login/v_js_login', $data);
 		}else{
 			
-		$email = $this->request->getPost('email');
-		$sandi = $this->request->getPost('sandi');
-		// $user  = $this->model->GetUserEmail($email);
+			$email = $this->request->getPost('email');
+			$sandi = $this->request->getPost('sandi');
 
-		$user = $this->user_model->select('id_user, sandi, nama, email, role_id, is_active')->asArray()->where('email', $email)->first();
-	
-	
-		if($user){
-			//jika usernya aktif
-			if($user['is_active'] == 1){
+			// $user = $this->user_model->select('id_user, sandi, nama, email, role_id, is_active')
+			// 		->asArray()
+			// 		->where('email', $email)
+			// 		->first();
+			
 
-
-				//cek password
-				if(password_verify($sandi, $user['sandi'])){
-
-					$data =[
-					'email' => $user['email'],
-					'role_id' => $user['role_id'],
-					'id_user' => $user['id_user']
-
-					];
-
-
-					$this->session->set($data);
-					if($user['role_id']==1){
-
-						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('beranda/dashboard_masuk'));
-
-					}
-					if($user['role_id']==2){
-						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('beranda/dashboard_masuk'));
-
-					}
+			$respon = $this->_client->request(
+				'POST',
+				'auth/login',
+				[
+					'form_params' => [
+						'email' => $email,
+						'password' => $sandi,
+					]
 					
-					if($user['role_id']==3){
-						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('akun/profil'));
+				]
+			);
 
-					}
+			
+			$token = json_decode($respon->getBody(), true);
+			// dd($token);
+			$ambil_token =  $token['access_token'];
 
-					if($user['role_id']==6){
-						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('akun/profil'));
+			if($ambil_token){
+		
+				if($user){
+					//jika usernya aktif
+					if($user['is_active'] == 1){
 
-					}
 
-					// if($user['role_id']==4){
-					// 	$this->session->setFlashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-					// 	<strong>Selamat datang kembali, '.$user['nama'].'</strong>
-					// 	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					// 	  <span aria-hidden="true">&times;</span>
-					// 	</button>
-					//   </div>');
-					// 	return redirect()->to(base_url('/'));
-					// }
+						//cek password
+						if(password_verify($sandi, $user['sandi'])){
 
-				}else{
-					$this->session->setFlashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-					<strong>Kata sandi salah!</strong>
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					  <span aria-hidden="true">&times;</span>
-					</button>
-				  </div>');
-					 //redirect(base_url('/'));
-					 return redirect()->to(base_url('/'))->back()->withInput();
-				}
+							$data =[
+							'email' => $user['email'],
+							'role_id' => $user['role_id'],
+							'id_user' => $user['id_user']
 
-			}else{
-				//jika usernya tidak aktif
-				$this->session->setFlashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-				<strong>Email belum diaktivasi!</strong>
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				  <span aria-hidden="true">&times;</span>
-				</button>
-			  </div>');
-				 return redirect()->to(base_url('/'));
-			}
+							];
 
-			}else{
-				$this->session->setFlashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-						<strong>E-mail belum terdaftar!</strong>
+
+							$this->session->set($data);
+							if($user['role_id']==1){
+
+								$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
+								return redirect()->to(base_url('beranda/dashboard_masuk'));
+
+							}
+							if($user['role_id']==2){
+								$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
+								return redirect()->to(base_url('beranda/dashboard_masuk'));
+
+							}
+							
+							if($user['role_id']==3){
+								$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
+								return redirect()->to(base_url('akun/profil'));
+
+							}
+
+							if($user['role_id']==6){
+								$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
+								return redirect()->to(base_url('akun/profil'));
+
+							}
+
+						}else{
+							$this->session->setFlashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+							<strong>Kata sandi salah!</strong>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>');
+							//redirect(base_url('/'));
+							return redirect()->to(base_url('/'))->back()->withInput();
+						}
+
+					}else{
+						//jika usernya tidak aktif
+						$this->session->setFlashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+						<strong>Email belum diaktivasi!</strong>
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 						</button>
 					</div>');
-				return redirect()->to(base_url('/'))->back()->withInput();
+						return redirect()->to(base_url('/'));
+					}
+
+				}else{
+					$this->session->setFlashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<strong>E-mail belum terdaftar!</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+					</div>');
+					return redirect()->to(base_url('/'))->back()->withInput();
+				}
+			}else{
+				$this->session->setFlashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<strong>Pengguna belum terdaftar</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+					</div>');
+					return redirect()->to(base_url('/'))->back()->withInput();
+
 			}
+				
 		}
+		
 		
 
 	}
