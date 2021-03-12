@@ -5,7 +5,8 @@ use CodeIgniter\Controller;
 // use CodeIgniter\I18n\Time;
 //use CodeIgniter\HTTP\RequestInterface;
 use GuzzleHttp\Client;
-// use GuzzleHttp\Stream\Stream;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Exception\ClientException;
 
 class Auth extends BaseController
 {
@@ -92,7 +93,11 @@ class Auth extends BaseController
 			// 		->where('email', $email)
 			// 		->first();
 			
-			$respon_token = $this->_client->request(
+			
+			$res = json_encode(['access_token' => '']);
+			// $eror = null;
+			try {
+				$respon_token = $this->_client->request(
 				'POST',
 				'auth/login',
 				// ['http_errors' => false],
@@ -102,15 +107,19 @@ class Auth extends BaseController
 						'password' => $sandi,
 					]
 					
-				]
+					],
 			);
+			$res = $respon_token->getBody();
+			} catch (ClientException $e) {
+				// $e->getRequest();
+				// $eror =  $e->getResponse();
+			}
 
-			$token = json_decode($respon_token->getBody(), true);
-			// dd($token);
-			//ambil status code untuk penggunaan kondisi if
-			$status = $respon_token->getStatusCode();
+
+			$token = json_decode($res, true);
+			$cek_token = $token['access_token'];
 	
-			if($status == 200){
+			if($cek_token != ''){
 				//ambil token buat nanti disimpen ke cookie
 				$ambil_token =  $token['access_token'];
 				$waktu_token = $token['expires_in'];
@@ -122,19 +131,6 @@ class Auth extends BaseController
 					'httponly' => true
 				]);
 				
-
-				// $set = set_cookie('jwt_token', ''.$ambil_token.'.', $waktu_token, 'http://localhost', '/', '', false, false, 'lax');
-				
-				// $set = set_cookie('jwt_token', "$ambil_token", $waktu_token);
-
-				// $get = $this->request->getCookie('jwt_token');
-
-				// dd($get);
-
-
-				
-			
-
 				///ambil user
 				$respon_ambil_user = $this->_client->request(
 					'GET',
