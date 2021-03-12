@@ -22,7 +22,7 @@ class Auth extends BaseController
 		$this->user_model = new \App\Models\Model_user();
 	}
 
-	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
+	protected $helpers = ['cookie','form', 'url', 'array', 'kpos'];
 
 	public function index(){
 		
@@ -115,14 +115,23 @@ class Auth extends BaseController
 				$ambil_token =  $token['access_token'];
 				$waktu_token = $token['expires_in'];
 
-				// set_cookie([
-				// 	'name' => 'jwt_token',
-				// 	'value' => $ambil_token,
-				// 	'expire' => $waktu_token,
-				// 	'httponly' => true
-				// ]);
+				$set = set_cookie([
+					'name' => 'jwt_token',
+					'value' => "$ambil_token",
+					'expire' => $waktu_token,
+					'httponly' => true
+				]);
+				
 
-				set_cookie("jwt_token", "$ambil_token", $waktu_token);
+				// $set = set_cookie('jwt_token', ''.$ambil_token.'.', $waktu_token, 'http://localhost', '/', '', false, false, 'lax');
+				
+				// $set = set_cookie('jwt_token', "$ambil_token", $waktu_token);
+
+				// $get = $this->request->getCookie('jwt_token');
+
+				// dd($get);
+
+
 				
 			
 
@@ -164,24 +173,24 @@ class Auth extends BaseController
 							if($user['role_id']==1){
 
 								$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-								return redirect()->to(base_url('beranda/dashboard_masuk'));
+								return redirect()->to(base_url('beranda/dashboard_masuk'))->withCookies('jwt_token');
 
 							}
 							if($user['role_id']==2){
 								$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-								return redirect()->to(base_url('beranda/dashboard_masuk'));
+								return redirect()->to(base_url('beranda/dashboard_masuk'))->withCookies('jwt_token');
 
 							}
 							
 							if($user['role_id']==3){
 								$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-								return redirect()->to(base_url('akun/profil'));
+								return redirect()->to(base_url('akun/profil'))->withCookies('jwt_token');
 
 							}
 
 							if($user['role_id']==6){
 								$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-								return redirect()->to(base_url('akun/profil'));
+								return redirect()->to(base_url('akun/profil'))->withCookies('jwt_token');
 
 							}
 
@@ -458,22 +467,15 @@ class Auth extends BaseController
 		$this->session->remove('role_id');
 		$this->session->remove('id_user');
 		$this->session->remove('nama');
-		if($role != 4){
+		delete_cookie('jwt_token');
+		if($role){
 			$this->session->setFlashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">
 						<strong>Anda berhasil keluar!</strong>
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 						</button>
 					</div>');
-				return redirect()->to(base_url('/'));
-		}else{
-			$this->session->setFlashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-			<strong>Anda berhasil keluar!</strong>
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				</div>');
-			return redirect()->to(base_url('/'));
+				return redirect()->to(base_url('/'))->withCookies();
 		}
 	}
 

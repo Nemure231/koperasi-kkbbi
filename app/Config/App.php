@@ -204,11 +204,18 @@ class App extends BaseConfig
 	|       'cookie_httponly') will also affect sessions.
 	|
 	*/
+	// public $cookiePrefix   = '';
+	// public $cookieDomain   = '';
+	// public $cookiePath     = WRITEPATH . 'cookie';
+	// public $cookieSecure   = false;
+	// public $cookieHTTPOnly = false;
+
 	public $cookiePrefix   = '';
 	public $cookieDomain   = '';
 	public $cookiePath     = '/';
 	public $cookieSecure   = false;
 	public $cookieHTTPOnly = false;
+	public $cookieSameSite = 'Lax'; 
 
 	/*
 	|--------------------------------------------------------------------------
