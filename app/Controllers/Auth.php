@@ -7,6 +7,7 @@ use CodeIgniter\Controller;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
+use App\Models\Users;
 
 class Auth extends BaseController
 {
@@ -17,10 +18,11 @@ class Auth extends BaseController
 		$this->_client = new Client([
 			'base_uri' => 'http://localhost:8000/api/',
 		]);
+		$this->model_user = new Users();
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 		$this->email = \Config\Services::email();
-		$this->user_model = new \App\Models\Model_user();
+
 	}
 
 	protected $helpers = ['cookie','form', 'url', 'array', 'kpos'];
@@ -31,7 +33,7 @@ class Auth extends BaseController
 		$roleid = $this->session->get('role_id');
 
 		if($roleid){
-			 return redirect()->to(base_url('/pengguna'));
+			 return redirect()->to(base_url('/akun/profil'));
 		}
 	
 		$email = set_value('email', '');
@@ -85,38 +87,12 @@ class Auth extends BaseController
 			tampilan_login('user/user-login/v_login', 'user/user-login/v_js_login', $data);
 		}else{
 			
+			
 			$email = $this->request->getPost('email');
 			$sandi = $this->request->getPost('sandi');
-
-			// $user = $this->user_model->select('id_user, sandi, nama, email, role_id, is_active')
-			// 		->asArray()
-			// 		->where('email', $email)
-			// 		->first();
 			
-			
-			$res_token = json_encode(['access_token' => '']);
-			// $eror = null;
-			try {
-				$respon_token = $this->_client->request(
-				'POST',
-				'auth/login',
-				// ['http_errors' => false],
-				['form_params' => 
-					[
-						'email' => $email,
-						'password' => $sandi,
-					]
-					
-					],
-			);
-			$res_token = $respon_token->getBody();
-			} catch (ClientException $e) {
-				// $e->getRequest();
-				// $eror =  $e->getResponse();
-			}
+			$token = $this->model_user->login($email, $sandi);
 
-
-			$token = json_decode($res_token, true);
 			$cek_token = $token['access_token'];
 	
 			if($cek_token){
@@ -131,24 +107,9 @@ class Auth extends BaseController
 					'httponly' => true
 				]);
 				
+				
+				$user = $this->model_user->ambilSatuUser($ambil_token);
 
-				$res_user = json_encode(['id' => '']);
-				try {
-					$respon_ambil_user = $this->_client->request(
-						'GET',
-						'auth/me',
-						['headers' => 
-							[
-							'Authorization' => "Bearer {$ambil_token}"
-							]
-						]
-					);
-					$res_user = $respon_ambil_user->getBody();
-				} catch (ClientException $e) {
-					
-				}
-
-				$user = json_decode($res_user, true);
 				$res_id_user = $user['id'];
 
 
@@ -463,18 +424,8 @@ class Auth extends BaseController
             return redirect()->to(base_url('/'));
 		}
 
-		$ambil_token = get_cookie('jwt_token');
-		$respon_token = $this->_client->request(
-		'POST',
-		'auth/logout',
-			['headers' => 
-				[
-					'Authorization' => "Bearer {$ambil_token}"
-				]
-			]
-		);
-	
-		
+		$this->model_user->logout();
+
 		$this->session->remove('email');
 		$this->session->remove('role_id');
 		$this->session->remove('id_user');
