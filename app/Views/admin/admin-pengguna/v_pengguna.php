@@ -33,10 +33,10 @@
                 </div>
               </div> -->
             </div>
-            <div class="profile-widget-description" id="pengguna_id_<?php echo $user['id_user'];?>">
-              <div class="profile-widget-name"><?php echo $user['nama'];  ?> <div
+            <div class="profile-widget-description">
+              <div class="profile-widget-name"><?php echo $user['name'];  ?> <div
                   class="text-muted d-inline font-weight-normal">
-                  <div class="slash"></div> <?php echo $user['role'];  ?>
+                  <div class="slash"></div> <?php echo $user['nama_role'];  ?>
                 </div>
               </div>
             </div>
@@ -54,7 +54,7 @@
                 <div class="row">
                   <div class="form-group col-md-12 col-12">
                     <label>Nama</label>
-                    <input type="text" class="form-control <?php echo ($validation->hasError('nama')) ? 'is-invalid' : ''; ?>" autofocus="" name="nama" value="<?php echo $user['nama']; ?>">
+                    <input type="text" class="form-control <?php echo ($validation->hasError('nama')) ? 'is-invalid' : ''; ?>" autofocus="" name="nama" value="<?php echo $user['name']; ?>">
                     <div class="invalid-feedback">
                       <?php echo $validation->showError('nama'); ?>
                     </div>

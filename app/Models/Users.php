@@ -9,6 +9,7 @@ class Users extends Model{
 
     public function __construct(){
         $this->db = \Config\Database::connect();
+        $this->session = \Config\Services::session();
         $this->request = \Config\Services::request();
         $this->_client = new Client([
 			'base_uri' => 'http://localhost:8000/api/',
@@ -51,6 +52,29 @@ class Users extends Model{
             $respon_ambil_user = $this->_client->request(
                 'GET',
                 'auth/me',
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_user = $respon_ambil_user->getBody();
+        } catch (ClientException $e) {
+            
+        }
+
+        $user = json_decode($res_user, true);
+        return $user;
+    }
+
+    public function ambilSatuUserJoinRole(){
+        $ambil_token = get_cookie('jwt_token');
+        $id_user = $this->session->get('id_user');
+        $res_user = json_encode(['users' => '']);
+        try {
+            $respon_ambil_user = $this->_client->request(
+                'GET',
+                'akun/profil/dengan-role/'.$id_user,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"

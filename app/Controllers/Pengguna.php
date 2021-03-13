@@ -3,15 +3,17 @@
 use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
+use App\Models\Users;
 
 class Pengguna extends BaseController{
 
-	protected $helpers = ['form', 'url', 'array', 'kpos'];
+	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
 
 	public function __construct(){
 
 		$this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
+		$this->user = new Users();
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 	}
@@ -23,15 +25,17 @@ class Pengguna extends BaseController{
 	
         
 	
-		$user = $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-				->join('user_role', 'user_role.id_role = user.role_id')
-				->where('email', $email)
-				->first();
+		// $user = $this->model_user->select('nama as name, email, telepon, gambar, alamat, role as nama_role')->asArray()
+		// 		->join('user_role', 'user_role.id_role = user.role_id')
+		// 		->where('email', $email)
+		// 		->first();
+		
+		$user = $this->user->ambilSatuUserJoinRole();
 
 		$data = [
 			'title' => ucfirst('Profil'),
 			'nama_menu_utama' => ucfirst('Profil'),
-			'user' => $user,
+			'user' => $user['users'],
 			'validation' => $this->validation,
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
 						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
@@ -43,7 +47,7 @@ class Pengguna extends BaseController{
 			'form_pengguna' => ['id' => 'formPengguna', 'name'=>'formPengguna'],
 			'email' => [
 				'type' => 'email',
-				'value'=> ''.$user['email'].'',
+				'value'=> ''.$user['users']['email'].'',
 				'class' => 'form-control',
 				'readonly' => ''
 			]

@@ -27,7 +27,6 @@ class Barang extends BaseController{
 
 	public function index(){
 		
-		
 		$role = $this->session->get('role_id');
 		
 
@@ -43,8 +42,8 @@ class Barang extends BaseController{
         $data = [
             'title' => ucfirst('Daftar Barang'),
             'nama_menu_utama' => ucfirst('Gudang'),
-            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-						->join('user_role', 'user_role.id_role = user.role_id')
+            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat')->asArray()
+						// ->join('user_role', 'user_role.id_role = user.role_id')
 						->where('email', $email)
 						->first(),
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()

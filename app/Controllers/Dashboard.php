@@ -4,6 +4,7 @@ use CodeIgniter\Controller;
 use App\Models\Model_barang_masuk;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
+use App\Models\Users;
 use App\Models\Model_transaksi_total;
 
 class Dashboard extends BaseController{
@@ -12,6 +13,7 @@ class Dashboard extends BaseController{
 		$this->model_barang_masuk = new Model_barang_masuk();
 		$this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
+		$this->user = new Users();
 		$this->model_transaksi_total = new Model_transaksi_total();
 
 		date_default_timezone_set("Asia/Jakarta");	
@@ -30,10 +32,7 @@ class Dashboard extends BaseController{
 		$data = [
 			'title' => 	ucfirst('Dashboard Masuk'),
 			'nama_menu_utama' => ucfirst('Dashboard'),
-			'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-						->join('user_role', 'user_role.id_role = user.role_id')
-						->where('email', $email)
-						->first(),
+			'user' 	=> 	$this->user->ambilSatuUserJoinRole()['users'],
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
 						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
 						->where('user_access_menu.role_id =', $role)
@@ -95,10 +94,7 @@ class Dashboard extends BaseController{
 		$data = [
 			'title' => ucfirst('Dashboard Keluar'),
 			'nama_menu_utama' => ucfirst('Dashboard'),
-			'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-						->join('user_role', 'user_role.id_role = user.role_id')
-						->where('email', $email)
-						->first(),
+			'user' 	=> 	$user = $this->user->ambilSatuUserJoinRole()['users'],
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
 						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
 						->where('user_access_menu.role_id =', $role)
