@@ -463,9 +463,6 @@ class Auth extends BaseController
             return redirect()->to(base_url('/'));
 		}
 
-		// $res_token = json_encode(['access_token' => '']);
-		// $eror = null;
-		// try {
 		$ambil_token = get_cookie('jwt_token');
 		$respon_token = $this->_client->request(
 		'POST',
@@ -476,10 +473,6 @@ class Auth extends BaseController
 				]
 			]
 		);
-		// $res_token = $respon_token->getBody();
-		// } catch (ClientException $e) {
-			
-		// }
 	
 		
 		$this->session->remove('email');
