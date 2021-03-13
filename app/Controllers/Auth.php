@@ -94,7 +94,7 @@ class Auth extends BaseController
 			// 		->first();
 			
 			
-			$res = json_encode(['access_token' => '']);
+			$res_token = json_encode(['access_token' => '']);
 			// $eror = null;
 			try {
 				$respon_token = $this->_client->request(
@@ -109,17 +109,17 @@ class Auth extends BaseController
 					
 					],
 			);
-			$res = $respon_token->getBody();
+			$res_token = $respon_token->getBody();
 			} catch (ClientException $e) {
 				// $e->getRequest();
 				// $eror =  $e->getResponse();
 			}
 
 
-			$token = json_decode($res, true);
+			$token = json_decode($res_token, true);
 			$cek_token = $token['access_token'];
 	
-			if($cek_token != ''){
+			if($cek_token){
 				//ambil token buat nanti disimpen ke cookie
 				$ambil_token =  $token['access_token'];
 				$waktu_token = $token['expires_in'];
@@ -131,25 +131,28 @@ class Auth extends BaseController
 					'httponly' => true
 				]);
 				
-				///ambil user
-				$respon_ambil_user = $this->_client->request(
-					'GET',
-					'auth/me',
-					// ['http_errors' => false],
-					['headers' => 
-						[
-						'Authorization' => "Bearer {$ambil_token}"
+
+				$res_user = json_encode(['id' => '']);
+				try {
+					$respon_ambil_user = $this->_client->request(
+						'GET',
+						'auth/me',
+						['headers' => 
+							[
+							'Authorization' => "Bearer {$ambil_token}"
+							]
 						]
-					]
-				);
+					);
+					$res_user = $respon_ambil_user->getBody();
+				} catch (ClientException $e) {
+					
+				}
 
-				$user = json_decode($respon_ambil_user->getBody(), true);
-
-				// dd($user);
-				$status_user = $respon_ambil_user->getStatusCode();
+				$user = json_decode($res_user, true);
+				$res_id_user = $user['id'];
 
 
-				if($status_user == 200){
+				if($res_id_user){
 					//jika usernya aktif
 					if($user['status'] == 1){
 
