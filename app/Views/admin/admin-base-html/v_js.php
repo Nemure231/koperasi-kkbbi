@@ -14,8 +14,23 @@
   <script type="application/javascript" src="<?php echo base_url().'/admin/assets/js/custom.js'; ?>"></script>
 
   <script>
-    $("#modal-2").fireModal({body: '<a href="<?php echo base_url().'/logout' ?>" class="btn btn-block btn-danger">Ya!</a>',title: '<h5 class="text-center text-danger"><i class="fa fa-power-off mr-3"></i> Keluar?</h5>', center: true});
+    // $("#modal-2").fireModal({
+    //   body: `<form
+    //         <a href="<//?php echo base_url().'/logout' ?>" class="btn btn-block btn-danger">Ya!</a>
+            
+    //         `,
+    //   title: `<h5 class="text-center text-danger"><i class="fa fa-power-off mr-3"></i> Keluar?</h5>`, 
+    //   center: true});
+    
 
+    $('#tombol-logout').click(function () {
+      //$('#btn-simpan').val("tambah-menu");
+      //var ded = 'dude';
+      //$('#judulBuku').html("Tambah Buku");
+      $('#modal-logout').modal('show');
+
+
+   });
     var nama = $('.namo').text();
     $('.nama_Profil_sidebar').text(nama);
   

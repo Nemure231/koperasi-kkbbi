@@ -462,6 +462,26 @@ class Auth extends BaseController
 		if(!$role){
             return redirect()->to(base_url('/'));
 		}
+
+		// $res_token = json_encode(['access_token' => '']);
+		// $eror = null;
+		// try {
+		$ambil_token = get_cookie('jwt_token');
+		$respon_token = $this->_client->request(
+		'POST',
+		'auth/logout',
+			['headers' => 
+				[
+					'Authorization' => "Bearer {$ambil_token}"
+				]
+			]
+		);
+		// $res_token = $respon_token->getBody();
+		// } catch (ClientException $e) {
+			
+		// }
+	
+		
 		$this->session->remove('email');
 		$this->session->remove('role_id');
 		$this->session->remove('id_user');
@@ -476,7 +496,8 @@ class Auth extends BaseController
 					</div>');
 				return redirect()->to(base_url('/'))->withCookies();
 		}
-	}
+
+	}	
 
 	public function blokir(){
 		

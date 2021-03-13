@@ -33,7 +33,7 @@ $routes->setAutoRoute(false);
 
 $routes->get('/', 'Auth::index');
 $routes->add('/', 'Auth::index');
-$routes->get('logout', 'Auth::logout');
+$routes->post('logout', 'Auth::logout');
 $routes->add('blokir', 'Auth::blokir');
 
 $routes->group('akun', function($routes){
