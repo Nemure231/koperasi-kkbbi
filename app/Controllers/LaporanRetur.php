@@ -3,6 +3,7 @@
 use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
+use App\Models\Users;
 use App\Models\Model_toko;
 use App\Models\Model_transaksi_retur;
 
@@ -15,6 +16,7 @@ class LaporanRetur extends BaseController{
         $this->model_toko = new Model_toko();
         $this->model_transaksi_retur = new Model_transaksi_retur();
 		$this->request = \Config\Services::request();
+        $this->user = new Users();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos'];
@@ -51,10 +53,7 @@ class LaporanRetur extends BaseController{
         $data = [
             'title' => ucfirst('Laporan Retur'),
             'nama_menu_utama' => ucfirst('Retur'),
-            'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                    ->join('user_role', 'user_role.id_role = user.role_id')
-                    ->where('email', $email)
-                    ->first(),
+            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                     ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                     ->where('user_access_menu.role_id =', $role)

@@ -4,6 +4,7 @@ use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
 use App\Models\Model_menu_utama;
+use App\Models\Users;
 class MenuUtama extends BaseController{
 
     public function __construct(){
@@ -13,6 +14,7 @@ class MenuUtama extends BaseController{
         $this->model_menu_utama = new Model_menu_utama();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
+        $this->user = new Users();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos'];
@@ -23,13 +25,9 @@ class MenuUtama extends BaseController{
 		
         
         $data = [
-        
             'title' => ucfirst('Menu Utama'),
             'nama_menu_utama' => ucfirst('Menu'),
-            'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                    ->join('user_role', 'user_role.id_role = user.role_id')
-                    ->where('email', $email)
-                    ->first(),
+            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                     ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                     ->where('user_access_menu.role_id =', $role)

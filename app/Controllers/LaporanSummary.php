@@ -6,7 +6,7 @@ use App\Models\Model_toko;
 use App\Models\Model_user;
 use App\Models\Model_transaksi_total;
 use App\Models\Model_barang_masuk;
-
+use App\Models\Users;
 class LaporanSummary extends BaseController{
 
     public function __construct(){
@@ -18,6 +18,7 @@ class LaporanSummary extends BaseController{
         $this->model_barang_masuk = new Model_barang_masuk();
         $this->model_transaksi_total = new Model_transaksi_total();
 		$this->request = \Config\Services::request();
+        $this->user = new Users();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos'];
@@ -61,10 +62,7 @@ class LaporanSummary extends BaseController{
         $data = [
             'title' => ucfirst('Summary Tanggal'),
             'nama_menu_utama' => ucfirst('Summary'),
-            'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                    ->join('user_role', 'user_role.id_role = user.role_id')
-                    ->where('email', $email)
-                    ->first(),
+            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                     ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                     ->where('user_access_menu.role_id =', $role)
@@ -133,10 +131,7 @@ class LaporanSummary extends BaseController{
         $data = [
             'title' => ucfirst('Summary Bulan'),
             'nama_menu_utama' => ucfirst('Summary'),
-            'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                    ->join('user_role', 'user_role.id_role = user.role_id')
-                    ->where('email', $email)
-                    ->first(),
+            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                     ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                     ->where('user_access_menu.role_id =', $role)
@@ -201,10 +196,7 @@ class LaporanSummary extends BaseController{
            
             'title' => ucfirst('Summary Tahun'),
             'nama_menu_utama' => ucfirst('Summary'),
-            'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                    ->join('user_role', 'user_role.id_role = user.role_id')
-                    ->where('email', $email)
-                    ->first(),
+            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                     ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                     ->where('user_access_menu.role_id =', $role)

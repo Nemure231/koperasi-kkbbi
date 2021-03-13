@@ -6,11 +6,13 @@ use App\Controllers\BaseController;
 use App\Models\Model_kategori;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
+use App\Models\Users;
 
 class Kategori extends BaseController
 {
 	
 	public function __construct(){
+        $this->user = new Users();
         $this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
         $this->model_kategori = new Model_kategori();
@@ -32,10 +34,7 @@ class Kategori extends BaseController
         $data = [
             'title' =>  ucfirst('Daftar Kategori'),
             'nama_menu_utama' => ucfirst('Barang'),
-            'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                        ->join('user_role', 'user_role.id_role = user.role_id')
-                        ->where('email', $email)
-                        ->first(),
+            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                         ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                         ->where('user_access_menu.role_id =', $role)

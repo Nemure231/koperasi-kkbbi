@@ -11,6 +11,8 @@ use App\Models\Model_transaksi_total;
 use App\Models\Model_transaksi_retur;
 use App\Models\Model_transaksi_sementara_retur;
 use App\Models\Model_transaksi_retur_total;
+use App\Models\Users;
+
 
 
 class Retur extends BaseController{
@@ -30,6 +32,7 @@ class Retur extends BaseController{
         $this->model_user_menu = new Model_user_menu();
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
+        $this->user = new Users();
 		
 	}
 

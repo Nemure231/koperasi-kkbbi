@@ -23,12 +23,6 @@ class Pengguna extends BaseController{
 		$role = $this->session->get('role_id');
 		$email = $this->session->get('email');
 	
-        
-	
-		// $user = $this->model_user->select('nama as name, email, telepon, gambar, alamat, role as nama_role')->asArray()
-		// 		->join('user_role', 'user_role.id_role = user.role_id')
-		// 		->where('email', $email)
-		// 		->first();
 		
 		$user = $this->user->ambilSatuUserJoinRole();
 

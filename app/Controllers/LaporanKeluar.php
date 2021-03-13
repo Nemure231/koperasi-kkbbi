@@ -5,6 +5,7 @@ use App\Models\Model_user;
 use App\Models\Model_toko;
 use App\Models\Model_user_menu;
 use App\Models\Model_transaksi_total;
+use App\Models\Users;
 
 class LaporanKeluar extends BaseController{
 
@@ -14,6 +15,7 @@ class LaporanKeluar extends BaseController{
         $this->model_toko = new Model_toko();
         $this->model_transaksi_total = new Model_transaksi_total();
 		$this->request = \Config\Services::request();
+        $this->user = new Users();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos'];

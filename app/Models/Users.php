@@ -67,6 +67,29 @@ class Users extends Model{
         return $user;
     }
 
+    public function ambilSatuUserBuatProfil(){
+        $ambil_token = get_cookie('jwt_token');
+        $id_user = $this->session->get('id_user');
+        $res_user = json_encode(['users' => '']);
+        try {
+            $respon_ambil_user = $this->_client->request(
+                'GET',
+                'akun/profil/'.$id_user,
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_user = $respon_ambil_user->getBody();
+        } catch (ClientException $e) {
+            
+        }
+
+        $user = json_decode($res_user, true);
+        return $user;
+    }
+
     public function ambilSatuUserJoinRole(){
         $ambil_token = get_cookie('jwt_token');
         $id_user = $this->session->get('id_user');
@@ -89,6 +112,7 @@ class Users extends Model{
         $user = json_decode($res_user, true);
         return $user;
     }
+
 
     public function logout(){
         $ambil_token = get_cookie('jwt_token');

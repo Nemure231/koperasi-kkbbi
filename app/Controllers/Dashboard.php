@@ -32,7 +32,7 @@ class Dashboard extends BaseController{
 		$data = [
 			'title' => 	ucfirst('Dashboard Masuk'),
 			'nama_menu_utama' => ucfirst('Dashboard'),
-			'user' 	=> 	$this->user->ambilSatuUserJoinRole()['users'],
+			'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
 						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
 						->where('user_access_menu.role_id =', $role)
@@ -94,7 +94,7 @@ class Dashboard extends BaseController{
 		$data = [
 			'title' => ucfirst('Dashboard Keluar'),
 			'nama_menu_utama' => ucfirst('Dashboard'),
-			'user' 	=> 	$user = $this->user->ambilSatuUserJoinRole()['users'],
+			'user' 	=> 	$user = $this->user->ambilSatuUserBuatProfil()['users'],
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
 						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
 						->where('user_access_menu.role_id =', $role)

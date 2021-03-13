@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\Model_kode_barang;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
+use App\Models\Users;
 
 class KodeBarang extends BaseController
 {
@@ -16,6 +17,7 @@ class KodeBarang extends BaseController
         $this->model_kode_barang = new Model_kode_barang();
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
+        $this->user = new Users();
 	}
 
 	protected $helpers = ['url', 'array', 'form', 'kpos'];
@@ -32,10 +34,7 @@ class KodeBarang extends BaseController
 		$data = [
 			'title' => ucfirst('Kode Barang'),
             'nama_menu_utama' => ucfirst('Kode'),
-			'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-						->join('user_role', 'user_role.id_role = user.role_id')
-						->where('email', $email)
-						->first(),
+			'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
 						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
 						->where('user_access_menu.role_id =', $role)

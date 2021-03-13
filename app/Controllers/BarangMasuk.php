@@ -11,6 +11,7 @@ use App\Models\Model_satuan;
 use App\Models\Model_merek;
 use App\Models\Model_kategori;
 use App\Models\Model_pengirim_barang;
+use App\Models\Users;
 
 class BarangMasuk extends BaseController
 {
@@ -27,9 +28,10 @@ class BarangMasuk extends BaseController
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
         $this->db = \Config\Database::connect();
+        $this->user = new Users();
 	}
 
-	protected $helpers = ['url', 'array', 'form', 'kpos'];
+	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
 
     public function index(){
 		
@@ -42,10 +44,7 @@ class BarangMasuk extends BaseController
            
             'title'     => ucfirst('Barang Masuk'),
             'nama_menu_utama' => ucfirst('Pembelian'),
-            'user' 	    =>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                            ->join('user_role', 'user_role.id_role = user.role_id')
-                            ->where('email', $email)
-                            ->first(),
+            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
             'menu' 	    => 	$this->model_user_menu->select('id_menu, menu')->asArray()
                             ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                             ->where('user_access_menu.role_id =', $role)
