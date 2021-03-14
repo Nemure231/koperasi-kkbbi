@@ -17,7 +17,7 @@ class Toko extends BaseController{
         $this->user = new Users();
 		
 	}
-	protected $helpers = ['url', 'array', 'form', 'kpos'];
+	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
 
     public function index(){
 		

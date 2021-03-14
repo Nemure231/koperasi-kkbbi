@@ -5,7 +5,7 @@
 
 <script type="application/javascript" src="<?php echo base_url().'/admin/assets/js/sweet-alert.js'; ?>"></script>
 <script>
-    var role = '<?php echo $user['role'];  ?>';
+    var role = '<?php echo $user['nama_role'];  ?>';
 </script>
 <script type="application/javascript" src="<?php echo base_url().'/admin/assets/jsmine/penggunajs.js'; ?>"></script>
 

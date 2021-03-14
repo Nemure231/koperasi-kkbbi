@@ -10,12 +10,25 @@ use App\Models\Model_user_access_menu;
 
 class HakAkses implements FilterInterface
 {
+    // protected $helpers = ['cookie'];
+
     public function before(RequestInterface $request, $arguments = null)
     {
         $session = \Config\Services::session();
         $user_menu = new Model_user_menu();
         $user_access_menu = new Model_user_access_menu();
         $db = \Config\Database::connect();
+        $request = \Config\Services::request();
+        $cookie = $request->getCookie('jwt_token');
+
+        if(!$cookie){
+            $session->remove('email');
+            $session->remove('role_id');
+            $session->remove('id_user');
+            $session->remove('nama');
+            return redirect()->to(base_url('/'));
+
+        }
 
         $role = $session->get('role_id');
 		if (!$role){

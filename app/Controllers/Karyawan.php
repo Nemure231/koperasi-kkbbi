@@ -18,7 +18,7 @@ class Karyawan extends BaseController{
 		$this->validation = \Config\Services::validation();
 		
 	}
-	protected $helpers = ['url', 'array', 'form', 'kpos'];
+	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
 
 	public function index(){
 		

@@ -30,7 +30,7 @@
           <?php echo csrf_field(); ?>
           <?php echo form_input($hidden_kode_transaksi); ?>
           <div class="card card-primary">
-
+          <input type="hidden" id="csrf_kasir" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
             <?php if($keranjang):  ?>
             <div class="card-header">
               <h4>
@@ -48,6 +48,7 @@
 
             </div>
             <div class="card-body">
+            
               <div class="table-responsive">
                 <table class="table">
                   <thead>

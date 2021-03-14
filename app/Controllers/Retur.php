@@ -17,7 +17,7 @@ use App\Models\Users;
 
 class Retur extends BaseController{
 
-	protected $helpers = ['form', 'url', 'array', 'kpos'];
+	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
 
 	public function __construct(){
         $this->model_barang = new Model_barang();

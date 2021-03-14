@@ -18,7 +18,7 @@ class LaporanKeluar extends BaseController{
         $this->user = new Users();
 	}
 
-	protected $helpers = ['form', 'url', 'array', 'kpos'];
+	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
 
 	
     public function index(){

@@ -7,7 +7,7 @@ use App\Models\Users;
 
 class Sandi extends BaseController{
 
-	protected $helpers = ['form', 'url', 'array', 'kpos'];
+	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
 
 	public function __construct(){
 
@@ -41,7 +41,7 @@ class Sandi extends BaseController{
 		'validation' => $this->validation,
 		'attr' => ['id' => 'katasandi', 'name'=>'katasandi']
 		];
-		tampilan_admin('admin/admin-katasandi/v_katasandi', 'admin/admin-katasandi/v_js_katasandi', $data);	
+		tampilan_admin('admin/admin-katasandi/v_katasandi', 'admin/admin-katasandi/v_js_katasandi', $data);
 	}
 
 

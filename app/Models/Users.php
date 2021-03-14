@@ -17,8 +17,6 @@ class Users extends Model{
     }
 
 
-
-
     public function login($email, $sandi){
         $res_token = json_encode(['access_token' => '']);
 			// $eror = null;

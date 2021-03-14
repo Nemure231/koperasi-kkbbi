@@ -9,7 +9,7 @@ use App\Models\Model_transaksi_sementara_retur;
 
 class InvoiceRetur extends BaseController{
 
-	protected $helpers = ['form', 'url', 'array', 'kpos'];
+	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
 
 	public function __construct(){
 

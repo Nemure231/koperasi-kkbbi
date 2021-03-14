@@ -36,7 +36,7 @@ class Kasir extends BaseController{
         // $this->printer = new Printer($this->connector);
 	}
 
-	protected $helpers = ['form', 'url', 'array', 'kpos'];
+	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
 
 	public function index(){
         //$session = \Config\Services::session();
@@ -51,7 +51,6 @@ class Kasir extends BaseController{
                     ->where('user_id', $id_user)
                     ->join('user_role', 'user_role.id_role = jenis_kasir.role_id')
                     ->first();
-
         $barang=$this->model_barang->select('nama_barang, id_barang, stok_barang, kode_barang, nama_satuan')
                 ->select('harga_anggota as harga')->asArray()
                 ->where('id_barang >', 0)

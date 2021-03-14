@@ -310,22 +310,24 @@ $(document).ready(function () {
          });
 
       } else {
+         var csrfName = $('#csrf_kasir').attr('name'); // CSRF Token name
+         var csrfHash = $('#csrf_kasir').val(); // CSRF hash
          $.ajax({
             url: 'kasir/tambah_keranjang',
-            //method: "POST",
             //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
             //yang kemuidan di kanannya harus disamakan dengan data yang diambil dari data- jquery
             //bergitulah caranya agar dapat menjaalankan fungsi di controller
             data: {
+               [csrfName]: csrfHash,
                k_barang_id: id_barang,
                k_qty: qty,
                k_harga: harga
                //k_role_id: role_id
 
             },
-            headers: {
-               'X-Requested-With': 'XMLHttpRequest'
-            },
+            // headers: {
+            //    'X-Requested-With': 'XMLHttpRequest'
+            // },
             type: "POST",
             dataType: 'json',
             success: function (res) {

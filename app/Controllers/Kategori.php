@@ -20,7 +20,7 @@ class Kategori extends BaseController
 		$this->validation = \Config\Services::validation();
 	}
 
-	protected $helpers = ['url', 'array', 'form', 'kpos'];
+	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
 
 
 
