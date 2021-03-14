@@ -6,7 +6,7 @@
 </script>
 <script type="application/javascript" src="<?php echo base_url().'/admin/assets/js/sweet-alert.js'; ?>"></script>
 <script type="application/javascript" src="<?php echo base_url().'/admin/assets/modules/bootstrap-datepicker/datepicker.min.js'; ?>"></script>
-<script type="application/javascript" src="<?php echo base_url().'/admin/assets/jsmine/laporanmasukminggujs.js'; ?>"></script>
+<script type="application/javascript" src="<?php echo base_url().'/admin/assets/jsmine/laporanmasukjs.js'; ?>"></script>
 
 
 </body>

@@ -8,7 +8,7 @@
 <script type="application/javascript" src="<?php echo base_url().'/admin/assets/js/page/modules-datatables.js'; ?>"></script>
 <script type="application/javascript" src="<?php echo base_url().'/admin/assets/js/sweet-alert.js'; ?>"></script>
 <script type="application/javascript" src="<?php echo base_url().'/admin/assets/js/select2.full.min.js'; ?>"></script>
-<script type="application/javascript" src="<?php echo base_url().'/admin/assets/jsmine/laporanmasukjs.js'; ?>"></script>
+<script type="application/javascript" src="<?php echo base_url().'/admin/assets/jsmine/barangmasukjs.js'; ?>"></script>
 
 <script>
 

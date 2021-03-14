@@ -7,7 +7,7 @@
 
 <script type="application/javascript" src="<?php echo base_url().'/admin/assets/js/sweet-alert.js'; ?>"></script>
 <script type="application/javascript" src="<?php echo base_url().'/admin/assets/modules/bootstrap-datepicker/datepicker.min.js'; ?>"></script>
-<script type="application/javascript" src="<?php echo base_url().'/admin/assets/jsmine/laporankeluarminggujs.js'; ?>"></script>
+<script type="application/javascript" src="<?php echo base_url().'/admin/assets/jsmine/laporankeluarjs.js'; ?>"></script>
 
 
 </body>

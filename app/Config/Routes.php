@@ -101,17 +101,6 @@ $routes->group('fitur', function($routes){
 	$routes->post('barang_masuk/tambah', 'BarangMasuk::tambah');
 	$routes->get('barang_masuk/ambil_detail', 'BarangMasuk::ambil_detail');
 	$routes->post('barang_masuk/ambil_harga', 'BarangMasuk::ambil_harga');
-
-	$routes->add('retur', 'Retur::index', ['filter' => 'cek_akses']);
-	$routes->post('retur/ambil_kode', 'Retur::ambil_kode');
-	$routes->post('retur/tambah_keranjang', 'Retur::tambah_keranjang');
-	$routes->post('retur/tambah_transaksi_sementara', 'Retur::tambah_transaksi_sementara');
-	$routes->delete('retur/hapus_barang', 'Retur::hapus_barang');
-	$routes->delete('retur/hapus_keranjang', 'Retur::hapus_keranjang');
-
-	$routes->get('retur/invoice', 'InvoiceRetur::index', ['filter' => 'cek_akses']);
-	$routes->post('retur/invoice/tambah', 'InvoiceRetur::tambah');
-	$routes->delete('retur/invoice/hapus', 'InvoiceRetur::hapus');
 });
 
 
@@ -159,9 +148,6 @@ $routes->group('pengaturan', function($routes){
 	
 	$routes->get('kode/transaksi', 'KodeTransaksi::index', ['filter' => 'cek_akses']);
 	$routes->put('kode/transaksi/ubah', 'KodeTransaksi::ubah');
-
-	$routes->get('kode/retur', 'KodeRetur::index', ['filter' => 'cek_akses']);
-	$routes->put('kode/retur/ubah', 'KodeRetur::ubah');
 
 	$routes->get('stok', 'Stok::index', ['filter' => 'cek_akses']);
 	$routes->put('stok/ubah', 'Stok::ubah');
