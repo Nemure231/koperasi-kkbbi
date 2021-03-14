@@ -111,6 +111,54 @@ class Users extends Model{
         return $user;
     }
 
+    public function ubahUser(){
+        $ambil_token = get_cookie('jwt_token');
+        // dd($ambil_token);
+        $id_user = $this->session->get('id_user');
+        // $res_user = json_encode(['users' => '']);
+        // try {
+
+            // $request_param = [
+            //     'name' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
+            //     'telepon' => $this->request->getPost('telepon'),
+            //     'alamat' => htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES)
+            // ];
+            // $request_data = json_encode($request_param);
+
+            $respon_ambil_user = $this->_client->request(
+                'PUT',
+                'akun/profil/ubah/'.$id_user,
+                // ['query' => 
+                //     [
+                //     'name' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
+                //     'telepon' => $this->request->getPost('telepon'),
+                //     'alamat' => htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES)
+                //     ]
+                // ],
+
+                ['form_param' =>
+                    [
+                        'name' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
+                        'telepon' => $this->request->getPost('telepon'),
+                        'alamat' => htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES),
+                    ]
+                ],
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            
+            // $res_user = $respon_ambil_user->getBody();
+        // } catch (ClientException $e) {
+            
+        // }
+
+        // $user = json_decode($res_user, true);
+        // return $user;
+    }
+
 
     public function logout(){
         $ambil_token = get_cookie('jwt_token');

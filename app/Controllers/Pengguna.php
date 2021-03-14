@@ -21,7 +21,6 @@ class Pengguna extends BaseController{
 	public function index(){
 		
 		$role = $this->session->get('role_id');
-		$email = $this->session->get('email');
 	
 		
 		$user = $this->user->ambilSatuUserJoinRole();
@@ -84,15 +83,12 @@ class Pengguna extends BaseController{
 
             }
 
-				$id = $this->session->get('id_user');
-                $edit = [
-                    'nama' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
-					'telepon' => $this->request->getPost('telepon'),
-					'alamat' =>  htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES)
-				];
+				
+
+				$this->user->ubahUser();
 			
 				//dd($id);
-				$this->model_user->update($id, $edit);
+				// $this->model_user->update($id, $edit);
 				
                 $this->session->setFlashdata('pesan_pengguna', 'Profil berhasil diperbarui');
 				return redirect()->to(base_url('akun/profil'));
