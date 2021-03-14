@@ -261,9 +261,11 @@ $(document).ready(function () {
 
 
    $('#tombolPembelian').click(function () {
+
       var role_jenis_kasir = $(this).data("role_id_jenis_kasir");
       $('#modalPembelian').modal('show');
       $('.role_idE').val(role_jenis_kasir);
+
 
    });
 
@@ -312,6 +314,7 @@ $(document).ready(function () {
       } else {
          var csrfName = $('#csrf_kasir').attr('name'); // CSRF Token name
          var csrfHash = $('#csrf_kasir').val(); // CSRF hash
+         
          $.ajax({
             url: 'kasir/tambah_keranjang',
             //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
@@ -325,9 +328,9 @@ $(document).ready(function () {
                //k_role_id: role_id
 
             },
-            // headers: {
-            //    'X-Requested-With': 'XMLHttpRequest'
-            // },
+            headers: {
+               'X-Requested-With': 'XMLHttpRequest'
+            },
             type: "POST",
             dataType: 'json',
             success: function (res) {
