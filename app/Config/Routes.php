@@ -117,17 +117,9 @@ $routes->group('fitur', function($routes){
 
 $routes->group('laporan', function($routes){
 
-	$routes->add('masuk/harian', 'LaporanMasuk::index', ['filter' => 'cek_akses']);
-	$routes->add('masuk/mingguan', 'LaporanMasuk::mingguan', ['filter' => 'cek_akses']);
-	$routes->add('masuk/bulanan', 'LaporanMasuk::bulanan', ['filter' => 'cek_akses']);
-	$routes->add('masuk/tahunan', 'LaporanMasuk::tahunan', ['filter' => 'cek_akses']);
+	$routes->add('masuk/cari', 'LaporanMasuk::index', ['filter' => 'cek_akses']);
 
-	$routes->add('keluar/harian', 'LaporanKeluar::index', ['filter' => 'cek_akses']);
-	$routes->add('keluar/mingguan', 'LaporanKeluar::mingguan', ['filter' => 'cek_akses']);
-	$routes->add('keluar/bulanan', 'LaporanKeluar::bulanan', ['filter' => 'cek_akses']);
-	$routes->add('keluar/tahunan', 'LaporanKeluar::tahunan', ['filter' => 'cek_akses']);
-
-	$routes->add('retur', 'LaporanRetur::index', ['filter' => 'cek_akses']);
+	$routes->add('keluar/cari', 'LaporanKeluar::index', ['filter' => 'cek_akses']);
 
 	$routes->add('summary/tanggal', 'LaporanSummary::index', ['filter' => 'cek_akses']);
 	$routes->add('summary/bulan', 'LaporanSummary::bulan', ['filter' => 'cek_akses']);

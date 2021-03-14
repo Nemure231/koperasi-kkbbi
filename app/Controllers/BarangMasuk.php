@@ -142,7 +142,7 @@ class BarangMasuk extends BaseController
             ],
             
         ];
-        tampilan_admin('admin/admin-laporan-barang-masuk/v_laporan_barang_masuk', 'admin/admin-laporan-barang-masuk/v_js_laporan_barang_masuk', $data);
+        tampilan_admin('admin/admin-barang-masuk/v_barang_masuk', 'admin/admin-barang-masuk/v_js_barang_masuk', $data);
     }
     
     public function tambah_pengirim(){

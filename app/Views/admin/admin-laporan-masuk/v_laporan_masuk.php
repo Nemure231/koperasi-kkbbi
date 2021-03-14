@@ -3,13 +3,6 @@
   href="<?php echo base_url().'/admin/assets/modules/bootstrap-datepicker/datepicker.min.css' ?>">
 <!-- Main Content -->
 
-<style>
-  tr.group,
-  tr.group:hover {
-    background-color: #ddd !important;
-  }
-</style>
-
 <div class="main-content">
   <section class="section">
     <div class="section-header">
@@ -34,7 +27,7 @@
             </div>
 
             <div class="card-body">
-            <?php echo form_open(base_url().'/laporan/masuk/mingguan', $form_minggu);    ?>
+            <?php echo form_open(base_url().'/laporan/masuk/cari', $form_minggu);    ?>
             <?php echo csrf_field(); ?>
               <div class="row">
                 <div class="col-lg-6 mb-3">
@@ -80,8 +73,7 @@
                 </div>
                 <div class="col-lg-6">
 
-                 
-                  <div class="form-group">
+                <div class="form-group">
                     <label>Form pencarian</label>
                     <div class="input-group">
 
@@ -98,15 +90,6 @@
                       </div>
                     </div>
                   </div>
-
-
-
-
-
-
-
-
-
 
                 </div>
               </div>
@@ -135,98 +118,109 @@
               </div>
                   <div class="row">
                   <?php if($minggu):  ?>
-                    <div class="table-responsive">
-                      <table class="table table-sm" style="width:100%" id="masming">
-                        <thead>
-                          <tr>
+                <div class="table-responsive">
+                  <div class="row">
 
-                            <th>Nama</th>
-                            <th>Barang</th>
-                            <th>Harga Pokok</th>
-                            <th>Qty</th>
-                            <th>Subtotal</th>
-                            <th>Tanggal Masuk</th>
+                 
+                    <?php $sum=0;?>
+                    <?php $sum_qty=0;?>
 
-                          </tr>
-                        </thead>
-                        <tbody>
+                    <?php
+                            $urut = 0;
+                            $nomor = 0;
+                            $grup = '-';
+                            foreach ($minggu as $d) {
+                                if ($grup == '-' || $grup != $d['nama_pengirim_barang']) {
+                                    $kat = $d['nama_pengirim_barang'];
+                                    $hor = $d['jam'];
+                                    $total = $d['total_harga_pokok'];
+                                    
+                                    
 
+                                    if ($grup != '-')
+                                        echo "</table></div>";
+                                      
 
-                          <?php $sum=0;?>
-                          <?php $sum_qty=0;?>
-                          <?php foreach($minggu as $mig):?>
-                          <tr>
+                                       
 
-                            <td>
-                             
-                              <?php echo $mig['nama_pengirim_barang']; ?>
-                            </td>
-                            <td><?php echo $mig['nama_barang']; ?></td>
+                                        echo "<div class='col-lg-6 col-md-6 col-sm-12'><table class='table table-sm'>";
 
-                            <td>
+                                       
+                                      echo "<tr class='text-center'>
+                                              <td colspan='9' style='text-align:right; border: 1px solid black; border-top:1px solid black; border-bottom:none;' colspan=''>
+                                                <b>
+                                                  ".$kat."
+                                                  <div style='float:left;'>".'Tanggal & waktu: '.$hor."</div>
+                                                  
+                                                </b>
+                                              </td>
+                                            </tr>";
 
-                              <?php 
-                      
-                              
-                                echo 'Rp. '. number_format($mig['harga_pokok_pb'], 0,",",".");
-                              
-                              
-                              ?>
+                                            
 
-                            </td>
-                            <td><?php echo $qty = $mig['jumlah_barang_masuk']; ?></td>
-                            <td>
+                                     
+                                        echo "<tr>
+                                              <th style='text-align:center; border: 1px solid black;' scope='col'>#</th>
+                                              <th style='text-align:center; border: 1px solid black; border-right: none; border-left: none;' scope='col'>Nama Barang</th>
+                                              <th style='text-align:center; border:1px solid black; ' scope='col'>Jumlah Barang</th>
+                                              <th style='text-align:center; border:1px solid black; border-right: 1px solid black; border-left: none;' scope='col'>Harga Pokok</th>
+                                              <th style='text-align:center; border:1px solid black; border-right: 1px solid black; border-left: none;' scope='col'>Subtotal</th>
+                                              
+                                             
+                                      </tr>";
+                                    $nomor = 1;
+                                }
+                                $grup = $d['nama_pengirim_barang'];
+                                if ($urut == 500) {
+                                    $nomor = 0;
+                                    echo "<div class='pagebreak'> </div> ";
+                                }
+                                ?>
+                    <tr>
+                      <th class="text-center" style="border:1px solid black;" scope="row"><?php echo $nomor++ ?></th>
+                      <td style="border:1px solid black; border-right: none; border-left: none;">
+                        <?php echo $d['nama_barang']; ?></td>
+                      <td class="text-center" style="border:1px solid black;"><?php echo $qty = $d['jumlah_barang_masuk']; ?></td>
+                      <td style="border:1px solid black; border-right: 1px solid black; border-left: none;">
+                        <?php echo 'Rp. '. number_format($d['harga_pokok_pb'], 0,",","."); ?></td>
+                      <td style="border:1px solid black; border-right: 1px solid black; border-left: none;">
+                        <?php $total = $d['harga_pokok_pb'] * $d['jumlah_barang_masuk']; echo 'Rp. '. number_format($total, 0,",","."); ?></td>
 
-                              <?php 
-                      
-                              
-                                echo 'Rp. '. number_format($mig['total_harga_pokok'], 0,",",".");
-                              
-                              
-                              ?>
-
-                            </td>
-                            <td><?php echo $mig['jam']; ?></td>
-                            <?php $total = $mig['total_harga_pokok']; ?>
-
-
-                          </tr>
-                          <?php $sum += $total;?>
-                          <?php $sum_qty += $qty;?>
-
-                          <?php endforeach;?>
-
-
-                        </tbody>
-
-
-                        <tbody>
-
-
-                          <tr>
-                            <td colspan="1"></td>
-
-
-                            <td colspan="1"></td>
-                            <td colspan="1"><strong><?php echo $sum_qty; ?></strong></td>
-                            <td colspan="1"><strong><?php echo 'Rp. '. number_format($sum, 0,",",".");  ?></strong></td>
-
-
-                          </tr>
-
-                        </tbody>
+                    </tr>
+                    <?php $sum += $total;?>
+                    <?php $sum_qty += $qty;?>
 
 
 
-                      </table>
+                    <?php
+                    }
+                    ?>
+
+                    
 
 
 
 
+                  </table></div></div>
+                  <table class="table table-sm">
+                      <thead>
+                        <tr style="border: 1px solid black;">
 
+                          <th style="text-align: center; border: 1px solid black;" scope="col">Total Harga</th>
+                          <th style="text-align: center; border: 1px solid black;" scope="col">Total Jumlah Barang</th>
 
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr style="border: 1px solid black;">
 
-                    </div>
+                          <td style="text-align: center; border: 1px solid black;"><?php echo 'Rp. '. number_format($sum, 0,",",".");  ?></td>
+                          <td style="text-align: center; border: 1px solid black;"><?php echo $sum_qty; ?></td>
+
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
                 <?php else  : ?>
 
                 <div class="card-header">

@@ -2,12 +2,7 @@
 <link rel="stylesheet" type="text/css"
   href="<?php echo base_url().'/admin/assets/modules/bootstrap-datepicker/datepicker.min.css' ?>">
 <!-- Main Content -->
-<style>
-  tr.group,
-  tr.group:hover {
-    background-color: #ddd !important;
-  }
-</style>
+
 <div class="main-content">
   <section class="section">
     <div class="section-header">
@@ -34,7 +29,7 @@
             </div>
 
             <div class="card-body">
-              <?php echo form_open(base_url().'/laporan/keluar/mingguan', $form_minggu);    ?>
+              <?php echo form_open(base_url().'/laporan/keluar/cari', $form_minggu);    ?>
               <?php echo csrf_field(); ?>
               <div class="row">
                 <div class="col-lg-6 mb-3">
@@ -92,10 +87,6 @@
                         <option value="2">Detail</option>
                         <option value="3">List Supplier</option>
 
-                       
-
-                       
-
                       </select>
                       <div class="input-group-append">
                         <button class="btn btn-primary" type="submit">Cari</button>
@@ -129,93 +120,166 @@
               </div>
                   <div class="row">
                     <?php if($minggu):  ?>
-                    
-                      <table class="table table-sm" style="width:100%" id="kelming">
-                        <thead>
-                          <tr>
 
-                            <th>Kode Transaksi</th>
-                            <th>Nama Barang</th>
-                            <th>Supplier</th>
-                            <th>Harga Satuan</th>
-                            <th>Qty</th>
-                            
-                            <th>Subtotal</th>
-                            <th>Tanggal Beli</th>
+                    <div class="table-responsive">
+                    <div class="row">
 
-                          </tr>
-                        </thead>
-                        <tbody>
+                     
+                        <?php $sum=0;?>
+                        <?php $sum_qty=0;?>
+                        <?php $subtot=0;?>
 
-                          <?php  $i =1;?>
-                          <?php $sum=0;?>
-                          <?php $sum_qty=0;?>
-                          <?php foreach($minggu as $mi):?>
-                          <tr>
-
-                            <td>
-                              <div class="text-left"><?php echo $mi['tt_kode_transaksi']; ?></div>
-                              <?php echo 'Rp. '. number_format($mi['tt_total_harga'], 0,",","."); ?>
-                            </td>
-                            <td><?php echo $mi['nama_barang']; ?></td>
-                            <td><?php echo $mi['nama_pengirim_barang']; ?></td>
-                            
-                            <td>
-
-                              <?php 
-                      
-                              if($mi['tt_role_id'] == 4){
-                                echo 'Rp. '. number_format($mi['harga_konsumen'], 0,",",".");
-                              }else{
-                                echo 'Rp. '. number_format($mi['harga_anggota'], 0,",",".");
-                              }
-                              
-                              ?>
-
-                            </td>
-                            <td><?php echo $qty = $mi['t_qty']; ?></td>
-                            <td><?php $total = $mi['t_harga']; echo $mi['t_harga']; ?>
-                            </td>
-                            <td><?php echo $mi['tanggal']; ?></td>
-
-                          </tr>
-                          <?php $sum += $total;?>
-                          <?php $sum_qty += $qty;?>
-                          <?php $i++;  ?>
-                          <?php endforeach;?>
-
-
-                        </tbody>
-
-                        <tfoot>
-                      <tr>
-                          <th colspan="1"></th>
-                          <th colspan="1"></th>
-                          <th colspan="1"></th>
-                          <th colspan="1"></th>
-                          <th colspan="1"></th>
-                          <th colspan="1"></th>
-                          <th colspan="1"></th>
-                          
-
-                         
-                      </tr>
-                  </tfoot>
-
-
-
-                      </table>
-
-
-
-
-
-
-
+                        <?php
+          $urut = 0;
+          $nomor = 0;
+          $grup = '-';
+          foreach ($minggu as $d) {
+              if ($grup == '-' || $grup != $d['tt_kode_transaksi']) {
+                $kat = $d['tt_kode_transaksi'];
+                $hor = $d['tanggal'];
+                $nam = $d['tt_nama_penerima'];
+                $rol = $d['role'];
+                $usr = $d['nama'];
+                $th  = $d['tt_total_harga'];
+                $jm = $d['tt_jumlah_uang'];
+                $tk = $d['tt_kembalian'];
+                $rl = $d['role'];
                 
 
+                if ($grup != '-')
+                    echo "</table></div>";
+                  
 
                   
+
+                    echo "<div class='col-lg-6 col-md-6 col-sm-12'><table class='table table-sm'>";
+
+                   
+                  echo "<tr class='text-center'>
+                          <td colspan='9' style='text-align:right; border-top:1px solid black; border-right: 1px solid black; border-left: 1px solid black; border-bottom:none;' colspan=''>
+                            <b>
+                              ".$kat."
+                              <div style='float:left;'>".'Tanggal & waktu: '.$hor."</div>
+                              
+                            </b>
+                          </td>
+                        </tr>";
+
+                        //$subtot += $har;
+
+                        echo "<tr class='text-center'>
+                        <td colspan='9' style='text-align:right; border: 1px solid black; border-top: none; border-bottom:none;' colspan=''>
+                          <b>
+                            Total Beli: ".'Rp. '. number_format($th, 0,",",".")."
+                            <div style='float:left;'>".'Kasir: '.$usr."</div>
+                            
+                          </b>
+                        </td>
+                      </tr>";
+
+                      echo "<tr class='text-center'>
+                        <td colspan='9' style='text-align:right; border: 1px solid black; border-top: none; border-bottom:none;' colspan=''>
+                          <b>
+                          Jumlah Uang: ".'Rp. '. number_format($jm, 0,",",".")."
+                            <div style='float:left;'>".'Nama pembeli: '.$nam."</div>
+                            
+                            
+                          </b>
+                        </td>
+                      </tr>";
+
+                     
+
+                      echo "<tr class='text-center'>
+                        <td colspan='9' style='text-align:right; border: 1px solid black; border-top: none; border-bottom:none;' colspan=''>
+                          <b>
+                            Kembalian: ".'Rp. '. number_format($tk, 0,",",".")."
+                            <div style='float:left;'>".'Jenis pembeli: '.$rl."</div>
+                            
+                            
+                          </b>
+                        </td>
+                      </tr>";
+
+
+                    echo "<tr>
+                          <th style='text-align:center; border: 1px solid black;' scope='col'>#</th>
+                          <th style='text-align:center; border: 1px solid black; border-right: none; border-left: none;' scope='col'>Nama Barang</th>
+                          <th style='text-align:center; border:1px solid black; ' scope='col'>QTY</th>
+                          <th style='text-align:center; border:1px solid black; border-right: 1px solid black; border-left: none;' scope='col'>Harga Satuan</th>
+                          <th style='text-align:center; border:1px solid black; border-right: 1px solid black; border-left: none;' scope='col'>Subtotal</th>
+                          
+                         
+                  </tr>";
+                  $nomor = 1;
+              }
+              $grup = $d['tt_kode_transaksi'];
+              if ($urut == 500) {
+                  $nomor = 0;
+                  echo "<div class='pagebreak'> </div> ";
+              }
+              ?>
+                        <tr>
+                          <th class="text-center" style="border:1px solid black;" scope="row"><?php echo $nomor++ ?>
+                          </th>
+                          <td style="border:1px solid black; border-right: none; border-left: none;">
+                            <?php echo $d['nama_barang']; ?></td>
+                          <td class="text-center" style="border:1px solid black;"><?php echo $qty = $d['t_qty']; ?></td>
+                          <td style="border:1px solid black; border-right: 1px solid black; border-left: none;">
+
+                            <?php
+
+          if($d['tt_role_id'] == 4){
+            echo 'Rp. '. number_format($d['harga_konsumen'], 0,",",".");
+          }elseif($d['tt_role_id'] == 5){
+            echo 'Rp. '. number_format($d['harga_anggota'], 0,",",".");
+          }
+      
+      
+      ?>
+
+                          </td>
+                          <td style="border:1px solid black; border-right: 1px solid black; border-left: none;">
+                            <?php $total = $d['t_harga']; echo 'Rp. '. number_format($total, 0,",","."); ?></td>
+
+                        </tr>
+
+                        <?php $sum += $total;?>
+                        <?php $sum_qty += $qty;?>
+
+
+
+                        <?php
+            }
+            ?>
+
+                        
+
+
+
+
+                      </table></div></div>
+                      <table class="table table-sm">
+                          <thead>
+                            <tr style="border: 1px solid black;">
+
+                              <th style="text-align: center; border: 1px solid black;" scope="col">Total Harga</th>
+                              <th style="text-align: center; border: 1px solid black;" scope="col">Total Jumlah Barang
+                              </th>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr style="border: 1px solid black;">
+
+                              <td style="text-align: center; border: 1px solid black;">
+                                <?php echo 'Rp. '. number_format($sum, 0,",",".");  ?></td>
+                              <td style="text-align: center; border: 1px solid black;"><?php echo $sum_qty; ?></td>
+
+                            </tr>
+                          </tbody>
+                        </table>
+                    </div>
                     <?php else  : ?>
 
                     <div class="card-header">
