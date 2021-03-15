@@ -5,7 +5,8 @@ use App\Models\Model_user_menu;
 use App\Models\Model_user;
 use App\Models\Model_user_role;
 use App\Models\Model_user_access_menu;
-use App\Models\Users;
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
 
 class RoleAkses extends BaseController{
 
@@ -16,7 +17,8 @@ class RoleAkses extends BaseController{
         $this->model_user_role = new Model_user_role();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
-        $this->user = new Users();
+        $this->modelUser = new ModelUser();
+        $this->modelMenu = new ModelMenu();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
@@ -30,13 +32,8 @@ class RoleAkses extends BaseController{
         $data = [
             'title' => ucfirst('Role'),
             'nama_menu_utama' => ucfirst('Role'),
-            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-            'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-                        ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-                        ->where('user_access_menu.role_id =', $role)
-                        ->orderBy('user_access_menu.menu_id', 'ASC')
-                        ->orderBy('user_access_menu.role_id', 'ASC')
-                        ->findAll(),
+            'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+            'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'idrole' => $this->model_user_role->select('id_role, role')->asArray()
                         ->where('id_role', $role_id)->first(),
             'menurole'  =>$this->model_user_menu->select('id_menu, menu')->asArray()

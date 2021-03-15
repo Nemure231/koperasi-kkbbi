@@ -2,7 +2,8 @@
 
 use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
-use App\Models\Users;
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
 
 class Sandi extends BaseController{
 
@@ -12,7 +13,8 @@ class Sandi extends BaseController{
 		$this->model_user_menu = new Model_user_menu();
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
-		$this->user = new Users();
+		$this->modelUser = new ModelUser();
+		$this->modelMenu =  new ModelMenu();
 	}
 
 
@@ -22,13 +24,8 @@ class Sandi extends BaseController{
 		$data = [
 		'title' => ucfirst('Ubah Sandi'),
 		'nama_menu_utama' => ucfirst('Profil'),
-		'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-		'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-				->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-				->where('user_access_menu.role_id =', $role)
-				->orderBy('user_access_menu.menu_id', 'ASC')
-				->orderBy('user_access_menu.role_id', 'ASC')
-				->findAll(),
+		'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+        'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
 		'session' => $this->session,
 		'validation' => $this->validation,
 		'attr' => ['id' => 'katasandi', 'name'=>'katasandi']
@@ -72,7 +69,7 @@ class Sandi extends BaseController{
 			return redirect()->to(base_url('/akun/sandi'))->withInput();
 		}
 
-		$data = $this->user->ambilSatuSandi()['users'];
+		$data = $this->modelUser->ambilSatuSandi();
 		$pass_sebelum = $this->request->getPost('katasandi_sebelum');
 		$pass_baru = $this->request->getPost('katasandi_baru');
 		if (!password_verify($pass_sebelum, $data['password'])) {
@@ -84,7 +81,7 @@ class Sandi extends BaseController{
 				$this->session->setFlashdata('sama', 'Kata sandi baru tidak boleh sama dengan kata sandi sebelumnya!');
 				return redirect()->to(base_url('/akun/sandi'));
 			}else{
-				$this->user->ubahSandi();
+				$this->modelUser->ubahSandi();
 				$this->session->setFlashdata('pesan', 'Kata sandi berhasil diubah!');
 				return redirect()->to(base_url('/akun/sandi'));
 			}

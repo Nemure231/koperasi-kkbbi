@@ -11,7 +11,8 @@ use App\Models\Model_satuan;
 use App\Models\Model_merek;
 use App\Models\Model_kategori;
 use App\Models\Model_pengirim_barang;
-use App\Models\Users;
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
 
 class BarangMasuk extends BaseController
 {
@@ -28,7 +29,8 @@ class BarangMasuk extends BaseController
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
         $this->db = \Config\Database::connect();
-        $this->user = new Users();
+        $this->modelUser = new ModelUsers();
+        $this->modelMenu = new ModelMenu();
 	}
 
 	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
@@ -44,13 +46,8 @@ class BarangMasuk extends BaseController
            
             'title'     => ucfirst('Barang Masuk'),
             'nama_menu_utama' => ucfirst('Pembelian'),
-            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-            'menu' 	    => 	$this->model_user_menu->select('id_menu, menu')->asArray()
-                            ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-                            ->where('user_access_menu.role_id =', $role)
-                            ->orderBy('user_access_menu.menu_id', 'ASC')
-                            ->orderBy('user_access_menu.role_id', 'ASC')
-                            ->findAll(),
+            'user' 	=> 	$this->modeluser->ambilSatuUserBuatProfil(),
+            'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'session'   =>  $this->session,
             'validation'=>  $this->validation,
             'barang'    =>  $this->model_barang->select('id_barang, nama_barang')->asArray()

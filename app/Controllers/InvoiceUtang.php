@@ -5,7 +5,8 @@ use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
 use App\Models\Model_transaksi_sementara;
-use App\Models\Users;
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
 
 
 class InvoiceUtang extends BaseController{
@@ -18,7 +19,8 @@ class InvoiceUtang extends BaseController{
         $this->model_transaksi_sementara = new Model_transaksi_sementara();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
-        $this->user = new Users();
+        $this->modelUser = new ModelUser();
+        $this->modelMenu = new ModelMenu();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
@@ -31,13 +33,8 @@ class InvoiceUtang extends BaseController{
 		
 		$data = [
 			'title' => ucfirst('Invoice Utang'),
-            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-            'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-                    ->where('user_access_menu.role_id =', $role)
-                    ->orderBy('user_access_menu.menu_id', 'ASC')
-                    ->orderBy('user_access_menu.role_id', 'ASC')
-                    ->findAll(),
+            'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+            'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'validation' => $this->validation,
 			'session' => $this->session,
 			'utang' =>$this->model_transaksi_sementara->select('nama_barang, ts_kode_transaksi, harga_konsumen, 

@@ -8,8 +8,8 @@ use App\Models\Model_satuan;
 use App\Models\Model_merek;
 use App\Models\Model_kategori;
 use App\Models\Model_pengirim_barang;
-use App\Models\Users;
-
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
 class Barang extends BaseController{
 
 	public function __construct(){
@@ -23,7 +23,8 @@ class Barang extends BaseController{
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 		$this->db = \Config\Database::connect();
-        $this->user = new Users();
+        $this->modelUser = new modelUser();
+        $this->modelMenu = new modelMenu();
 	}
 	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
 
@@ -44,13 +45,8 @@ class Barang extends BaseController{
         $data = [
             'title' => ucfirst('Daftar Barang'),
             'nama_menu_utama' => ucfirst('Gudang'),
-            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-						->where('user_access_menu.role_id =', $role)
-						->orderBy('user_access_menu.menu_id', 'ASC')
-						->orderBy('user_access_menu.role_id', 'ASC')
-						->findAll(),
+            'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+			'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'barang' => $this->model_barang->select('id_barang, deskripsi_barang, harga_pokok, 
                         nama_barang, nama_pengirim_barang, pengirim_barang_id, nama_kategori, kode_barang,
                         stok_barang, tanggal, tanggal_update,nama_merek, nama_satuan, kategori_id, satuan_id, 

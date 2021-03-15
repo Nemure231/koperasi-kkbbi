@@ -5,7 +5,7 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
 
  
-class Users extends Model{
+class ModelUser extends Model{
 
     public function __construct(){
         $this->db = \Config\Database::connect();
@@ -85,7 +85,7 @@ class Users extends Model{
         }
 
         $user = json_decode($res_user, true);
-        return $user;
+        return $user['data'];
     }
 
     public function ambilSatuUserBuatProfil(){
@@ -108,7 +108,7 @@ class Users extends Model{
         }
 
         $user = json_decode($res_user, true);
-        return $user;
+        return $user['data'];
     }
 
     public function ambilSatuUserJoinRole(){
@@ -131,7 +131,7 @@ class Users extends Model{
         }
 
         $user = json_decode($res_user, true);
-        return $user;
+        return $user['data'];
     }
 
     public function ubahUser(){
@@ -183,7 +183,7 @@ class Users extends Model{
             
         }
         $user = json_decode($res_sandi, true);
-        return $user;
+        return $user['data'];
     }
 
 

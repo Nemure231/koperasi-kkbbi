@@ -5,8 +5,8 @@ use App\Models\Model_user;
 use App\Models\Model_toko;
 use App\Models\Model_user_menu;
 use App\Models\Model_transaksi_total;
-use App\Models\Users;
-
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
 class LaporanKeluar extends BaseController{
 
     public function __construct(){
@@ -15,7 +15,8 @@ class LaporanKeluar extends BaseController{
         $this->model_toko = new Model_toko();
         $this->model_transaksi_total = new Model_transaksi_total();
 		$this->request = \Config\Services::request();
-        $this->user = new Users();
+        $this->modelUser = new ModelUser();
+        $this->modelMenu = new ModelMenu();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
@@ -73,13 +74,8 @@ class LaporanKeluar extends BaseController{
            
             'title' => ucfirst('Laporan Keluar'),
             'nama_menu_utama' => ucfirst('Barang Keluar'),
-            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-            'menu' 	=> $this->model_user_menu->select('id_menu, menu')->asArray()
-                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-                    ->where('user_access_menu.role_id =', $role)
-                    ->orderBy('user_access_menu.menu_id', 'ASC')
-                    ->orderBy('user_access_menu.role_id', 'ASC')
-                    ->findAll(),
+            'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+            'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'session'=> $this->session,
             'toko'  =>$this->model_toko->select('nama_toko, telepon_toko, alamat_toko, logo_toko, logo_koperasi_inter')
                     ->asArray()->where('id_toko', 1)

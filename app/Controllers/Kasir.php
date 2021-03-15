@@ -11,7 +11,8 @@ use App\Models\Model_transaksi_total;
 use App\Models\Model_jenis_kasir;
 use App\Models\Model_user_role;
 use App\Models\Model_transaksi_sementara;
-use App\Models\Users;
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
 // use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 // use Mike42\Escpos\Printer;
 // use Setruk\PrintConnectors\FilePrintConnector;
@@ -21,7 +22,8 @@ class Kasir extends BaseController{
 
     public function __construct(){
 
-        $this->user = new Users();
+        $this->modelUser = new ModelUser();
+        $this->modelMenu = new ModelMenu();
         $this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
         $this->model_user_role = new Model_user_role();
@@ -70,13 +72,8 @@ class Kasir extends BaseController{
         $data = [
            'title'  => ucfirst('Kasir'),
            'nama_menu_utama' => ucfirst('Penjualan'),
-           'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-            'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-                    ->where('user_access_menu.role_id =', $role)
-                    ->orderBy('user_access_menu.menu_id', 'ASC')
-                    ->orderBy('user_access_menu.role_id', 'ASC')
-                    ->findAll(),
+           'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+           'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
            'session' => $this->session,
            'kode' => $kode,
            'id_session' => $this->session->get('id_user'),

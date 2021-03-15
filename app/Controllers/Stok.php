@@ -6,7 +6,8 @@ use App\Controllers\BaseController;
 use App\Models\Model_stok;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
-use App\Models\Users;
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
 
 class Stok extends BaseController
 {
@@ -18,7 +19,8 @@ class Stok extends BaseController
         $this->model_stok = new Model_stok();
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
-        $this->user = new Users();
+        $this->modelUser = new ModelUser();
+        $this->modelMenu = new ModelMenu();
 	}
 
 	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
@@ -38,13 +40,8 @@ class Stok extends BaseController
 		$data = [
 			'title' => ucfirst('Pengaturan Stok'),
             'nama_menu_utama' => ucfirst('Stok'),
-            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-						->where('user_access_menu.role_id =', $role)
-						->orderBy('user_access_menu.menu_id', 'ASC')
-						->orderBy('user_access_menu.role_id', 'ASC')
-						->findAll(),
+            'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+            'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'stok' => $stok,
             'habis' => $this->model_stok->GetAllStokHampirHabis(),
             'session' => $this->session,

@@ -5,7 +5,9 @@ use App\Models\Model_user_menu;
 use App\Models\Model_user_sub_menu;
 use App\Models\Model_menu_utama;
 use App\Models\Model_user;
-use App\Models\Users;
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
+
 class Submenu extends BaseController{
 
     public function __construct(){
@@ -16,7 +18,8 @@ class Submenu extends BaseController{
         $this->model_user_sub_menu = new Model_user_sub_menu();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
-        $this->user = new Users();
+        $this->modelUser = new ModelUser();
+        $this->modelMenu = new ModelMenu();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
@@ -31,13 +34,8 @@ class Submenu extends BaseController{
             
             'title' => ucfirst('Submenu'),
             'nama_menu_utama' => ucfirst('Menu'),
-            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-            'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-                    ->where('user_access_menu.role_id =', $role)
-                    ->orderBy('user_access_menu.menu_id', 'ASC')
-                    ->orderBy('user_access_menu.role_id', 'ASC')
-                    ->findAll(),
+            'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+            'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'mmenu' => $this->model_user_menu->select('id_menu, menu')->asArray()->findAll(),
             'menu_utama' => $this->model_menu_utama->select('id_menu_utama, nama_menu_utama, ikon_menu_utama')->asArray()->findAll(),
             'submenu'=>$this->model_user_sub_menu->select('id_menu,menu, user_sub_menu.menu_id as menu_id, id_menu_utama,

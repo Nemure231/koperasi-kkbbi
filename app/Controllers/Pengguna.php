@@ -2,7 +2,8 @@
 
 use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
-use App\Models\Users;
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
 
 class Pengguna extends BaseController{
 
@@ -11,7 +12,8 @@ class Pengguna extends BaseController{
 	public function __construct(){
 
 		$this->model_user_menu = new Model_user_menu();
-		$this->user = new Users();
+		$this->modelUser = new ModelUser();
+		$this->modelMenu = new ModelMenu();
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 	}
@@ -19,24 +21,19 @@ class Pengguna extends BaseController{
 	public function index(){
 		
 		$role = $this->session->get('role_id');
-		$user = $this->user->ambilSatuUserJoinRole();
+		$user = $this->modelUser->ambilSatuUserJoinRole();
 
 		$data = [
 			'title' => ucfirst('Profil'),
 			'nama_menu_utama' => ucfirst('Profil'),
-			'user' => $user['users'],
+			'user' 	=> 	$user,
+            'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
 			'validation' => $this->validation,
-			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-						->where('user_access_menu.role_id =', $role)
-						->orderBy('user_access_menu.menu_id', 'ASC')
-						->orderBy('user_access_menu.role_id', 'ASC')
-						->findAll(),
 			'session' => $this->session,
 			'form_pengguna' => ['id' => 'formPengguna', 'name'=>'formPengguna'],
 			'email' => [
 				'type' => 'email',
-				'value'=> ''.$user['users']['email'].'',
+				'value'=> ''.$user['email'].'',
 				'class' => 'form-control',
 				'readonly' => ''
 			]
@@ -74,7 +71,7 @@ class Pengguna extends BaseController{
                 return redirect()->to(base_url('akun/profil'))->withInput();
         }
 
-		$this->user->ubahUser();	
+		$this->modelUser->ubahUser();	
         $this->session->setFlashdata('pesan_pengguna', 'Profil berhasil diperbarui');
 		return redirect()->to(base_url('akun/profil'));
 	}

@@ -10,7 +10,7 @@
 
 
             <?php foreach ($menu as $m): ?>
-              <li class="menu-header"><?php echo $m['menu']; ?></li>
+              <li class="menu-header"><?php echo $m['nama_menu']; ?></li>
               <?php  
               
                 $menuId = $m['id_menu'];

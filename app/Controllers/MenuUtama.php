@@ -4,7 +4,9 @@ use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
 use App\Models\Model_menu_utama;
-use App\Models\Users;
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
+
 class MenuUtama extends BaseController{
 
     public function __construct(){
@@ -14,7 +16,8 @@ class MenuUtama extends BaseController{
         $this->model_menu_utama = new Model_menu_utama();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
-        $this->user = new Users();
+        $this->modelUser = new ModelUser();
+        $this->modelMenu = new ModelMenu();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
@@ -27,13 +30,8 @@ class MenuUtama extends BaseController{
         $data = [
             'title' => ucfirst('Menu Utama'),
             'nama_menu_utama' => ucfirst('Menu'),
-            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-            'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-                    ->where('user_access_menu.role_id =', $role)
-                    ->orderBy('user_access_menu.menu_id', 'ASC')
-                    ->orderBy('user_access_menu.role_id', 'ASC')
-                    ->findAll(),
+            'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+            'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
            'menu_utama' => $this->model_menu_utama->select('id_menu_utama, nama_menu_utama, ikon_menu_utama')->asArray()->findAll(),
            'validation' => $this->validation,
            'session' => $this->session,

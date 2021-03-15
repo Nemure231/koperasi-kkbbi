@@ -3,7 +3,9 @@
 use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
-use App\Models\Users;
+use App\Models\ModelUser;
+use App\Models\ModelMenu;
+
 class Menu extends BaseController{
 
     public function __construct(){
@@ -12,7 +14,8 @@ class Menu extends BaseController{
 		$this->model_user = new Model_user();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
-        $this->user = new Users();
+        $this->modelUser = new ModelUser();
+        $this->modelMenu = new ModelMenu();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
@@ -26,13 +29,8 @@ class Menu extends BaseController{
         
             'title' => ucfirst('Menu'),
             'nama_menu_utama' => ucfirst('Menu'),
-            'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-            'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-                    ->where('user_access_menu.role_id =', $role)
-                    ->orderBy('user_access_menu.menu_id', 'ASC')
-                    ->orderBy('user_access_menu.role_id', 'ASC')
-                    ->findAll(),
+            'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+            'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
            'mmenu' => $this->model_user_menu->select('id_menu, menu')->asArray()->findAll(),
            'validation' => $this->validation,
            'session' => $this->session,

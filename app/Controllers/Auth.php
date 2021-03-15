@@ -7,7 +7,7 @@ use CodeIgniter\Controller;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
-use App\Models\Users;
+use App\Models\ModelUser;
 
 class Auth extends BaseController
 {
@@ -18,7 +18,7 @@ class Auth extends BaseController
 		$this->_client = new Client([
 			'base_uri' => 'http://localhost:8000/api/',
 		]);
-		$this->model_user = new Users();
+		$this->modelUser = new ModelUser();
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 		$this->email = \Config\Services::email();
@@ -91,7 +91,7 @@ class Auth extends BaseController
 			$email = $this->request->getPost('email');
 			$sandi = $this->request->getPost('sandi');
 			
-			$token = $this->model_user->login($email, $sandi);
+			$token = $this->modelUser->login($email, $sandi);
 
 			$cek_token = $token['access_token'];
 	
@@ -108,7 +108,7 @@ class Auth extends BaseController
 				]);
 				
 				
-				$user = $this->model_user->ambilSatuUserUntukLogin($ambil_token);
+				$user = $this->modelUser->ambilSatuUserUntukLogin($ambil_token);
 
 				$res_id_user = $user['id'];
 
@@ -424,7 +424,7 @@ class Auth extends BaseController
             return redirect()->to(base_url('/'));
 		}
 
-		$this->model_user->logout();
+		$this->modelUser->logout();
 
 		$this->session->remove('email');
 		$this->session->remove('role_id');

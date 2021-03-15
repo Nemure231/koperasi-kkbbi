@@ -4,8 +4,9 @@ use CodeIgniter\Controller;
 use App\Models\Model_barang_masuk;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
-use App\Models\Users;
+use App\Models\ModelUser;
 use App\Models\Model_transaksi_total;
+use App\Models\ModelMenu;
 
 class Dashboard extends BaseController{
 
@@ -13,7 +14,8 @@ class Dashboard extends BaseController{
 		$this->model_barang_masuk = new Model_barang_masuk();
 		$this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
-		$this->user = new Users();
+		$this->modelUser = new ModelUser();
+		$this->modelMenu = new ModelMenu();
 		$this->model_transaksi_total = new Model_transaksi_total();
 
 		date_default_timezone_set("Asia/Jakarta");	
@@ -32,13 +34,8 @@ class Dashboard extends BaseController{
 		$data = [
 			'title' => 	ucfirst('Dashboard Masuk'),
 			'nama_menu_utama' => ucfirst('Dashboard'),
-			'user' 	=> 	$this->user->ambilSatuUserBuatProfil()['users'],
-			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-						->where('user_access_menu.role_id =', $role)
-						->orderBy('user_access_menu.menu_id', 'ASC')
-						->orderBy('user_access_menu.role_id', 'ASC')
-						->findAll(),
+			'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+			'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
 			'session' => $this->session,
 			'row_masuk_hari' => $this->model_barang_masuk->selectSUM('total_harga_pokok', 'total_bmh')
 						->selectSUM('jumlah_barang_masuk', 'total_jbm')->asArray()
@@ -95,12 +92,7 @@ class Dashboard extends BaseController{
 			'title' => ucfirst('Dashboard Keluar'),
 			'nama_menu_utama' => ucfirst('Dashboard'),
 			'user' 	=> 	$user = $this->user->ambilSatuUserBuatProfil()['users'],
-			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-						->where('user_access_menu.role_id =', $role)
-						->orderBy('user_access_menu.menu_id', 'ASC')
-						->orderBy('user_access_menu.role_id', 'ASC')
-						->findAll(),
+			'menu' 	=> 	$this->menu->ambilMenuUntukSidebar(),
 			'session' => $this->session,
 			'row_keluar_hari'=>	$this->model_transaksi_total->selectSUM('tt_total_harga', 'total_bkh')
 								->selectSUM('tt_total_qty', 'total_ttq')->asArray()
