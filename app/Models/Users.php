@@ -43,13 +43,36 @@ class Users extends Model{
         return $token;
     }
 
-    public function ambilSatuUser($ambil_token){
+    public function ambilSatuUserUntukLogin($ambil_token){
         // $ambil_token = get_cookie('jwt_token');
         $res_user = json_encode(['id' => '']);
         try {
             $respon_ambil_user = $this->_client->request(
                 'GET',
                 'auth/me',
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_user = $respon_ambil_user->getBody();
+        } catch (ClientException $e) {
+            
+        }
+
+        $user = json_decode($res_user, true);
+        return $user;
+    }
+
+    public function ambilSatuUser(){
+        $ambil_token = get_cookie('jwt_token');
+        $id_user = $this->session->get('id_user');
+        $res_user = json_encode(['users' => '']);
+        try {
+            $respon_ambil_user = $this->_client->request(
+                'GET',
+                'akun/profil/'.$id_user,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -72,7 +95,7 @@ class Users extends Model{
         try {
             $respon_ambil_user = $this->_client->request(
                 'GET',
-                'akun/profil/'.$id_user,
+                'akun/profil/untuk-profil/'.$id_user,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -113,21 +136,19 @@ class Users extends Model{
 
     public function ubahUser(){
         $ambil_token = get_cookie('jwt_token');
-        // dd($ambil_token);
         $id_user = $this->session->get('id_user');
-        // $res_user = json_encode(['users' => '']);
-        // try {
-
-            // $request_param = [
-            //     'name' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
-            //     'telepon' => $this->request->getPost('telepon'),
-            //     'alamat' => htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES)
-            // ];
-            // $request_data = json_encode($request_param);
-
-            $respon_ambil_user = $this->_client->request(
-                'PUT',
-                'akun/profil/ubah/'.$id_user,
+       
+        $respon_ambil_user = $this->_client->request(
+            'PUT',
+            'akun/profil/ubah/'.$id_user
+            .'?name='. $this->request->getPost('nama').
+            '&telepon='. $this->request->getPost('telepon').
+            '&alamat='. $this->request->getPost('alamat'),
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ],
                 // ['query' => 
                 //     [
                 //     'name' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
@@ -135,28 +156,9 @@ class Users extends Model{
                 //     'alamat' => htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES)
                 //     ]
                 // ],
+        );
+                
 
-                ['form_param' =>
-                    [
-                        'name' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
-                        'telepon' => $this->request->getPost('telepon'),
-                        'alamat' => htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES),
-                    ]
-                ],
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
-                    ]
-                ]
-            );
-            
-            // $res_user = $respon_ambil_user->getBody();
-        // } catch (ClientException $e) {
-            
-        // }
-
-        // $user = json_decode($res_user, true);
-        // return $user;
     }
 
 

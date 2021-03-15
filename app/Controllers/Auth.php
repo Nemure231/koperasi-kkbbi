@@ -108,7 +108,7 @@ class Auth extends BaseController
 				]);
 				
 				
-				$user = $this->model_user->ambilSatuUser($ambil_token);
+				$user = $this->model_user->ambilSatuUserUntukLogin($ambil_token);
 
 				$res_id_user = $user['id'];
 
