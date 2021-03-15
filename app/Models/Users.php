@@ -161,6 +161,51 @@ class Users extends Model{
 
     }
 
+    /////////////////////////////////////////////Sandi///////////////////////
+
+
+    public function ambilSatuSandi(){
+        $ambil_token = get_cookie('jwt_token');
+        $id_user = $this->session->get('id_user');
+        $res_sandi = json_encode(['users' => '']);
+        try {
+            $respon_ambil_sandi = $this->_client->request(
+                'GET',
+                'akun/sandi/'.$id_user,
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_sandi = $respon_ambil_sandi->getBody();
+        } catch (ClientException $e) {
+            
+        }
+        $user = json_decode($res_sandi, true);
+        return $user;
+    }
+
+
+    public function ubahSandi(){
+        $ambil_token = get_cookie('jwt_token');
+        $id_user = $this->session->get('id_user');
+       
+        $respon_ambil_user = $this->_client->request(
+            'PUT',
+            'akun/sandi/ubah/'.$id_user
+            .'?sandi_lama='. $this->request->getPost('katasandi_sebelum').
+            '&sandi_baru='. $this->request->getPost('katasandi_baru'),
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ],
+        );
+                
+
+    }
+
 
     public function logout(){
         $ambil_token = get_cookie('jwt_token');

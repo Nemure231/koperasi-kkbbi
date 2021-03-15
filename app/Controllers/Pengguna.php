@@ -2,7 +2,6 @@
 
 use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
-use App\Models\Model_user;
 use App\Models\Users;
 
 class Pengguna extends BaseController{
@@ -12,7 +11,6 @@ class Pengguna extends BaseController{
 	public function __construct(){
 
 		$this->model_user_menu = new Model_user_menu();
-		$this->model_user = new Model_user();
 		$this->user = new Users();
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
@@ -21,8 +19,6 @@ class Pengguna extends BaseController{
 	public function index(){
 		
 		$role = $this->session->get('role_id');
-	
-		
 		$user = $this->user->ambilSatuUserJoinRole();
 
 		$data = [
@@ -50,51 +46,37 @@ class Pengguna extends BaseController{
 
 
 	public function ubah(){
-
-       
-        
-            if(!$this->validate([
-                'nama' => [
-                    'label'  => 'Nama',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Nama harus diisi!'
-                    ]
-                ],
-                'telepon' => [
-                    'label'  => 'Nomor Telepon',
-                    'rules'  => 'required|numeric',
-                    'errors' => [
-					'required' => 'Nomor telepon harus diisi!',
-					'numeric' => 'Nomor telepon harus dengan angka!'
-                    ]
-				],
-                'alamat' => [
-                    'label'  => 'Alamat',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'ALamat harus diisi!'
-                    
-                    ]
+        if(!$this->validate([
+            'nama' => [
+                'label'  => 'Nama',
+                'rules'  => 'required',
+                'errors' => [
+                'required' => 'Nama harus diisi!'
                 ]
+            ],
+			'telepon' => [
+                'label'  => 'Nomor Telepon',
+                'rules'  => 'required|numeric',
+                'errors' => [
+				'required' => 'Nomor telepon harus diisi!',
+				'numeric' => 'Nomor telepon harus dengan angka!'
+                ]
+			],
+            'alamat' => [
+                'label'  => 'Alamat',
+                'rules'  => 'required',
+                'errors' => [
+                'required' => 'ALamat harus diisi!'                
+                ]
+            ]
 
             ])) {
                 return redirect()->to(base_url('akun/profil'))->withInput();
+        }
 
-            }
-
-				
-
-				$this->user->ubahUser();
-			
-				//dd($id);
-				// $this->model_user->update($id, $edit);
-				
-                $this->session->setFlashdata('pesan_pengguna', 'Profil berhasil diperbarui');
-				return redirect()->to(base_url('akun/profil'));
-		
-            
-        
+		$this->user->ubahUser();	
+        $this->session->setFlashdata('pesan_pengguna', 'Profil berhasil diperbarui');
+		return redirect()->to(base_url('akun/profil'));
 	}
 
 
