@@ -40,7 +40,6 @@ class ModelMenu extends Model{
         return $user['data'];
     }
 
-   
 }
 
 ?>

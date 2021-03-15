@@ -56,7 +56,6 @@ class Menu extends BaseController{
         ]
 
         ];
-        //dd(time());
         tampilan_admin('admin/admin-menu/v_menu', 'admin/admin-menu/v_js_menu', $data);
     }
     
