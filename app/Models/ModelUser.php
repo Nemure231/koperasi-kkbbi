@@ -141,9 +141,9 @@ class ModelUser extends Model{
         $respon_ambil_user = $this->_client->request(
             'PUT',
             'akun/profil/ubah/'.$id_user
-            .'?name='. $this->request->getPost('nama').
-            '&telepon='. $this->request->getPost('telepon').
-            '&alamat='. $this->request->getPost('alamat'),
+            .'?name='. htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES).
+            '&telepon='. htmlspecialchars($this->request->getPost('telepon'), ENT_QUOTES).
+            '&alamat='. htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES),
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"

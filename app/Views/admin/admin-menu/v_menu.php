@@ -45,9 +45,9 @@
                     <?php foreach($mmenu as $m):?>
                     <tr id="menu_id_<?php echo $m['id_menu'];?>">
                       <td><?php echo $i; ?></td>
-                      <td><?php echo $m['menu']; ?></td>
+                      <td><?php echo $m['nama_menu']; ?></td>
                       <td>
-                        <a href="javascript:void(0)" class="edit-menu btn btn-warning mr-1" data-id="<?php echo $m['id_menu'];?>" data-menu="<?php echo $m['menu'];?>" ><i class="fas fa-pencil-alt"></i></a>
+                        <a href="javascript:void(0)" class="edit-menu btn btn-warning mr-1" data-id="<?php echo $m['id_menu'];?>" data-menu="<?php echo $m['nama_menu'];?>" ><i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" class="hapus-menu btn btn-danger" data-id="<?php echo $m['id_menu'];?>" ><i class="fas fa-trash"></i></a>
                       </td>
                     </tr>
@@ -110,7 +110,7 @@
 				<div class="modal-body">
 
 					<div class="form-group">
-						<!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
+						<!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['nama_menu'] -->
             <?php echo form_input($menunu); ?>
 					</div>
 
@@ -147,7 +147,7 @@
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Nama kategori</label>
-              <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
+              <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['nama_menu'] -->
               <?php echo form_input($menuE); ?>
               <div class="invalid-feedback">
               </div>

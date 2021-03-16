@@ -20,7 +20,7 @@ class ModelMenu extends Model{
     public function ambilMenuUntukSidebar(){
         $ambil_token = get_cookie('jwt_token');
         $role_id = $this->session->get('role_id');
-        $res_user = json_encode(['users' => '']);
+        $res_user = json_encode(['data' => '']);
         try {
             $respon_ambil_user = $this->_client->request(
                 'GET',
@@ -38,6 +38,72 @@ class ModelMenu extends Model{
 
         $user = json_decode($res_user, true);
         return $user['data'];
+    }
+
+    public function ambilMenu(){
+        $ambil_token = get_cookie('jwt_token');
+        $res_menu = json_encode(['data' => '']);
+        try {
+            $respon_ambil_menu = $this->_client->request(
+                'GET',
+                'pengaturan/menu',
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_menu = $respon_ambil_menu->getBody();
+        } catch (ClientException $e) {
+            
+        }
+
+        $user = json_decode($res_menu, true);
+        return $user['data'];
+    }
+
+    public function tambahMenu(){
+        $ambil_token = get_cookie('jwt_token');
+    
+        $respon_ambil_user = $this->_client->request(
+            'POST',
+            'pengaturan/menu/tambah'
+            .'?nama_menu='. htmlspecialchars($this->request->getPost('menu'), ENT_QUOTES),
+            ['headers' => 
+                [
+                'Authorization' => "Bearer {$ambil_token}"
+                ]
+            ],
+        );
+    }
+
+    public function ubahMenu($id_menu){
+        $ambil_token = get_cookie('jwt_token');
+       
+        $respon_ambil_user = $this->_client->request(
+            'PUT',
+            'pengaturan/menu/ubah/'.$id_menu
+            .'?nama_menu='. htmlspecialchars($this->request->getPost('menuE'), ENT_QUOTES),
+            ['headers' => 
+                [
+                'Authorization' => "Bearer {$ambil_token}"
+                ]
+            ],
+        );
+    }
+
+    public function hapusMenu($id_menu){
+        $ambil_token = get_cookie('jwt_token');
+       
+        $respon_ambil_user = $this->_client->request(
+            'DELETE',
+            'pengaturan/menu/hapus/'.$id_menu,
+            ['headers' => 
+                [
+                'Authorization' => "Bearer {$ambil_token}"
+                ]
+            ],
+        );
     }
 
 }

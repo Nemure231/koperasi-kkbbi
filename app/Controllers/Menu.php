@@ -24,14 +24,14 @@ class Menu extends BaseController{
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-        
         $data = [
         
             'title' => ucfirst('Menu'),
             'nama_menu_utama' => ucfirst('Menu'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-           'mmenu' => $this->model_user_menu->select('id_menu, menu')->asArray()->findAll(),
+           'mmenu' => $this->modelMenu->ambilMenu(),
+           #$this->model_user_menu->select('id_menu, menu')->asArray()->findAll(),
            'validation' => $this->validation,
            'session' => $this->session,
            'attr' => ['id' => 'formMenu', 'name'=>'formMenu'],
@@ -77,11 +77,11 @@ class Menu extends BaseController{
 
         }
 
-            $data = array(
-                'menu' => htmlspecialchars($this->request->getPost('menu'), ENT_QUOTES)
-            );
+            // $data = array(
+            //     'menu' => htmlspecialchars($this->request->getPost('menu'), ENT_QUOTES)
+            // );
 
-            $this->model_user_menu->insert($data);
+            $this->modelMenu->tambahMenu();
         
             $this->session->setFlashdata('pesan_menu', 'Menu baru berhasil ditambahkan!');
             return redirect()->to(base_url('/pengaturan/menu'));
@@ -113,12 +113,8 @@ class Menu extends BaseController{
                 return redirect()->to(base_url('/pengaturan/menu'))->withInput();
 
             }
-                $id = $this->request->getPost('hidden_menu_id');
-                $data = array(
-                    'menu' => htmlspecialchars($this->request->getPost('menuE'), ENT_QUOTES)
-                );
-
-                $this->model_user_menu->update($id, $data);
+                $id_menu = $this->request->getPost('hidden_menu_id');
+                $this->modelMenu->ubahMenu($id_menu);
                 $this->session->setFlashdata('pesan_edit_menu', 'Menu baru berhasil diedit!');
                 return redirect()->to(base_url('/pengaturan/menu'));
                 
@@ -126,9 +122,8 @@ class Menu extends BaseController{
     }
 
     public function hapus(){
-
         $id_menu = $this->request->getPost('hidden_hapus_menu_id');
-        $this->model_user_menu->delete($id_menu);
+        $this->modelMenu->hapusMenu($id_menu);
         $this->session->setFlashdata('pesan_hapus_menu', 'Menu berhasil dihapus!');
         return redirect()->to(base_url('/pengaturan/menu'));
         
