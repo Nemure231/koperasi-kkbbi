@@ -81,8 +81,10 @@
                 </div>
                     <?php endif; ?>
                     <div class="invisible">
-  <?php echo $validation->listErrors(); ?>
-</div>
+                 
+                 <?php echo $session->getFlashdata('pesan_validasi_menu');  ?>
+                
+                </div>
 
 
 

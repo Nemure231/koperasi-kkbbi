@@ -61,30 +61,35 @@ class Menu extends BaseController{
     
 
     public function tambah(){
-        if(!$this->validate([
-            'menu' => [
-                'label'  => 'Nama Menu',
-                'rules'  => 'required|is_unique[user_menu.menu]',
-                'errors' => [
-                'required' => 'Nama menu harus diisi!',
-                'is_unique' => 'Nama menu sudah ada!'
-                ]
-            ]
+        // if(!$this->validate([
+        //     'menu' => [
+        //         'label'  => 'Nama Menu',
+        //         'rules'  => 'required|is_unique[user_menu.menu]',
+        //         'errors' => [
+        //         'required' => 'Nama menu harus diisi!',
+        //         'is_unique' => 'Nama menu sudah ada!'
+        //         ]
+        //     ]
             
-        ])) {
+        // ])) {
             
-            return redirect()->to(base_url('/pengaturan/menu'))->withInput();
+        //     return redirect()->to(base_url('/pengaturan/menu'))->withInput();
 
-        }
+        // }
 
             // $data = array(
             //     'menu' => htmlspecialchars($this->request->getPost('menu'), ENT_QUOTES)
             // );
 
-            $this->modelMenu->tambahMenu();
-        
-            $this->session->setFlashdata('pesan_menu', 'Menu baru berhasil ditambahkan!');
-            return redirect()->to(base_url('/pengaturan/menu'));
+            $validasi = $this->modelMenu->tambahMenu();
+            // dd($validasi);
+            if($validasi){
+                $this->session->setFlashdata('pesan_validasi_menu',  '<div class="errors">'.$validasi['nama_menu'][0].'</div>');
+                return redirect()->to(base_url('/pengaturan/menu'));
+            }else{
+                $this->session->setFlashdata('pesan_menu', 'Menu baru berhasil ditambahkan!');
+                return redirect()->to(base_url('/pengaturan/menu'));
+            }
     }
 
     public function ubah(){
