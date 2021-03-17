@@ -139,7 +139,7 @@ $routes->group('pengaturan', function($routes){
 	$routes->delete('menu_utama/hapus', 'MenuUtama::hapus');
 
 	$routes->get('submenu', 'Submenu::index', ['filter' => 'cek_akses']);
-	$routes->post('submenu/tambah', 'Submenu::tambah');
+	$routes->add('submenu/tambah', 'Submenu::tambah');
 	$routes->put('submenu/ubah', 'Submenu::ubah');
 	$routes->delete('submenu/hapus', 'Submenu::hapus');
 

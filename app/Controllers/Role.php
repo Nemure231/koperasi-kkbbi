@@ -28,7 +28,10 @@ class Role extends BaseController{
         $email = $this->session->get('email');
 		
 
-
+        // $r = $this->model_user_role->select('id_role, role')->asArray()
+        // ->where('id_role!=', 4)->where('id_role!=', 5)
+        // ->findAll();
+        // dd($r);
 		
         $data = [
             'title' => ucfirst('Role'),

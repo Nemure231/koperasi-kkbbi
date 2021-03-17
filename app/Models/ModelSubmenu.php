@@ -60,7 +60,7 @@ class ModelSubmenu extends Model{
         return $submenu['data'];
     }
 
-    public function tambahSubmenu($menu_id, $menu_utama_id, $ikon){
+    public function tambahSubmenu(){
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -68,11 +68,11 @@ class ModelSubmenu extends Model{
             $respon_ambil_submenu = $this->_client->request(
                 'POST',
                 'pengaturan/submenu/tambah'
-                .'?menu_id='.$menu_id
-                .'&menu_utama_id='.$menu_utama_id
+                .'?menu_id='.$this->request->getPost('menu_id')
+                .'&menu_utama_id='.$this->request->getPost('menu_utama_id')
                 .'&nama_submenu='. htmlspecialchars($this->request->getPost('judul'), ENT_QUOTES)
                 .'&url_submenu='. htmlspecialchars($this->request->getPost('url'), ENT_QUOTES)
-                .'&ikon_submenu='. $ikon
+                .'&ikon_submenu='.  htmlspecialchars($this->request->getPost('icon'), ENT_QUOTES)
                 .'&status_submenu='. htmlspecialchars($this->request->getPost('is_active'), ENT_QUOTES),
 
                 ['headers' => 

@@ -149,31 +149,103 @@ class Submenu extends BaseController{
             
         //     return redirect()->to(base_url('/pengaturan/submenu'))->withInput();
         // }
-            $ikon = htmlspecialchars($this->request->getPost('icon'), ENT_QUOTES);
+            // $ikon = htmlspecialchars($this->request->getPost('icon'), ENT_QUOTES);
 
-            $mei = $this->request->getPost('menu_id');
-            $menu_utama = $this->request->getPost('menu_utama_id');
+            // $mei = $this->request->getPost('menu_id');
+            // $menu_utama = $this->request->getPost('menu_utama_id');
 
-            if (is_numeric($mei)){
-                $menu_id = $mei;
-            }else{
-                $menu_id = $this->modelMenu->tambahMenuDariSubmenu($mei);
-                $this->session->setFlashdata('pesan_validasi_submenu',  '<div class="errors">'.$menu_id['nama_menu'][0].'</div>');
-                return redirect()->to(base_url('/pengaturan/submenu'));
+            // if (is_numeric($mei)){
+            //     $menu_id = $mei;
+            // }else{
+            //     $menu_id = $this->modelMenu->tambahMenuDariSubmenu($mei);
+            //     $this->session->setFlashdata('pesan_validasi_submenu',  '<div class="errors">'.$menu_id['nama_menu'][0].'</div>');
+            //     return redirect()->to(base_url('/pengaturan/submenu'));
                 
-            }
-            if (is_numeric($menu_utama)){
-                $menu_utama_id = $menu_utama;
-            }else{
+            // }
+            // if (is_numeric($menu_utama)){
+            //     $menu_utama_id = $menu_utama;
+            // }else{
 
-                $menu_utama_id = $this->modelMenuUtama->tambahMenuUtamaDariSubmenu($menu_utama, $menu_id, $ikon);
-                $this->session->setFlashdata('pesan_validasi_submenu',  '<div class="errors">'.$menu_utama_id['nama_menu_utama'][0].'</div>');
-                return redirect()->to(base_url('/pengaturan/submenu'));
-            }
+            //     $menu_utama_id = $this->modelMenuUtama->tambahMenuUtamaDariSubmenu($menu_utama, $menu_id, $ikon);
+            //     $this->session->setFlashdata('pesan_validasi_submenu',  '<div class="errors">'.$menu_utama_id['nama_menu_utama'][0].'</div>');
+            //     return redirect()->to(base_url('/pengaturan/submenu'));
+            // }
 
-            $validasi = $this->modelSubmenu->tambahSubmenu($menu_id, $menu_utama_id, $ikon);
+            $validasi = $this->modelSubmenu->tambahSubmenu();
+
             if($validasi){
-                $this->session->setFlashdata('pesan_validasi_submenu',  '<div class="errors">'.$validasi['nama_submenu'][0].'</div>');
+                // dd($validasi);
+                // if($validasi == ''){
+                //     $nama = '';
+                // }else{
+                //     $nama = $validasi['nama_submenu'][0];
+                // }
+
+                // if($validasi == ''){
+                //     $menu = '';
+                // }else{
+                //     $menu = $validasi['menu_id'][0];
+                // }
+
+                // if($validasi == ''){
+                //     $menu_utama = '';
+                // }else{
+                //     $menu_utama = $validasi['menu_utama_id'][0];
+                // }
+
+                // if($validasi == ''){
+                //     $url = '';
+                // }else{
+                //     $url = $validasi['url_submenu'][0];
+                // }
+
+                // if($validasi == ''){
+                //     $ikon = '';
+                // }else{
+                //     $ikon = $validasi['ikon_submenu'][0];
+                // }
+
+                // if (is_array($validasi) || is_object($validasi))
+                // {
+                //     foreach ($validasi as $row){  //Go through every row in the result
+
+                //         echo('<div class="errors text-danger">');
+                //         $nama = $row['nama_submenu'];
+                //         $menu_id = $row['menu_id'];
+                //         $menu_utama_id = $row['menu_utama_id'];
+                //         $ikon = $row['ikon_submenu'];
+                //         $url = $row['url_submenu'];
+                //         foreach ($row as $value){    //Go through every value in the row
+                //             echo "<li>'$nama'</li>";
+                //             echo "<li>'$menu_id'</li>";
+                //             echo "<li>'$menu_utama_id'</li>";
+                //             echo "<li>'$ikon'</li>";
+                //             echo "<li>'$url'</li>";
+                //         }
+                //         echo('</>');
+                //     }
+                // }
+
+                // foreach ($validasi as $s =>$val)
+                //   {
+                //     // dd($s);
+                //     $dm= '<div class="errors text-danger">'
+                //       .'<li>'.$val[$s]['nama_submenu'].'</li>'
+                //       .'<li>'.$val[$s]['menu_id'].'</li>'
+                //       .'<li>'.$val[$s]['menu_utama_id'].'</li>'
+                //       .'<li>'.$val[$s]['ikon_submenu'].'</li>'
+                //       .'<li>'.$val[$s]['url_submenu'].'</li>'
+                //       .'</div>';
+                //   }
+
+                $this->session->setFlashdata('pesan_validasi_submenu',  $validasi);
+                // .'<li>'.$nama.'</li>'
+                // .'<li>'.$menu.'</li>'
+                // .'<li>'.$menu_utama.'</li>'
+                // .'<li>'.$url.'</li>'
+                // .'<li>'.$ikon.'</li>'
+                // .'</div>'
+            
                 return redirect()->to(base_url('/pengaturan/submenu'));
             }else{
                 $this->session->setFlashdata('pesan_submenu', 'Menu baru berhasil ditambahkan!');
