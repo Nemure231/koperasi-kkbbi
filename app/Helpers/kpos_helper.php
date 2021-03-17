@@ -1,6 +1,6 @@
 <?php 
 
-use App\Models\Model_user_sub_menu;
+use App\Models\ModelSubmenu;
 use App\Models\Model_user_access_menu;
 use App\Models\Model_menu_utama;
 
@@ -16,15 +16,9 @@ use App\Models\Model_menu_utama;
             }
         }
 
-        function sub_menu_conex($menuId, $mainId){
-            $model = new Model_user_sub_menu();
-            return  $model->select('judul, id_submenu, url, icon')->asArray()
-                        ->join('user_menu', 'user_menu.id_menu = user_sub_menu.menu_id')
-                        ->where('user_sub_menu.menu_id', $menuId)
-                        ->where('user_sub_menu.menu_utama_id', $mainId)
-                        ->where('user_sub_menu.is_active', 1)
-                        ->findAll();
-            
+        function sub_menu_conex($menu_id, $menu_utama_id){
+            $model = new ModelSubmenu();
+            return  $model->ambilSubmenuUntukSidebar($menu_id, $menu_utama_id);
         }
 
         function main_menu_conex($menuId){

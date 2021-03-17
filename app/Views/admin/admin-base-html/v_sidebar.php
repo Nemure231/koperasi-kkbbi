@@ -35,7 +35,7 @@
                   <?php $escape2 = sub_menu_conex($menuId, $mainId);?>
 
                   <?php foreach ($escape2 as $sub2): ?>
-                    <?php if($title == $sub2['judul']):  ?>
+                    <?php if($title == $sub2['nama_submenu']):  ?>
               
                     <li class="active">
                         <?php else  : ?>
@@ -44,7 +44,7 @@
                     <?php endif; ?>
                     
                     
-                    <a class="nav-link" href="<?php echo base_url($sub2['url']);  ?>"><i class="<?php echo $sub2['icon']; ?>"></i><?php echo $sub2['judul']; ?></a></li>
+                    <a class="nav-link" href="<?php echo base_url($sub2['url_submenu']);  ?>"><i class="<?php echo $sub2['ikon_submenu']; ?>"></i><?php echo $sub2['nama_submenu']; ?></a></li>
                   <?php endforeach; ?>
 
 
