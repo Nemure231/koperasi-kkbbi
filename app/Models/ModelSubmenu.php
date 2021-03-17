@@ -38,6 +38,28 @@ class ModelSubmenu extends Model{
         return $submenu['data'];
     }
 
+    public function ambilSubmenu(){
+        $ambil_token = get_cookie('jwt_token');
+        $res_submenu = json_encode(['data' => '']);
+        try {
+            $respon_ambil_submenu = $this->_client->request(
+                'GET',
+                'pengaturan/submenu',
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_submenu = $respon_ambil_submenu->getBody();
+        } catch (ClientException $e) {
+            
+        }
+
+        $submenu = json_decode($res_submenu, true);
+        return $submenu['data'];
+    }
+
 
 
 

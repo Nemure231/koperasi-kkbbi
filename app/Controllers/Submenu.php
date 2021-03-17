@@ -7,6 +7,7 @@ use App\Models\Model_menu_utama;
 use App\Models\Model_user;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
+use App\Models\ModelSubmenu;
 
 class Submenu extends BaseController{
 
@@ -20,6 +21,7 @@ class Submenu extends BaseController{
         $this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
+        $this->modelSubmenu = new ModelSubmenu();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
@@ -38,12 +40,13 @@ class Submenu extends BaseController{
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'mmenu' => $this->model_user_menu->select('id_menu, menu')->asArray()->findAll(),
             'menu_utama' => $this->model_menu_utama->select('id_menu_utama, nama_menu_utama, ikon_menu_utama')->asArray()->findAll(),
-            'submenu'=>$this->model_user_sub_menu->select('id_menu,menu, user_sub_menu.menu_id as menu_id, id_menu_utama,
-                    nama_menu_utama, judul, url, icon, is_active, id_submenu, menu_utama_id')
-                    ->asArray()
-                    ->join('user_menu', 'user_menu.id_menu = user_sub_menu.menu_id')
-                    ->join('menu_utama', 'menu_utama.id_menu_utama = user_sub_menu.menu_utama_id')
-                    ->findAll(),
+            'submenu'=> $this->modelSubmenu->ambilSubmenu(),
+            // $this->model_user_sub_menu->select('id_menu,menu, user_sub_menu.menu_id as menu_id, id_menu_utama,
+            //         nama_menu_utama, judul, url, icon, is_active, id_submenu, menu_utama_id')
+            //         ->asArray()
+            //         ->join('user_menu', 'user_menu.id_menu = user_sub_menu.menu_id')
+            //         ->join('menu_utama', 'menu_utama.id_menu_utama = user_sub_menu.menu_utama_id')
+            //         ->findAll(),
             'session' => $this->session,
             'validation' => $this->validation,
             'attr' => ['id' => 'formSubMenu', 'name'=>'formSubMenu'],

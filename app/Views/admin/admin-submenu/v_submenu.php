@@ -52,13 +52,13 @@ width:100%!important;
                     <?php foreach($submenu as $sm):?>
                     <tr id="id_sub_menu_<?php echo $sm['id_submenu'];?>">
                       <td><?php echo $i; ?></td>
-                      <td><?php echo $sm['judul']; ?></td>
-                      <td><?php echo $sm['menu']; ?></td>
+                      <td><?php echo $sm['nama_submenu']; ?></td>
+                      <td><?php echo $sm['nama_menu']; ?></td>
                       <td><?php echo $sm['nama_menu_utama']; ?></td>
-                      <td><?php echo $sm['url']; ?></td>
-                      <td><?php echo $sm['icon']; ?></td>
+                      <td><?php echo $sm['url_submenu']; ?></td>
+                      <td><?php echo $sm['ikon_submenu']; ?></td>
                       <td class="text-center">
-                        <?php if ($sm['is_active'] == 1){
+                        <?php if ($sm['status_submenu'] == 1){
                               echo '<div class="badge badge-success">Aktif</div>';
                             }else{
                               echo '<div class="badge badge-danger">Tidak aktif</div>';
@@ -68,11 +68,11 @@ width:100%!important;
                       <td>
                         <a href="javascript:void(0)" class="edit-submenu btn btn-warning mr-1"
 						data-id="<?php echo $sm['id_submenu'];?>"
-						data-judul="<?php echo $sm['judul'];?>"
+						data-judul="<?php echo $sm['nama_submenu'];?>"
 						data-menu_id="<?php echo $sm['menu_id'];?>"
-						data-url="<?php echo $sm['url'];?>"
-						data-icon="<?php echo $sm['icon'];?>"
-						data-is_active="<?php echo $sm['is_active'];?>"
+						data-url="<?php echo $sm['url_submenu'];?>"
+						data-icon="<?php echo $sm['ikon_submenu'];?>"
+						data-is_active="<?php echo $sm['status_submenu'];?>"
             data-menu_utama_id="<?php echo $sm['menu_utama_id'];?>"
 						
 						
