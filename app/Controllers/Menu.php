@@ -1,17 +1,13 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_user_menu;
-use App\Models\Model_user;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
 
 class Menu extends BaseController{
 
     public function __construct(){
-
-        $this->model_user_menu = new Model_user_menu();
-		$this->model_user = new Model_user();
+        
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
@@ -30,30 +26,29 @@ class Menu extends BaseController{
             'nama_menu_utama' => ucfirst('Menu'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-           'mmenu' => $this->modelMenu->ambilMenu(),
-           #$this->model_user_menu->select('id_menu, menu')->asArray()->findAll(),
-           'validation' => $this->validation,
-           'session' => $this->session,
-           'attr' => ['id' => 'formMenu', 'name'=>'formMenu'],
-           'form_edit_menu' => ['id' => 'formEditMenu', 'name'=>'formEditMenu'],
-           'form_hapus_menu' => ['id' => 'formHapusMenu', 'name'=>'formHapusMenu', 'class' => 'btn btn-block'],
-           'hidden_menu_id' => ['name' => 'hidden_menu_id', 'id'=>'hidden_menu_id', 'type'=> 'hidden'],
-           'hidden_hapus_menu_id' => ['name' => 'hidden_hapus_menu_id', 'id'=>'hidden_hapus_menu_id', 'type'=> 'hidden'],
-           'hidden_old_menu' => ['name' => 'old_menu', 'id'=>'old_menu', 'type'=> 'hidden'],
-           'menunu' => [
+            'mmenu' => $this->modelMenu->ambilMenu(),
+            'validation' => $this->validation,
+            'session' => $this->session,
+            'attr' => ['id' => 'formMenu', 'name'=>'formMenu'],
+            'form_edit_menu' => ['id' => 'formEditMenu', 'name'=>'formEditMenu'],
+            'form_hapus_menu' => ['id' => 'formHapusMenu', 'name'=>'formHapusMenu', 'class' => 'btn btn-block'],
+            'hidden_menu_id' => ['name' => 'hidden_menu_id', 'id'=>'hidden_menu_id', 'type'=> 'hidden'],
+            'hidden_hapus_menu_id' => ['name' => 'hidden_hapus_menu_id', 'id'=>'hidden_hapus_menu_id', 'type'=> 'hidden'],
+            'hidden_old_menu' => ['name' => 'old_menu', 'id'=>'old_menu', 'type'=> 'hidden'],
+            'menunu' => [
                 'type' => 'text',
                 'name' => 'menu',
                 'id' => 'menu',
                 'placeholder' => 'Nama menu ....',
                 'class' => 'form-control menu'
-           ],
-           'menuE' => [
-            'type' => 'text',
-            'name' => 'menuE',
-            'id' => 'menuE',
-            'placeholder' => 'Nama menu ....',
-            'class' => 'form-control menu'
-        ]
+            ],
+            'menuE' => [
+                'type' => 'text',
+                'name' => 'menuE',
+                'id' => 'menuE',
+                'placeholder' => 'Nama menu ....',
+                'class' => 'form-control menu'
+            ]
 
         ];
         tampilan_admin('admin/admin-menu/v_menu', 'admin/admin-menu/v_js_menu', $data);
@@ -61,68 +56,28 @@ class Menu extends BaseController{
     
 
     public function tambah(){
-        // if(!$this->validate([
-        //     'menu' => [
-        //         'label'  => 'Nama Menu',
-        //         'rules'  => 'required|is_unique[user_menu.menu]',
-        //         'errors' => [
-        //         'required' => 'Nama menu harus diisi!',
-        //         'is_unique' => 'Nama menu sudah ada!'
-        //         ]
-        //     ]
-            
-        // ])) {
-            
-        //     return redirect()->to(base_url('/pengaturan/menu'))->withInput();
 
-        // }
-
-            // $data = array(
-            //     'menu' => htmlspecialchars($this->request->getPost('menu'), ENT_QUOTES)
-            // );
-
-            $validasi = $this->modelMenu->tambahMenu();
-            // dd($validasi);
-            if($validasi){
-                $this->session->setFlashdata('pesan_validasi_menu',  '<div class="errors">'.$validasi['nama_menu'][0].'</div>');
-                return redirect()->to(base_url('/pengaturan/menu'));
-            }else{
-                $this->session->setFlashdata('pesan_menu', 'Menu baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/pengaturan/menu'));
-            }
+        $validasi = $this->modelMenu->tambahMenu();
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_menu',  '<div class="errors">'.$validasi['nama_menu'][0].'</div>');
+            return redirect()->to(base_url('/pengaturan/menu'));
+        }else{
+            $this->session->setFlashdata('pesan_menu', 'Menu baru berhasil ditambahkan!');
+            return redirect()->to(base_url('/pengaturan/menu'));
+        }
     }
 
     public function ubah(){
-       
-        $old =  $this->request->getPost('old_menu');
-        $new =  $this->request->getPost('menuE');
+        $id_menu = $this->request->getPost('hidden_menu_id');
+        $validasi = $this->modelMenu->ubahMenu($id_menu);
 
-        $rules = 'required';
-
-        if($old != $new){
-            $rules =  'required|is_unique[user_menu.menu]';
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_menu',  '<div class="errors">'.$validasi['nama_menu'][0].'</div>');
+            return redirect()->to(base_url('/pengaturan/menu'));
+        }else{
+            $this->session->setFlashdata('pesan_edit_menu', 'Menu baru berhasil diubah!');
+            return redirect()->to(base_url('/pengaturan/menu'));
         }
-
-            if(!$this->validate([
-                'menuE' => [
-                    'label'  => 'Nama Menu',
-                    'rules'  => $rules,
-                    'errors' => [
-                    'required' => 'Nama menu harus diisi!',
-                    'is_unique' => 'Nama menu sudah ada!'
-                    ]
-                ]
-                
-            ])) {
-                
-                return redirect()->to(base_url('/pengaturan/menu'))->withInput();
-
-            }
-                $id_menu = $this->request->getPost('hidden_menu_id');
-                $this->modelMenu->ubahMenu($id_menu);
-                $this->session->setFlashdata('pesan_edit_menu', 'Menu baru berhasil diedit!');
-                return redirect()->to(base_url('/pengaturan/menu'));
-                
       
     }
 
@@ -134,8 +89,6 @@ class Menu extends BaseController{
         
     
     }
-
-   
 
 	
 }

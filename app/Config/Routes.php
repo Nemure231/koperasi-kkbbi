@@ -32,7 +32,7 @@ $routes->setAutoRoute(false);
 // route since we don't have to scan directories.
 
 $routes->get('/', 'Auth::index');
-$routes->add('/', 'Auth::index');
+$routes->post('login', 'Auth::login');
 $routes->post('logout', 'Auth::logout');
 $routes->add('blokir', 'Auth::blokir');
 

@@ -61,10 +61,13 @@ class Auth extends BaseController
 			],
 			
 		];
+		tampilan_login('user/user-login/v_login', 'user/user-login/v_js_login', $data);
+	}
 
-		if($this->request->getMethod() == 'post'){
-			$this->validation->setRules([
-				'email' => [
+	public function login(){
+
+		 if(!$this->validate([
+            		'email' => [
 					'label'  => 'Email',
 					'rules'  => 'required|valid_email',
 					'errors' => [
@@ -80,14 +83,11 @@ class Auth extends BaseController
 						'required' => 'Sandi harus diisi!'
 					]
 				]
-			]);
-		}
+            
+        ])) {
+            return redirect()->to(base_url('/'))->withInput();
+        }
 
-		if($this->validation->withRequest($this->request)->run() == FALSE){
-			tampilan_login('user/user-login/v_login', 'user/user-login/v_js_login', $data);
-		}else{
-			
-			
 			$email = $this->request->getPost('email');
 			$sandi = $this->request->getPost('sandi');
 			
@@ -196,11 +196,8 @@ class Auth extends BaseController
 
 			}
 				
-		}
 		
-		
-
-	}
+    }
 
 	// public function registrasi(){
 		

@@ -77,7 +77,7 @@ class Role extends BaseController{
             
         ])) {
             
-            return redirect()->to(base_url('/role'))->withInput();
+            return redirect()->to(base_url('/pengaturan/role'))->withInput();
 
         }
 
@@ -115,7 +115,7 @@ class Role extends BaseController{
                 
             ])) {
                 
-                return redirect()->to(base_url('/role'))->withInput();
+                return redirect()->to(base_url('/pengaturan/role'))->withInput();
 
             }
                 $id_role = $this->request->getPost('role_id');
