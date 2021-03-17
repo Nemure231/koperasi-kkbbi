@@ -60,6 +60,38 @@ class ModelSubmenu extends Model{
         return $submenu['data'];
     }
 
+    public function tambahSubmenu($menu_id, $menu_utama_id, $ikon){
+        $result = '';
+        $validasi = array('data' => '');
+        try {
+            $ambil_token = get_cookie('jwt_token');
+            $respon_ambil_submenu = $this->_client->request(
+                'POST',
+                'pengaturan/submenu/tambah'
+                .'?menu_id='.$menu_id
+                .'&menu_utama_id='.$menu_utama_id
+                .'&nama_submenu='. htmlspecialchars($this->request->getPost('judul'), ENT_QUOTES)
+                .'&url_submenu='. htmlspecialchars($this->request->getPost('url'), ENT_QUOTES)
+                .'&ikon_submenu='. $ikon
+                .'&status_submenu='. htmlspecialchars($this->request->getPost('is_active'), ENT_QUOTES),
+
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ],
+            )->getBody();
+            json_decode($respon_ambil_submenu, true);
+        } catch (ClientException $e) {
+            // echo Psr7\Message::toString($e->getRequest());
+            $validasi = json_decode($e->getResponse()->getBody(), true);
+        }
+
+        return $result = $validasi['data'];
+
+    }
+
+
 
 
 

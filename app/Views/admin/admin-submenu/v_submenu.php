@@ -114,9 +114,11 @@ width:100%!important;
 
             <?php endif; ?>
 
-<div class="invisible">
-  <?php echo $validation->listErrors(); ?>
-</div>
+            <div class="invisible">
+              <!-- <//?php echo $validation->listErrors(); ?> -->
+
+              <?php echo $session->getFlashdata('pesan_validasi_submenu')  ?>
+            </div>
           </div>
         </div>
       </div>
@@ -172,7 +174,7 @@ width:100%!important;
 
 								<option></option>
 								<?php foreach ($mmenu as $m):?>
-								<option value="<?php echo $m['id_menu']; ?>"><?php echo $m['menu']; ?></option>
+								<option value="<?php echo $m['id_menu']; ?>"><?php echo $m['nama_menu']; ?></option>
 								<?php endforeach;  ?>
 
 							</select>
@@ -195,6 +197,7 @@ width:100%!important;
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<div class="form-check">
                   <?php echo form_input($cecc); ?>
+                  <input class="form-check-input" name="is_active" type="hidden" value="2">
                   <!-- <//?php echo form_input($cecc); ?> -->
 								<!-- <input class="form-check-input" type="checkbox" value="1" name="is_active"
 									id="is_active" checked> -->
@@ -269,7 +272,7 @@ width:100%!important;
 
 								<option></option>
 								<?php foreach ($mmenu as $m):?>
-								<option value="<?php echo $m['id_menu']; ?>"><?php echo $m['menu']; ?></option>
+								<option value="<?php echo $m['id_menu']; ?>"><?php echo $m['nama_menu']; ?></option>
 								<?php endforeach;  ?>
 
 							</select>

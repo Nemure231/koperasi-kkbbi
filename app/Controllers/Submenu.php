@@ -8,6 +8,7 @@ use App\Models\Model_user;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
 use App\Models\ModelSubmenu;
+use App\Models\ModelMenuUtama;
 
 class Submenu extends BaseController{
 
@@ -22,6 +23,7 @@ class Submenu extends BaseController{
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
         $this->modelSubmenu = new ModelSubmenu();
+        $this->modelMenuUtama= new ModelMenuUtama();
 	}
 
 	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
@@ -32,21 +34,14 @@ class Submenu extends BaseController{
         $email = $this->session->get('email');
 
         $data = [
-
             
             'title' => ucfirst('Submenu'),
             'nama_menu_utama' => ucfirst('Menu'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-            'mmenu' => $this->model_user_menu->select('id_menu, menu')->asArray()->findAll(),
+            'mmenu' => $this->modelMenu->ambilMenu(),
             'menu_utama' => $this->model_menu_utama->select('id_menu_utama, nama_menu_utama, ikon_menu_utama')->asArray()->findAll(),
             'submenu'=> $this->modelSubmenu->ambilSubmenu(),
-            // $this->model_user_sub_menu->select('id_menu,menu, user_sub_menu.menu_id as menu_id, id_menu_utama,
-            //         nama_menu_utama, judul, url, icon, is_active, id_submenu, menu_utama_id')
-            //         ->asArray()
-            //         ->join('user_menu', 'user_menu.id_menu = user_sub_menu.menu_id')
-            //         ->join('menu_utama', 'menu_utama.id_menu_utama = user_sub_menu.menu_utama_id')
-            //         ->findAll(),
             'session' => $this->session,
             'validation' => $this->validation,
             'attr' => ['id' => 'formSubMenu', 'name'=>'formSubMenu'],
@@ -113,89 +108,77 @@ class Submenu extends BaseController{
     
 
     public function tambah(){
-        if(!$this->validate([
-            'judul' => [
-                'label'  => 'Nama Submenu',
-                'rules'  => 'required|is_unique[user_sub_menu.judul]',
-                'errors' => [
-                'required' => 'Nama submenu harus diisi!',
-                'is_unique' => 'Nama submenu sudah ada!'
-                ]
-            ],
-            'url' => [
-                    'label'  => 'Url',
-                    'rules'  => 'required|is_unique[user_sub_menu.url]',
-                    'errors' => [
-                    'required' => 'Url harus diisi!',
-                    'is_unique' => 'Url sudah ada!'
-                    ]
-            ],
-            'icon' => [
-                'label'  => 'Icon',
-                'rules'  => 'required',
-                'errors' => [
-                'required' => 'Icon harus diisi!'
-                ]
-            ],
-            'menu_id' => [
-                'label'  => 'Menu',
-                'rules'  => 'required',
-                'errors' => [
-                'required' => 'Menu harus dipilih!'
-                ]
-            ],
-            'menu_utama_id' => [
-                'label'  => 'Menu Utama',
-                'rules'  => 'required',
-                'errors' => [
-                'required' => 'Menu Utama harus dipilih!'
-                ]
-            ]
+        // if(!$this->validate([
+        //     'judul' => [
+        //         'label'  => 'Nama Submenu',
+        //         'rules'  => 'required',
+        //         'errors' => [
+        //         'required' => 'Nama submenu harus diisi!'
+        //         ]
+        //     ],
+        //     'url' => [
+        //             'label'  => 'Url',
+        //             'rules'  => 'required',
+        //             'errors' => [
+        //             'required' => 'Url harus diisi!',
+        //             ]
+        //     ],
+        //     'icon' => [
+        //         'label'  => 'Icon',
+        //         'rules'  => 'required',
+        //         'errors' => [
+        //         'required' => 'Icon harus diisi!'
+        //         ]
+        //     ],
+        //     'menu_id' => [
+        //         'label'  => 'Menu',
+        //         'rules'  => 'required',
+        //         'errors' => [
+        //         'required' => 'Menu harus dipilih!'
+        //         ]
+        //     ],
+        //     'menu_utama_id' => [
+        //         'label'  => 'Menu Utama',
+        //         'rules'  => 'required',
+        //         'errors' => [
+        //         'required' => 'Menu Utama harus dipilih!'
+        //         ]
+        //     ]
             
-        ])) {
+        // ])) {
             
-            return redirect()->to(base_url('/pengaturan/submenu'))->withInput();
-
-        }
-            $isaktif = $this->request->getPost('is_active');
-
-            if(!$isaktif){
-                $isaktif = 2;
-            }
+        //     return redirect()->to(base_url('/pengaturan/submenu'))->withInput();
+        // }
+            $ikon = htmlspecialchars($this->request->getPost('icon'), ENT_QUOTES);
 
             $mei = $this->request->getPost('menu_id');
-
-                if (is_numeric($mei)){
-                    $me = $mei;
-                }else{
-                    $this->model_user_menu->set('menu', $mei)->insert();
-                    $me = $this->db->insertID();
-            
-                }
-
             $menu_utama = $this->request->getPost('menu_utama_id');
 
-            if (is_numeric($menu_utama)){
-                $mu = $menu_utama;
+            if (is_numeric($mei)){
+                $menu_id = $mei;
             }else{
-                $this->model_menu_utama->set('nama_menu_utama', $menu_utama)->insert();
-                $mu = $this->db->insertID();
+                $menu_id = $this->modelMenu->tambahMenuDariSubmenu($mei);
+                $this->session->setFlashdata('pesan_validasi_submenu',  '<div class="errors">'.$menu_id['nama_menu'][0].'</div>');
+                return redirect()->to(base_url('/pengaturan/submenu'));
+                
+            }
+            if (is_numeric($menu_utama)){
+                $menu_utama_id = $menu_utama;
+            }else{
+
+                $menu_utama_id = $this->modelMenuUtama->tambahMenuUtamaDariSubmenu($menu_utama, $menu_id, $ikon);
+                $this->session->setFlashdata('pesan_validasi_submenu',  '<div class="errors">'.$menu_utama_id['nama_menu_utama'][0].'</div>');
+                return redirect()->to(base_url('/pengaturan/submenu'));
             }
 
-            $data = array(
-                'menu_id' => htmlspecialchars($me, ENT_QUOTES),
-                'judul' => htmlspecialchars($this->request->getPost('judul'), ENT_QUOTES),
-                'url' => htmlspecialchars($this->request->getPost('url'), ENT_QUOTES),
-                'icon' => htmlspecialchars($this->request->getPost('icon'), ENT_QUOTES),
-                'is_active' => $isaktif,
-                'menu_utama_id' => htmlspecialchars($mu, ENT_QUOTES),
-            );
-
-            $this->model_user_sub_menu->insert($data);
-        
-            $this->session->setFlashdata('pesan_submenu', 'Menu baru berhasil ditambahkan!');
-            return redirect()->to(base_url('/pengaturan/submenu'));
-            
+            $validasi = $this->modelSubmenu->tambahSubmenu($menu_id, $menu_utama_id, $ikon);
+            if($validasi){
+                $this->session->setFlashdata('pesan_validasi_submenu',  '<div class="errors">'.$validasi['nama_submenu'][0].'</div>');
+                return redirect()->to(base_url('/pengaturan/submenu'));
+            }else{
+                $this->session->setFlashdata('pesan_submenu', 'Menu baru berhasil ditambahkan!');
+                return redirect()->to(base_url('/pengaturan/submenu'));
+            }
 
     }
 
