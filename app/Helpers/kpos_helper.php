@@ -30,6 +30,14 @@ use App\Models\Model_menu_utama;
             
         }
 
+        function array_help($Array){
+            $List = []; 
+            foreach($Array as $Key=>$Arr){
+                $List = $Arr; //here $List is always getting overwritten by $Arr
+            }
+            return $List; //when loop finishes, final $Arr is in $List and it is returned
+        }
+
 
         // function is_logged_in(){
 

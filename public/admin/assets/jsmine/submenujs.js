@@ -43,7 +43,7 @@ if (flashDataHapus) {
 
 const flashDataSalah = $('.errors').html();
 
-if (flashDataSalah) {
+if (flashDataSalah != 0) {
 
    Swal.fire({
       title: 'Gagal',

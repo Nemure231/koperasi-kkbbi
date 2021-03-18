@@ -37,6 +37,7 @@ class Submenu extends BaseController{
             
             'title' => ucfirst('Submenu'),
             'nama_menu_utama' => ucfirst('Menu'),
+            // 'ses' => $this->modelSubmenu->tambahSubmenu(),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'mmenu' => $this->modelMenu->ambilMenu(),
@@ -237,6 +238,10 @@ class Submenu extends BaseController{
                 //       .'<li>'.$val[$s]['url_submenu'].'</li>'
                 //       .'</div>';
                 //   }
+
+                // $data = [
+                //     'validasi' => $validasi
+                // ];
 
                 $this->session->setFlashdata('pesan_validasi_submenu',  $validasi);
                 // .'<li>'.$nama.'</li>'

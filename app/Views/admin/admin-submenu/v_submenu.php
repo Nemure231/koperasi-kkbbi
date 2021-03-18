@@ -114,67 +114,20 @@ width:100%!important;
 
             <?php endif; ?>
 
-            <!-- <div class="invisible"> -->
-              <!-- <//?php echo $validation->listErrors(); ?> -->
+            <div class="invisible">
+              <div class="errors">
+
 
               <?php $ses = $session->getFlashdata('pesan_validasi_submenu');
-                
-                //   dd($ses);
-                // foreach ((array)$ses['data'] as $s) {
-                //   echo '<div class="errors text-danger">'
-                //     .'<li>'.$s[0].'</li>'
-                //     .'<li>'.$s[1].'</li>'
-                //     .'<li>'.$s[2].'</li>'
-                //     .'<li>'.$s[3].'</li>'
-                //     .'<li>'.$s[4].'</li>'
-                //     .'<li>'.$s[5].'</li>'
-                //     .'</div>';
-                //   }
 
-              if ($ses)
-              {
-                  foreach ($ses as $s)
-                  {
-                    
-                    echo '<div class="errors text-danger">'
-                      .'<li>'.$s['nama_submenu'].'</li>'
-                      .'<li>'.$s['menu_id'].'</li>'
-                      .'<li>'.$s['menu_utama_id'].'</li>'
-                      .'<li>'.$s['ikon_submenu'].'</li>'
-                      .'<li>'.$s['url_submenu'].'</li>'
-                      .'</div>';
-                  }
+              if($ses){
+                  echo implode("<br>",$ses ?? [] );
+              }else{
+                echo 0;
               }
-
-              // foreach($ses[0] as $err){
-              //   echo '<div class="errors text-danger">'
-              //   .'<li>'.$ses['nama_submenu'].'</li>'
-              //   .'<li>'.$ses['menu_id'].'</li>'
-              //   .'<li>'.$ses['menu_utama_id'].'</li>'
-              //   .'<li>'.$ses['ikon_submenu'].'</li>'
-              //   .'<li>'.$ses['url_submenu'].'</li>'
-              //   .'</div>';
-              // }
-
-
-
-              // if($ses){
-
-
-              // echo '<div class="errors text-danger">'
-              // .'<li>'.$ses['nama_submenu'][0].'</li>'
-              // .'<li>'.$ses['menu_id'][0].'</li>'
-              // .'<li>'.$ses['menu_utama_id'][0].'</li>'
-              // .'<li>'.$ses['ikon_submenu'][0].'</li>'
-              // .'<li>'.$ses['url_submenu'][0].'</li>'
-              // .'</div>';
-
-
-              // }else {
-              //   echo '';
-              // }
               ?>
-            <!-- </div> -->
+              </div>
+            </div>
           </div>
         </div>
       </div>
