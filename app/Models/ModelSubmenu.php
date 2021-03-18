@@ -91,6 +91,50 @@ class ModelSubmenu extends Model{
 
     }
 
+    public function ubahSubmenu($id_submenu){
+        $result = '';
+        $validasi = array('data' => '');
+        try {
+            $ambil_token = get_cookie('jwt_token');
+            $respon_ambil_submenu = $this->_client->request(
+                'PUT',
+                'pengaturan/submenu/ubah/'.$id_submenu
+                .'?menu_id='.$this->request->getPost('menu_idE')
+                .'&menu_utama_id='.$this->request->getPost('menu_utama_idE')
+                .'&nama_submenu='. htmlspecialchars($this->request->getPost('judulE'), ENT_QUOTES)
+                .'&url_submenu='. htmlspecialchars($this->request->getPost('urlE'), ENT_QUOTES)
+                .'&ikon_submenu='.  htmlspecialchars($this->request->getPost('iconE'), ENT_QUOTES)
+                .'&status_submenu='. htmlspecialchars($this->request->getPost('is_activeE'), ENT_QUOTES),
+
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ],
+            )->getBody();
+            json_decode($respon_ambil_submenu, true);
+        } catch (ClientException $e) {
+            // echo Psr7\Message::toString($e->getRequest());
+            $validasi = json_decode($e->getResponse()->getBody(), true);
+        }
+
+        return $result = $validasi['data'];
+
+    }
+
+    public function hapusSubmenu($id_submenu){
+        $ambil_token = get_cookie('jwt_token');
+       
+        $respon_ambil_user = $this->_client->request(
+            'DELETE',
+            'pengaturan/submenu/hapus/'.$id_submenu,
+            ['headers' => 
+                [
+                'Authorization' => "Bearer {$ambil_token}"
+                ]
+            ],
+        );
+    }
 
 
 

@@ -96,10 +96,22 @@ $(document).ready(function () {
          dropdownParent: $('#modalEditSubMenu'),
          tags: true
       });
+
       if(is_active == 1){
          $('#is_activeE').prop('checked', true);
       }
+   });
 
+   $('.is_activeE').click(function () {
+      var cek = this.checked;
+      
+      if(cek == true){
+         $('#is_activeE').val(1);
+      }
+
+      if(cek == false){
+         $('#is_activeE').val(2);
+      }
 
    });
 

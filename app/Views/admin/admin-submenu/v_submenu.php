@@ -303,6 +303,7 @@ width:100%!important;
 
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<div class="form-check">
+              <!-- <input class="form-check-input" name="is_activeE" type="hidden" value="2"> -->
                   <?php echo form_input($ceccE); ?>
                   <!-- <//?php echo form_input($cecc); ?> -->
 								<!-- <input class="form-check-input" type="checkbox" value="1" name="is_active"
