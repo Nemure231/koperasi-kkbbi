@@ -1,12 +1,12 @@
 
 <link rel="stylesheet"  type="text/css" href="<?php echo base_url().'/admin/assets/css/animate.min.css' ?>">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/css/datatabel-boot4.min.css' ?>">
-<!-- <style type="text/css">
-	#menu-error {
-		color: #dc3545;
-  //}
+<style type="text/css">
+.select2 {
+width:100%!important;
+}
   
-</style> -->
+</style>
 <!-- Main Content -->
 <div  class="flash-data" data-flashdata="<?php echo $session->getFlashdata('pesan_menu_utama')  ?>"></div>
             <div  class="flash-data-edit" data-flashdata="<?php echo $session->getFlashdata('pesan_edit_menu_utama')  ?>"></div>
@@ -36,6 +36,7 @@
                     <tr>
                       <th class="text-center">#</th>
                       <th>Nama</th>
+                      <th>Menu</th>
                       <th>Ikon</th>
                       <th>Opsi</th>
                     </tr>
@@ -47,9 +48,10 @@
                     <tr id="menu_id_<?php echo $m['id_menu_utama'];?>">
                       <td><?php echo $i; ?></td>
                       <td><?php echo $m['nama_menu_utama']; ?></td>
+                      <td><?php echo $m['nama_menu']; ?></td>
                       <td><?php echo $m['ikon_menu_utama']; ?></td>
                       <td>
-                        <a href="javascript:void(0)" class="edit-menu-utama btn btn-warning mr-1" data-id="<?php echo $m['id_menu_utama'];?>" data-nama-menu-utama="<?php echo $m['nama_menu_utama'];?>" data-ikon-menu-utama="<?php echo $m['ikon_menu_utama'];?>" ><i class="fas fa-pencil-alt"></i></a>
+                        <a href="javascript:void(0)" class="edit-menu-utama btn btn-warning mr-1" data-id="<?php echo $m['id_menu_utama'];?>" data-nama-menu-utama="<?php echo $m['nama_menu_utama'];?>" data-menu-id="<?php echo $m['menu_id'];?>" data-ikon-menu-utama="<?php echo $m['ikon_menu_utama'];?>" ><i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" class="hapus-menu-utama btn btn-danger" data-id="<?php echo $m['id_menu_utama'];?>" ><i class="fas fa-trash"></i></a>
                       </td>
                     </tr>
@@ -83,7 +85,10 @@
                 </div>
                 <?php endif; ?>
                     <div class="invisible">
-                <?php echo $validation->listErrors(); ?>
+                    <div class="menu_utama_error">
+                      <?php $ses = $session->getFlashdata('pesan_validasi_menu_utama');
+                      echo implode_helper($ses);?>
+                    </div>
               </div>
 
 
@@ -97,7 +102,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalMenuUtama" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalMenuUtama" role="dialog" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header bg-primary">
@@ -112,12 +117,26 @@
 				<div class="modal-body">
 
 					<div class="form-group">
+          <label>Nama Menu Utama</label>
             <?php echo form_input($nama_menu_utama); ?>
 					</div>
 
           <div class="form-group">
+          <label>IKon Menu Utama</label>
             <?php echo form_input($ikon_menu_utama); ?>
 					</div>
+
+          <div class="form-group">
+							<label>Menu</label>
+							<select class="custom-select" name="menu_id" id="menu_id">
+
+								<option></option>
+								<?php foreach ($mmenu as $m):?>
+								<option value="<?php echo $m['id_menu']; ?>"><?php echo $m['nama_menu']; ?></option>
+								<?php endforeach;  ?>
+
+							</select>
+						</div>
 
 				</div>
 				<div class="modal-footer">
@@ -132,7 +151,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalEditMenuUtama" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalEditMenuUtama" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -157,10 +176,23 @@
           </div>
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
-              <label>IKon Menu Utama</label>
+              <label>Ikon Menu Utama</label>
               <?php echo form_input($ikon_menu_utamaE); ?>
             </div>
           </div>
+          <div class="col-lg-12">
+          <div class="form-group col-sm-12 col-md-12 col-lg-12">
+							<label>Menu</label>
+							<select class="custom-select" name="menu_idE" id="menu_idE">
+
+								<option></option>
+								<?php foreach ($mmenu as $m):?>
+								<option value="<?php echo $m['id_menu']; ?>"><?php echo $m['nama_menu']; ?></option>
+								<?php endforeach;  ?>
+
+							</select>
+						</div>
+            </div>
         </div>
 
 
