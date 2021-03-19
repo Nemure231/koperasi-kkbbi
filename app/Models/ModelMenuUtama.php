@@ -8,7 +8,6 @@ use GuzzleHttp\Exception\ClientException;
 class ModelMenuUtama extends Model{
 
     public function __construct(){
-        $this->db = \Config\Database::connect();
         $this->session = \Config\Services::session();
         $this->request = \Config\Services::request();
         $this->_client = new Client([
@@ -16,55 +15,29 @@ class ModelMenuUtama extends Model{
 		]);
     }
 
-
-    // public function tambahMenuUtamaDariSubmenu($nama_menu_utama, $menu_id, $ikon_menu_utama){
-       
-    //         $ambil_token = get_cookie('jwt_token');
-    //         $respon_ambil_menu_utama = $this->_client->request(
-    //             'POST',
-    //             'pengaturan/menu_utama/tambah/dari-submenu'
-    //             .'?menu_id='.$menu_id
-    //             .'&nama_menu_utama='. htmlspecialchars($nama_menu_utama, ENT_QUOTES)
-    //             .'&ikon_menu_utama='. htmlspecialchars($ikon_menu_utama, ENT_QUOTES),
-    //             ['headers' => 
-    //                 [
-    //                 'Authorization' => "Bearer {$ambil_token}"
-    //                 ]
-    //             ],
-    //         )->getBody();
-    //         $menu_utama = json_decode($respon_ambil_menu_utama, true);
-            
-    //     $result = $menu_utama['data'];
-    //     return $result;
-
-    // }
-
-    public function tambahMenuUtamaDariSubmenu($nama_menu_utama, $menu_id, $ikon_menu_utama){
-        $result = '';
-        $validasi = array('data' => '');
+    public function ambilMenuUtamaUntukSidebar($menu_id){
+        $ambil_token = get_cookie('jwt_token');
+        $res_menu_utama = json_encode(['data' => '']);
         try {
-            $ambil_token = get_cookie('jwt_token');
             $respon_ambil_menu_utama = $this->_client->request(
-                'POST',
-                'pengaturan/menu_utama/tambah/dari-submenu'
-                .'?menu_id='.$menu_id
-                .'&nama_menu_utama='. htmlspecialchars($nama_menu_utama, ENT_QUOTES)
-                .'&ikon_menu_utama='. htmlspecialchars($ikon_menu_utama, ENT_QUOTES),
+                'GET',
+                'pengaturan/menu_utama/untuk-sidebar/'.$menu_id,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
                     ]
-                ],
-            )->getBody();
-            json_decode($respon_ambil_menu_utama, true);
+                ]
+            );
+            $res_menu_utama = $respon_ambil_menu_utama->getBody();
         } catch (ClientException $e) {
-            // echo Psr7\Message::toString($e->getRequest());
-            $validasi = json_decode($e->getResponse()->getBody(), true);
+            
         }
 
-        return $result = $validasi['data'];
-
+        $menu_utama = json_decode($res_menu_utama, true);
+        return $menu_utama['data'];
     }
+
+
 
     
 }

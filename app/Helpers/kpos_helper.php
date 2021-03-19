@@ -2,7 +2,7 @@
 
 use App\Models\ModelSubmenu;
 use App\Models\Model_user_access_menu;
-use App\Models\Model_menu_utama;
+use App\Models\ModelMenuUtama;
 
     
         function check_akses($role_id, $menu_id){
@@ -22,11 +22,8 @@ use App\Models\Model_menu_utama;
         }
 
         function main_menu_conex($menuId){
-            $model = new Model_menu_utama();
-            return $model->select('nama_menu_utama, id_menu_utama, ikon_menu_utama')->asArray()
-                    ->join('user_menu', 'user_menu.id_menu = menu_utama.menu_id')
-                    ->where('menu_utama.menu_id', $menuId)
-                    ->findAll();
+            $model = new ModelMenuUtama();
+            return $model->ambilMenuUtamaUntukSidebar($menuId);
             
         }
 
