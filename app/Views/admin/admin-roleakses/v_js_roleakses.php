@@ -11,6 +11,9 @@
 		const menuId = $(this).data('menu');
 		const roleId = $(this).data('role');
 
+		var csrfName = $('#csrf_akses_role').attr('name'); // CSRF Token name
+         var csrfHash = $('#csrf_akses_role').val(); 
+
 		$.ajax({
 			url: "<?php echo base_url().'/pengaturan/role/akses/ubah'; ?>",
 			type: 'post',
@@ -18,6 +21,7 @@
                'X-Requested-With': 'XMLHttpRequest'
             },
 			data: {
+				[csrfName]: csrfHash,
 				menuId: menuId,
 				roleId: roleId
 			},

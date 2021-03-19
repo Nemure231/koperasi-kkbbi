@@ -2,12 +2,12 @@
 
 use App\Models\ModelSubmenu;
 use App\Models\ModelMenuUtama;
-use App\Models\ModelAksesMenu;
+use App\Models\ModelAksesRole;
     
         function check_akses($role_id, $menu_id){
-            $model = new ModelAksesMenu();
+            $model = new ModelAksesRole();
 
-            $result= $model->cekCentangAksesMenu($role_id, $menu_id);
+            $result= $model->cekCentangAksesRole($role_id, $menu_id);
 
             if ($result > 0) {
                 return 'checked="checked"';

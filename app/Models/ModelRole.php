@@ -39,6 +39,30 @@ class ModelRole extends Model{
         return $role['data'];
     }
 
+
+    public function ambilRoleUntukCekCentang(){
+        $id_role = $this->session->get('role_id');
+        $ambil_token = get_cookie('jwt_token');
+        $res_role = json_encode(['data' => '']);
+        try {
+            $respon_ambil_role = $this->_client->request(
+                'GET',
+                'pengaturan/role/cek-centang/'.$id_role,
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_role = $respon_ambil_role->getBody();
+        } catch (ClientException $e) {
+            
+        }
+
+        $role = json_decode($res_role, true);
+        return $role['data'];
+    }
+
     public function tambahRole(){
         $result = '';
         $validasi = array('data' => '');

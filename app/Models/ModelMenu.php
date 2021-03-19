@@ -62,6 +62,28 @@ class ModelMenu extends Model{
         return $user['data'];
     }
 
+    public function ambilMenuUntukDaftarRoleAkses(){
+        $ambil_token = get_cookie('jwt_token');
+        $res_menu = json_encode(['data' => '']);
+        try {
+            $respon_ambil_menu = $this->_client->request(
+                'GET',
+                'pengaturan/menu/untuk-role-akses',
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_menu = $respon_ambil_menu->getBody();
+        } catch (ClientException $e) {
+            
+        }
+
+        $user = json_decode($res_menu, true);
+        return $user['data'];
+    }
+
     public function tambahMenu(){
         $result = '';
         $validasi = array('data' => '');

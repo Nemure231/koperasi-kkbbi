@@ -5,7 +5,7 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
 
  
-class ModelAksesMenu extends Model{
+class ModelAksesRole extends Model{
 
     public function __construct(){
         $this->db = \Config\Database::connect();
@@ -17,7 +17,7 @@ class ModelAksesMenu extends Model{
     }
 
 
-    public function cekCentangAksesMenu($role_id, $menu_id){
+    public function cekCentangAksesRole($role_id, $menu_id){
         $ambil_token = get_cookie('jwt_token');
         $res_akses = json_encode(['data' => '']);
         try {
@@ -37,6 +37,32 @@ class ModelAksesMenu extends Model{
 
         $akses = json_decode($res_akses, true);
         return $akses['data'];
+    }
+
+    public function ubahAksesRole($role_id, $menu_id){
+        // $result = '';
+        // $validasi = array('data' => '');
+        // try {
+            $ambil_token = get_cookie('jwt_token');
+            $respon_akses_role = $this->_client->request(
+                'POST',
+                'pengaturan/role/akses/ubah/'.$role_id.'/'.$menu_id
+                .'?role_id='.$this->request->getPost('roleId')
+                .'&menu_id='.$this->request->getPost('menuId'),
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ],
+            );
+            // ->getBody();
+        //     json_decode($respon_akses_role, true);
+        // } catch (ClientException $e) {
+        //     // echo Psr7\Message::toString($e->getRequest());
+        //     $validasi = json_decode($e->getResponse()->getBody(), true);
+        // }
+
+        // return $result = $validasi['data'];
     }
 
 }

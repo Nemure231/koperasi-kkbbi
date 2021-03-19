@@ -17,7 +17,6 @@ class Model_user_access_menu extends Model
 
   public function UbahRole($role_id, $menu_id){
         
-        
     $builder = $this->db->table('user_access_menu');
     $menu_id = $this->request->getPost('menuId');
     $role_id = $this->request->getPost('roleId');

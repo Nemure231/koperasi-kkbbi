@@ -4,12 +4,13 @@
 <div class="main-content">
   <section class="section">
     <div class="section-header">
-      <h1><?php echo esc($title).' - '.''.$idrole['role'].'' ?> </h1>
+      <h1><?php echo esc($title).' - '.''.$idrole['nama_role'].'' ?> </h1>
     </div>
     <div class="section-body">
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
           <div class="card card-primary">
+          <input type="hidden" id="csrf_akses_role" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
 
 
           <?php if($menurole):  ?>
@@ -31,7 +32,7 @@
                     <?php foreach($menurole as $mr):?>
                     <tr>
                       <td><?php echo $i; ?></td>
-                      <td><?php echo $mr['menu'];  ?></td>
+                      <td><?php echo $mr['nama_menu'];  ?></td>
                       <td>
                       <div class="form-group">
                           <div class="control-label"></div>
