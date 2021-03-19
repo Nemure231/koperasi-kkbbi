@@ -1,7 +1,6 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_user_menu;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
 
@@ -10,8 +9,6 @@ class Pengguna extends BaseController{
 	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
 
 	public function __construct(){
-
-		$this->model_user_menu = new Model_user_menu();
 		$this->modelUser = new ModelUser();
 		$this->modelMenu = new ModelMenu();
 		$this->request = \Config\Services::request();

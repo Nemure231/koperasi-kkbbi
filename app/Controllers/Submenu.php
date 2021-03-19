@@ -1,10 +1,7 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_user_menu;
-use App\Models\Model_user_sub_menu;
 use App\Models\Model_menu_utama;
-use App\Models\Model_user;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
 use App\Models\ModelSubmenu;
@@ -13,11 +10,7 @@ use App\Models\ModelMenuUtama;
 class Submenu extends BaseController{
 
     public function __construct(){
-        $this->db = \Config\Database::connect();
-        $this->model_user = new Model_user();
         $this->model_menu_utama = new Model_menu_utama();
-        $this->model_user_menu = new Model_user_menu();
-        $this->model_user_sub_menu = new Model_user_sub_menu();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
@@ -30,14 +23,11 @@ class Submenu extends BaseController{
 
 
     public function index(){
-		$role = $this->session->get('role_id');
-        $email = $this->session->get('email');
 
         $data = [
             
             'title' => ucfirst('Submenu'),
             'nama_menu_utama' => ucfirst('Menu'),
-            // 'ses' => $this->modelSubmenu->tambahSubmenu(),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'mmenu' => $this->modelMenu->ambilMenu(),
@@ -124,110 +114,6 @@ class Submenu extends BaseController{
     }
 
     public function ubah(){
-       
-        // $old_judul =  $this->request->getPost('judul_old');
-        // $new_judul =  $this->request->getPost('judulE');
-
-        // $old_url =  $this->request->getPost('url_old');
-        // $new_url =  $this->request->getPost('urlE');
-
-        // $rules_judul = 'required';
-        // $rules_url = 'required';
-
-        // if($old_judul != $new_judul){
-        //     $rules_judul =  'required|is_unique[user_sub_menu.judul]';
-        // }
-
-        // if($old_url != $new_url){
-        //     $rules_url =  'required|is_unique[user_sub_menu.url]';
-        // }
-
-        //     if(!$this->validate([
-        //         'judulE' => [
-        //             'label'  => 'Nama Submenu',
-        //             'rules'  => $rules_judul,
-        //             'errors' => [
-        //             'required' => 'Nama submenu harus diisi!',
-        //             'is_unique' => 'Nama submenu sudah ada!'
-        //             ]
-        //         ],
-        //         'urlE' => [
-        //                 'label'  => 'Url',
-        //                 'rules'  => $rules_url,
-        //                 'errors' => [
-        //                 'required' => 'Url harus diisi!',
-        //                 'is_unique' => 'Url sudah ada!'
-        //                 ]
-        //         ],
-        //         'iconE' => [
-        //             'label'  => 'Icon',
-        //             'rules'  => 'required',
-        //             'errors' => [
-        //             'required' => 'Icon harus diisi!'
-        //             ]
-        //         ],
-        //         'menu_idE' => [
-        //             'label'  => 'Menu',
-        //             'rules'  => 'required',
-        //             'errors' => [
-        //             'required' => 'Menu harus dipilih!'
-        //             ]
-        //         ],
-        //         'menu_utama_idE' => [
-        //             'label'  => 'Menu Utama',
-        //             'rules'  => 'required',
-        //             'errors' => [
-        //             'required' => 'Menu Utama harus dipilih!'
-        //             ]
-        //         ]
-                
-        //     ])) {
-                
-        //         return redirect()->to(base_url('/pengaturan/submenu'))->withInput();
-        //     }
-
-            //     $isaktif = $this->request->getPost('is_activeE');
-
-            //     if(!$isaktif){
-            //         $isaktif = 2;
-            //     }else{
-            //         $isaktif = 1;
-            //     }
-
-            //     $id = $this->request->getPost('submenu_id');
-
-
-            //     $mei = $this->request->getPost('menu_idE');
-
-            //     if (is_numeric($mei)){
-            //         $me = $mei;
-            //     }else{
-            //         $this->model_user_menu->set('menu', $mei)->insert();
-            //         $me = $this->db->insertID();
-            
-            //     }
-
-            //     $menu_utama = $this->request->getPost('menu_utama_idE');
-
-            // if (is_numeric($menu_utama)){
-            //     $mu = $menu_utama;
-            // }else{
-            //     $this->model_menu_utama->set('nama_menu_utama', $menu_utama)->insert();
-            //     $mu = $this->db->insertID();
-            // }
-
-            //     $data = array(
-            //         'menu_id' => htmlspecialchars($me, ENT_QUOTES),
-            //         'judul' => htmlspecialchars($this->request->getPost('judulE'), ENT_QUOTES),
-            //         'url' => htmlspecialchars($this->request->getPost('urlE'), ENT_QUOTES),
-            //         'icon' => htmlspecialchars($this->request->getPost('iconE'), ENT_QUOTES),
-            //         'is_active' => $isaktif,
-            //         'menu_utama_id' => htmlspecialchars($mu, ENT_QUOTES)
-            //     );
-
-            //     $this->model_user_sub_menu->update($id, $data);
-            //     $this->session->setFlashdata('pesan_edit_submenu', 'Submenu baru berhasil diedit!');
-            //     return redirect()->to(base_url('/pengaturan/submenu'));
 
             $id_submenu = $this->request->getPost('submenu_id');
 

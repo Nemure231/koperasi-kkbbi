@@ -43,9 +43,9 @@
                     <?php foreach($role as $r):?>
                     <tr>
                       <td><?php echo $i; ?></td>
-                      <td><?php echo $r['role']; ?></td>
+                      <td><?php echo $r['nama_role']; ?></td>
                       <td>
-                        <a href="javascript:void(0)" class="edit-role btn btn-warning mr-1" data-id="<?php echo $r['id_role'];?>" data-role="<?php echo $r['role'];?>" ><i class="fas fa-pencil-alt"></i></a>
+                        <a href="javascript:void(0)" class="edit-role btn btn-warning mr-1" data-id="<?php echo $r['id_role'];?>" data-role="<?php echo $r['nama_role'];?>" ><i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" class="hapus-role btn btn-danger mr-1" data-id="<?php echo $r['id_role'];?>" ><i class="fas fa-trash"></i></a>
                         <a href="<?php echo base_url().'/pengaturan/role/akses/'. $r['id_role']; ?>" class="btn btn-info"><i class="fas fa-cogs"></i></a>
 
@@ -85,7 +85,10 @@
 
             <?php endif; ?>
             <div class="invisible">
-  <?php echo $validation->listErrors(); ?>
+            <div class="role_error">
+                      <?php $ses = $session->getFlashdata('pesan_validasi_role');
+                      echo implode_helper($ses);?>
+                    </div>
 </div>
 
 

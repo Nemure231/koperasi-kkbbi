@@ -82,9 +82,12 @@
                     <?php endif; ?>
                     <div class="invisible">
                  
-                 <?php echo $session->getFlashdata('pesan_validasi_menu');  ?>
+                    <div class="menu_error">
+                      <?php $ses = $session->getFlashdata('pesan_validasi_menu');
+                      echo implode_helper($ses);?>
+                    </div>
                 
-                </div>
+                    </div>
 
 
 

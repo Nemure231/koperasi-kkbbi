@@ -59,7 +59,7 @@ class Menu extends BaseController{
 
         $validasi = $this->modelMenu->tambahMenu();
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_menu',  '<div class="errors">'.$validasi['nama_menu'][0].'</div>');
+            $this->session->setFlashdata('pesan_validasi_menu',  $validasi);
             return redirect()->to(base_url('/pengaturan/menu'));
         }else{
             $this->session->setFlashdata('pesan_menu', 'Menu baru berhasil ditambahkan!');
@@ -72,10 +72,10 @@ class Menu extends BaseController{
         $validasi = $this->modelMenu->ubahMenu($id_menu);
 
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_menu',  '<div class="errors">'.$validasi['nama_menu'][0].'</div>');
+            $this->session->setFlashdata('pesan_validasi_menu',  $validasi);
             return redirect()->to(base_url('/pengaturan/menu'));
         }else{
-            $this->session->setFlashdata('pesan_edit_menu', 'Menu baru berhasil diubah!');
+            $this->session->setFlashdata('pesan_edit_menu', 'Menu berhasil diubah!');
             return redirect()->to(base_url('/pengaturan/menu'));
         }
       

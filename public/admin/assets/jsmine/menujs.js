@@ -41,9 +41,9 @@ if (flashDataHapus) {
 }
 
 
-const flashDataSalah = $('.errors').html();
+const flashDataSalah = $('.menu_error').html();
 
-if (flashDataSalah) {
+if (flashDataSalah != 0) {
 
    Swal.fire({
       title: 'Gagal',
