@@ -30,48 +30,13 @@ use App\Models\Model_menu_utama;
             
         }
 
-        function array_help($Array){
-            $List = []; 
-            foreach($Array as $Key=>$Arr){
-                $List = $Arr; //here $List is always getting overwritten by $Arr
+        function implode_helper($array){
+            if($array){
+                return implode("<br>",$array ?? [] );
+            }else{
+                return 0;
             }
-            return $List; //when loop finishes, final $Arr is in $List and it is returned
         }
-
-
-        // function is_logged_in(){
-
-        //         $role_id = $session->get('role_id');
-        //         $uri = $request->uri;
-        //         $menu = $uri->getSegment(1);
-
-        //         $db = \Config\Database::connect();
-    
-        //         $queryMenu = $db->table('user_menu')->getWhere(['menu' => $menu])->getRowArray();
-        //         $menu_id = $queryMenu['id_menu'];
-    
-        //         return $userAccess = $db->table('user_access_menu')->where([
-        //             'role_id' => $role_id,
-        //             'menu_id' => $menu_id
-        //         ])->countAllResults();
-    
-        //         // if ($userAccess < 1) {
-        //         //     return redirect()->to(base_url('blokir'));
-        //         // }
-    
-        // }
-
-        // function emil(){
-
-        //     $session = \Config\Services::session();
-            
-        //     $email = $session->get('email');
-        //     if (!$email){
-        //         return redirect()->to(base_url('/'));
-        //     }
-        // }
-    
-
    
         //special_data is such a session and validation
         function tampilan_login($center_html, $javascript_page, $data=[]){

@@ -120,11 +120,7 @@ width:100%!important;
 
               <?php $ses = $session->getFlashdata('pesan_validasi_submenu');
 
-              if($ses){
-                  echo implode("<br>",$ses ?? [] );
-              }else{
-                echo 0;
-              }
+                echo implode_helper($ses);
               ?>
               </div>
             </div>
