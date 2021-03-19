@@ -1,15 +1,13 @@
 <?php 
 
 use App\Models\ModelSubmenu;
-use App\Models\Model_user_access_menu;
 use App\Models\ModelMenuUtama;
-
+use App\Models\ModelAksesMenu;
     
         function check_akses($role_id, $menu_id){
-            $model = new Model_user_access_menu();
+            $model = new ModelAksesMenu();
 
-            $result=$model->select('role_id, menu_id')->where(['role_id' => $role_id, 'menu_id' => $menu_id])
-                    ->countAllResults();
+            $result= $model->cekCentangAksesMenu($role_id, $menu_id);
 
             if ($result > 0) {
                 return 'checked="checked"';
