@@ -92,7 +92,11 @@
             </div>
             <?php endif; ?>
             <div class="invisible">
-                <?php echo $validation->listErrors(); ?>
+            <div class="satuan_error">
+                      <?php $ses = $session->getFlashdata('pesan_validasi_satuan');
+                      echo implode_helper($ses);?>
+                    </div>
+              </div>
               </div>
 
 

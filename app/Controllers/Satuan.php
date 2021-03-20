@@ -3,40 +3,31 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\Model_satuan;
-use App\Models\Model_user_menu;
-use App\Models\Model_user;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
+use App\Models\ModelSatuan;
 
 class Satuan extends BaseController
 {
 	
 	public function __construct(){
-        $this->model_user_menu = new Model_user_menu();
-		$this->model_user = new Model_user();
-        $this->model_satuan = new Model_satuan();
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
+        $this->modelSatuan = new ModelSatuan();
 	}
 
 	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
 
 	public function index(){
 		
-		$role = $this->session->get('role_id');
-		$email = $this->session->get('email');
-        
-
         $data = [
             'title' => ucfirst('Daftar Satuan'),
             'nama_menu_utama' => ucfirst('Barang'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-            'satuan' => $this->model_satuan->select('id_satuan, nama_satuan')
-						->findAll(),
+            'satuan' => $this->modelSatuan->ambilSatuan(),
             'validation' => $this->validation,
             'session' => $this->session,
             'form_tambah_satuan' => ['id' => 'formTambahSatuan', 'name'=>'formTambahSatuan'],
@@ -72,69 +63,30 @@ class Satuan extends BaseController
 
     public function tambah(){
 
-        if(!$this->validate([
-                'nama_satuan' => [
-                    'label'  => 'Nama Satuan',
-                    'rules'  => 'required|is_unique[satuan.nama_satuan]',
-                    'errors' => [
-                    'required' => 'Nama satuan harus diisi!',
-                    'is_unique' => 'Nama satuan sudah ada!'
-                    ]
-                ]
-                
-            ])) {
-                
-                return redirect()->to(base_url('/suplai/satuan'))->withInput();
-
-            }
-
-                $data = array(
-                    'nama_satuan' => htmlspecialchars($this->request->getPost('nama_satuan'), ENT_QUOTES)
-                );
-
-                $this->model_satuan->insert($data);
+        $validasi = $this->modelSatuan->tambahSatuan();
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_satuan',  $validasi);
+            return redirect()->to(base_url('/suplai/satuan'));
+        }else{
             
-                $this->session->setFlashdata('pesan_satuan', 'Satuan baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/suplai/satuan'));
-                
-        
+            $this->session->setFlashdata('pesan_satuan', 'Satuan baru berhasil ditambahkan!');
+            return redirect()->to(base_url('/suplai/satuan'));
+        }
     }
 
     public function ubah(){
 
-        $new = $this->request->getPost('edit_nama_satuan');
-        $old = $this->request->getPost('old_nama_satuan');
 
-        $nama = 'required';
+        $id = $this->request->getPost('id_satuanE');
 
-        if($old != $new){
-            $nama =  'required|is_unique[satuan.nama_satuan]';
-        }
-            if(!$this->validate([
-                'edit_nama_satuan' => [
-                    'label'  => 'Nama Satuan',
-                    'rules'  => $nama,
-                    'errors' => [
-                    'required' => 'Nama satuan harus diisi!',
-                    'is_unique' => 'Nama satuan sudah ada!'
-                    ]
-                ]
-                
-            ])) {
-                
-                return redirect()->to(base_url('/suplai/satuan'))->withInput();
-
-            }
-
-                $id = $this->request->getPost('id_satuanE');
-                $data = array(
-                    'nama_satuan' => htmlspecialchars($this->request->getPost('edit_nama_satuan'), ENT_QUOTES)
-                );
-
-                $this->model_satuan->update($id, $data);
-            
-                $this->session->setFlashdata('pesan_satuan', 'Satuan baru berhasil diedit!');
+        $validasi = $this->modelSatuan->ubahSatuan($id);
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_satuan',  $validasi);
+            return redirect()->to(base_url('/suplai/satuan'));
+        }else{
+            $this->session->setFlashdata('pesan_satuan', 'Satuan baru berhasil diubah!');
                 return redirect()->to(base_url('/suplai/satuan'));
+        }
                 
        
         
@@ -142,10 +94,10 @@ class Satuan extends BaseController
 
 
     public function hapus(){
-            $id_satuan = $this->request->getPost('id_satuanH');
-            $this->model_satuan->delete($id_satuan);
-            $this->session->setFlashdata('pesan_hapus_satuan', 'Satuan berhasil dihapus!');
-            return redirect()->to(base_url('/suplai/satuan'));
+        $id_satuan = $this->request->getPost('id_satuanH');
+        $this->modelSatuan->hapusSatuan($id_satuan);
+        $this->session->setFlashdata('pesan_hapus_satuan', 'Satuan berhasil dihapus!');
+        return redirect()->to(base_url('/suplai/satuan'));
         
     
     }
