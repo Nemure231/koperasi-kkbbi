@@ -68,14 +68,14 @@ width:100%!important;
                       <td><?php echo $b['nama_kategori']; ?></td>
                       <td><?php echo $b['nama_satuan']; ?></td>
                       <td><?php echo $b['nama_merek']; ?></td>
-                      <td><?php echo $b['nama_pengirim_barang']; ?></td>
+                      <td><?php echo $b['nama_supplier']; ?></td>
                       <td><?php echo $b['harga_pokok']; ?></td>
                       <td><?php echo $b['harga_konsumen']; ?></td>
                       <td><?php echo $b['harga_anggota']; ?></td>
                       <td class="text-center"><?php echo $b['stok_barang']; ?></td>
                     
-                      <td><?php echo $b['tanggal']; ?></td>
-                      <td><?php echo $b['tanggal_update']; ?></td>
+                      <td><?php echo $b['created_at']; ?></td>
+                      <td><?php echo $b['updated_at']; ?></td>
                       
                       <td>
                         <a href="javascript:void(0)" id="tombolEditBarang" class="btn mb-3 btn-warning mr-1 tombolEditBarang"
@@ -84,11 +84,10 @@ width:100%!important;
                           data-kategori_id="<?php echo $b['kategori_id'];?>"
                           data-satuan_id="<?php echo $b['satuan_id'];?>"
                           data-merek_id="<?php echo $b['merek_id'];?>"
-                          data-pengirim_barang_id="<?php echo $b['pengirim_barang_id'];?>"
+                          data-pengirim_barang_id="<?php echo $b['supplier_id'];?>"
                           data-stok="<?php echo $b['stok_barang'];?>"
                           data-harga_konsumen="<?php echo $b['harga_konsumen'];?>"
                           data-harga_anggota="<?php echo $b['harga_anggota'];?>"
-                          data-deskripsi_barang="<?php echo $b['deskripsi_barang'];?>"
                           data-harga_pokok="<?php echo $b['harga_pokok']; ?>"
                           >
                           <i class="fas fa-pencil-alt"></i></a>
@@ -148,7 +147,14 @@ width:100%!important;
               </div>
             </div>
             <?php endif; ?>
-            <div class="invisible"><?php echo $validation->listErrors(); ?></div>
+            <div class="invisible">
+            
+            <div class="barang_error">
+                      <?php $ses = $session->getFlashdata('pesan_validasi_barang');
+                      echo implode_helper($ses);?>
+                    </div>
+            
+            </div>
 
 
 
@@ -174,7 +180,7 @@ width:100%!important;
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open(base_url().'/suplai/barang/tambah', $form_tambah_barang);    ?>
-      <?php echo form_input($hidden_kode_barang); ?>
+      <!-- <//?php echo form_input($hidden_kode_barang); ?> -->
       <?php echo csrf_field(); ?>
       <div class="modal-body">
         <div class="row">
@@ -184,7 +190,7 @@ width:100%!important;
             <div class="row">
                 <div class="form-group">
                     <!--// name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                    <?php echo form_input($hidden_kode_barang); ?>
+                    <!-- <//?php echo form_input($hidden_kode_barang); ?> -->
                   </div>
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
@@ -230,7 +236,7 @@ width:100%!important;
                 <select class="form-control" name="supplier_id" id="supplier_id">
                 <option value=""></option>
                   <?php foreach ($supplier as $sp) :?>
-                  <option value="<?php echo esc($sp['id_pengirim_barang']);?>"><?php echo esc($sp['nama_pengirim_barang']);?></option>
+                  <option value="<?php echo esc($sp['id_supplier']);?>"><?php echo esc($sp['nama_supplier']);?></option>
                   <?php endforeach;?>
                 </select>
               </div>
@@ -260,10 +266,7 @@ width:100%!important;
                 <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
                 <?php echo form_input($input_stok); ?>
               </div>
-              <div class="form-group col-sm-12 col-lg-12 col-md-12">
-                <label>Deskripsi</label>
-                <?php echo form_textarea($input_deskripsi); ?>
-              </div>
+             
               
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <button type="submit" id="btn-simpan" class="btn btn-block btn-primary">Simpan</button>
@@ -348,7 +351,7 @@ width:100%!important;
                 <select class="form-control" name="supplier_idE" id="supplier_idE">
                 <option value=""></option>
                   <?php foreach ($supplier as $sp) :?>
-                  <option value="<?php echo esc($sp['id_pengirim_barang']);?>"><?php echo esc($sp['nama_pengirim_barang']);?></option>
+                  <option value="<?php echo esc($sp['id_supplier']);?>"><?php echo esc($sp['nama_supplier']);?></option>
                   <?php endforeach;?>
                 </select>
               </div>
@@ -377,10 +380,7 @@ width:100%!important;
                 <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
                 <?php echo form_input($input_stokE); ?>
               </div>
-              <div class="form-group col-sm-12 col-lg-12 col-md-12">
-                <label>Deskripsi</label>
-                <?php echo form_textarea($input_deskripsiE); ?>
-              </div>
+              
               
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <button type="submit" id="btn-simpan" class="btn btn-block btn-primary">Simpan</button>
