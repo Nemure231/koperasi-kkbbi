@@ -1,22 +1,17 @@
 <?php
-
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\Model_kategori;
-use App\Models\Model_user_menu;
-use App\Models\Model_user;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
+use App\Models\ModelKategori;
 class Kategori extends BaseController
 {
 	
 	public function __construct(){
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
-        $this->model_user_menu = new Model_user_menu();
-		$this->model_user = new Model_user();
-        $this->model_kategori = new Model_kategori();
+        $this->modelKategori = new ModelKategori();
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 	}
@@ -26,19 +21,13 @@ class Kategori extends BaseController
 
 
     public function index(){
-		
-		$role = $this->session->get('role_id');
-        $email = $this->session->get('email');
-		
-        
 
         $data = [
             'title' =>  ucfirst('Daftar Kategori'),
             'nama_menu_utama' => ucfirst('Barang'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
-           'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-            'kategori'=>$this->model_kategori->select('id_kategori, nama_kategori')->asArray()
-                        ->findAll(),
+            'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
+            'kategori'=>$this->modelKategori->ambilKategori(),
             'validation' => $this->validation,
             'session' => $this->session,
             'form_tambah_kategori' => ['id' => 'formTambahKategori', 'name'=>'formTambahKategori'],
@@ -82,96 +71,40 @@ class Kategori extends BaseController
 
     public function tambah(){
 
-        
-            if(!$this->validate([
-                'nama_kategori' => [
-                    'label'  => 'Nama Kategori',
-                    'rules'  => 'required|is_unique[kategori.nama_kategori]',
-                    'errors' => [
-                    'required' => 'Nama kategori harus diisi!',
-                    'is_unique' => 'Nama kategori sudah ada!'
-                    ]
-                ]
-                
-            ])) {
-                
-                return redirect()->to(base_url('/suplai/kategori'))->withInput();
-            }
-            
-          
-                $data = array(
-                    'nama_kategori' => htmlspecialchars($this->request->getPost('nama_kategori'), ENT_QUOTES)
-                );
-                $this->model_kategori->insert($data);
-                $this->session->setFlashdata('pesan_kategori', 'Kategori baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/suplai/kategori'));
+    
+        $validasi = $this->modelKategori->tambahKategori();
+
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_kategori',  $validasi);
+            return redirect()->to(base_url('/suplai/kategori'));
+        }else{
+            $this->session->setFlashdata('pesan_kategori', 'Kategori baru berhasil ditambahkan!');
+            return redirect()->to(base_url('/suplai/kategori'));
+        }
 
         
     
     }
 
     public function ubah(){
-       
-        $old =  $this->request->getPost('old_nama_kategori');
-        $new =  $this->request->getPost('edit_nama_kategori');
-
-        // $old_k =  $this->request->getPost('old_kode_kategori');
-        // $new_k =  $this->request->getPost('edit_kode_kategori');
-
-        $rules = 'required';
-        //$rules_k = 'required';
-
-        if($old != $new){
-            $rules =  'required|is_unique[kategori.nama_kategori]';
-        }
-
-        // if($old_k != $new_k){
-        //     $rules_k =  'required|is_unique[kategori.kode_kategori]';
-        // }
-
         
-            if(!$this->validate([
-                'edit_nama_kategori' => [
-                    'label'  => 'Nama Kategori',
-                    'rules'  => $rules,
-                    'errors' => [
-                    'required' => 'Nama kategori harus diisi!',
-                    'is_unique' => 'Nama kategori sudah ada!'
-                    ]
-                ]
-                // ,
-                //     'edit_kode_kategori' => [
-                //     'label'  => 'Kode Kategori',
-                //     'rules'  => $rules_k,
-                //     'errors' => [
-                //     'required' => 'Kode kategori harus diisi!',
-                //     'is_unique' => 'Kode kategori sudah ada!'
-                //     ]
-                // ]
-                
-            ])) {
-                
-                return redirect()->to(base_url('/suplai/kategori'))->withInput();
-
-            }
-                $id = $this->request->getPost('id_kategoriE');
-                $data = array(
-                    //'kode_kategori' => htmlspecialchars($this->request->getPost('edit_kode_kategori'), ENT_QUOTES),
-                    'nama_kategori' => htmlspecialchars($this->request->getPost('edit_nama_kategori'), ENT_QUOTES)
-                );
-
-                $this->model_kategori->update($id, $data);
-                $this->session->setFlashdata('pesan_kategori', 'Kategori baru berhasil diedit!');
-                return redirect()->to(base_url('/suplai/kategori'));
-                
-               
+        $id = $this->request->getPost('id_kategoriE');
+        $validasi = $this->modelKategori->ubahKategori($id);
+                        
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_kategori',  $validasi);
+            return redirect()->to(base_url('/suplai/kategori'));
+        }else{
+            $this->session->setFlashdata('pesan_kategori', 'Kategori berhasil diubah!');
+            return redirect()->to(base_url('/suplai/kategori'));
+        }
     }
 
 
     public function hapus(){
             $id_kategori = $this->request->getPost('id_kategoriH');
         
-            $this->model_kategori->delete($id_kategori);
+            $this->modelKategori->hapusKategori($id_kategori);
             $this->session->setFlashdata('pesan_hapus_kategori', 'Kategori berhasil dihapus!');
             return redirect()->to(base_url('/suplai/kategori'));
         

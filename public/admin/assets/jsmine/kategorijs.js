@@ -3,7 +3,7 @@
 
 const flashDataHapus = $('#flash-data-hapus').data('flashdatahapus');
 const flashData = $('.flash-data').data('flashdata');
-const flashDataSalah = $('.errors').html();
+const flashDataSalah = $('.kategori_error').html();
 
 if (flashData) {
    Swal.fire({
@@ -15,7 +15,9 @@ if (flashData) {
       icon: 'success'
    });
 
-} else if (flashDataSalah) {
+}
+
+if (flashDataSalah != 0) {
 
    Swal.fire({
       title: 'Gagal',
@@ -27,7 +29,9 @@ if (flashData) {
    });
    
    //$('#modalBuku').modal('show');
-} else if (flashDataHapus) {
+}
+
+if (flashDataHapus) {
 
    Swal.fire({
       title: 'Berhasil',

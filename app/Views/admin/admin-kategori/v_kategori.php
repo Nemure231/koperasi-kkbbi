@@ -94,7 +94,10 @@
             </div>
             <?php endif; ?>
             <div class="invisible">
-                <?php echo $validation->listErrors(); ?>
+            <div class="kategori_error">
+                      <?php $ses = $session->getFlashdata('pesan_validasi_kategori');
+                      echo implode_helper($ses);?>
+                    </div>
               </div>
 
 
