@@ -40,14 +40,13 @@ class Barang extends BaseController{
         $harga_konsumen = set_value('harga_konsumen', '');
         $harga_anggota = set_value('harga_anggota', '');
         $stok_barang = set_value('stok_barang', '');
-        $deskripsi_barang = set_value('deskripsi_barang', '');
         $harga_pokok = set_value('harga_pokok', '');
         $data = [
             'title' => ucfirst('Daftar Barang'),
             'nama_menu_utama' => ucfirst('Gudang'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
 			'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-            'barang' => $this->model_barang->select('id_barang, deskripsi_barang, harga_pokok, 
+            'barang' => $this->model_barang->select('id_barang, harga_pokok, 
                         nama_barang, nama_pengirim_barang, pengirim_barang_id, nama_kategori, kode_barang,
                         stok_barang, tanggal, tanggal_update,nama_merek, nama_satuan, kategori_id, satuan_id, 
                         merek_id, harga_anggota, harga_konsumen')->asArray()
@@ -116,14 +115,6 @@ class Barang extends BaseController{
                 'value' => ''.$stok_barang.'',
                 'class' => 'form-control'
             ],
-            'input_deskripsi' => [
-                'type' => 'number',
-                'name' => 'deskripsi_barang',
-                'id' => 'deskripsi_barang',
-                'value' => ''.$deskripsi_barang.'',
-                'class' => 'form-control',
-                'style' => 'min-height:145px;'
-            ],
             'hidden_id_barangE' => [
                 'type' => 'hidden',
                 'name' => 'id_barangE',
@@ -171,13 +162,6 @@ class Barang extends BaseController{
                 'name' => 'stok_barangE',
                 'id' => 'stok_barangE',
                 'class' => 'form-control'
-            ],
-            'input_deskripsiE' => [
-                'type' => 'number',
-                'name' => 'deskripsi_barangE',
-                'id' => 'deskripsi_barangE',
-                'class' => 'form-control',
-                'style' => 'min-height:145px;'
             ],
             'hidden_id_barangH' => [
                 'type' => 'hidden',
@@ -336,7 +320,6 @@ class Barang extends BaseController{
                     'harga_konsumen' => $this->request->getPost('harga_konsumen'),
                     'harga_anggota' => $this->request->getPost('harga_anggota'),
                     'stok_barang' => $this->request->getPost('stok_barang'),
-                    'deskripsi_barang' => htmlspecialchars($this->request->getPost('deskripsi_barang'), ENT_QUOTES),
                     'tanggal' => date('Y-m-d H:i:s')
                 );
     
@@ -501,7 +484,6 @@ class Barang extends BaseController{
                     'harga_konsumen' => $this->request->getPost('harga_konsumenE'),
                     'harga_anggota' => $this->request->getPost('harga_anggotaE'),
                     'stok_barang' => $this->request->getPost('stok_barangE'),
-                    'deskripsi_barang' => $this->request->getPost('deskripsi_barangE'),
                     'tanggal_update' => date('Y-m-d H:i:s')
                 );
                 
