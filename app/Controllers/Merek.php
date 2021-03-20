@@ -10,8 +10,6 @@ class Merek extends BaseController
 {
 	
 	public function __construct(){
-        $this->request = \Config\Services::request();
-		$this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
         $this->modelMerek = new ModelMerek();
@@ -24,11 +22,10 @@ class Merek extends BaseController
 		
         $data = [
             'title' => ucfirst('Daftar Merek'),
-            'nama_menu_utama' => ucfirst('Barang'),
+            'nama_menu_utama' => ucfirst('Gudang'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'merek' =>  $this->modelMerek->ambilMerek(),
-            'validation' => $this->validation,
             'session' => $this->session,
             'form_tambah_merek' => ['id' => 'formTambahMerek', 'name'=>'formTambahMerek'],
             'form_edit_merek' =>  ['id' => 'formEditMerek', 'name'=>'formEditMerek'],
@@ -75,8 +72,7 @@ class Merek extends BaseController
 
     public function ubah(){
 
-        $id = $this->request->getPost('id_merekE');
-        $validasi = $this->modelMerek->ubahMerek($id);
+        $validasi = $this->modelMerek->ubahMerek();
         if($validasi){
             $this->session->setFlashdata('pesan_validasi_merek',  $validasi);
             return redirect()->to(base_url('/suplai/merek'));
@@ -88,7 +84,6 @@ class Merek extends BaseController
 
 
     public function hapus(){
-        $id_merek = $this->request->getPost('id_merekH'); 
         $this->modelMerek->hapusMerek($id_merek);
         $this->session->setFlashdata('pesan_hapus_merek', 'Merek berhasil dihapus!');
         return redirect()->to(base_url('/suplai/merek'));

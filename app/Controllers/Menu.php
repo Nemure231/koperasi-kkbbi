@@ -7,9 +7,6 @@ use App\Models\ModelMenu;
 class Menu extends BaseController{
 
     public function __construct(){
-        
-        $this->request = \Config\Services::request();
-        $this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
 	}
@@ -17,9 +14,7 @@ class Menu extends BaseController{
 	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
 
 	public function index(){
-		$role = $this->session->get('role_id');
-        $email = $this->session->get('email');
-		
+
         $data = [
         
             'title' => ucfirst('Menu'),
@@ -27,7 +22,6 @@ class Menu extends BaseController{
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'mmenu' => $this->modelMenu->ambilMenu(),
-            'validation' => $this->validation,
             'session' => $this->session,
             'attr' => ['id' => 'formMenu', 'name'=>'formMenu'],
             'form_edit_menu' => ['id' => 'formEditMenu', 'name'=>'formEditMenu'],
@@ -68,8 +62,7 @@ class Menu extends BaseController{
     }
 
     public function ubah(){
-        $id_menu = $this->request->getPost('hidden_menu_id');
-        $validasi = $this->modelMenu->ubahMenu($id_menu);
+        $validasi = $this->modelMenu->ubahMenu();
 
         if($validasi){
             $this->session->setFlashdata('pesan_validasi_menu',  $validasi);
@@ -82,8 +75,7 @@ class Menu extends BaseController{
     }
 
     public function hapus(){
-        $id_menu = $this->request->getPost('hidden_hapus_menu_id');
-        $this->modelMenu->hapusMenu($id_menu);
+        $this->modelMenu->hapusMenu();
         $this->session->setFlashdata('pesan_hapus_menu', 'Menu berhasil dihapus!');
         return redirect()->to(base_url('/pengaturan/menu'));
         

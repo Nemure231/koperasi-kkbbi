@@ -7,8 +7,6 @@ use App\Models\ModelRole;
 class Role extends BaseController{
 
     public function __construct(){
-        $this->request = \Config\Services::request();
-        $this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
         $this->modelRole = new ModelRole();
@@ -27,7 +25,6 @@ class Role extends BaseController{
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'role' => $this->modelRole->ambilRole(),
             'session' => $this->session,
-            'validation' => $this->validation,
             'attr' => ['id' => 'formRole', 'name'=>'formRole'],
             'form_hapus_role' => ['id' => 'formHapusRole', 'name'=>'formHapusRole', 'class' => 'btn btn-block'],
             'hidden_role_id' => ['name' => 'role_id', 'id'=>'role_id', 'type'=> 'hidden'],
@@ -67,8 +64,7 @@ class Role extends BaseController{
 
     public function ubah(){
        
-        $id_role = $this->request->getPost('role_id');
-        $validasi = $this->modelRole->ubahRole($id_role);
+        $validasi = $this->modelRole->ubahRole();
 
         if($validasi){
             $this->session->setFlashdata('pesan_validasi_role',  $validasi);
@@ -81,8 +77,7 @@ class Role extends BaseController{
 
 
     public function hapus(){
-        $id_role =  $this->request->getPost('hidden_role_id_hapus');
-        $this->modelRole->hapusRole($id_role);
+        $this->modelRole->hapusRole();
         $this->session->setFlashdata('pesan_hapus_role', 'Role berhasil dihapus!');
         return redirect()->to(base_url('/pengaturan/role'));
     }

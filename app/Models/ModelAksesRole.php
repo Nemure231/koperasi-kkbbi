@@ -4,7 +4,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
 
- 
 class ModelAksesRole extends Model{
 
     public function __construct(){
@@ -39,30 +38,21 @@ class ModelAksesRole extends Model{
         return $akses['data'];
     }
 
-    public function ubahAksesRole($role_id, $menu_id){
-        // $result = '';
-        // $validasi = array('data' => '');
-        // try {
-            $ambil_token = get_cookie('jwt_token');
-            $respon_akses_role = $this->_client->request(
-                'POST',
-                'pengaturan/role/akses/ubah/'.$role_id.'/'.$menu_id
-                .'?role_id='.$this->request->getPost('roleId')
-                .'&menu_id='.$this->request->getPost('menuId'),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
-                    ]
-                ],
-            );
-            // ->getBody();
-        //     json_decode($respon_akses_role, true);
-        // } catch (ClientException $e) {
-        //     // echo Psr7\Message::toString($e->getRequest());
-        //     $validasi = json_decode($e->getResponse()->getBody(), true);
-        // }
-
-        // return $result = $validasi['data'];
+    public function ubahAksesRole(){
+        $role_id= $this->request->getPost('roleId');
+        $menu_id= $this->request->getPost('menuId');
+        $ambil_token = get_cookie('jwt_token');
+        $respon_akses_role = $this->_client->request(
+            'POST',
+            'pengaturan/role/akses/ubah/'.$role_id.'/'.$menu_id
+            .'?role_id='.$role_id
+            .'&menu_id='.$menu_id,
+            ['headers' => 
+                [
+                'Authorization' => "Bearer {$ambil_token}"
+                ]
+            ],
+        );
     }
 
 }

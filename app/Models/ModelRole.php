@@ -88,7 +88,8 @@ class ModelRole extends Model{
     }
 
    
-    public function ubahRole($id_role){
+    public function ubahRole(){
+        $id_role = $this->request->getPost('role_id');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -112,7 +113,8 @@ class ModelRole extends Model{
         return $result = $validasi['data'];
     }
 
-    public function hapusRole($id_role){
+    public function hapusRole(){
+        $id_role =  $this->request->getPost('hidden_role_id_hapus');
         $ambil_token = get_cookie('jwt_token');
        
         $respon_ambil_user = $this->_client->request(

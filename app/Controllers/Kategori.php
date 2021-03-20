@@ -12,8 +12,6 @@ class Kategori extends BaseController
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
         $this->modelKategori = new ModelKategori();
-        $this->request = \Config\Services::request();
-		$this->validation = \Config\Services::validation();
 	}
 
 	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
@@ -24,11 +22,10 @@ class Kategori extends BaseController
 
         $data = [
             'title' =>  ucfirst('Daftar Kategori'),
-            'nama_menu_utama' => ucfirst('Barang'),
+            'nama_menu_utama' => ucfirst('Gudang'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'kategori'=>$this->modelKategori->ambilKategori(),
-            'validation' => $this->validation,
             'session' => $this->session,
             'form_tambah_kategori' => ['id' => 'formTambahKategori', 'name'=>'formTambahKategori'],
             'form_edit_kategori' =>  ['id' => 'formEditKategori', 'name'=>'formEditKategori'],
@@ -88,8 +85,8 @@ class Kategori extends BaseController
 
     public function ubah(){
         
-        $id = $this->request->getPost('id_kategoriE');
-        $validasi = $this->modelKategori->ubahKategori($id);
+        
+        $validasi = $this->modelKategori->ubahKategori();
                         
         if($validasi){
             $this->session->setFlashdata('pesan_validasi_kategori',  $validasi);
@@ -102,9 +99,8 @@ class Kategori extends BaseController
 
 
     public function hapus(){
-            $id_kategori = $this->request->getPost('id_kategoriH');
         
-            $this->modelKategori->hapusKategori($id_kategori);
+            $this->modelKategori->hapusKategori();
             $this->session->setFlashdata('pesan_hapus_kategori', 'Kategori berhasil dihapus!');
             return redirect()->to(base_url('/suplai/kategori'));
         

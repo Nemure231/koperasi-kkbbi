@@ -133,7 +133,8 @@ class ModelMenu extends Model{
     }
 
 
-    public function ubahMenu($id_menu){
+    public function ubahMenu(){
+        $id_menu = $this->request->getPost('hidden_menu_id');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -157,7 +158,8 @@ class ModelMenu extends Model{
         return $result = $validasi['data'];
     }
 
-    public function hapusMenu($id_menu){
+    public function hapusMenu(){
+        $id_menu = $this->request->getPost('hidden_hapus_menu_id');
         $ambil_token = get_cookie('jwt_token');
        
         $respon_ambil_user = $this->_client->request(

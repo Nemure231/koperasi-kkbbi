@@ -45,14 +45,14 @@
                     <?php foreach($supplier as $s):?>
                     <tr>
                       <td><?php echo $i; ?></td>
-                      <td><?php echo $s['nama_pengirim_barang'] ?></td>
+                      <td><?php echo $s['nama_supplier'] ?></td>
                       <td>
                         <a href="javascript:void(0)" id="tombolEditSupplier" class="btn btn-warning mr-1 tombolEditSupplier"
-                          data-id_supplier="<?php echo $s['id_pengirim_barang'];?>"
-                          data-nama_supplier="<?php echo $s['nama_pengirim_barang'];?>">
+                          data-id_supplier="<?php echo $s['id_supplier'];?>"
+                          data-nama_supplier="<?php echo $s['nama_supplier'];?>">
                           <i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" id="tombolHapusSupplier" class="btn btn-danger tombolHapusSupplier"
-                          data-id_supplier="<?php echo $s['id_pengirim_barang'];?>">
+                          data-id_supplier="<?php echo $s['id_supplier'];?>">
                           <i class="fas fa-trash"></i>
                         </a>
 
@@ -88,7 +88,10 @@
             </div>
             <?php endif; ?>
             <div class="invisible">
-                <?php echo $validation->listErrors(); ?>
+            <div class="supplier_error">
+                      <?php $ses = $session->getFlashdata('pesan_validasi_supplier');
+                      echo implode_helper($ses);?>
+                    </div>
               </div>
 
 

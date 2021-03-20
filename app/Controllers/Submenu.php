@@ -1,7 +1,6 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_menu_utama;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
 use App\Models\ModelSubmenu;
@@ -10,9 +9,6 @@ use App\Models\ModelMenuUtama;
 class Submenu extends BaseController{
 
     public function __construct(){
-        $this->model_menu_utama = new Model_menu_utama();
-        $this->request = \Config\Services::request();
-        $this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
         $this->modelSubmenu = new ModelSubmenu();
@@ -31,10 +27,9 @@ class Submenu extends BaseController{
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'mmenu' => $this->modelMenu->ambilMenu(),
-            'menu_utama' => $this->model_menu_utama->select('id_menu_utama, nama_menu_utama, ikon_menu_utama')->asArray()->findAll(),
+            'menu_utama' => $this->modelMenuUtama->ambilMenuUtamaUntukSubmenu(),
             'submenu'=> $this->modelSubmenu->ambilSubmenu(),
             'session' => $this->session,
-            'validation' => $this->validation,
             'attr' => ['id' => 'formSubMenu', 'name'=>'formSubMenu'],
             'form_hapus_submenu' => ['id' => 'formHapusSubmenu', 'name'=>'formHapusSubmenu', 'class' => 'btn btn-block'],
             'hidden_submenu_id' => ['name' => 'submenu_id', 'id'=>'submenu_id', 'type'=> 'hidden'],
@@ -100,47 +95,34 @@ class Submenu extends BaseController{
 
     public function tambah(){
 
-            $validasi = $this->modelSubmenu->tambahSubmenu();
-
-            if($validasi){
-                $this->session->setFlashdata('pesan_validasi_submenu',  $validasi);
-            
-                return redirect()->to(base_url('/pengaturan/submenu'));
-            }else{
-                $this->session->setFlashdata('pesan_submenu', 'Submenu baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/pengaturan/submenu'));
-            }
+        $validasi = $this->modelSubmenu->tambahSubmenu();
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_submenu',  $validasi);
+            return redirect()->to(base_url('/pengaturan/submenu'));
+        }else{
+            $this->session->setFlashdata('pesan_submenu', 'Submenu baru berhasil ditambahkan!');
+            return redirect()->to(base_url('/pengaturan/submenu'));
+        }
 
     }
 
     public function ubah(){
+        $validasi = $this->modelSubmenu->ubahSubmenu();
 
-            $id_submenu = $this->request->getPost('submenu_id');
-
-            $validasi = $this->modelSubmenu->ubahSubmenu($id_submenu);
-
-            if($validasi){
-                $this->session->setFlashdata('pesan_validasi_submenu',  $validasi);
-            
-                return redirect()->to(base_url('/pengaturan/submenu'));
-            }else{
-                $this->session->setFlashdata('pesan_submenu', 'Submenu baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/pengaturan/submenu'));
-            }
-              
-                
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_submenu',  $validasi);    
+            return redirect()->to(base_url('/pengaturan/submenu'));
+        }else{
+            $this->session->setFlashdata('pesan_submenu', 'Submenu baru berhasil ditambahkan!');
+            return redirect()->to(base_url('/pengaturan/submenu'));
+        }       
     }
 
 
     public function hapus(){
-        $id_submenu = $this->request->getPost('hidden_hapus_id_submenu');
-            $this->modelSubmenu->hapusSubmenu($id_submenu);
-            $this->session->setFlashdata('pesan_hapus_submenu', 'Submenu berhasil dihapus!');
-            return redirect()->to(base_url('/pengaturan/submenu'));
-        
-       
-        
-    
+        $this->modelSubmenu->hapusSubmenu();
+        $this->session->setFlashdata('pesan_hapus_submenu', 'Submenu berhasil dihapus!');
+        return redirect()->to(base_url('/pengaturan/submenu'));
     }
 	
 }

@@ -91,7 +91,8 @@ class ModelSubmenu extends Model{
 
     }
 
-    public function ubahSubmenu($id_submenu){
+    public function ubahSubmenu(){
+        $id_submenu = $this->request->getPost('submenu_id');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -122,9 +123,10 @@ class ModelSubmenu extends Model{
 
     }
 
-    public function hapusSubmenu($id_submenu){
+    public function hapusSubmenu(){
+        $id_submenu = $this->request->getPost('hidden_hapus_id_submenu');
         $ambil_token = get_cookie('jwt_token');
-       
+
         $respon_ambil_user = $this->_client->request(
             'DELETE',
             'pengaturan/submenu/hapus/'.$id_submenu,

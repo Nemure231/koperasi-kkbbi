@@ -10,8 +10,6 @@ class RoleAkses extends BaseController{
 
     public function __construct(){
 
-        $this->request = \Config\Services::request();
-        $this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
         $this->modelRole = new ModelRole();
@@ -38,10 +36,7 @@ class RoleAkses extends BaseController{
     }
     
     public function ubah(){
-        
-        $role_id= $this->request->getPost('roleId');
-        $menu_id= $this->request->getPost('menuId');
-        $this->modelAksesRole->ubahAksesRole($role_id, $menu_id);
+        $this->modelAksesRole->ubahAksesRole();
         $this->session->setFlashdata('pesan_akses', 'Role akses berhasil diubah!');
         
 	

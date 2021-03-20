@@ -64,7 +64,8 @@ class ModelKategori extends Model{
     }
 
 
-    public function ubahKategori($id_kategori){
+    public function ubahKategori(){
+        $id_kategori = $this->request->getPost('id_kategoriE');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -88,7 +89,8 @@ class ModelKategori extends Model{
         return $result = $validasi['data'];
     }
 
-    public function hapusKategori($id_kategori){
+    public function hapusKategori(){
+        $id_kategori = $this->request->getPost('id_kategoriH');
         $ambil_token = get_cookie('jwt_token');
        
         $respon_ambil_kategori = $this->_client->request(

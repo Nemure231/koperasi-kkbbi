@@ -11,13 +11,11 @@ class Pengguna extends BaseController{
 	public function __construct(){
 		$this->modelUser = new ModelUser();
 		$this->modelMenu = new ModelMenu();
-		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 	}
 
 	public function index(){
 		
-		$role = $this->session->get('role_id');
 		$user = $this->modelUser->ambilSatuUserJoinRole();
 
 		$data = [

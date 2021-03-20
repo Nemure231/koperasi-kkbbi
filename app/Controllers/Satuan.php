@@ -11,8 +11,6 @@ class Satuan extends BaseController
 {
 	
 	public function __construct(){
-        $this->request = \Config\Services::request();
-		$this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
         $this->modelSatuan = new ModelSatuan();
@@ -24,11 +22,10 @@ class Satuan extends BaseController
 		
         $data = [
             'title' => ucfirst('Daftar Satuan'),
-            'nama_menu_utama' => ucfirst('Barang'),
+            'nama_menu_utama' => ucfirst('Gudang'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'satuan' => $this->modelSatuan->ambilSatuan(),
-            'validation' => $this->validation,
             'session' => $this->session,
             'form_tambah_satuan' => ['id' => 'formTambahSatuan', 'name'=>'formTambahSatuan'],
             'form_edit_satuan' =>  ['id' => 'formEditSatuan', 'name'=>'formEditSatuan'],
@@ -76,10 +73,7 @@ class Satuan extends BaseController
 
     public function ubah(){
 
-
-        $id = $this->request->getPost('id_satuanE');
-
-        $validasi = $this->modelSatuan->ubahSatuan($id);
+        $validasi = $this->modelSatuan->ubahSatuan();
         if($validasi){
             $this->session->setFlashdata('pesan_validasi_satuan',  $validasi);
             return redirect()->to(base_url('/suplai/satuan'));
@@ -87,15 +81,11 @@ class Satuan extends BaseController
             $this->session->setFlashdata('pesan_satuan', 'Satuan baru berhasil diubah!');
                 return redirect()->to(base_url('/suplai/satuan'));
         }
-                
-       
-        
     }
 
 
     public function hapus(){
-        $id_satuan = $this->request->getPost('id_satuanH');
-        $this->modelSatuan->hapusSatuan($id_satuan);
+        $this->modelSatuan->hapusSatuan();
         $this->session->setFlashdata('pesan_hapus_satuan', 'Satuan berhasil dihapus!');
         return redirect()->to(base_url('/suplai/satuan'));
         

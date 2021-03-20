@@ -63,7 +63,8 @@ class ModelMerek extends Model{
     }
 
 
-    public function ubahMerek($id_merek){
+    public function ubahMerek(){
+        $id_merek = $this->request->getPost('id_merekE');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -87,7 +88,8 @@ class ModelMerek extends Model{
         return $result = $validasi['data'];
     }
 
-    public function hapusMerek($id_merek){
+    public function hapusMerek(){
+        $id_merek = $this->request->getPost('id_merekH'); 
         $ambil_token = get_cookie('jwt_token');
        
         $respon_ambil_merek = $this->_client->request(

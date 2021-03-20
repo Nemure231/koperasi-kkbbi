@@ -59,6 +59,28 @@ class ModelMenuUtama extends Model{
         return $user['data'];
     }
 
+    public function ambilMenuUtamaUntukSubmenu(){
+        $ambil_token = get_cookie('jwt_token');
+        $res_menu_utama = json_encode(['data' => '']);
+        try {
+            $respon_ambil_menu_utama = $this->_client->request(
+                'GET',
+                'pengaturan/menu_utama/untuk-submenu',
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_menu_utama = $respon_ambil_menu_utama->getBody();
+        } catch (ClientException $e) {
+            
+        }
+
+        $user = json_decode($res_menu_utama, true);
+        return $user['data'];
+    }
+
     public function tambahMenuUtama(){
         $result = '';
         $validasi = array('data' => '');
@@ -86,7 +108,8 @@ class ModelMenuUtama extends Model{
     }
 
 
-    public function ubahMenuUtama($id_menu_utama){
+    public function ubahMenuUtama(){
+        $id_menu_utama = $this->request->getPost('hidden_menu_utama_id');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -112,7 +135,8 @@ class ModelMenuUtama extends Model{
         return $result = $validasi['data'];
     }
 
-    public function hapusMenuUtama($id_menu_utama){
+    public function hapusMenuUtama(){
+        $id_menu_utama = $this->request->getPost('hidden_hapus_menu_utama_id');
         $ambil_token = get_cookie('jwt_token');
        
         $respon_ambil_user = $this->_client->request(

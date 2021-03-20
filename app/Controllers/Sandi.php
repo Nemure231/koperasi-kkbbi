@@ -17,16 +17,15 @@ class Sandi extends BaseController{
 
 
 	public function index(){
-		$role = $this->session->get('role_id');
 
 		$data = [
-		'title' => ucfirst('Ubah Sandi'),
-		'nama_menu_utama' => ucfirst('Profil'),
-		'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
-        'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-		'session' => $this->session,
-		'validation' => $this->validation,
-		'attr' => ['id' => 'katasandi', 'name'=>'katasandi']
+			'title' => ucfirst('Ubah Sandi'),
+			'nama_menu_utama' => ucfirst('Profil'),
+			'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
+			'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
+			'session' => $this->session,
+			'validation' => $this->validation,
+			'attr' => ['id' => 'katasandi', 'name'=>'katasandi']
 		];
 		tampilan_admin('admin/admin-katasandi/v_katasandi', 'admin/admin-katasandi/v_js_katasandi', $data);
 	}
