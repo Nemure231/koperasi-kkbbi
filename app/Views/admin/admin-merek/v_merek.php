@@ -91,7 +91,10 @@
             </div>
             <?php endif; ?>
             <div class="invisible">
-                <?php echo $validation->listErrors(); ?>
+            <div class="merek_error">
+                      <?php $ses = $session->getFlashdata('pesan_validasi_merek');
+                      echo implode_helper($ses);?>
+                    </div>
               </div>
 
 
