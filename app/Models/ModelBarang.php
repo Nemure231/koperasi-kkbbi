@@ -72,16 +72,24 @@ class ModelBarang extends Model{
     }
 
 
-    public function ubahMerek(){
-        $id_merek = $this->request->getPost('id_merekE');
+    public function ubahBarang(){
+        $id_barang =$this->request->getPost('id_barangE');
         $result = '';
         $validasi = array('data' => '');
         try {
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_merek = $this->_client->request(
                 'PUT',
-                'suplai/merek/ubah/'.$id_merek
-                .'?nama_merek='. htmlspecialchars($this->request->getPost('edit_nama_merek'), ENT_QUOTES),
+                'suplai/barang/ubah/'.$id_barang
+                .'?nama_barang='. htmlspecialchars($this->request->getPost('nama_barangE'), ENT_QUOTES)
+                .'&kategori_id='.$this->request->getPost('kategori_idE')
+                .'&satuan_id='.$this->request->getPost('satuan_idE')
+                .'&merek_id='.$this->request->getPost('merek_idE')
+                .'&supplier_id='.$this->request->getPost('supplier_idE')
+                .'&harga_pokok='.$this->request->getPost('harga_pokokE')
+                .'&harga_konsumen='.$this->request->getPost('harga_konsumenE')
+                .'&harga_anggota='.$this->request->getPost('harga_anggotaE')
+                .'&stok_barang='.$this->request->getPost('stok_barangE'),
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -97,13 +105,13 @@ class ModelBarang extends Model{
         return $result = $validasi['data'];
     }
 
-    public function hapusMerek(){
-        $id_merek = $this->request->getPost('id_merekH'); 
+    public function hapusBarang(){
+        $id_barang = $this->request->getPost('id_barangH');  
         $ambil_token = get_cookie('jwt_token');
        
         $respon_ambil_merek = $this->_client->request(
             'DELETE',
-            'suplai/merek/hapus/'.$id_merek,
+            'suplai/barang/hapus/'.$id_barang,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"

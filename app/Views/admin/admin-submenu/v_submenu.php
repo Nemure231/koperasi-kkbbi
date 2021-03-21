@@ -6,6 +6,7 @@
     color: #dc3545;}
     .select2 {
 width:100%!important;
+
 }
 </style>
 <div  class="flash-data" data-flashdata="<?php echo $session->getFlashdata('pesan_submenu')  ?>"></div>
@@ -115,13 +116,22 @@ width:100%!important;
             <?php endif; ?>
 
             <div class="invisible">
-              <div class="errors">
-
-
+              <div class="submenu_error">
+              0
               <?php $ses = $session->getFlashdata('pesan_validasi_submenu');
+              
+              if($ses){
+                echo $ses['nama_submenu']; 
+                echo $ses['menu_id']; 
+                echo $ses['menu_utama_id']; 
+                echo $ses['ikon_submenu']; 
+                echo $ses['url_submenu'];
 
-                echo implode_helper($ses);
+              }
+              
               ?>
+              
+
               </div>
             </div>
           </div>
@@ -148,6 +158,8 @@ width:100%!important;
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
 			<?php echo form_open(base_url().'/pengaturan/submenu/tambah', $attr); ?>
       <?php echo csrf_field(); ?>
+
+      <?php $ses = $session->getFlashdata('pesan_validasi_submenu');?>
 				<div class="modal-body">
 
         <!-- <a href="javascript:void(0)" class="tbhs btn btn-icon icon-left btn-primary" ><i class="fas fa-plus"></i> Tambah menu</a> -->
@@ -157,13 +169,13 @@ width:100%!important;
 					<div class="row">
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<label>Nama submenu</label>
-						
-              <?php echo form_input($judul); ?>
+                <input type="text" name="judul" value="<?php echo set_value('judul', ''); ?>" id="judul" class="form-control judul  <?php echo ($ses['nama_submenu'] ?? []) ? 'is-invalid' : ''; ?>"/>
+                <?php echo ($ses ?? []) ? '<div class="invalid-feedback">'.$ses['nama_submenu'].'</div>' : ''; ?>
 						</div>
 
             <div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Menu Utama</label>
-							<select class="custom-select" name="menu_utama_id" id="menu_utama_id">
+							<select class="custom-select <?php echo ($ses['menu_utama_id'] ?? []) ? 'is-invalid' : ''; ?>" name="menu_utama_id" id="menu_utama_id">
 
 								<option></option>
 								<?php foreach ($menu_utama as $mu):?>
@@ -171,11 +183,12 @@ width:100%!important;
 								<?php endforeach;  ?>
 
 							</select>
+                <?php echo ($ses ?? []) ? '<div class="invalid-feedback">'.$ses['menu_utama_id'].'</div>' : ''; ?>
 						</div>
               
 						<div class="form-group col-lg-6 col-md-6 col-sm-12" id="yumi">
 							<label>Menu</label>
-							<select class="custom-select" name="menu_id" id="menu_id">
+							<select class="custom-select <?php echo ($ses['menu_id'] ?? []) ? 'is-invalid' : ''; ?>" name="menu_id" id="menu_id">
 
 								<option></option>
 								<?php foreach ($mmenu as $m):?>
@@ -183,19 +196,19 @@ width:100%!important;
 								<?php endforeach;  ?>
 
 							</select>
+              <?php echo ($ses ?? []) ? '<div class="invalid-feedback">'.$ses['menu_id'].'</div>' : ''; ?>
 						</div>
-
-           
-            
 
 
 						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Url</label>
-							<?php echo form_input($url); ?>
+							<input type="text" name="url" value="<?php echo set_value('url', ''); ?>" id="url" class="form-control url <?php echo ($ses['url_submenu'] ?? []) ? 'is-invalid' : ''; ?>" />
+              <?php echo ($ses ?? []) ? '<div class="invalid-feedback">'.$ses['url_submenu'].'</div>' : ''; ?>
 						</div>
 						<div class="form-group col-lg-6 col-md-6 col-sm-6">
 							<label>Ikon</label>
-							<?php echo form_input($icon); ?>
+              <input type="text" name="icon" value="<?php echo set_value('icon', ''); ?>" id="icon" class="form-control <?php echo ($ses['ikon_submenu'] ?? []) ? 'is-invalid' : ''; ?>" />
+              <?php echo ($ses ?? []) ? '<div class="invalid-feedback">'.$ses['ikon_submenu'].'</div>' : ''; ?>
 						</div>
 
 

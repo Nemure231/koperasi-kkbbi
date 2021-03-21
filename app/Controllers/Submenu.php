@@ -98,7 +98,7 @@ class Submenu extends BaseController{
         $validasi = $this->modelSubmenu->tambahSubmenu();
         if($validasi){
             $this->session->setFlashdata('pesan_validasi_submenu',  $validasi);
-            return redirect()->to(base_url('/pengaturan/submenu'));
+            return redirect()->to(base_url('/pengaturan/submenu'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_submenu', 'Submenu baru berhasil ditambahkan!');
             return redirect()->to(base_url('/pengaturan/submenu'));

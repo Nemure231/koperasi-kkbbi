@@ -1,43 +1,10 @@
 $("#buku_id_1").remove();
 
-function previewImg() {
-   const sampul = document.querySelector('#gambar_barang');
-   const sampulLabel = document.querySelector('.custom-file-label');
-   const imgPrev = document.querySelector('.img-prev');
-
-   sampulLabel.textContent = sampul.files[0].name;
-
-   const fileSampul = new FileReader();
-
-   fileSampul.readAsDataURL(sampul.files[0]);
-
-   fileSampul.onload = function (e) {
-      imgPrev.src = e.target.result;
-   }
-}
-
-
-
-function previewImg1() {
-   const sampul = document.querySelector('#gambar_barangE');
-   const sampulLabel = document.querySelector('#img-edit-label');
-   const imgPrev = document.querySelector('.img-prevE');
-
-   sampulLabel.textContent = sampul.files[0].name;
-
-   const fileSampul = new FileReader();
-
-   fileSampul.readAsDataURL(sampul.files[0]);
-
-   fileSampul.onload = function (e) {
-      imgPrev.src = e.target.result;
-   }
-}
 
 
 const flashDataHapus = $('#flash-data-hapus').data('flashdatahapus');
 const flashData = $('.flash-data').data('flashdata');
-const flashDataSalah = $('barang_error').html();
+const flashDataSalah = $('.barang_error').html();
 
 if (flashData) {
    Swal.fire({
@@ -77,8 +44,10 @@ if (flashDataHapus) {
 }
 
 
+
 $(document).ready(function () {
-   //$("#brbr").DataTable();
+
+
 
    $('#brbr').DataTable({
       responsive: true,
@@ -237,7 +206,6 @@ $(document).ready(function () {
 
    //GET UPDATE
    $('table').on('click', '.tombolEditBarang', function () {
-     
       var id_barang = $(this).data('id_barang');
       var nama_barang = $(this).data('nama_barang');
       var gambar_barang = $(this).data('gambar_barang');

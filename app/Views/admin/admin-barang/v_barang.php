@@ -151,7 +151,8 @@ width:100%!important;
             
             <div class="barang_error">
                       <?php $ses = $session->getFlashdata('pesan_validasi_barang');
-                      echo implode_helper($ses);?>
+                      echo implode_helper($ses);
+                      ?>
                     </div>
             
             </div>

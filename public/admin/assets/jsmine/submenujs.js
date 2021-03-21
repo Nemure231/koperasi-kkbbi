@@ -41,25 +41,26 @@ if (flashDataHapus) {
 }
 
 
-const flashDataSalah = $('.errors').html();
+// const flashDataSalah = $('.submenu_error').html();
 
-if (flashDataSalah != 0) {
+// if (flashDataSalah != 0) {
 
-   Swal.fire({
-      title: 'Gagal',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      html: ' ' + flashDataSalah,
-      icon: 'error'
-   });
-}
+//    Swal.fire({
+//       title: 'Gagal',
+//       hideClass: {
+//          popup: 'animate__animated animate__fadeOutUp animate__fast'
+//       },
+//       html: ' ' + flashDataSalah,
+//       icon: 'error'
+//    });
+// }
 
 $(document).ready(function () {
 
    $('#menu_id').select2({tags: true});
+
    $('#menu_utama_id').select2({tags: true});
-  // $('#menu_idE').select2();
+
    $('#swal2-content ul li').css("color", "#dc3545");
 
    $("#table-1").DataTable();
@@ -123,5 +124,12 @@ $(document).ready(function () {
       // $('#btn-simpan-hapus').attr("action", "kecohhapussubmenu/" + id_submenu);
 
    });
+
+
+   var validasi = $('.submenu_error').html();
+
+   if(validasi != 0){
+      $('#modalSubMenu').modal('show');
+   }
 
 });

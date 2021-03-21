@@ -39,7 +39,7 @@ class Barang extends BaseController{
 	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
 
 	public function index(){
-
+        
         // $kode_barang = $this->model_barang->AutoKodeBarang();
         $nama_barang = set_value('nama_barang', '');
         $harga_konsumen = set_value('harga_konsumen', '');
@@ -61,14 +61,6 @@ class Barang extends BaseController{
             'form_tambah_barang' => ['id' => 'formTambahBarang', 'name'=>'formTambahBarang'],
             'form_edit_barang' =>  ['id' => 'formEditBarang', 'name'=>'formEditBarang'],
             'form_hapus_barang' =>  ['id' => 'formHapusBarang', 'name'=>'formHapusBarang', 'class' => 'btn btn-block'],
-            // 'hidden_kode_barang' => [
-            //     'type' => 'hidden',
-            //     'name' => 'kode_barang',
-            //     'id' => 'kode_barang',
-            //     'value' => ''.$kode_barang.'',
-            //     'class' => 'form-control',
-            //     'autofocus' => ''
-            // ],
             'input_nama_barang' => [
                 'type' => 'text',
                 'name' => 'nama_barang',
@@ -170,157 +162,7 @@ class Barang extends BaseController{
 
     public function tambah(){
 
-            // if(!$this->validate([
-            //     'nama_barang' => [
-            //         'label'  => 'Nama Barang',
-            //         'rules'  => 'required|is_unique[barang.nama_barang]',
-            //         'errors' => [
-            //         'required' => 'Nama barang harus diisi!',
-            //         'is_unique' => 'Nama barang sudah ada!'
-            //         ]
-            //     ],
-            //     'kode_barang' => [
-            //         'label'  => 'Kode Barang',
-            //         'rules'  => 'required',
-            //         'errors' => [
-            //         'required' => 'Kode barang harus diisi!'
-            //         ]
-            //     ],
-            //     'kategori_id' => [
-            //         'label'  => 'Kategori',
-            //         'rules'  => 'required',
-            //         'errors' => [
-            //         'required' => 'Kategori harus dipilih!',
-            //         ]
-            //     ],
-            //     'satuan_id' => [
-            //         'label'  => 'Satuan',
-            //         'rules'  => 'required',
-            //         'errors' => [
-            //         'required' => 'Satuan harus dipilih!'
-            //         // 'numeric' => 'Satuan harus angka!'
-            //         ]
-            //     ],
-            //     'merek_id' => [
-            //         'label'  => 'Merek',
-            //         'rules'  => 'required',
-            //         'errors' => [
-            //         'required' => 'Merek harus dipilih!',
-            //         // 'numeric' => 'Merek harus angka!'
-            //         ]
-            //     ],
-            //     'supplier_id' => [
-            //         'label'  => 'Supplier',
-            //         'rules'  => 'required',
-            //         'errors' => [
-            //         'required' => 'Supplier harus dipilih!'
-            //        // 'numeric' => 'Supplier harus angka!'
-            //         ]
-            //     ],
-            //     'harga_konsumen' => [
-            //         'label'  => 'Harga Konsumen',
-            //         'rules'  => 'required|numeric',
-            //         'errors' => [
-            //         'required' => 'Harga konsumen harus diisi!',
-            //         'numeric' => 'Harga konsumen harus angka!'
-            //         ]
-            //     ],
-            //     'harga_pokok' => [
-            //         'label'  => 'Harga Pokok',
-            //         'rules'  => 'required|numeric',
-            //         'errors' => [
-            //         'required' => 'Harga pokok harus diisi!',
-            //         'numeric' => 'Harga pokok harus angka!'
-            //         ]
-            //     ],
-            //     'harga_anggota' => [
-            //         'label'  => 'Harga Anggota',
-            //         'rules'  => 'required|numeric',
-            //         'errors' => [
-            //         'required' => 'Harga anggota harus diisi!',
-            //         'numeric' => 'Harga anggota harus angka!'
-            //         ]
-            //     ],
-            //     'stok_barang' => [
-            //         'label'  => 'Stok Barang',
-            //         'rules'  => 'required|numeric',
-            //         'errors' => [
-            //         'required' => 'Stok barang harus diisi!',
-            //         'numeric' => 'Stok barang harus angka!'
-            //         ]
-            //     ],
-            //     'deskripsi_barang' => [
-            //         'label'  => 'Deskripsi Barang',
-            //         'rules'  => 'required',
-            //         'errors' => [
-            //         'required' => 'Dskripsi barang harus diisi!'
-            //         ]
-            //     ]
-
-            // ])) {
-                
-            //     return redirect()->to(base_url('/suplai/barang'))->withInput();
-
-            // }
-
-            //     $sap = $this->request->getPost('satuan_id');
-
-            //     if (is_numeric($sap)){
-            //         $sem = $sap;
-            //     }else{
-            //         $this->model_satuan->set('nama_satuan', $sap)->insert();
-            //         $sem = $this->db->insertID();
-            //     }
-
-            //     $kat = $this->request->getPost('kategori_id');
-
-            //     if (is_numeric($kat)){
-            //         $ket = $kat;
-            //     }else{
-            //         $this->model_kategori->set('nama_kategori', $kat)->insert();
-            //         $ket = $this->db->insertID();   
-            //     }
-
-            //     $mer = $this->request->getPost('merek_id');
-
-            //     if (is_numeric($mer)){
-            //         $mar = $mer;
-            //     }else{
-            //         $this->model_merek->set('nama_merek', $mer)->insert();
-            //         $mar = $this->db->insertID();    
-            //     }
-
-            //     $sop = $this->request->getPost('supplier_id');
-
-            //     if (is_numeric($sop)){
-            //         $sup = $sop;
-            //     }else{
-            //         $this->model_pengirim_barang->set('nama_pengirim_barang', $sop)->insert();
-            //         $sup = $this->db->insertID(); 
-            //     }
-
-            //     date_default_timezone_set("Asia/Jakarta");
-
-            //     $nama_barang = htmlspecialchars($this->request->getPost('nama_barang'), ENT_QUOTES);
-            //     $data = array(
-            //         'kode_barang' => htmlspecialchars($this->request->getPost('kode_barang'), ENT_QUOTES),
-            //         'nama_barang' => $nama_barang,
-            //         'kategori_id' => htmlspecialchars($ket, ENT_QUOTES),
-            //         'satuan_id' => htmlspecialchars($sem, ENT_QUOTES),
-            //         'merek_id' => htmlspecialchars($mar, ENT_QUOTES),
-            //         'pengirim_barang_id' => htmlspecialchars($sup, ENT_QUOTES),
-            //         'harga_pokok' => $this->request->getPost('harga_pokok'),
-            //         'harga_konsumen' => $this->request->getPost('harga_konsumen'),
-            //         'harga_anggota' => $this->request->getPost('harga_anggota'),
-            //         'stok_barang' => $this->request->getPost('stok_barang'),
-            //         'tanggal' => date('Y-m-d H:i:s')
-            //     );
-    
-            //     $this->model_barang->insert($data);
-                
-               
-            //     $this->session->setFlashdata('pesan_barang', 'Barang baru berhasil ditambahkan!');
-            //     return redirect()->to(base_url('/suplai/barang'));
+           
         $validasi = $this->modelBarang->tambahBarang();
         if($validasi){
             $this->session->setFlashdata('pesan_validasi_barang',  $validasi);
@@ -333,175 +175,23 @@ class Barang extends BaseController{
     }
 
     public function ubah(){
+                
+        $validasi = $this->modelBarang->ubahBarang();
 
-        $old = $this->request->getPost('nama_barang_old');
-        $new = $this->request->getPost('nama_barangE');
-
-        $rules_nama = 'required';
-
-        if($old != $new){
-            $rules_nama =  'required|is_unique[barang.nama_barang]';
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_barang',  $validasi);
+            return redirect()->to(base_url('/suplai/barang'));
+        }else{
+            $this->session->setFlashdata('pesan_barang', 'Barang berhasil diubah!');
+            return redirect()->to(base_url('/suplai/barang'));
         }
-
-            if(!$this->validate([
-                'nama_barangE' => [
-                    'label'  => 'Nama Barang',
-                    'rules'  => $rules_nama,
-                    'errors' => [
-                    'required' => 'Nama barang harus diisi!',
-                    'is_unique' => 'Nama barang sudah ada!'
-                
-                    ]
-                ],
-                'kategori_idE' => [
-                    'label'  => 'Penulis',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Kategori harus dipilih!'
-                    //'numeric' => 'Kategori harus angka!'
-                    ]
-                ],
-                'satuan_idE' => [
-                    'label'  => 'Satuan',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Satuan harus dipilih!'
-                    // 'numeric' => 'Satuan harus angka!'
-                    ]
-                ],
-                'merek_idE' => [
-                    'label'  => 'Merek',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Merek harus dipilih!',
-                    //'numeric' => 'Merek harus angka!'
-                    ]
-                ],
-                'supplier_idE' => [
-                    'label'  => 'Supplier',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Supplier harus dipilih!',
-                    // 'numeric' => 'Supplier harus angka!'
-                    ]
-                ],
-                'harga_pokokE' => [
-                    'label'  => 'Harga Pokok',
-                    'rules'  => 'required|numeric',
-                    'errors' => [
-                    'required' => 'Harga pokok harus diisi!',
-                    'numeric' => 'Harga pokok harus angka!'
-                    ]
-                ],
-                'harga_konsumenE' => [
-                    'label'  => 'Harga Konsumen',
-                    'rules'  => 'required|numeric',
-                    'errors' => [
-                    'required' => 'Harga konsumen harus diisi!',
-                    'numeric' => 'Harga konsumen harus angka!'
-                    ]
-                ],
-                'harga_anggotaE' => [
-                    'label'  => 'Harga Anggota',
-                    'rules'  => 'required|numeric',
-                    'errors' => [
-                    'required' => 'Harga anggota harus diisi!',
-                    'numeric' => 'Harga anggota harus angka!'
-                    ]
-                ],
-                'stok_barangE' => [
-                    'label'  => 'Stok Barang',
-                    'rules'  => 'required|numeric',
-                    'errors' => [
-                    'required' => 'Stok barang harus diisi!',
-                    'numeric' => 'Stok barang harus angka!'
-                    ]
-                ],
-                'deskripsi_barangE' => [
-                    'label'  => 'Deskripsi Barang',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Dskripsi barang harus diisi!'
-                    ]
-                ]
-            ])) {
-                
-                return redirect()->to(base_url('/suplai/barang'))->withInput();
-
-            }
-
-
-                date_default_timezone_set("Asia/Jakarta");
-                $id = $this->request->getPost('id_barangE');
-                $nama_barang = htmlspecialchars($this->request->getPost('nama_barangE'), ENT_QUOTES);
-                
-                
-                $sap = $this->request->getPost('satuan_idE');
-
-                if (is_numeric($sap)){
-                    $sem = $sap;
-                }else{
-                    $this->model_satuan->set('nama_satuan', $sap)->insert();
-                    $sem = $this->db->insertID();
-                }
-
-                $kat = $this->request->getPost('kategori_idE');
-
-                if (is_numeric($kat)){
-                    $ket = $kat;
-                }else{
-                    $this->model_kategori->set('nama_kategori', $kat)->insert();
-                    $ket = $this->db->insertID();   
-                }
-
-                $mer = $this->request->getPost('merek_idE');
-
-                if (is_numeric($mer)){
-                    $mar = $mer;
-                }else{
-                    $this->model_merek->set('nama_merek', $mer)->insert();
-                    $mar = $this->db->insertID();
-                }
-
-                $sop = $this->request->getPost('supplier_idE');
-
-                if (is_numeric($sop)){
-                    $sup = $sop;
-                }else{
-                    $this->model_pengirim_barang->set('nama_pengirim_barang', $sop)->insert();
-                    $sup = $this->db->insertID(); 
-                }
-                
-                
-                
-                $data = array(
-                    'nama_barang' => $nama_barang,
-                    'kategori_id' => htmlspecialchars($ket, ENT_QUOTES),
-                    'satuan_id' => htmlspecialchars($sem, ENT_QUOTES),
-                    'merek_id' => htmlspecialchars($mar, ENT_QUOTES),
-                    'pengirim_barang_id' => htmlspecialchars($sup, ENT_QUOTES),
-                    'harga_pokok' => $this->request->getPost('harga_pokokE'),
-                    'harga_konsumen' => $this->request->getPost('harga_konsumenE'),
-                    'harga_anggota' => $this->request->getPost('harga_anggotaE'),
-                    'stok_barang' => $this->request->getPost('stok_barangE'),
-                    'tanggal_update' => date('Y-m-d H:i:s')
-                );
-                
-                // $this->model->EditBarang($data, $id);
-                $this->model_barang->update($id, $data);
-
-                $this->session->setFlashdata('pesan_barang', 'Barang berhasil diedit!');
-                return redirect()->to(base_url('/suplai/barang'));
-                
-       
     }
 
     
     public function hapus(){     
-            $id_barang = $this->request->getPost('id_barangH');  
-            $this->model_barang->delete($id_barang);
-            $this->session->setFlashdata('hapus_barang', 'Barang berhasil dihapus!');
-            return redirect()->to(base_url('/suplai/barang'));
+        $this->modelBarang->hapusBarang();
+        $this->session->setFlashdata('hapus_barang', 'Barang berhasil dihapus!');
+        return redirect()->to(base_url('/suplai/barang'));
 
         
     
