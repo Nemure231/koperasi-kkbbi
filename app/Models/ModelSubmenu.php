@@ -70,10 +70,10 @@ class ModelSubmenu extends Model{
                 'pengaturan/submenu/tambah'
                 .'?menu_id='.$this->request->getPost('menu_id')
                 .'&menu_utama_id='.$this->request->getPost('menu_utama_id')
-                .'&nama_submenu='. htmlspecialchars($this->request->getPost('judul'), ENT_QUOTES)
-                .'&url_submenu='. htmlspecialchars($this->request->getPost('url'), ENT_QUOTES)
-                .'&ikon_submenu='.  htmlspecialchars($this->request->getPost('icon'), ENT_QUOTES)
-                .'&status_submenu='. htmlspecialchars($this->request->getPost('is_active'), ENT_QUOTES),
+                .'&nama_submenu='. htmlspecialchars($this->request->getPost('nama_submenu'), ENT_QUOTES)
+                .'&url_submenu='. htmlspecialchars($this->request->getPost('url_submenu'), ENT_QUOTES)
+                .'&ikon_submenu='.  htmlspecialchars($this->request->getPost('ikon_submenu'), ENT_QUOTES)
+                .'&status_submenu='. htmlspecialchars($this->request->getPost('status_submenu'), ENT_QUOTES),
 
                 ['headers' => 
                     [
@@ -92,7 +92,7 @@ class ModelSubmenu extends Model{
     }
 
     public function ubahSubmenu(){
-        $id_submenu = $this->request->getPost('submenu_id');
+        $id_submenu = $this->request->getPost('edit_id_submenu');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -100,12 +100,12 @@ class ModelSubmenu extends Model{
             $respon_ambil_submenu = $this->_client->request(
                 'PUT',
                 'pengaturan/submenu/ubah/'.$id_submenu
-                .'?menu_id='.$this->request->getPost('menu_idE')
-                .'&menu_utama_id='.$this->request->getPost('menu_utama_idE')
-                .'&nama_submenu='. htmlspecialchars($this->request->getPost('judulE'), ENT_QUOTES)
-                .'&url_submenu='. htmlspecialchars($this->request->getPost('urlE'), ENT_QUOTES)
-                .'&ikon_submenu='.  htmlspecialchars($this->request->getPost('iconE'), ENT_QUOTES)
-                .'&status_submenu='. htmlspecialchars($this->request->getPost('is_activeE'), ENT_QUOTES),
+                .'?menu_id='.$this->request->getPost('edit_menu_id')
+                .'&menu_utama_id='.$this->request->getPost('edit_menu_utama_id')
+                .'&nama_submenu='. htmlspecialchars($this->request->getPost('edit_nama_submenu'), ENT_QUOTES)
+                .'&url_submenu='. htmlspecialchars($this->request->getPost('edit_url_submenu'), ENT_QUOTES)
+                .'&ikon_submenu='.  htmlspecialchars($this->request->getPost('edit_ikon_submenu'), ENT_QUOTES)
+                .'&status_submenu='. htmlspecialchars($this->request->getPost('edit_status_submenu'), ENT_QUOTES),
 
                 ['headers' => 
                     [
@@ -124,7 +124,7 @@ class ModelSubmenu extends Model{
     }
 
     public function hapusSubmenu(){
-        $id_submenu = $this->request->getPost('hidden_hapus_id_submenu');
+        $id_submenu = $this->request->getPost('hapus_id_submenu');
         $ambil_token = get_cookie('jwt_token');
 
         $respon_ambil_user = $this->_client->request(

@@ -30,63 +30,11 @@ class Submenu extends BaseController{
             'menu_utama' => $this->modelMenuUtama->ambilMenuUtamaUntukSubmenu(),
             'submenu'=> $this->modelSubmenu->ambilSubmenu(),
             'session' => $this->session,
-            'attr' => ['id' => 'formSubMenu', 'name'=>'formSubMenu'],
-            'form_hapus_submenu' => ['id' => 'formHapusSubmenu', 'name'=>'formHapusSubmenu', 'class' => 'btn btn-block'],
-            'hidden_submenu_id' => ['name' => 'submenu_id', 'id'=>'submenu_id', 'type'=> 'hidden'],
-            'hidden_hapus_id_submenu' => ['name' => 'hidden_hapus_id_submenu', 'id'=>'hidden_hapus_id_submenu', 'type'=> 'hidden'],
-            'hidden_judul_old' => ['name' => 'judul_old', 'id'=>'judul_old', 'type'=> 'hidden'],
-            'hidden_url_old' => ['name' => 'url_old', 'id'=>'url_old', 'type'=> 'hidden'],
-            'cecc' =>[
-                'name' => 'is_active',
-                'id'=>'is_active',
-                'type'=> 'checkbox',
-                'value'=> '1',
-                'class'=> 'form-check-input',
-                'checked' => ''
-            ],
-            'judul' => [
-                'type' => 'text',
-                'name' => 'judul',
-                'id' => 'judul',
-                'class' => 'form-control judul'
-            ],
-            'url' => [
-                'type' => 'text',
-                'name' => 'url',
-                'id' => 'url',
-                'class' => 'form-control url'
-            ],
-            'icon' => [
-                'type' => 'text',
-                'name' => 'icon',
-                'id' => 'icon',
-                'class' => 'form-control'
-            ],
-            'ceccE' =>[
-                'name' => 'is_activeE',
-                'id'=>'is_activeE',
-                'type'=> 'checkbox',
-                'value'=> '1',
-                'class'=> 'form-check-input is_activeE'
-            ],
-            'judulE' => [
-                'type' => 'text',
-                'name' => 'judulE',
-                'id' => 'judulE',
-                'class' => 'form-control'
-            ],
-            'urlE' => [
-                'type' => 'text',
-                'name' => 'urlE',
-                'id' => 'urlE',
-                'class' => 'form-control url'
-            ],
-            'iconE' => [
-                'type' => 'text',
-                'name' => 'iconE',
-                'id' => 'iconE',
-                'class' => 'form-control'
-            ]
+            'form_tambah' => ['id' => 'form-tambah'],
+            'form_edit' => ['id' => 'form-edit'],
+            'form_hapus' => ['id' => 'form-hapus', 'class' => 'btn btn-block'],
+            'edit_id_submenu' => ['name' => 'edit_id_submenu', 'id'=>'edit_id_submenu', 'type'=> 'hidden'],
+            'hapus_id_submenu' => ['name' => 'hapus_id_submenu', 'id'=>'hapus_id_submenu', 'type'=> 'hidden'],
         ];
         
         tampilan_admin('admin/admin-submenu/v_submenu', 'admin/admin-submenu/v_js_submenu', $data);
@@ -97,7 +45,7 @@ class Submenu extends BaseController{
 
         $validasi = $this->modelSubmenu->tambahSubmenu();
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_submenu',  $validasi);
+            $this->session->setFlashdata('pesan_validasi_tambah_submenu',  $validasi);
             return redirect()->to(base_url('/pengaturan/submenu'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_submenu', 'Submenu baru berhasil ditambahkan!');
@@ -109,8 +57,18 @@ class Submenu extends BaseController{
     public function ubah(){
         $validasi = $this->modelSubmenu->ubahSubmenu();
 
+        $old = [
+            'id_submenu' => $this->request->getPost('edit_id_submenu'),
+            'nama_submenu' => $this->request->getPost('edit_nama_submenu'),
+            'menu_id' => $this->request->getPost('edit_menu_id'),
+            'menu_utama_id' => $this->request->getPost('edit_menu_utama_id'),
+            'url_submenu' => $this->request->getPost('edit_url_submenu'),
+            'ikon_submenu' => $this->request->getPost('edit_ikon_submenu')
+        ];
+
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_submenu',  $validasi);    
+            $this->session->setFlashdata('pesan_validasi_edit_submenu',  $validasi);
+            $this->session->setFlashdata('old_edit_input',  $old);        
             return redirect()->to(base_url('/pengaturan/submenu'));
         }else{
             $this->session->setFlashdata('pesan_submenu', 'Submenu baru berhasil ditambahkan!');

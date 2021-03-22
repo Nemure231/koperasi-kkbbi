@@ -116,16 +116,33 @@ width:100%!important;
             <?php endif; ?>
 
             <div class="invisible">
-              <div class="submenu_error">
+              <div class="validasi_tambah">
               0
-              <?php $ses = $session->getFlashdata('pesan_validasi_submenu');
+              <?php $validasi_tambah = $session->getFlashdata('pesan_validasi_tambah_submenu');
               
-              if($ses){
-                echo $ses['nama_submenu']; 
-                echo $ses['menu_id']; 
-                echo $ses['menu_utama_id']; 
-                echo $ses['ikon_submenu']; 
-                echo $ses['url_submenu'];
+              if($validasi_tambah){
+                echo $validasi_tambah['nama_submenu']; 
+                echo $validasi_tambah['menu_id']; 
+                echo $validasi_tambah['menu_utama_id']; 
+                echo $validasi_tambah['ikon_submenu']; 
+                echo $validasi_tambah['url_submenu'];
+
+              }
+              
+              ?>
+              
+
+              </div>
+              <div class="validasi_edit">
+              0
+              <?php $validasi_edit = $session->getFlashdata('pesan_validasi_edit_submenu');
+              
+              if($validasi_edit){
+                echo $validasi_edit['nama_submenu']; 
+                echo $validasi_edit['menu_id']; 
+                echo $validasi_edit['menu_utama_id']; 
+                echo $validasi_edit['ikon_submenu']; 
+                echo $validasi_edit['url_submenu'];
 
               }
               
@@ -144,38 +161,40 @@ width:100%!important;
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalSubMenu" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalSubMenu" role="dialog" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header bg-primary">
 				<h5 class="modal-title text-light">Tambah Submenu</h5>
-				<button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+				<button type="button" class="close tutup-modal text-danger" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">X</span>
 				</button>
 			</div>
 
       
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-			<?php echo form_open(base_url().'/pengaturan/submenu/tambah', $attr); ?>
-      <?php echo csrf_field(); ?>
-
-      <?php $ses = $session->getFlashdata('pesan_validasi_submenu');?>
+			<?php echo form_open(base_url().'/pengaturan/submenu/tambah', $form_tambah); ?>
+        <?php $pesan_tambah = $session->getFlashdata('pesan_validasi_tambah_submenu');?>
 				<div class="modal-body">
-
-        <!-- <a href="javascript:void(0)" class="tbhs btn btn-icon icon-left btn-primary" ><i class="fas fa-plus"></i> Tambah menu</a> -->
-        
-
 
 					<div class="row">
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<label>Nama submenu</label>
-                <input type="text" name="judul" value="<?php echo set_value('judul', ''); ?>" id="judul" class="form-control judul  <?php echo ($ses['nama_submenu'] ?? []) ? 'is-invalid' : ''; ?>"/>
-                <?php echo ($ses ?? []) ? '<div class="invalid-feedback">'.$ses['nama_submenu'].'</div>' : ''; ?>
+                <?php
+                $class_tambah_nama_submenu = ($pesan_tambah['nama_submenu'] ?? []) ? 'is-invalid' : '';
+                $value_tambah_nama_submenu = set_value('nama_submenu', '');
+                echo form_input([
+                  'name' => "nama_submenu",
+                  'class' => "form-control "."$class_tambah_nama_submenu"."",
+                  'value' => $value_tambah_nama_submenu,
+                  'type' => "text"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['nama_submenu'].'</div>' : ''; ?>
 						</div>
 
             <div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Menu Utama</label>
-							<select class="custom-select <?php echo ($ses['menu_utama_id'] ?? []) ? 'is-invalid' : ''; ?>" name="menu_utama_id" id="menu_utama_id">
+							<select class="custom-select <?php echo ($pesan_tambah['menu_utama_id'] ?? []) ? 'is-invalid' : ''; ?>" name="menu_utama_id" id="menu_utama_id">
 
 								<option></option>
 								<?php foreach ($menu_utama as $mu):?>
@@ -183,12 +202,12 @@ width:100%!important;
 								<?php endforeach;  ?>
 
 							</select>
-                <?php echo ($ses ?? []) ? '<div class="invalid-feedback">'.$ses['menu_utama_id'].'</div>' : ''; ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['menu_utama_id'].'</div>' : ''; ?>
 						</div>
               
 						<div class="form-group col-lg-6 col-md-6 col-sm-12" id="yumi">
 							<label>Menu</label>
-							<select class="custom-select <?php echo ($ses['menu_id'] ?? []) ? 'is-invalid' : ''; ?>" name="menu_id" id="menu_id">
+							<select class="custom-select <?php echo ($pesan_tambah['menu_id'] ?? []) ? 'is-invalid' : ''; ?>" name="menu_id" id="menu_id">
 
 								<option></option>
 								<?php foreach ($mmenu as $m):?>
@@ -196,30 +215,49 @@ width:100%!important;
 								<?php endforeach;  ?>
 
 							</select>
-              <?php echo ($ses ?? []) ? '<div class="invalid-feedback">'.$ses['menu_id'].'</div>' : ''; ?>
+              <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['menu_id'].'</div>' : ''; ?>
 						</div>
 
 
 						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Url</label>
-							<input type="text" name="url" value="<?php echo set_value('url', ''); ?>" id="url" class="form-control url <?php echo ($ses['url_submenu'] ?? []) ? 'is-invalid' : ''; ?>" />
-              <?php echo ($ses ?? []) ? '<div class="invalid-feedback">'.$ses['url_submenu'].'</div>' : ''; ?>
+              <?php
+                $class_tambah_url_submenu = ($pesan_tambah['url_submenu'] ?? []) ? 'is-invalid' : '';
+                $value_tambah_url_submenu = set_value('url_submenu', '');
+                echo form_input([
+                  'name' => "url_submenu",
+                  'class' => "form-control "."$class_tambah_url_submenu"."",
+                  'value' => $value_tambah_url_submenu,
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['url_submenu'].'</div>' : ''; ?>
 						</div>
 						<div class="form-group col-lg-6 col-md-6 col-sm-6">
-							<label>Ikon</label>
-              <input type="text" name="icon" value="<?php echo set_value('icon', ''); ?>" id="icon" class="form-control <?php echo ($ses['ikon_submenu'] ?? []) ? 'is-invalid' : ''; ?>" />
-              <?php echo ($ses ?? []) ? '<div class="invalid-feedback">'.$ses['ikon_submenu'].'</div>' : ''; ?>
+            <label>Ikon</label>
+            <?php
+                $class_tambah_ikon_submenu = ($pesan_tambah['ikon_submenu'] ?? []) ? 'is-invalid' : '';
+                $value_tambah_ikon_submenu = set_value('ikon_submenu', '');
+                echo form_input([
+                  'name' => "ikon_submenu",
+                  'class' => "form-control "."$class_tambah_ikon_submenu"."",
+                  'value' => $value_tambah_ikon_submenu,
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['ikon_submenu'].'</div>' : ''; ?>
 						</div>
 
 
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<div class="form-check">
-                  <?php echo form_input($cecc); ?>
-                  <input class="form-check-input" name="is_active" type="hidden" value="2">
-                  <!-- <//?php echo form_input($cecc); ?> -->
-								<!-- <input class="form-check-input" type="checkbox" value="1" name="is_active"
-									id="is_active" checked> -->
-								<label class="form-check-label" for="is_active">
+                <?php echo form_input([
+                  'id' => 'status_submenu',
+                  'name' => 'status_submenu',
+                  'type'=> 'checkbox',
+                  'value'=> '1',
+                  'class'=> 'form-check-input status_submenu',
+                  'checked' => ''
+                ]); ?>
+								<label class="form-check-label" for="status_submenu">
 									Aktif?
 								</label>
 							</div>
@@ -240,53 +278,65 @@ width:100%!important;
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalEditSubMenu" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalEditSubMenu" data-backdrop="static" class="modalEditSubMenu" role="dialog" aria-hidden="true" >
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header bg-primary">
 				<h5 class="modal-title text-light">Edit Submenu</h5>
-				<button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+				<button type="button" class="close tutup-modal text-danger" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">X</span>
 				</button>
 			</div>
 
       
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-			<?php echo form_open(base_url().'/pengaturan/submenu/ubah', $attr); ?>
+			<?php echo form_open(base_url().'/pengaturan/submenu/ubah', $form_edit); ?>
+      <?php $old_data = $session->getFlashdata('old_edit_input');?>
       <input type="hidden" name="_method" value="PUT">
-		<?php echo csrf_field(); ?>
-		<?php echo form_input($hidden_submenu_id); ?>
-		<?php echo form_input($hidden_judul_old); ?>
-		<?php echo form_input($hidden_url_old); ?>
+		    <?php echo form_input([
+          'name' => 'edit_id_submenu', 'id'=>'edit_id_submenu', 'type'=> 'hidden',
+          'value' => $old_data['id_submenu'] ?? ''
+        ]); ?>
+        <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_submenu');?>
+
+        <!-- <input id="old_id_submenu" type="hidden" value="<//?php echo $old_data/['id_submenu'] ?? ''; ?>" /> -->
 
 				<div class="modal-body">
-
-        <!-- <a href="javascript:void(0)" class="tbhs btn btn-icon icon-left btn-primary" ><i class="fas fa-plus"></i> Tambah menu</a> -->
-        
-
-
 					<div class="row">
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<label>Nama submenu</label>
 						
-              <?php echo form_input($judulE); ?>
+              <?php
+                $class_edit_nama_submenu = ($pesan_edit['nama_submenu'] ?? []) ? 'is-invalid' : '';
+                // $value_edit_nama_submenu = set_value('edit_nama_submenu', '');
+                echo form_input([
+                  'id' => "edit_nama_submenu",
+                  'name' => "edit_nama_submenu",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_submenu"."",
+                  'value' => $old_data['nama_submenu'] ?? '',
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_submenu'].'</div>' : ''; ?>
+						
 						</div>
 
             <div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Menu Utama</label>
-							<select class="custom-select" name="menu_utama_idE" id="menu_utama_idE">
-
+              <input id="old_menu_utama_id" type="hidden" value="<?php echo $old_data['menu_utama_id'] ?? ''; ?>" />
+							<select class="custom-select hapus-validasi-border edit_menu_utama_id <?php echo ($pesan_edit['menu_utama_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_menu_utama_id" id="edit_menu_utama_id">
 								<option></option>
 								<?php foreach ($menu_utama as $mu):?>
 								<option value="<?php echo $mu['id_menu_utama']; ?>"><?php echo $mu['nama_menu_utama']; ?></option>
 								<?php endforeach;  ?>
 
 							</select>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['menu_utama_id'].'</div>' : ''; ?>
 						</div>
               
-						<div class="form-group col-lg-6 col-md-6 col-sm-12" id="yumi">
+						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Menu</label>
-							<select class="custom-select" name="menu_idE" id="menu_idE">
+              <input id="old_menu_id" type="hidden" value="<?php echo $old_data['menu_id'] ?? ''; ?>" />
+							<select class="custom-select hapus-validasi-border edit_menu_id <?php echo ($pesan_edit['menu_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_menu_id" id="edit_menu_id">
 
 								<option></option>
 								<?php foreach ($mmenu as $m):?>
@@ -294,30 +344,52 @@ width:100%!important;
 								<?php endforeach;  ?>
 
 							</select>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['menu_id'].'</div>' : ''; ?>
 						</div>
-
-           
-            
-
 
 						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Url</label>
-							<?php echo form_input($urlE); ?>
+							<?php
+                $class_edit_url_submenu = ($pesan_edit['url_submenu'] ?? []) ? 'is-invalid' : '';
+                // $value_edit_url_submenu = set_value('edit_url_submenu', '');
+                echo form_input([
+                  'id'  => "edit_url_submenu", 
+                  'name' => "edit_url_submenu",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_url_submenu"."",
+                  'value' => $old_data['url_submenu'] ?? '',
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['url_submenu'].'</div>' : ''; ?>
+						
 						</div>
 						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Ikon</label>
-							<?php echo form_input($iconE); ?>
+              <?php
+                $class_edit_ikon_submenu = ($pesan_edit['ikon_submenu'] ?? []) ? 'is-invalid' : '';
+                // $value_edit_ikon_submenu = set_value('edit_ikon_submenu', '');
+                echo form_input([
+                  'id' => "edit_ikon_submenu",
+                  'name' => "edit_ikon_submenu",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_ikon_submenu"."",
+                  'value' => $old_data['ikon_submenu'] ?? '',
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['ikon_submenu'].'</div>' : ''; ?>
+						
 						</div>
 
 
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<div class="form-check">
-              <!-- <input class="form-check-input" name="is_activeE" type="hidden" value="2"> -->
-                  <?php echo form_input($ceccE); ?>
-                  <!-- <//?php echo form_input($cecc); ?> -->
-								<!-- <input class="form-check-input" type="checkbox" value="1" name="is_active"
-									id="is_active" checked> -->
-								<label class="form-check-label" for="is_active">
+              <?php echo form_input([
+                  'id' => 'edit_status_submenu',
+                  'name' => 'edit_status_submenu',
+                  'type'=> 'checkbox',
+                  'value'=> '1',
+                  'class'=> 'form-check-input',
+                  'checked' => ''
+                ]); ?>
+								<label class="form-check-label" for="edit_status_submenu">
 									Aktif?
 								</label>
 							</div>
@@ -337,12 +409,12 @@ width:100%!important;
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalHapusSubMenu" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalHapusSubMenu" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title text-light"></h5>
-        <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close tutup-modal text-danger" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true"><i style="font-size: 24px;" class="fas fa-10x fa-times"></i></span>
         </button>
       </div>
@@ -368,17 +440,12 @@ width:100%!important;
 
       </div>
       <div class="modal-footer" id="yahaloo">
-        <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
-        <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <?php echo form_open(base_url().'/pengaturan/submenu/hapus', $form_hapus_submenu);    ?>
-        <?php echo form_input($hidden_hapus_id_submenu); ?>
-        <?php echo csrf_field(); ?>
-          <input type="hidden" name="_method" value="DELETE">
-          <button type="submit" class="btn btn-danger">Ya, hapus!</button>
-        <?php echo form_close(); ?>
-
+        <?php echo form_open(base_url().'/pengaturan/submenu/hapus', $form_hapus);    ?>
+          <?php echo form_input($hapus_id_submenu); ?>
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-danger">Ya, hapus!</button>
+          <?php echo form_close(); ?>
       </div>
-
     </div>
   </div>
 </div>
