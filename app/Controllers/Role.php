@@ -25,25 +25,10 @@ class Role extends BaseController{
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'role' => $this->modelRole->ambilRole(),
             'session' => $this->session,
-            'attr' => ['id' => 'formRole', 'name'=>'formRole'],
-            'form_hapus_role' => ['id' => 'formHapusRole', 'name'=>'formHapusRole', 'class' => 'btn btn-block'],
-            'hidden_role_id' => ['name' => 'role_id', 'id'=>'role_id', 'type'=> 'hidden'],
-            'hidden_role_id_hapus' => ['name' => 'hidden_role_id_hapus', 'id'=>'hidden_role_id_hapus', 'type'=> 'hidden'],
-            'hidden_old_role' => ['name' => 'old_role', 'id'=>'old_role', 'type'=> 'hidden'],
-            'nama_role' => [
-                'type' => 'text',
-                'name' => 'role',
-                'id' => 'role',
-                'placeholder' => 'Nama role ....',
-                'class' => 'form-control role'
-            ],
-            'roleE' => [
-                'type' => 'text',
-                'name' => 'roleE',
-                'id' => 'roleE',
-                'placeholder' => 'Nama role ....',
-                'class' => 'form-control role'
-            ],
+            'form_tambah' => ['id' => 'form-tambah-role'],
+            'form_edit' => ['id' => 'form-edit-role'],
+            'form_hapus' => ['id' => 'form-hapus-role', 'class' => 'btn btn-block'],
+            'hapus_id_role' => ['name' => 'hapus_id_role', 'id'=>'hapus_id_role', 'type'=> 'hidden']
         ];
 		
         tampilan_admin('admin/admin-role/v_role', 'admin/admin-role/v_js_role', $data);
@@ -53,8 +38,8 @@ class Role extends BaseController{
 
         $validasi = $this->modelRole->tambahRole();
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_role',  $validasi);
-            return redirect()->to(base_url('/pengaturan/role'));
+            $this->session->setFlashdata('pesan_validasi_tambah_role',  $validasi);
+            return redirect()->to(base_url('/pengaturan/role'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_role', 'Role baru berhasil ditambahkan!');
             return redirect()->to(base_url('/pengaturan/role'));
@@ -65,10 +50,13 @@ class Role extends BaseController{
     public function ubah(){
        
         $validasi = $this->modelRole->ubahRole();
-
+        $old = [
+            'id_role' => $this->request->getPost('edit_id_role')
+        ];
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_role',  $validasi);
-            return redirect()->to(base_url('/pengaturan/role'));
+            $this->session->setFlashdata('pesan_validasi_edit_role',  $validasi);
+            $this->session->setFlashdata('old_edit_input',  $old);
+            return redirect()->to(base_url('/pengaturan/role'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_edit_role', 'Role berhasil diubah!');
             return redirect()->to(base_url('/pengaturan/role'));

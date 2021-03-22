@@ -23,10 +23,9 @@ class Menu extends BaseController{
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'mmenu' => $this->modelMenu->ambilMenu(),
             'session' => $this->session,
-            'form_tambah' => ['id' => 'formMenu'],
-            'form_edit' => ['id' => 'formEditMenu'],
+            'form_tambah' => ['id' => 'form-tambah-menu'],
+            'form_edit' => ['id' => 'form-edit-menu'],
             'form_hapus' => ['class' => 'btn btn-block'],
-            'edit_id_menu' => ['name' => 'hapus_id_menu', 'id'=>'edit_id_menu', 'type'=> 'hidden'],
             'hapus_id_menu' => ['name' => 'hapus_id_menu', 'id'=>'hapus_id_menu', 'type'=> 'hidden']
 
         ];

@@ -30,10 +30,9 @@ class Submenu extends BaseController{
             'menu_utama' => $this->modelMenuUtama->ambilMenuUtamaUntukSubmenu(),
             'submenu'=> $this->modelSubmenu->ambilSubmenu(),
             'session' => $this->session,
-            'form_tambah' => ['id' => 'form-tambah'],
-            'form_edit' => ['id' => 'form-edit'],
-            'form_hapus' => ['id' => 'form-hapus', 'class' => 'btn btn-block'],
-            'edit_id_submenu' => ['name' => 'edit_id_submenu', 'id'=>'edit_id_submenu', 'type'=> 'hidden'],
+            'form_tambah' => ['id' => 'form-tambah-submenu'],
+            'form_edit' => ['id' => 'form-edit-submenu'],
+            'form_hapus' => ['id' => 'form-hapus-submenu', 'class' => 'btn btn-block'],
             'hapus_id_submenu' => ['name' => 'hapus_id_submenu', 'id'=>'hapus_id_submenu', 'type'=> 'hidden'],
         ];
         

@@ -41,21 +41,7 @@ if (flashDataHapus) {
 }
 
 
-const flashDataSalah = $('.role_error').html();
-
-if (flashDataSalah != 0) {
-
-   Swal.fire({
-      title: 'Gagal',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      html: ' ' + flashDataSalah,
-      icon: 'error'
-   });
-}
 $(document).ready(function () {
-   $('#swal2-content ul li').css("color", "#dc3545");
 
    $("#roro").DataTable();
          /*  When user click add user button */
@@ -70,18 +56,28 @@ $(document).ready(function () {
       var nama_role = $(this).data('role');
       var id_role = $(this).data('id');
       $('#modalEditRole').modal('show');
-      $('#roleE').val(nama_role);
-      $('#old_role').val(nama_role);
-      $('#role_id').val(id_role);
+      $('#edit_nama_role').val(nama_role);
+      $('#edit_id_role').val(id_role);
 
    });
+
+   var validasi_tambah = $('.validasi_tambah').html();
+   var validasi_edit = $('.validasi_edit').html();
+   if(validasi_tambah != 0){
+      $('#modalRole').modal('show');
+   }
+   if(validasi_edit != 0){
+      $('#modalEditRole').modal('show');
+   }
 
    $('table').on('click', '.hapus-role', function () {
       var id_role = $(this).data('id');
       $('#modalHapusRole').modal('show');
-      $('#hidden_role_id_hapus').val(id_role);
-      // $('#btn-simpan-hapus').attr("action", "role/kecohhapusrole/" + id_role);
+      $('#hapus_id_role').val(id_role);
+   });
 
-
+   $('#modalEditRole').on('hidden.bs.modal', function (event) {
+      $('.hapus-validasi').remove('invalid-feedback');
+      $('.hapus-validasi-border').removeClass('is-invalid');
    });
 });

@@ -71,7 +71,7 @@ class ModelRole extends Model{
             $respon_ambil_role = $this->_client->request(
                 'POST',
                 'pengaturan/role/tambah'
-                .'?nama_role='. htmlspecialchars($this->request->getPost('role'), ENT_QUOTES),
+                .'?nama_role='. htmlspecialchars($this->request->getPost('nama_role'), ENT_QUOTES),
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"

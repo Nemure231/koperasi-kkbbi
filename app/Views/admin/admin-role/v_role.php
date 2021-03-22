@@ -85,11 +85,26 @@
 
             <?php endif; ?>
             <div class="invisible">
-            <div class="role_error">
-                      <?php $ses = $session->getFlashdata('pesan_validasi_role');
-                      echo implode_helper($ses);?>
-                    </div>
-</div>
+                <div class="validasi_tambah">
+                0
+                <?php $validasi_tambah = $session->getFlashdata('pesan_validasi_tambah_role');
+                
+                if($validasi_tambah){
+                  echo $validasi_tambah['nama_role']; 
+
+                }?>
+                </div>
+                <div class="validasi_edit">
+                0
+                <?php $validasi_edit = $session->getFlashdata('pesan_validasi_edit_role');
+                
+                if($validasi_edit){
+                  echo $validasi_edit['nama_role']; 
+                }?>
+                
+
+                </div>        
+              </div>
 
 
 
@@ -116,12 +131,21 @@
 				</button>
 			</div>
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah role ini berasal dari controler role di fungsi index -->
-      <?php echo form_open(base_url().'/pengaturan/role/tambah', $attr);    ?>
-      <?php echo csrf_field(); ?>
+      <?php echo form_open(base_url().'/pengaturan/role/tambah', $form_tambah);    ?>
+      <?php $pesan_tambah = $session->getFlashdata('pesan_validasi_tambah_role');?>
 				<div class="modal-body">
 
 					<div class="form-group">
-          <?php echo form_input($nama_role); ?>
+          <label>Nama Role</label>
+          <?php
+              $class_tambah_nama_role = ($pesan_tambah['nama_role'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "nama_role",
+                  'class' => "form-control "."$class_tambah_nama_role"."",
+                  'value' => set_value('nama_role', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_tambah['nama_role'].'</div>' : ''; ?>
 					</div>
 
 				</div>
@@ -147,15 +171,30 @@
 				</button>
 			</div>
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah role ini berasal dari controler role di fungsi index -->
-      <?php echo form_open(base_url().'/pengaturan/role/ubah', $attr);    ?>
-      <?php echo csrf_field(); ?>
+      <?php echo form_open(base_url().'/pengaturan/role/ubah', $form_edit);    ?>
+      <?php $old_data = $session->getFlashdata('old_edit_input');?>
       <input type="hidden" name="_method" value="PUT">
-      <?php echo form_input($hidden_role_id); ?>
-      <?php echo form_input($hidden_old_role); ?>
+      <?php echo form_input([
+          'name' => 'edit_id_role',
+          'id'=> 'edit_id_role',
+          'type'=> 'hidden',
+          'value' => $old_data['id_role'] ?? ''
+        ]); ?>
+      <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_role');?>
 				<div class="modal-body">
 
 					<div class="form-group">
-          <?php echo form_input($roleE); ?>
+          <label>Nama Role</label>
+          <?php
+                $class_edit_nama_role = ($pesan_edit['nama_role'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'id' => "edit_nama_role",
+                  'name' => "edit_nama_role",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_role"."",
+                  'value' => set_value('edit_nama_role', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_role'].'</div>' : ''; ?>
 					</div>
 
 				</div>
@@ -205,9 +244,8 @@
       <div class="modal-footer" id="yahaloo">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <?php echo form_open(base_url().'/pengaturan/role/hapus', $form_hapus_role);    ?>
-        <?php echo form_input($hidden_role_id_hapus); ?>
-        <?php echo csrf_field(); ?>
+        <?php echo form_open(base_url().'/pengaturan/role/hapus', $form_hapus);    ?>
+        <?php echo form_input($hapus_id_role); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         <?php echo form_close(); ?>

@@ -169,7 +169,7 @@
           'name' => 'edit_id_menu',
           'id'=> 'edit_id_menu',
           'type'=> 'hidden',
-          'value' => set_value('edit_nama_menu', '')
+          'value' => $old_data['id_menu'] ?? ''
         ]); ?>
       <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_menu');?>
       <input type="hidden" name="_method" value="PUT">
@@ -189,8 +189,7 @@
                   'type' => "text"
                 ]); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_menu'].'</div>' : ''; ?>
-              <div class="invalid-feedback">
-              </div>
+              
             </div>
           </div>
         </div>
