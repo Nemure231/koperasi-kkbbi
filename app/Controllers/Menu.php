@@ -11,7 +11,7 @@ class Menu extends BaseController{
         $this->modelMenu = new ModelMenu();
 	}
 
-	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
+	protected $helpers = ['form', 'url', 'kpos', 'cookie'];
 
 	public function index(){
 
@@ -23,26 +23,11 @@ class Menu extends BaseController{
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'mmenu' => $this->modelMenu->ambilMenu(),
             'session' => $this->session,
-            'attr' => ['id' => 'formMenu', 'name'=>'formMenu'],
-            'form_edit_menu' => ['id' => 'formEditMenu', 'name'=>'formEditMenu'],
-            'form_hapus_menu' => ['id' => 'formHapusMenu', 'name'=>'formHapusMenu', 'class' => 'btn btn-block'],
-            'hidden_menu_id' => ['name' => 'hidden_menu_id', 'id'=>'hidden_menu_id', 'type'=> 'hidden'],
-            'hidden_hapus_menu_id' => ['name' => 'hidden_hapus_menu_id', 'id'=>'hidden_hapus_menu_id', 'type'=> 'hidden'],
-            'hidden_old_menu' => ['name' => 'old_menu', 'id'=>'old_menu', 'type'=> 'hidden'],
-            'menunu' => [
-                'type' => 'text',
-                'name' => 'menu',
-                'id' => 'menu',
-                'placeholder' => 'Nama menu ....',
-                'class' => 'form-control menu'
-            ],
-            'menuE' => [
-                'type' => 'text',
-                'name' => 'menuE',
-                'id' => 'menuE',
-                'placeholder' => 'Nama menu ....',
-                'class' => 'form-control menu'
-            ]
+            'form_tambah' => ['id' => 'formMenu'],
+            'form_edit' => ['id' => 'formEditMenu'],
+            'form_hapus' => ['class' => 'btn btn-block'],
+            'edit_id_menu' => ['name' => 'hapus_id_menu', 'id'=>'edit_id_menu', 'type'=> 'hidden'],
+            'hapus_id_menu' => ['name' => 'hapus_id_menu', 'id'=>'hapus_id_menu', 'type'=> 'hidden']
 
         ];
         tampilan_admin('admin/admin-menu/v_menu', 'admin/admin-menu/v_js_menu', $data);
@@ -53,8 +38,8 @@ class Menu extends BaseController{
 
         $validasi = $this->modelMenu->tambahMenu();
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_menu',  $validasi);
-            return redirect()->to(base_url('/pengaturan/menu'));
+            $this->session->setFlashdata('pesan_validasi_tambah_menu',  $validasi);
+            return redirect()->to(base_url('/pengaturan/menu'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_menu', 'Menu baru berhasil ditambahkan!');
             return redirect()->to(base_url('/pengaturan/menu'));
@@ -64,9 +49,14 @@ class Menu extends BaseController{
     public function ubah(){
         $validasi = $this->modelMenu->ubahMenu();
 
+        $old = [
+            'id_menu' => $this->request->getPost('edit_id_menu')
+        ];
+
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_menu',  $validasi);
-            return redirect()->to(base_url('/pengaturan/menu'));
+            $this->session->setFlashdata('pesan_validasi_edit_menu',  $validasi);
+            $this->session->setFlashdata('old_edit_input',  $old);
+            return redirect()->to(base_url('/pengaturan/menu'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_edit_menu', 'Menu berhasil diubah!');
             return redirect()->to(base_url('/pengaturan/menu'));

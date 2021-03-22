@@ -13,7 +13,7 @@ class Role extends BaseController{
         
 	}
 
-	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
+	protected $helpers = ['form', 'url', 'kpos', 'cookie'];
 
 	public function index(){
 		

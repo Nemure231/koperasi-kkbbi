@@ -89,7 +89,7 @@ class ModelRole extends Model{
 
    
     public function ubahRole(){
-        $id_role = $this->request->getPost('role_id');
+        $id_role = $this->request->getPost('edit_id_role');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -97,7 +97,7 @@ class ModelRole extends Model{
             $respon_ambil_role = $this->_client->request(
                 'PUT',
                 'pengaturan/role/ubah/'.$id_role
-                .'?nama_role='. htmlspecialchars($this->request->getPost('roleE'), ENT_QUOTES),
+                .'?nama_role='. htmlspecialchars($this->request->getPost('edit_nama_role'), ENT_QUOTES),
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -114,7 +114,7 @@ class ModelRole extends Model{
     }
 
     public function hapusRole(){
-        $id_role =  $this->request->getPost('hidden_role_id_hapus');
+        $id_role =  $this->request->getPost('hapus_id_role');
         $ambil_token = get_cookie('jwt_token');
        
         $respon_ambil_user = $this->_client->request(

@@ -92,7 +92,7 @@ class ModelMenu extends Model{
             $respon_ambil_menu = $this->_client->request(
                 'POST',
                 'pengaturan/menu/tambah'
-                .'?nama_menu='. htmlspecialchars($this->request->getPost('menu'), ENT_QUOTES),
+                .'?nama_menu='. htmlspecialchars($this->request->getPost('nama_menu'), ENT_QUOTES),
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -108,33 +108,33 @@ class ModelMenu extends Model{
         return $result = $validasi['data'];
     }
 
-    public function tambahMenuDariSubmenu($nama_menu){
-        $result = '';
-        $validasi = array('data' => '');
-        try {
-            $ambil_token = get_cookie('jwt_token');
-            $respon_ambil_menu = $this->_client->request(
-                'POST',
-                'pengaturan/menu/tambah/dari-submenu'
-                .'?nama_menu='. htmlspecialchars($nama_menu, ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
-                    ]
-                ],
-            )->getBody();
-            json_decode($respon_ambil_menu, true);
-        } catch (ClientException $e) {
-            // echo Psr7\Message::toString($e->getRequest());
-            $validasi = json_decode($e->getResponse()->getBody(), true);
-        }
+    // public function tambahMenuDariSubmenu($nama_menu){
+    //     $result = '';
+    //     $validasi = array('data' => '');
+    //     try {
+    //         $ambil_token = get_cookie('jwt_token');
+    //         $respon_ambil_menu = $this->_client->request(
+    //             'POST',
+    //             'pengaturan/menu/tambah/dari-submenu'
+    //             .'?nama_menu='. htmlspecialchars($nama_menu, ENT_QUOTES),
+    //             ['headers' => 
+    //                 [
+    //                 'Authorization' => "Bearer {$ambil_token}"
+    //                 ]
+    //             ],
+    //         )->getBody();
+    //         json_decode($respon_ambil_menu, true);
+    //     } catch (ClientException $e) {
+    //         // echo Psr7\Message::toString($e->getRequest());
+    //         $validasi = json_decode($e->getResponse()->getBody(), true);
+    //     }
 
-        return $result = $validasi['data'];
-    }
+    //     return $result = $validasi['data'];
+    // }
 
 
     public function ubahMenu(){
-        $id_menu = $this->request->getPost('hidden_menu_id');
+        $id_menu = $this->request->getPost('edit_id_menu');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -159,7 +159,7 @@ class ModelMenu extends Model{
     }
 
     public function hapusMenu(){
-        $id_menu = $this->request->getPost('hidden_hapus_menu_id');
+        $id_menu = $this->request->getPost('hapus_id_menu');
         $ambil_token = get_cookie('jwt_token');
        
         $respon_ambil_user = $this->_client->request(

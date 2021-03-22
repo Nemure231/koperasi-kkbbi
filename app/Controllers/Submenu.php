@@ -59,17 +59,14 @@ class Submenu extends BaseController{
 
         $old = [
             'id_submenu' => $this->request->getPost('edit_id_submenu'),
-            'nama_submenu' => $this->request->getPost('edit_nama_submenu'),
             'menu_id' => $this->request->getPost('edit_menu_id'),
-            'menu_utama_id' => $this->request->getPost('edit_menu_utama_id'),
-            'url_submenu' => $this->request->getPost('edit_url_submenu'),
-            'ikon_submenu' => $this->request->getPost('edit_ikon_submenu')
+            'menu_utama_id' => $this->request->getPost('edit_menu_utama_id')
         ];
 
         if($validasi){
             $this->session->setFlashdata('pesan_validasi_edit_submenu',  $validasi);
             $this->session->setFlashdata('old_edit_input',  $old);        
-            return redirect()->to(base_url('/pengaturan/submenu'));
+            return redirect()->to(base_url('/pengaturan/submenu'))->withInput();;
         }else{
             $this->session->setFlashdata('pesan_submenu', 'Submenu baru berhasil ditambahkan!');
             return redirect()->to(base_url('/pengaturan/submenu'));
