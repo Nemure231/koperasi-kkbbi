@@ -84,12 +84,39 @@ width:100%!important;
                   </div>
                 </div>
                 <?php endif; ?>
-                    <div class="invisible">
-                    <div class="menu_utama_error">
-                      <?php $ses = $session->getFlashdata('pesan_validasi_menu_utama');
-                      echo implode_helper($ses);?>
-                    </div>
+                <div class="invisible">
+              <div class="validasi_tambah">
+              0
+              <?php $validasi_tambah = $session->getFlashdata('pesan_validasi_tambah_menu_utama');
+              
+              if($validasi_tambah){
+                echo $validasi_tambah['nama_menu_utama']; 
+                echo $validasi_tambah['menu_id']; 
+                echo $validasi_tambah['ikon_menu_utama']; 
+              
+
+              }
+              
+              ?>
+              
+
               </div>
+              <div class="validasi_edit">
+              0
+              <?php $validasi_edit = $session->getFlashdata('pesan_validasi_edit_menu_utama');
+              
+              if($validasi_edit){
+                echo $validasi_edit['nama_menu_utama']; 
+                echo $validasi_edit['menu_id']; 
+                echo $validasi_edit['ikon_menu_utama']; 
+
+              }
+              
+              ?>
+              
+
+              </div>
+            </div>
 
 
 
@@ -102,7 +129,7 @@ width:100%!important;
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalMenuUtama" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalMenuUtama" role="dialog" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header bg-primary">
@@ -113,22 +140,39 @@ width:100%!important;
 			</div>
 			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open(base_url().'/pengaturan/menu_utama/tambah', $form_tambah);    ?>
-        <?php echo csrf_field(); ?>
+      <?php $pesan_tambah = $session->getFlashdata('pesan_validasi_tambah_menu_utama');?>
+        
 				<div class="modal-body">
 
 					<div class="form-group">
           <label>Nama Menu Utama</label>
-            <?php echo form_input($nama_menu_utama); ?>
+          <?php
+                $class_tambah_nama_menu_utama = ($pesan_tambah['nama_menu_utama'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "nama_menu_utama",
+                  'class' => "form-control "."$class_tambah_nama_menu_utama"."",
+                  'value' => set_value('nama_menu_utama', ''),
+                  'type' => "text"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['nama_menu_utama'].'</div>' : ''; ?>
 					</div>
 
           <div class="form-group">
           <label>IKon Menu Utama</label>
-            <?php echo form_input($ikon_menu_utama); ?>
+          <?php
+                $class_tambah_ikon_menu_utama = ($pesan_tambah['ikon_menu_utama'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "ikon_menu_utama",
+                  'class' => "form-control "."$class_tambah_ikon_menu_utama"."",
+                  'value' => set_value('ikon_menu_utama', ''),
+                  'type' => "text"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['ikon_menu_utama'].'</div>' : ''; ?>
 					</div>
 
           <div class="form-group">
 							<label>Menu</label>
-							<select class="custom-select" name="menu_id" id="menu_id">
+							<select class="custom-select <?php echo ($pesan_tambah['menu_id'] ?? []) ? 'is-invalid' : ''; ?>" name="menu_id" id="menu_id">
 
 								<option></option>
 								<?php foreach ($mmenu as $m):?>
@@ -136,6 +180,7 @@ width:100%!important;
 								<?php endforeach;  ?>
 
 							</select>
+              <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['menu_id'].'</div>' : ''; ?>
 						</div>
 
 				</div>
@@ -151,7 +196,7 @@ width:100%!important;
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalEditMenuUtama" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalEditMenuUtama" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -162,28 +207,58 @@ width:100%!important;
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open(base_url().'/pengaturan/menu_utama/ubah', $form_edit);    ?>
+      <?php $old_data = $session->getFlashdata('old_edit_input');?>
       <input type="hidden" name="_method" value="PUT">
-      <?php echo form_input($hidden_menu_utama_id); ?>
-      <?php echo form_input($hidden_old_menu_utama); ?>
-      <?php echo csrf_field(); ?>
+      <?php echo form_input([
+          'name' => 'edit_id_menu_utama',
+          'id'=>'edit_id_menu_utama',
+          'type'=> 'hidden',
+          'value' => $old_data['id_menu_utama'] ?? ''
+        ]); ?>
+        <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_menu_utama');?>
+      
+      
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Nama Menu Utama</label>
-              <?php echo form_input($nama_menu_utamaE); ?>
+              <?php
+                $class_edit_nama_menu_utama = ($pesan_edit['nama_menu_utama'] ?? []) ? 'is-invalid' : '';
+                // $value_edit_nama_menu_utama = set_value('edit_nama_menu_utama', '');
+                echo form_input([
+                  'id' => "edit_nama_menu_utama",
+                  'name' => "edit_nama_menu_utama",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_menu_utama"."",
+                  'value' => set_value('edit_nama_menu_utama', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_menu_utama'].'</div>' : ''; ?>
+						
             </div>
           </div>
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Ikon Menu Utama</label>
-              <?php echo form_input($ikon_menu_utamaE); ?>
+              <?php
+                $class_edit_ikon_menu_utama = ($pesan_edit['ikon_menu_utama'] ?? []) ? 'is-invalid' : '';
+                // $value_edit_ikon_menu_utama = set_value('edit_ikon_menu_utama', '');
+                echo form_input([
+                  'id' => "edit_ikon_menu_utama",
+                  'name' => "edit_ikon_menu_utama",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_ikon_menu_utama"."",
+                  'value' => set_value('edit_ikon_menu_utama', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['ikon_menu_utama'].'</div>' : ''; ?>
+						
             </div>
           </div>
           <div class="col-lg-12">
           <div class="form-group col-sm-12 col-md-12 col-lg-12">
 							<label>Menu</label>
-							<select class="custom-select" name="menu_idE" id="menu_idE">
+              <input id="old_menu_id" type="hidden" value="<?php echo $old_data['menu_id'] ?? ''; ?>" />
+							<select class="custom-select <?php echo ($pesan_edit['menu_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_menu_id" id="edit_menu_id">
 
 								<option></option>
 								<?php foreach ($mmenu as $m):?>
@@ -191,6 +266,7 @@ width:100%!important;
 								<?php endforeach;  ?>
 
 							</select>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['menu_id'].'</div>' : ''; ?>
 						</div>
             </div>
         </div>
@@ -208,7 +284,7 @@ width:100%!important;
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalHapusMenuUtama" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalHapusMenuUtama" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -238,10 +314,9 @@ width:100%!important;
         </div>
 
       </div>
-      <div class="modal-footer" id="yahaloo">
+      <div class="modal-footer">
         <?php echo form_open(base_url().'/pengaturan/menu_utama/hapus', $form_hapus);    ?>
-        <?php echo form_input($hidden_hapus_menu_utama_id); ?>
-        <?php echo csrf_field(); ?>
+        <?php echo form_input($hapus_id_menu_utama); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         <?php echo form_close(); ?>

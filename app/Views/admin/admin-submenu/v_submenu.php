@@ -297,9 +297,6 @@ width:100%!important;
           'value' => $old_data['id_submenu'] ?? ''
         ]); ?>
         <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_submenu');?>
-
-        <!-- <input id="old_id_submenu" type="hidden" value="<//?php echo $old_data/['id_submenu'] ?? ''; ?>" /> -->
-
 				<div class="modal-body">
 					<div class="row">
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
@@ -322,7 +319,7 @@ width:100%!important;
             <div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Menu Utama</label>
               <input id="old_menu_utama_id" type="hidden" value="<?php echo $old_data['menu_utama_id'] ?? ''; ?>" />
-							<select class="custom-select hapus-validasi-border edit_menu_utama_id <?php echo ($pesan_edit['menu_utama_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_menu_utama_id" id="edit_menu_utama_id">
+							<select class="custom-select hapus-validasi-border <?php echo ($pesan_edit['menu_utama_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_menu_utama_id" id="edit_menu_utama_id">
 								<option></option>
 								<?php foreach ($menu_utama as $mu):?>
 								<option value="<?php echo $mu['id_menu_utama']; ?>"><?php echo $mu['nama_menu_utama']; ?></option>
@@ -335,7 +332,7 @@ width:100%!important;
 						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Menu</label>
               <input id="old_menu_id" type="hidden" value="<?php echo $old_data['menu_id'] ?? ''; ?>" />
-							<select class="custom-select hapus-validasi-border edit_menu_id <?php echo ($pesan_edit['menu_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_menu_id" id="edit_menu_id">
+							<select class="custom-select hapus-validasi-border <?php echo ($pesan_edit['menu_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_menu_id" id="edit_menu_id">
 
 								<option></option>
 								<?php foreach ($mmenu as $m):?>

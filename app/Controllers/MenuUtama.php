@@ -26,41 +26,10 @@ class MenuUtama extends BaseController{
             'mmenu' =>  $this->modelMenu->ambilMenu(),
             'menu_utama' => $this->modelMenuUtama->ambilMenuUtama(),
             'session' => $this->session,
-            'form_tambah' => ['id' => 'formMenuUtama'],
-            'form_edit' => ['id' => 'formEditMenuUtama'],
+            'form_tambah' => ['id' => 'form-tambah-menu-utama'],
+            'form_edit' => ['id' => 'form-edit-menu-utama'],
             'form_hapus' => ['class' => 'btn btn-block'],
-            'hidden_menu_utama_id' => ['name' => 'hidden_menu_utama_id', 'id'=>'hidden_menu_utama_id', 'type'=> 'hidden'],
-            'hidden_hapus_menu_utama_id' => ['name' => 'hidden_hapus_menu_utama_id', 'id'=>'hidden_hapus_menu_utama_id', 'type'=> 'hidden'],
-            'hidden_old_menu_utama' => ['name' => 'old_nama_menu_utama', 'id'=>'old_nama_menu_utama', 'type'=> 'hidden'],
-            'nama_menu_utama' => [
-                'type' => 'text',
-                'name' => 'nama_menu_utama',
-                'id' => 'nama_menu_utama',
-                // 'placeholder' => 'Nama menu utama ....',
-                'class' => 'form-control'
-            ],
-            'ikon_menu_utama' => [
-                'type' => 'text',
-                'name' => 'ikon_menu_utama',
-                'id' => 'ikon_menu_utama',
-                // 'placeholder' => 'Ikon menu utama ....',
-                'class' => 'form-control'
-            ],
-            'nama_menu_utamaE' => [
-                'type' => 'text',
-                'name' => 'nama_menu_utamaE',
-                'id' => 'nama_menu_utamaE',
-                // 'placeholder' => 'Nama menu utama ....',
-                'class' => 'form-control menu'
-            ],
-            'ikon_menu_utamaE' => [
-                'type' => 'text',
-                'name' => 'ikon_menu_utamaE',
-                'id' => 'ikon_menu_utamaE',
-                // 'placeholder' => 'Ikon menu utama ....',
-                'class' => 'form-control'
-         ],
-
+            'hapus_id_menu_utama' => ['name' => 'hapus_id_menu_utama', 'id'=>'hapus_id_menu_utama', 'type'=> 'hidden'],
         ];
         tampilan_admin('admin/admin-menu-utama/v_menu_utama', 'admin/admin-menu-utama/v_js_menu_utama', $data);
     }
@@ -69,8 +38,8 @@ class MenuUtama extends BaseController{
     public function tambah(){
         $validasi = $this->modelMenuUtama->tambahMenuUtama();
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_menu_utama',  $validasi);
-            return redirect()->to(base_url('/pengaturan/menu_utama'));
+            $this->session->setFlashdata('pesan_validasi_tambah_menu_utama',  $validasi);
+            return redirect()->to(base_url('/pengaturan/menu_utama'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_menu_utama', 'Menu utama baru berhasil ditambahkan!');
             return redirect()->to(base_url('/pengaturan/menu_utama'));
@@ -80,9 +49,14 @@ class MenuUtama extends BaseController{
     public function ubah(){
 
         $validasi = $this->modelMenuUtama->ubahMenuUtama();
+        $old = [
+            'id_menu_utama' => $this->request->getPost('edit_id_menu_utama'),
+            'menu_id' => $this->request->getPost('edit_menu_id'),
+        ];
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_menu_utama',  $validasi);
-            return redirect()->to(base_url('/pengaturan/menu_utama'));
+            $this->session->setFlashdata('pesan_validasi_edit_menu_utama',  $validasi);
+            $this->session->setFlashdata('old_edit_input',  $old);  
+            return redirect()->to(base_url('/pengaturan/menu_utama'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_edit_menu_utama', 'Menu utama baru berhasil diubah!');
             return redirect()->to(base_url('/pengaturan/menu_utama'));

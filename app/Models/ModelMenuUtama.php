@@ -109,7 +109,7 @@ class ModelMenuUtama extends Model{
 
 
     public function ubahMenuUtama(){
-        $id_menu_utama = $this->request->getPost('hidden_menu_utama_id');
+        $id_menu_utama = $this->request->getPost('edit_id_menu_utama');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -117,9 +117,9 @@ class ModelMenuUtama extends Model{
             $respon_ambil_menu_utama = $this->_client->request(
                 'PUT',
                 'pengaturan/menu_utama/ubah/'.$id_menu_utama
-                .'?menu_id='. htmlspecialchars($this->request->getPost('menu_idE'), ENT_QUOTES)
-                .'&nama_menu_utama='. htmlspecialchars($this->request->getPost('nama_menu_utamaE'), ENT_QUOTES)
-                .'&ikon_menu_utama='. htmlspecialchars($this->request->getPost('ikon_menu_utamaE'), ENT_QUOTES),
+                .'?menu_id='. htmlspecialchars($this->request->getPost('edit_menu_id'), ENT_QUOTES)
+                .'&nama_menu_utama='. htmlspecialchars($this->request->getPost('edit_nama_menu_utama'), ENT_QUOTES)
+                .'&ikon_menu_utama='. htmlspecialchars($this->request->getPost('edit_ikon_menu_utama'), ENT_QUOTES),
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -136,7 +136,7 @@ class ModelMenuUtama extends Model{
     }
 
     public function hapusMenuUtama(){
-        $id_menu_utama = $this->request->getPost('hidden_hapus_menu_utama_id');
+        $id_menu_utama = $this->request->getPost('hapus_id_menu_utama');
         $ambil_token = get_cookie('jwt_token');
        
         $respon_ambil_user = $this->_client->request(

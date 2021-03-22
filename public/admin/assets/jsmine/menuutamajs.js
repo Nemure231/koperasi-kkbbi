@@ -41,23 +41,10 @@ if (flashDataHapus) {
 }
 
 
-const flashDataSalah = $('.menu_utama_error').html();
 
-if (flashDataSalah != 0) {
-
-   Swal.fire({
-      title: 'Gagal',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      html: ' ' + flashDataSalah,
-      icon: 'error'
-   });
-}
 
    $(document).ready(function () {
       $('#menu_id').select2({tags: true});
-      $('#swal2-content ul li').css("color", "#dc3545");
 
       $("#table-menu-utama").DataTable();
       /*  When user click add user button */
@@ -73,22 +60,43 @@ if (flashDataSalah != 0) {
          var ikon = $(this).data('ikon-menu-utama');
          var menu_id = $(this).data('menu-id');
          $('#modalEditMenuUtama').modal('show');
-         $('#nama_menu_utamaE').val(nama_menu_utama);
-         $('#ikon_menu_utamaE').val(ikon);
-         $('#menu_idE').val(menu_id);
-         $('#old_nama_menu_utama').val(nama_menu_utama);
-         $('#hidden_menu_utama_id').val(id);
-         $('#menu_idE').select2({
+         $('#edit_nama_menu_utama').val(nama_menu_utama);
+         $('#edit_ikon_menu_utama').val(ikon);
+         $('#edit_menu_id').val(menu_id);
+         $('#edit_id_menu_utama').val(id);
+         $('#edit_menu_id').select2({
             dropdownParent: $('#modalEditMenuUtama'),
             tags: true
          });
       
       });
 
+      var validasi_tambah = $('.validasi_tambah').html();
+      var validasi_edit = $('.validasi_edit').html();
+      if(validasi_tambah != 0){
+         $('#modalMenuUtama').modal('show');
+      }
+
+      if(validasi_edit != 0){
+         $('#modalEditMenuUtama').modal('show');
+
+         $('#modalEditMenuUtama').on('shown.bs.modal', function (event) {
+            menu_id = $('#old_menu_id').val();
+            $('#edit_menu_id').val(menu_id);
+            
+      
+            $('#edit_menu_id').select2({
+               dropdownParent: $('#modalEditMenuUtama'),
+               tags: true
+            });
+          
+         });
+      }
+
       $('table').on('click', '.hapus-menu-utama', function () {
          var id = $(this).data('id');
          $('#modalHapusMenuUtama').modal('show');
-         $('#hidden_hapus_menu_utama_id').val(id);
+         $('#hapus_id_menu_utama').val(id);
 
       
          
