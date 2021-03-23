@@ -14,19 +14,6 @@ if (flashData) {
    });
 
 }
-if (flashDataSalah != 0) {
-
-   Swal.fire({
-      title: 'Gagal',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      html: ' ' + flashDataSalah,
-      icon: 'error'
-   });
-   
-   //$('#modalBuku').modal('show');
-}
 if (flashDataHapus) {
 
    Swal.fire({
@@ -42,13 +29,9 @@ if (flashDataHapus) {
 
 $(document).ready(function () {
    $("#mermer").DataTable();
-   $('#swal2-content ul li').css("color", "#dc3545");
-
 
    $('#tombolTambahMerek').click(function () {
-      $('#modalTambahMerek').modal('show');
-      
-
+      $('#modalTambahMerek').modal('show');      
    });
 
    
@@ -57,26 +40,28 @@ $(document).ready(function () {
       var nama_merek = $(this).data('nama_merek');
       $('#modalEditMerek').modal('show');
       $('#edit_nama_merek').val(nama_merek);
-      $('#old_nama_merek').val(nama_merek);
-      $('#id_merekE').val(id_merek);
-      
-      
+      $('#edit_id_merek').val(id_merek);
    });
 
-   $('.edit_nama_merek').on('change', function () {
-      $('.edit_nama_merek').rules('add', {remote: {
-         url: "unikbuku",
-         type: "post"
-      }});
-   });
+   var validasi_tambah = $('.validasi_tambah').html();
+   var validasi_edit = $('.validasi_edit').html();
+   if(validasi_tambah != 0){
+      $('#modalTambahMerek').modal('show');
+   }
+   if(validasi_edit != 0){
+      $('#modalEditMerek').modal('show');
+   }
 
    $('table').on('click', '.tombolHapusMerek', function () {
 
       var id_merek = $(this).data("id_merek");
       $('#modalMerekHapus').modal('show');
-      $('#id_merekH').val(id_merek);
-   
-     
+      $('#hapus_id_merek').val(id_merek);
+   });
+
+   $('#modalEditMerek').on('hidden.bs.modal', function (event) {
+      $('.hapus-validasi').remove('invalid-feedback');
+      $('.hapus-validasi-border').removeClass('is-invalid');
    });
 
 

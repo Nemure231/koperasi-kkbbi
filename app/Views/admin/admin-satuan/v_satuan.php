@@ -152,7 +152,7 @@
                   'value' => set_value('nama_satuan', ''),
                   'type' => "text"
                 ]); ?>
-              <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_tambah['nama_satuan'].'</div>' : ''; ?>
+              <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['nama_satuan'].'</div>' : ''; ?>
               
             </div>
           </div>

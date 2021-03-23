@@ -78,4 +78,3 @@ if (flashDataHapus) {
          $('.hapus-validasi-border').removeClass('is-invalid');
       });
    });
-     

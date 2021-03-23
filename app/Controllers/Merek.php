@@ -15,7 +15,7 @@ class Merek extends BaseController
         $this->modelMerek = new ModelMerek();
 	}
 
-	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
+	protected $helpers = ['url', 'form', 'kpos', 'cookie'];
 
 
     public function index(){
@@ -27,32 +27,10 @@ class Merek extends BaseController
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'merek' =>  $this->modelMerek->ambilMerek(),
             'session' => $this->session,
-            'form_tambah_merek' => ['id' => 'formTambahMerek', 'name'=>'formTambahMerek'],
-            'form_edit_merek' =>  ['id' => 'formEditMerek', 'name'=>'formEditMerek'],
-            'form_hapus_merek' =>  ['id' => 'formHapusMerek', 'name'=>'formHapusMerek', 'class' => 'btn btn-block'],
-            'hidden_id_merek' => ['name' => 'id_merekE', 'id'=>'id_merekE', 'type'=> 'hidden'],
-            'hidden_id_merekH' => ['name' => 'id_merekH', 'id'=>'id_merekH', 'type'=> 'hidden'],
-            'input_nama_merek' => [
-                'type' => 'text',
-                'name' => 'nama_merek',
-                'class' => 'form-control'
-                
-            ],
-            'input_nama_merekE' => [
-                'type' => 'text',
-                'name' => 'edit_nama_merek',
-                'id' => 'edit_nama_merek',
-                'class' => 'form-control'
-                
-            ],
-            'hidden_nama_merek' => [
-                'type' => 'hidden',
-                'name' => 'old_nama_merek',
-                'id' => 'old_nama_merek',
-                'class' => 'form-control'
-                
-            ],
-            
+            'form_tambah' => ['id' => 'form-tambah-merek'],
+            'form_edit' =>  ['id' => 'form-edit-merek'],
+            'form_hapus' =>  ['class' => 'btn btn-block'],
+            'hapus_id_merek' => ['name' => 'hapus_id_merek', 'id'=>'hapus_id_merek', 'type'=> 'hidden']
         ];
         tampilan_admin('admin/admin-merek/v_merek', 'admin/admin-merek/v_js_merek', $data);
      
@@ -62,8 +40,8 @@ class Merek extends BaseController
 
         $validasi = $this->modelMerek->tambahMerek();
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_merek',  $validasi);
-            return redirect()->to(base_url('/suplai/merek'));
+            $this->session->setFlashdata('pesan_validasi_tambah_merek',  $validasi);
+            return redirect()->to(base_url('/suplai/merek'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_merek', 'Merek baru berhasil ditambahkan!');
             return redirect()->to(base_url('/suplai/merek'));
@@ -73,9 +51,14 @@ class Merek extends BaseController
     public function ubah(){
 
         $validasi = $this->modelMerek->ubahMerek();
+
+        $old = [
+            'id_merek' => $this->request->getPost('edit_id_merek')
+        ];
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_merek',  $validasi);
-            return redirect()->to(base_url('/suplai/merek'));
+            $this->session->setFlashdata('pesan_validasi_edit_merek',  $validasi);
+            $this->session->setFlashdata('old_edit_input',  $old);
+            return redirect()->to(base_url('/suplai/merek'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_merek', 'Merek berhasil diubah!');
             return redirect()->to(base_url('/suplai/merek'));
@@ -84,7 +67,7 @@ class Merek extends BaseController
 
 
     public function hapus(){
-        $this->modelMerek->hapusMerek($id_merek);
+        $this->modelMerek->hapusMerek();
         $this->session->setFlashdata('pesan_hapus_merek', 'Merek berhasil dihapus!');
         return redirect()->to(base_url('/suplai/merek'));
     }

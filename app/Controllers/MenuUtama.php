@@ -14,7 +14,7 @@ class MenuUtama extends BaseController{
         $this->modelMenuUtama =  new ModelMenuUtama();
 	}
 
-	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
+	protected $helpers = ['form', 'url', 'kpos', 'cookie'];
 
 	public function index(){
 

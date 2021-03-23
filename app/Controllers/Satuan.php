@@ -16,7 +16,7 @@ class Satuan extends BaseController
         $this->modelSatuan = new ModelSatuan();
 	}
 
-	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
+	protected $helpers = ['url', 'form', 'kpos', 'cookie'];
 
 	public function index(){
 		
