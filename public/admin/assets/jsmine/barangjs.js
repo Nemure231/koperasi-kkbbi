@@ -1,7 +1,5 @@
 $("#buku_id_1").remove();
 
-
-
 const flashDataHapus = $('#flash-data-hapus').data('flashdatahapus');
 const flashData = $('.flash-data').data('flashdata');
 const flashDataSalah = $('.barang_error').html();
@@ -18,19 +16,6 @@ if (flashData) {
 
 }
 
-if (flashDataSalah != 0) {
-
-   Swal.fire({
-      title: 'Gagal',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      html: ' ' + flashDataSalah,
-      icon: 'error'
-   });
-
-   //$('#modalBuku').modal('show');
-}
 if (flashDataHapus) {
 
    Swal.fire({
@@ -187,18 +172,8 @@ $(document).ready(function () {
    $('#supplier_id').select2({tags: true});
    $('#kategori_id').select2({tags: true});
 
-
-
-
-
-
-
-   $('#swal2-content ul li').css("color", "#dc3545");
-
    $('#tombolTambahBarang').click(function () {
-      //$('#btn-simpan').val("tambah-menu");
-      //var ded = 'dude';
-      //$('#judulBuku').html("Tambah Buku");
+     
       $('#modalTambahBarang').modal('show');
 
 
@@ -218,37 +193,31 @@ $(document).ready(function () {
       var harga_anggota = $(this).data('harga_anggota');
       var harga_pokok = $(this).data('harga_pokok');
       var stok_barang = $(this).data('stok');
-      // $('#formEditBarang').attr("action", "suplai/barang/ubah");
-      $('#img-edit').attr("src", "admin/assets/barang/" + gambar_barang);
-      $('#img-edit-label').text(gambar_barang);
-      $('#id_barangE').val(id_barang);
-      $('#nama_barangE').val(nama_barang);
-      $('#kategori_idE').val(kategori);
-      $('#nama_barang_old').val(nama_barang);
-      $('#merek_idE').val(merek);
-      $('#supplier_idE').val(pengirim);
-      $('#satuan_idE').val(satuan);
-      $('#deskripsi_barangE').val(deskripsi);
-      $('#nama_barangE').val(nama_barang);
-      $('#harga_konsumenE').val(harga_konsumen);
-      $('#harga_anggotaE').val(harga_anggota);
-      $('#harga_pokokE').val(harga_pokok);
-      $('#stok_barangE').val(stok_barang);
-      $('#gambar_barang_lama').val(gambar_barang);
-      $('#merek_idE').select2({
+      $('#edit_id_barang').val(id_barang);
+      $('#edit_nama_barang').val(nama_barang);
+      $('#edit_kategori_id').val(kategori);
+      $('#edit_merek_id').val(merek);
+      $('#edit_supplier_id').val(pengirim);
+      $('#edit_satuan_id').val(satuan);
+      $('#edit_nama_barang').val(nama_barang);
+      $('#edit_harga_konsumen').val(harga_konsumen);
+      $('#edit_harga_anggota').val(harga_anggota);
+      $('#edit_harga_pokok').val(harga_pokok);
+      $('#edit_stok_barang').val(stok_barang);
+      $('#edit_merek_id').select2({
          dropdownParent: $('#modalEditBarang'),
          tags: true
          
       });
-      $('#satuan_idE').select2({
+      $('#edit_satuan_id').select2({
          dropdownParent: $('#modalEditBarang'),
          tags: true
       });
-      $('#kategori_idE').select2({
+      $('#edit_kategori_id').select2({
          dropdownParent: $('#modalEditBarang'),
          tags: true
       });
-      $('#supplier_idE').select2({
+      $('#edit_supplier_id').select2({
          dropdownParent: $('#modalEditBarang'),
          tags: true
       });
@@ -257,61 +226,59 @@ $(document).ready(function () {
 
    });
 
+
+   var validasi_tambah = $('.validasi_tambah').html();
+   var validasi_edit = $('.validasi_edit').html();
+   if(validasi_tambah != 0){
+      $('#modalTambahBarang').modal('show');
+   }
+
+   if(validasi_edit != 0){
+      $('#modalEditBarang').modal('show');
+
+         kategori_id = $('#old_kategori_id').val();
+         satuan_id = $('#old_satuan_id').val();
+         merek_id = $('#old_merek_id').val();
+         supplier_id = $('#old_supplier_id').val();
+         $('#edit_kategori_id').val(kategori_id);
+         $('#edit_satuan_id').val(satuan_id);
+         $('#edit_merek_id').val(merek_id);
+         $('#edit_supplier_id').val(supplier_id);
+         
+   
+         $('#edit_merek_id').select2({
+            dropdownParent: $('#modalEditBarang'),
+            tags: true
+            
+         });
+         $('#edit_satuan_id').select2({
+            dropdownParent: $('#modalEditBarang'),
+            tags: true
+         });
+         $('#edit_kategori_id').select2({
+            dropdownParent: $('#modalEditBarang'),
+            tags: true
+         });
+         $('#edit_supplier_id').select2({
+            dropdownParent: $('#modalEditBarang'),
+            tags: true
+         });
+      
+   }
+
+
    $('table').on('click', '.tombolHapusBarang', function () {
 
       var barang_id = $(this).data("id_barang");
-      var gambar_barang = $(this).data('gambar_barang');
 
-      // $('#btn-simpan-hapus').attr("href", "suplai/barang/hapus/" + barang_id);
-      $('#id_barangH').val(barang_id);
-      // $('#btn-simpan-hapus2').attr("action", "suplai/barang/kecoh/" + barang_id);
-
-      $('#old_gambar').val(gambar_barang);
-      //$('#formGenre').trigger("reset");
-      //$('#judulBukuHapus').html("");
+      $('#hapus_id_barang').val(barang_id);
       $('#modalBarangHapus').modal('show');
+  
+   });
 
-      //   Swal.fire({
-      //      title: 'Yakin ingin menghapus?',
-      //      text: "Data yang telah dihapus tidak dapat dikembalikan lagi!",
-      //      icon: 'warning',
-      //      hideClass: {
-      //         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      //      },
-      //      showCancelButton: true,
-      //      confirmButtonColor: '#3085d6',
-      //      cancelButtonColor: '#d33',
-      //      cancelButtonText: 'Batal',
-      //      confirmButtonText: 'Ya, hapus!'
-      //   }).then((result) => {
-      //      if (result.value) {
-      //         $.ajax({
-      //            type: "Post",
-      //            url: "buku/hapusbuku",
-      //            data: {
-      //               buku_id: buku_id
-      //            },
-      //            dataType: "json",
-      //            success: function (data) {
-      //               $("#buku_id_" + buku_id).remove();
-
-      //               //location.reload();
-      //            },
-      //            error: function (data) {
-      //               //console.log('Error:', data);
-      //            }
-      //         });
-      //         Swal.fire({
-      //            title: 'Berhasil',
-      //            hideClass: {
-      //               popup: 'animate__animated animate__fadeOutUp animate__fast'
-      //            },
-      //            text: 'Menu berhasil dihapus!',
-      //            icon: 'success'
-      //         });
-
-      //      }
-      //   });
+   $('#modalEditBarang').on('hidden.bs.modal', function (event) {
+      $('.hapus-validasi').remove('invalid-feedback');
+      $('.hapus-validasi-border').removeClass('is-invalid');
    });
 
 

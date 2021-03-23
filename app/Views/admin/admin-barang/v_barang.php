@@ -148,13 +148,47 @@ width:100%!important;
             </div>
             <?php endif; ?>
             <div class="invisible">
-            
-            <div class="barang_error">
-                      <?php $ses = $session->getFlashdata('pesan_validasi_barang');
-                      echo implode_helper($ses);
-                      ?>
-                    </div>
-            
+              <div class="validasi_tambah">
+              0
+              <?php $validasi_tambah = $session->getFlashdata('pesan_validasi_tambah_barang');
+              
+              if($validasi_tambah){
+                echo $validasi_tambah['nama_barang']; 
+                echo $validasi_tambah['kategori_id']; 
+                echo $validasi_tambah['satuan_id']; 
+                echo $validasi_tambah['merek_id'];
+                echo $validasi_tambah['supplier_id'];
+                echo $validasi_tambah['harga_pokok']; 
+                echo $validasi_tambah['harga_konsumen'];
+                echo $validasi_tambah['harga_anggota'];
+                echo $validasi_tambah['stok_barang'];
+                 
+              }
+              
+              ?>
+
+              </div>
+              <div class="validasi_edit">
+              0
+              <?php $validasi_edit = $session->getFlashdata('pesan_validasi_edit_barang');
+              
+              if($validasi_edit){
+                echo $validasi_edit['nama_barang']; 
+                echo $validasi_edit['kategori_id']; 
+                echo $validasi_edit['satuan_id']; 
+                echo $validasi_edit['merek_id'];
+                echo $validasi_edit['supplier_id'];
+                echo $validasi_edit['harga_pokok']; 
+                echo $validasi_edit['harga_konsumen'];
+                echo $validasi_edit['harga_anggota'];
+                echo $validasi_edit['stok_barang'];
+
+              }
+              
+              ?>
+              
+
+              </div>
             </div>
 
 
@@ -170,7 +204,7 @@ width:100%!important;
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalTambahBarang"  role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static"  id="modalTambahBarang"  role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -180,67 +214,64 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/suplai/barang/tambah', $form_tambah_barang);    ?>
-      <!-- <//?php echo form_input($hidden_kode_barang); ?> -->
-      <?php echo csrf_field(); ?>
+      <?php echo form_open(base_url().'/suplai/barang/tambah', $form_tambah);    ?>
+      <?php $pesan_tambah = $session->getFlashdata('pesan_validasi_tambah_barang');?>
       <div class="modal-body">
         <div class="row">
     
 
           <div class="col-lg-6">
             <div class="row">
-                <div class="form-group">
-                    <!--// name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                    <!-- <//?php echo form_input($hidden_kode_barang); ?> -->
-                  </div>
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Nama Barang</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($input_nama_barang); ?>
+                <?php
+                $class_tambah_nama_barang = ($pesan_tambah['nama_barang'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "nama_barang",
+                  'class' => "form-control "."$class_tambah_nama_barang"."",
+                  'value' => set_value('nama_barang', ''),
+                  'type' => "text"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['nama_barang'].'</div>' : ''; ?>
               </div>
 
-              <div class="form-group col-sm-6 col-md-12 col-lg-12">
+              <div class="form-group col-sm-12 col-md-6 col-lg-12">
                 <label>Kategori</label>
-                <select class="form-control" name="kategori_id" id="kategori_id">
-                <option value=""></option>
+                <select class="form-control <?php echo ($pesan_tambah['kategori_id'] ?? []) ? 'is-invalid' : ''; ?>" name="kategori_id" id="kategori_id">
+                	<option value="">--Pilih--</option>
                   <?php foreach ($kategori as $kt) :?>
-                  <option value="<?php echo esc($kt['id_kategori']);?>"><?php echo esc($kt['nama_kategori']);?></option>
+                  <option value="<?php echo $kt['id_kategori'];?>"><?php echo $kt['nama_kategori'];?></option>
                   <?php endforeach;?>
                 </select>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['kategori_id'].'</div>' : ''; ?>
               </div>
 
 
 
-              <div class="form-group col-sm-12 col-md-12 col-lg-6">
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label>Satuan</label>
-                <select class="form-control" name="satuan_id" id="satuan_id">
-                  <option value=""></option>
+                <select class="form-control <?php echo ($pesan_tambah['satuan_id'] ?? []) ? 'is-invalid' : ''; ?>" name="satuan_id" id="satuan_id">
+                  	<option value="">--Pilih--</option>
                   <?php foreach ($satuan as $st) :?>
                   <option value="<?php echo esc($st['id_satuan']);?>"><?php echo esc($st['nama_satuan']);?></option>
                   <?php endforeach;?>
                 </select>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['satuan_id'].'</div>' : ''; ?>
               </div>
 
               <div class="form-group col-sm-12 col-md-12 col-lg-6">
                 <label>Merek</label>
-                <select class="form-control" name="merek_id" id="merek_id">
-                <option value=""></option>
+                <select class="form-control <?php echo ($pesan_tambah['merek_id'] ?? []) ? 'is-invalid' : ''; ?>" name="merek_id" id="merek_id">
+                	<option value="">--Pilih--</option>
                   <?php foreach ($merek as $mt) :?>
                   <option value="<?php echo esc($mt['id_merek']);?>"><?php echo esc($mt['nama_merek']);?></option>
                   <?php endforeach;?>
                 </select>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['merek_id'].'</div>' : ''; ?>
               </div>
 
-              <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                <label>Supplier</label>
-                <select class="form-control" name="supplier_id" id="supplier_id">
-                <option value=""></option>
-                  <?php foreach ($supplier as $sp) :?>
-                  <option value="<?php echo esc($sp['id_supplier']);?>"><?php echo esc($sp['nama_supplier']);?></option>
-                  <?php endforeach;?>
-                </select>
-              </div>
+  
 
              
             </div>
@@ -248,24 +279,63 @@ width:100%!important;
 
           <div class="col-lg-6">
             <div class="row">
-              <div class="form-group col-sm-6 col-md-6 col-lg-6">
+              <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                <label>Supplier</label>
+                <select class="form-control <?php echo ($pesan_tambah['supplier_id'] ?? []) ? 'is-invalid' : ''; ?>" name="supplier_id" id="supplier_id">
+                	<option value="">--Pilih--</option>
+                  <?php foreach ($supplier as $sp) :?>
+                  <option value="<?php echo esc($sp['id_supplier']);?>"><?php echo esc($sp['nama_supplier']);?></option>
+                  <?php endforeach;?>
+                </select>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['supplier_id'].'</div>' : ''; ?>
+              </div>
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label>Harga Konsumen</label>
-                <?php echo form_input($input_harga_konsumen); ?>
+                <?php
+                $class_tambah_harga_konsumen = ($pesan_tambah['harga_konsumen'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "harga_konsumen",
+                  'class' => "form-control "."$class_tambah_harga_konsumen"."",
+                  'value' => set_value('harga_konsumen', ''),
+                  'type' => "number"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['harga_konsumen'].'</div>' : ''; ?>
               </div>
-              <div class="form-group col-sm-6 col-md-6 col-lg-6">
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label>Harga Anggota</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($input_harga_anggota); ?>
+                <?php
+                $class_tambah_harga_anggota = ($pesan_tambah['harga_anggota'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "harga_anggota",
+                  'class' => "form-control "."$class_tambah_harga_anggota"."",
+                  'value' => set_value('harga_anggota', ''),
+                  'type' => "number"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['harga_anggota'].'</div>' : ''; ?>
               </div>
-              <div class="form-group col-sm-6 col-md-6 col-lg-6">
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label>Harga Pokok</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($input_harga_pokok); ?>
+                <?php
+                $class_tambah_harga_pokok = ($pesan_tambah['harga_pokok'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "harga_pokok",
+                  'class' => "form-control "."$class_tambah_harga_pokok"."",
+                  'value' => set_value('harga_pokok', ''),
+                  'type' => "number"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['harga_pokok'].'</div>' : ''; ?>
               </div>
-              <div class="form-group col-sm-6 col-md-6 col-lg-6">
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label>Stok Barang</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($input_stok); ?>
+                <?php
+                $class_tambah_stok_barang = ($pesan_tambah['stok_barang'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "stok_barang",
+                  'class' => "form-control "."$class_tambah_stok_barang"."",
+                  'value' => set_value('stok_barang', ''),
+                  'type' => "number"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['stok_barang'].'</div>' : ''; ?>
               </div>
              
               
@@ -286,7 +356,7 @@ width:100%!important;
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalEditBarang" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static"  id="modalEditBarang" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -296,12 +366,16 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/suplai/barang/ubah', $form_edit_barang);    ?>
-      <input type="hidden" name="_method" value="PUT" />
-      <?php echo csrf_field(); ?>
-      <?php echo form_input($hidden_id_barangE); ?>
-      <!-- <//?php echo form_input($hidden_gambar_barang_lama); ?> -->
-      <?php echo form_input($hidden_nama_barang_old); ?>
+      <?php echo form_open(base_url().'/suplai/barang/ubah', $form_edit);    ?>
+      <?php $old_data = $session->getFlashdata('old_edit_input');?>
+      <input type="hidden" name="_method" value="PUT">
+      <?php echo form_input([
+          'name' => 'edit_id_barang',
+          'id'=>'edit_id_barang',
+          'type'=> 'hidden',
+          'value' => $old_data['id_barang'] ?? ''
+        ]); ?>
+        <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_barang');?>
      
       <div class="modal-body">
         <div class="row">
@@ -311,75 +385,130 @@ width:100%!important;
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Nama Barang</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($input_nama_barangE); ?>
+                <?php
+                $class_edit_nama_barang = ($pesan_edit['nama_barang'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'id' => "edit_nama_barang",
+                  'name' => "edit_nama_barang",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_barang"."",
+                  'value' => set_value('edit_nama_barang', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_barang'].'</div>' : ''; ?>
+						
               </div>
 
               <div class="form-group col-sm-6 col-md-12 col-lg-12">
                 <label>Kategori</label>
-                <select class="form-control" name="kategori_idE" id="kategori_idE">
-                <option value=""></option>
+                <input id="old_kategori_id" type="hidden" value="<?php echo $old_data['kategori_id'] ?? ''; ?>" />
+                <select class="form-control hapus-validasi-border <?php echo ($pesan_edit['kategori_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_kategori_id" id="edit_kategori_id">
+                	<option value="">--Pilih--</option>
                   <?php foreach ($kategori as $kt) :?>
                   <option value="<?php echo esc($kt['id_kategori']);?>"><?php echo esc($kt['nama_kategori']);?></option>
                   <?php endforeach;?>
                 </select>
+                <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['kategori_id'].'</div>' : ''; ?>
               </div>
 
 
 
               <div class="form-group col-sm-12 col-md-12 col-lg-6">
                 <label>Satuan</label>
-                <select class="form-control" name="satuan_idE" id="satuan_idE">
-                  <option value=""></option>
+                <input id="old_satuan_id" type="hidden" value="<?php echo $old_data['satuan_id'] ?? ''; ?>" />
+                <select class="form-control hapus-validasi-border <?php echo ($pesan_edit['satuan_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_satuan_id" id="edit_satuan_id">
+                  	<option value="">--Pilih--</option>
                   <?php foreach ($satuan as $st) :?>
                   <option value="<?php echo esc($st['id_satuan']);?>"><?php echo esc($st['nama_satuan']);?></option>
                   <?php endforeach;?>
                 </select>
+                <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['satuan_id'].'</div>' : ''; ?>
               </div>
 
               <div class="form-group col-sm-12 col-md-12 col-lg-6">
                 <label>Merek</label>
-                <select class="form-control" name="merek_idE" id="merek_idE">
-                <option value=""></option>
+                <input id="old_merek_id" type="hidden" value="<?php echo $old_data['merek_id'] ?? ''; ?>" />
+                <select class="form-control hapus-validasi-border <?php echo ($pesan_edit['merek_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_merek_id" id="edit_merek_id">
+                	<option value="">--Pilih--</option>
                   <?php foreach ($merek as $mt) :?>
                   <option value="<?php echo esc($mt['id_merek']);?>"><?php echo esc($mt['nama_merek']);?></option>
                   <?php endforeach;?>
                 </select>
+                <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['merek_id'].'</div>' : ''; ?>
               </div>
 
-              <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                <label>Supplier</label>
-                <select class="form-control" name="supplier_idE" id="supplier_idE">
-                <option value=""></option>
-                  <?php foreach ($supplier as $sp) :?>
-                  <option value="<?php echo esc($sp['id_supplier']);?>"><?php echo esc($sp['nama_supplier']);?></option>
-                  <?php endforeach;?>
-                </select>
-              </div>
+    
 
             </div>
           </div>
 
           <div class="col-lg-6">
             <div class="row">
+              <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                <label>Supplier</label>
+                <input id="old_supplier_id" type="hidden" value="<?php echo $old_data['supplier_id'] ?? ''; ?>" />
+                <select class="form-control hapus-validasi-border <?php echo ($pesan_edit['supplier_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_supplier_id" id="edit_supplier_id">
+                	<option value="">--Pilih--</option>
+                  <?php foreach ($supplier as $sp) :?>
+                  <option value="<?php echo esc($sp['id_supplier']);?>"><?php echo esc($sp['nama_supplier']);?></option>
+                  <?php endforeach;?>
+                </select>
+                <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['supplier_id'].'</div>' : ''; ?>
+              </div>
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Harga Konsumen</label>
-                <?php echo form_input($input_harga_konsumenE); ?>
+                <?php
+                $class_edit_harga_konsumen = ($pesan_edit['harga_konsumen'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'id' => "edit_harga_konsumen",
+                  'name' => "edit_harga_konsumen",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_harga_konsumen"."",
+                  'value' => set_value('edit_harga_konsumen', ''),
+                  'type' => "number"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['harga_konsumen'].'</div>' : ''; ?>
+						
               </div>
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Harga Anggota</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($input_harga_anggotaE); ?>
+                <?php
+                $class_edit_harga_anggota = ($pesan_edit['harga_anggota'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'id' => "edit_harga_anggota",
+                  'name' => "edit_harga_anggota",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_harga_anggota"."",
+                  'value' => set_value('edit_harga_anggota', ''),
+                  'type' => "number"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['harga_anggota'].'</div>' : ''; ?>
+						
               </div>
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Harga Pokok</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($input_harga_pokokE); ?>
+                <?php
+                $class_edit_harga_pokok = ($pesan_edit['harga_pokok'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'id' => "edit_harga_pokok",
+                  'name' => "edit_harga_pokok",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_harga_pokok"."",
+                  'value' => set_value('edit_harga_pokok', ''),
+                  'type' => "number"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['harga_pokok'].'</div>' : ''; ?>
+						
               </div>
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Stok Barang</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($input_stokE); ?>
+                <?php
+                $class_edit_stok_barang = ($pesan_edit['stok_barang'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'id' => "edit_stok_barang",
+                  'name' => "edit_stok_barang",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_stok_barang"."",
+                  'value' => set_value('edit_stok_barang', ''),
+                  'type' => "number"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['stok_barang'].'</div>' : ''; ?>
+						
               </div>
               
               
@@ -405,7 +534,7 @@ width:100%!important;
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalBarangHapus" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static"  id="modalBarangHapus" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div id="judbuk" class="modal-header">
@@ -438,10 +567,9 @@ width:100%!important;
       <div class="modal-footer" id="yahaloo">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <?php echo form_open(base_url().'/suplai/barang/hapus', $form_hapus_barang);    ?>
-        <?php echo csrf_field(); ?>
+        <?php echo form_open(base_url().'/suplai/barang/hapus', $form_hapus);    ?>
           <input type="hidden" name="_method" value="DELETE">
-          <?php echo form_input($hidden_id_barangH); ?>
+          <?php echo form_input($hapus_id_barang); ?>
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         <?php echo form_close(); ?>
 

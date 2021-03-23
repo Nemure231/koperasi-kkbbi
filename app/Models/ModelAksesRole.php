@@ -15,6 +15,28 @@ class ModelAksesRole extends Model{
 		]);
     }
 
+    public function cekAksesRoleUser($role_id, $uri_menu){
+        $ambil_token = $this->request->getCookie('jwt_token');
+        $res_akses = json_encode(['data' => '']);
+        try {
+            $respon_ambil_akses = $this->_client->request(
+                'GET',
+                'pengaturan/role/akses/cek-akses/'.$role_id.'/'.$uri_menu,
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_akses = $respon_ambil_akses->getBody();
+        } catch (ClientException $e) {
+            
+        }
+
+        $akses = json_decode($res_akses, true);
+        return $akses['data'];
+    }
+
 
     public function cekCentangAksesRole($role_id, $menu_id){
         $ambil_token = get_cookie('jwt_token');

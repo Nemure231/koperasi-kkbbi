@@ -158,7 +158,7 @@ width:100%!important;
 					</div>
 
           <div class="form-group">
-          <label>IKon Menu Utama</label>
+          <label>Ikon Menu Utama</label>
           <?php
                 $class_tambah_ikon_menu_utama = ($pesan_tambah['ikon_menu_utama'] ?? []) ? 'is-invalid' : '';
                 echo form_input([
@@ -174,7 +174,7 @@ width:100%!important;
 							<label>Menu</label>
 							<select class="custom-select <?php echo ($pesan_tambah['menu_id'] ?? []) ? 'is-invalid' : ''; ?>" name="menu_id" id="menu_id">
 
-								<option></option>
+								<option value="">--Pilih--</option>
 								<?php foreach ($mmenu as $m):?>
 								<option value="<?php echo $m['id_menu']; ?>"><?php echo $m['nama_menu']; ?></option>
 								<?php endforeach;  ?>
@@ -258,9 +258,9 @@ width:100%!important;
           <div class="form-group col-sm-12 col-md-12 col-lg-12">
 							<label>Menu</label>
               <input id="old_menu_id" type="hidden" value="<?php echo $old_data['menu_id'] ?? ''; ?>" />
-							<select class="custom-select <?php echo ($pesan_edit['menu_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_menu_id" id="edit_menu_id">
+							<select class="custom-select hapus-validasi-border <?php echo ($pesan_edit['menu_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_menu_id" id="edit_menu_id">
 
-								<option></option>
+								<option value="">--Pilih--</option>
 								<?php foreach ($mmenu as $m):?>
 								<option value="<?php echo $m['id_menu']; ?>"><?php echo $m['nama_menu']; ?></option>
 								<?php endforeach;  ?>

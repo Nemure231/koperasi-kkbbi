@@ -73,7 +73,7 @@ class ModelBarang extends Model{
 
 
     public function ubahBarang(){
-        $id_barang =$this->request->getPost('id_barangE');
+        $id_barang =$this->request->getPost('edit_id_barang');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -81,15 +81,15 @@ class ModelBarang extends Model{
             $respon_ambil_merek = $this->_client->request(
                 'PUT',
                 'suplai/barang/ubah/'.$id_barang
-                .'?nama_barang='. htmlspecialchars($this->request->getPost('nama_barangE'), ENT_QUOTES)
-                .'&kategori_id='.$this->request->getPost('kategori_idE')
-                .'&satuan_id='.$this->request->getPost('satuan_idE')
-                .'&merek_id='.$this->request->getPost('merek_idE')
-                .'&supplier_id='.$this->request->getPost('supplier_idE')
-                .'&harga_pokok='.$this->request->getPost('harga_pokokE')
-                .'&harga_konsumen='.$this->request->getPost('harga_konsumenE')
-                .'&harga_anggota='.$this->request->getPost('harga_anggotaE')
-                .'&stok_barang='.$this->request->getPost('stok_barangE'),
+                .'?nama_barang='. htmlspecialchars($this->request->getPost('edit_nama_barang'), ENT_QUOTES)
+                .'&kategori_id='.$this->request->getPost('edit_kategori_id')
+                .'&satuan_id='.$this->request->getPost('edit_satuan_id')
+                .'&merek_id='.$this->request->getPost('edit_merek_id')
+                .'&supplier_id='.$this->request->getPost('edit_supplier_id')
+                .'&harga_pokok='.$this->request->getPost('edit_harga_pokok')
+                .'&harga_konsumen='.$this->request->getPost('edit_harga_konsumen')
+                .'&harga_anggota='.$this->request->getPost('edit_harga_anggota')
+                .'&stok_barang='.$this->request->getPost('edit_stok_barang'),
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -106,7 +106,7 @@ class ModelBarang extends Model{
     }
 
     public function hapusBarang(){
-        $id_barang = $this->request->getPost('id_barangH');  
+        $id_barang = $this->request->getPost('hapus_id_barang');  
         $ambil_token = get_cookie('jwt_token');
        
         $respon_ambil_merek = $this->_client->request(

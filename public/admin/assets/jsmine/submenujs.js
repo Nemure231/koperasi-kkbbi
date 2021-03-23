@@ -125,7 +125,6 @@ $(document).ready(function () {
    if(validasi_edit != 0){
       $('#modalEditSubMenu').modal('show');
 
-      $('#modalEditSubMenu').on('shown.bs.modal', function (event) {
          menu_utama_id = $('#old_menu_utama_id').val();
          menu_id = $('#old_menu_id').val();
          $('#edit_menu_id').val(menu_id);
@@ -139,7 +138,6 @@ $(document).ready(function () {
             dropdownParent: $('#modalEditSubMenu'),
             tags: true
          });
-       });
    }
 
 
