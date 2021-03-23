@@ -94,10 +94,24 @@
             </div>
             <?php endif; ?>
             <div class="invisible">
-            <div class="kategori_error">
-                      <?php $ses = $session->getFlashdata('pesan_validasi_kategori');
-                      echo implode_helper($ses);?>
-                    </div>
+                <div class="validasi_tambah">
+                0
+                <?php $validasi_tambah = $session->getFlashdata('pesan_validasi_tambah_kategori');
+                
+                if($validasi_tambah){
+                  echo $validasi_tambah['nama_kategori']; 
+                }?>
+                </div>
+                <div class="validasi_edit">
+                0
+                <?php $validasi_edit = $session->getFlashdata('pesan_validasi_edit_kategori');
+                
+                if($validasi_edit){
+                  echo $validasi_edit['nama_kategori']; 
+                }?>
+                
+
+                </div>        
               </div>
 
 
@@ -111,7 +125,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalTambahKategori" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalTambahKategori" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -121,25 +135,23 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open_multipart(base_url().'/suplai/kategori/tambah', $form_tambah_kategori);    ?>
-      <!-- < ?php echo form_input($id_hidd); ?> -->
-      <?php echo csrf_field(); ?>
+      <?php echo form_open_multipart(base_url().'/suplai/kategori/tambah', $form_tambah);    ?>
+      <?php $pesan_tambah = $session->getFlashdata('pesan_validasi_tambah_kategori');?>
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Nama kategori</label>
-              <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-             
-              <?php echo form_input($input_kategori); ?>
-             
+              <?php
+                $class_tambah_nama_kategori = ($pesan_tambah['nama_kategori'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "nama_kategori",
+                  'class' => "form-control "."$class_tambah_nama_kategori"."",
+                  'value' => set_value('nama_kategori', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback ">'.$pesan_tambah['nama_kategori'].'</div>' : ''; ?>
             </div>
-            <!-- <div class="form-group col-sm-12 col-md-12 col-lg-12">
-              <label>Kode kategori</label>
-          
-              < //?php echo form_input($input_kode_kategori); ?>
-          
-            </div> -->
           </div>
 
         </div>
@@ -159,7 +171,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalEditKategori" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalEditKategori" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -169,31 +181,34 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/suplai/kategori/ubah', $form_edit_kategori);    ?>
-      <?php echo form_input($hidden_id_kategori); ?>
+      <?php echo form_open(base_url().'/suplai/kategori/ubah', $form_edit);    ?>
+      <?php $old_data = $session->getFlashdata('old_edit_input');?>
+      <?php echo form_input([
+          'name' => 'edit_id_kategori',
+          'id'=> 'edit_id_kategori',
+          'type'=> 'hidden',
+          'value' => $old_data['id_kategori'] ?? ''
+        ]); ?>
+      <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_kategori');?>
       <input type="hidden" name="_method" value="PUT">
-      <!-- <//?php echo form_input($hidden_old_kategori); ?> -->
-      <!-- <//?php echo form_input($hidden_old_kode_kategori); ?> -->
-      <?php echo csrf_field(); ?>
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Nama kategori</label>
-              <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
+              <?php
+                $class_edit_nama_kategori = ($pesan_edit['nama_kategori'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'id' => "edit_nama_kategori",
+                  'name' => "edit_nama_kategori",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_kategori"."",
+                  'value' => set_value('edit_nama_kategori', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_kategori'].'</div>' : ''; ?>
               
-              <?php echo form_input($input_kategoriE); ?>
             </div>
           </div>
-          <!-- <div class="col-lg-12">
-            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-              <label>Kode kategori</label>
-          
-                <//?php echo form_input($edit_kode_kategori); ?>
-              <div class="invalid-feedback">
-              </div>
-            </div>
-          </div> -->
 
         </div>
 
@@ -211,7 +226,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalKategoriHapus" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalKategoriHapus" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -244,9 +259,8 @@
       <div class="modal-footer" id="yahaloo">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <?php echo form_open(base_url().'/suplai/kategori/hapus', $form_hapus_kategori);    ?>
-        <?php echo csrf_field(); ?>
-          <?php echo form_input($hidden_id_kategoriH); ?>
+        <?php echo form_open(base_url().'/suplai/kategori/hapus', $form_hapus);    ?>
+          <?php echo form_input($hapus_id_kategori); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         <?php echo form_close(); ?>

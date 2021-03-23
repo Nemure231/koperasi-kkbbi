@@ -68,9 +68,9 @@ if (flashDataHapus) {
       }
 
       $('table').on('click', '.hapus-menu', function () {
-      var id_menu = $(this).data('id');
-      $('#modalHapusMenu').modal('show');
-      $('#hapus_id_menu').val(id_menu);
+         var id_menu = $(this).data('id');
+         $('#modalHapusMenu').modal('show');
+         $('#hapus_id_menu').val(id_menu);
       });
 
       $('#modalEditMenu').on('hidden.bs.modal', function (event) {
