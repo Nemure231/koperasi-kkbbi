@@ -17,20 +17,6 @@ if (flashData) {
 
 }
 
-if (flashDataSalah != 0) {
-
-   Swal.fire({
-      title: 'Gagal',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      html: ' ' + flashDataSalah,
-      icon: 'error'
-   });
-   
-   //$('#modalBuku').modal('show');
-}
-
 if (flashDataHapus) {
 
    Swal.fire({
@@ -46,26 +32,6 @@ if (flashDataHapus) {
 
 $(document).ready(function () {
    $("#satsat").DataTable();
-   $('#swal2-content ul li').css("color", "#dc3545");
-
-   // if ($("#formEditSatuan").length > 0) {
-   //    $("#formEditSatuan").validate({
-
-   //       rules: {
-   //          edit_nama_satuan: {
-   //             remote: {
-   //                url: "uniksatuan",
-   //                type: "post"
-   //             }
-   //          }
-   //       },
-   //       messages: {
-   //          edit_nama_satuan: {
-   //             remote: "Nama satuan sudah ada!",
-   //          },
-   //       },
-   //    });
-   // }
 
    $('#tombolTambahSatuan').click(function () {
       $('#modalTambahSatuan').modal('show');
@@ -79,26 +45,29 @@ $(document).ready(function () {
       var nama_satuan = $(this).data('nama_satuan');
       $('#modalEditSatuan').modal('show');
       $('#edit_nama_satuan').val(nama_satuan);
-      $('#old_nama_satuan').val(nama_satuan);
-      $('#id_satuanE').val(id_satuan);
+      $('#edit_id_satuan').val(id_satuan);
       
    });
 
-   // $('.edit_nama_satuan').on('change', function () {
-   //    $('.edit_nama_satuan').rules('add', {remote: {
-   //       url: "unikbuku",
-   //       type: "post"
-   //    }});
-   // });
+   var validasi_tambah = $('.validasi_tambah').html();
+   var validasi_edit = $('.validasi_edit').html();
+   if(validasi_tambah != 0){
+      $('#modalTambahSatuan').modal('show');
+   }
+   if(validasi_edit != 0){
+      $('#modalEditSatuan').modal('show');
+   }
 
    $('table').on('click', '.tombolHapusSatuan', function () {
 
       var id_satuan = $(this).data("id_satuan");
       $('#modalSatuanHapus').modal('show');
-      $('#id_satuanH').val(id_satuan);
-      // $('#btn-simpan-hapus').attr("action", "kecohhapussatuan/" + id_satuan);
-   
-     
+      $('#hapus_id_satuan').val(id_satuan);
+   });
+
+   $('#modalEditSatuan').on('hidden.bs.modal', function (event) {
+      $('.hapus-validasi').remove('invalid-feedback');
+      $('.hapus-validasi-border').removeClass('is-invalid');
    });
 
 

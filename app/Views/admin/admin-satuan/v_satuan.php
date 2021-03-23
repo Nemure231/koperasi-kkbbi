@@ -92,12 +92,29 @@
             </div>
             <?php endif; ?>
             <div class="invisible">
-            <div class="satuan_error">
-                      <?php $ses = $session->getFlashdata('pesan_validasi_satuan');
-                      echo implode_helper($ses);?>
-                    </div>
+                <div class="validasi_tambah">
+                0
+                <?php $validasi_tambah = $session->getFlashdata('pesan_validasi_tambah_satuan');
+                
+                if($validasi_tambah){
+                  echo $validasi_tambah['nama_satuan']; 
+
+                }?>
+                </div>
+                <div class="validasi_edit">
+                0
+                <?php $validasi_edit = $session->getFlashdata('pesan_validasi_edit_satuan');
+                
+                if($validasi_edit){
+                  echo $validasi_edit['nama_satuan']; 
+                }?>
+                
+
+                </div>        
               </div>
-              </div>
+
+          
+          </div>
 
 
 
@@ -110,7 +127,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalTambahSatuan" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static"  id="modalTambahSatuan" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -120,17 +137,22 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/suplai/satuan/tambah', $form_tambah_satuan);    ?>
-
-      <?php echo csrf_field(); ?>
+      <?php echo form_open(base_url().'/suplai/satuan/tambah', $form_tambah);    ?>
+      <?php $pesan_tambah = $session->getFlashdata('pesan_validasi_tambah_satuan');?>
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Nama Satuan</label>
-              <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-          
-              <?php echo form_input($input_satuan); ?>
+              <?php
+                $class_tambah_nama_satuan = ($pesan_tambah['nama_satuan'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "nama_satuan",
+                  'class' => "form-control "."$class_tambah_nama_satuan"."",
+                  'value' => set_value('nama_satuan', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_tambah['nama_satuan'].'</div>' : ''; ?>
               
             </div>
           </div>
@@ -152,7 +174,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalEditSatuan" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static"  id="modalEditSatuan" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -162,18 +184,33 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/suplai/satuan/ubah', $form_edit_satuan);    ?>
+      <?php echo form_open(base_url().'/suplai/satuan/ubah', $form_edit);    ?>
       <input type="hidden" name="_method" value="PUT">
-      <?php echo csrf_field(); ?>
-      <?php echo form_input($hidden_id_satuan); ?>
-      <?php echo form_input($hidden_old_nama_satuan); ?>
+      <?php $old_data = $session->getFlashdata('old_edit_input');?>
+      <?php echo form_input([
+          'name' => 'edit_id_satuan',
+          'id'=> 'edit_id_satuan',
+          'type'=> 'hidden',
+          'value' => $old_data['id_satuan'] ?? ''
+        ]); ?>
+      <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_satuan');?>
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Nama Satuan</label>
               <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-              <?php echo form_input($input_satuanE); ?>
+              <?php
+                $class_edit_nama_satuan = ($pesan_edit['nama_satuan'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'id' => "edit_nama_satuan",
+                  'name' => "edit_nama_satuan",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_satuan"."",
+                  'value' => set_value('edit_nama_satuan', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_satuan'].'</div>' : ''; ?>
+              
             </div>
           </div>
 
@@ -193,7 +230,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalSatuanHapus" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static"   id="modalSatuanHapus" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -227,9 +264,8 @@
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
         <!-- <form id="btn-simpan-hapus" class="btn btn-block" method="post"> -->
-        <?php echo form_open(base_url().'/suplai/satuan/hapus', $form_hapus_satuan);    ?>
-        <?php echo form_input($hidden_id_satuanH); ?>
-        <?php echo csrf_field(); ?>
+        <?php echo form_open(base_url().'/suplai/satuan/hapus', $form_hapus);    ?>
+        <?php echo form_input($hapus_id_satuan); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         <?php echo form_close(); ?>

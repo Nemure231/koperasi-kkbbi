@@ -65,7 +65,7 @@ class ModelSatuan extends Model{
 
 
     public function ubahSatuan(){
-        $id_satuan = $this->request->getPost('id_satuanE');
+        $id_satuan = $this->request->getPost('edit_id_satuan');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -90,7 +90,7 @@ class ModelSatuan extends Model{
     }
 
     public function hapusSatuan(){
-        $id_satuan = $this->request->getPost('id_satuanH');
+        $id_satuan = $this->request->getPost('hapus_id_satuan');
         $ambil_token = get_cookie('jwt_token');
 
         $respon_ambil_satuan = $this->_client->request(
