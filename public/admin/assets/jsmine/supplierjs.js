@@ -15,19 +15,6 @@ if (flashData) {
 
 }
 
-if (flashDataSalah != 0) {
-
-   Swal.fire({
-      title: 'Gagal',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      html: ' ' + flashDataSalah,
-      icon: 'error'
-   });
-   
-   //$('#modalBuku').modal('show');
-}
 
 if (flashDataHapus) {
 
@@ -44,13 +31,8 @@ if (flashDataHapus) {
 
 $(document).ready(function () {
    $("#supsup").DataTable();
-   $('#swal2-content ul li').css("color", "#dc3545");
-
-
    $('#tombolTambahSupplier').click(function () {
       $('#modalTambahSupplier').modal('show');
-      
-
    });
 
    
@@ -59,20 +41,29 @@ $(document).ready(function () {
       var nama_supplier = $(this).data('nama_supplier');
       $('#modalEditSupplier').modal('show');
       $('#edit_nama_supplier').val(nama_supplier);
-      $('#old_nama_supplier').val(nama_supplier);
-      $('#id_supplierE').val(id_supplier);
-      
-      
+      $('#edit_id_supplier').val(id_supplier);
    });
+
+   var validasi_tambah = $('.validasi_tambah').html();
+   var validasi_edit = $('.validasi_edit').html();
+   if(validasi_tambah != 0){
+      $('#modalTambahSupplier').modal('show');
+   }
+   if(validasi_edit != 0){
+      $('#modalEditSupplier').modal('show');
+   }
 
    $('table').on('click', '.tombolHapusSupplier', function () {
 
       var id_supplier = $(this).data("id_supplier");
 
       $('#modalSupplierHapus').modal('show');
-      $('#id_supplierH').val(id_supplier);
-   
-     
+      $('#hapus_id_supplier').val(id_supplier);
+   });
+
+   $('#modalEditSuppier').on('hidden.bs.modal', function (event) {
+      $('.hapus-validasi').remove('invalid-feedback');
+      $('.hapus-validasi-border').removeClass('is-invalid');
    });
 
 

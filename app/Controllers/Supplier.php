@@ -16,7 +16,7 @@ class Supplier extends BaseController
         $this->modelSupplier = new ModelSupplier();
 	}
 
-	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
+	protected $helpers = ['url', 'form', 'kpos', 'cookie'];
 
 
 
@@ -29,18 +29,10 @@ class Supplier extends BaseController
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'supplier'=>$this->modelSupplier->ambilSupplier(),
             'session' => $this->session,
-            'form_tambah_supplier' => ['id' => 'formTambahSupplier', 'name'=>'formTambahSupplier'],
-            'form_edit_supplier' =>  ['id' => 'formEditSupplier', 'name'=>'formEditSupplier'],
-            'form_hapus_supplier' =>  ['id' => 'formHapusSupplier', 'name'=>'formHapusSupplier', 'class' => 'btn btn-block'],
-            'hidden_id_supplier' => ['name' => 'id_supplierE', 'id'=>'id_supplierE', 'type'=> 'hidden'],
-            'hidden_id_supplierH' => ['name' => 'id_supplierH', 'id'=>'id_supplierH', 'type'=> 'hidden'],
-            'hidden_old_nama_supplier' => [
-                'type' => 'hidden',
-                'name' => 'old_nama_supplier',
-                'id' => 'old_nama_supplier',
-                'class' => 'form-control'
-                
-            ]
+            'form_tambah' => ['id' => 'form-tambah-supplier'],
+            'form_edit' =>  ['id' => 'form-edit-supplier'],
+            'form_hapus' =>  ['class' => 'btn btn-block'],
+            'hapus_id_supplier' => ['name' => 'hapus_id_supplier', 'id'=>'hapus_id_supplier', 'type'=> 'hidden']
         ];
         tampilan_admin('admin/admin-supplier/v_supplier', 'admin/admin-supplier/v_js_supplier', $data);
      
@@ -49,8 +41,8 @@ class Supplier extends BaseController
     public function tambah(){
         $validasi = $this->modelSupplier->tambahSupplier();
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_supplier',  $validasi);
-            return redirect()->to(base_url('/suplai/supplier'));
+            $this->session->setFlashdata('pesan_validasi_tambah_supplier',  $validasi);
+            return redirect()->to(base_url('/suplai/supplier'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_supplier', 'Supplier baru berhasil ditambahkan!');
             return redirect()->to(base_url('/suplai/supplier'));
@@ -60,9 +52,13 @@ class Supplier extends BaseController
 
     public function ubah(){
         $validasi = $this->modelSupplier->ubahSupplier();
+        $old = [
+            'id_supplier' => $this->request->getPost('edit_id_supplier')
+        ];
         if($validasi){
-            $this->session->setFlashdata('pesan_validasi_supplier',  $validasi);
-            return redirect()->to(base_url('/suplai/supplier'));
+            $this->session->setFlashdata('pesan_validasi_edit_supplier',  $validasi);
+            $this->session->setFlashdata('old_edit_input',  $old);
+            return redirect()->to(base_url('/suplai/supplier'))->withInput();
         }else{
             $this->session->setFlashdata('pesan_supplier', 'Supplier baru berhasil ditambahkan!');
             return redirect()->to(base_url('/suplai/supplier'));

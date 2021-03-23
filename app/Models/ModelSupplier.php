@@ -64,7 +64,7 @@ class ModelSupplier extends Model{
 
 
     public function ubahSupplier(){
-        $id_supplier = $this->request->getPost('id_supplierE');
+        $id_supplier = $this->request->getPost('edit_id_supplier');
         $result = '';
         $validasi = array('data' => '');
         try {
@@ -89,7 +89,7 @@ class ModelSupplier extends Model{
     }
 
     public function hapusSupplier(){
-        $id_supplier = $this->request->getPost('id_supplierH');
+        $id_supplier = $this->request->getPost('hapus_id_supplier');
         $ambil_token = get_cookie('jwt_token');
 
         $respon_ambil_supplier = $this->_client->request(

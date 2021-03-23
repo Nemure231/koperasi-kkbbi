@@ -88,11 +88,27 @@
             </div>
             <?php endif; ?>
             <div class="invisible">
-            <div class="supplier_error">
-                      <?php $ses = $session->getFlashdata('pesan_validasi_supplier');
-                      echo implode_helper($ses);?>
-                    </div>
+                <div class="validasi_tambah">
+                0
+                <?php $validasi_tambah = $session->getFlashdata('pesan_validasi_tambah_supplier');
+                
+                if($validasi_tambah){
+                  echo $validasi_tambah['nama_supplier']; 
+
+                }?>
+                </div>
+                <div class="validasi_edit">
+                0
+                <?php $validasi_edit = $session->getFlashdata('pesan_validasi_edit_supplier');
+                
+                if($validasi_edit){
+                  echo $validasi_edit['nama_supplier']; 
+                }?>
+                
+
+                </div>        
               </div>
+           
 
 
 
@@ -105,7 +121,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalTambahSupplier" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalTambahSupplier" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -115,19 +131,23 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/suplai/supplier/tambah', $form_tambah_supplier);    ?>
-      <!-- < ?php echo form_input($id_hidd); ?> -->
-      <?php echo csrf_field(); ?>
+      <?php echo form_open(base_url().'/suplai/supplier/tambah', $form_tambah);    ?>
+      <?php $pesan_tambah = $session->getFlashdata('pesan_validasi_tambah_supplier');?>
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
-              <label>Nama supplier</label>
+              <label>Nama Supplier</label>
               <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-              <input type="text" class="form-control" name="nama_supplier">
-              <div class="invalid-feedback">
-
-              </div>
+              <?php
+                $class_tambah_nama_supplier = ($pesan_tambah['nama_supplier'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "nama_supplier",
+                  'class' => "form-control "."$class_tambah_nama_supplier"."",
+                  'value' => set_value('nama_supplier', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['nama_supplier'].'</div>' : ''; ?>
             </div>
           </div>
 
@@ -148,7 +168,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalEditSupplier" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalEditSupplier" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -158,20 +178,32 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/suplai/supplier/ubah', $form_edit_supplier);    ?>
+      <?php echo form_open(base_url().'/suplai/supplier/ubah', $form_edit);    ?>
       <input type="hidden" name="_method" value="PUT">
-      <?php echo form_input($hidden_id_supplier); ?>
-      <?php echo csrf_field(); ?>
-      <?php echo form_input($hidden_old_nama_supplier); ?>
+      <?php $old_data = $session->getFlashdata('old_edit_input');?>
+      <?php echo form_input([
+          'name' => 'edit_id_supplier',
+          'id'=> 'edit_id_supplier',
+          'type'=> 'hidden',
+          'value' => $old_data['id_supplier'] ?? ''
+        ]); ?>
+      <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_supplier');?>
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
-              <label>Nama supplier</label>
-              <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-              <input type="text" class="form-control" name="edit_nama_supplier" id="edit_nama_supplier">
-              <div class="invalid-feedback">
-              </div>
+              <label>Nama Supplier</label>
+              <?php
+                $class_edit_nama_supplier = ($pesan_edit['nama_supplier'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'id' => "edit_nama_supplier",
+                  'name' => "edit_nama_supplier",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_supplier"."",
+                  'value' => set_value('edit_nama_supplier', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_supplier'].'</div>' : ''; ?>
+              
             </div>
           </div>
 
@@ -191,7 +223,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalSupplierHapus" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalSupplierHapus" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -224,9 +256,8 @@
       <div class="modal-footer" id="yahaloo">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <?php echo form_open(base_url().'/suplai/supplier/hapus', $form_hapus_supplier);    ?>
-          <?php echo form_input($hidden_id_supplierH); ?>
-          <?php echo csrf_field(); ?>
+        <?php echo form_open(base_url().'/suplai/supplier/hapus', $form_hapus);    ?>
+          <?php echo form_input($hapus_id_supplier); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         <?php echo form_close(); ?>
