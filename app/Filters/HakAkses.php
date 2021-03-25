@@ -13,23 +13,7 @@ class HakAkses implements FilterInterface
     {
         $session = \Config\Services::session();
         $request = \Config\Services::request();
-        $cookie = $request->getCookie('jwt_token');
         $ModelAksesRole = new ModelAksesRole();
-
-        if(!$cookie){
-            $session->remove('email');
-            $session->remove('role_id');
-            $session->remove('id_user');
-            $session->remove('nama');
-            $session->setFlashdata('pesan', '<div class="alert alert-info alert-dismissible fade show" role="alert">
-						<strong>Waktu login Anda baru saja habis, silakan login kembali.</strong>
-						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-						</button>
-					</div>');
-            return redirect()->to(base_url('/'));
-
-        }
 
         $role_id = $session->get('role_id');
 		if (!$role_id){
