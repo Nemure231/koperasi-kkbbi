@@ -1,35 +1,26 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_user;
-use App\Models\Model_user_menu;
-use App\Models\Model_toko;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
+use App\Models\ModelToko;
 
 class Toko extends BaseController{
 
 	public function __construct(){
-        $this->model_user = new Model_user();
-        $this->model_toko = new Model_toko();
-        $this->model_user_menu = new Model_user_menu();
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
+        $this->modelToko = new ModelToko();
 		
 	}
-	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
+	protected $helpers = ['url', 'form', 'kpos', 'cookie'];
 
     public function index(){
 		
-		$role = $this->session->get('role_id');
-        $email = $this->session->get('email');
         
-        $toko = $this->model_toko->select('id_toko, nama_toko, telepon_toko, email_toko, alamat_toko, 
-                deskripsi_toko, logo_toko')->asArray()
-                ->where('id_toko', 1)
-                ->first();
+        $toko = $this->modelToko->ambilToko();
     
         
         $data = [
@@ -40,9 +31,9 @@ class Toko extends BaseController{
             'toko' => $toko,
             'validation' => $this->validation,
             'session' => $this->session,
-            'form_toko' =>  ['id' => 'formToko', 'name'=>'formToko'],
-            'hidden_id_toko' => ['name' => 'toko_id', 'id'=>'toko_id', 'type'=> 'hidden', 'value' => ''.$toko['id_toko'].''],
-            'hidden_logo_lama' => ['name' => 'logo_lama', 'id'=>'logo_lama', 'type'=> 'hidden', 'value' => ''.$toko['logo_toko'].''],
+            'form_toko' =>  ['id' => 'formToko'],
+            'edit_id_toko' => ['name' => 'edit_id_toko', 'type'=> 'hidden', 'value' => ''.$toko['id_toko'].''],
+            'logo_lama' => ['name' => 'logo_lama', 'id'=>'logo_lama', 'type'=> 'hidden', 'value' => ''.$toko['logo_toko'].''],
         ];
         tampilan_admin('admin/admin-toko/v_toko', 'admin/admin-toko/v_js_toko', $data);
     }
@@ -51,14 +42,12 @@ class Toko extends BaseController{
 
             if(!$this->validate([
                 'nama_toko' => [
-                    'label'  => 'Judul Buku',
                     'rules'  => 'required',
                     'errors' => [
                         'required' => 'Harus diisi!'
                     ]
                 ],
                 'telepon_toko' => [
-                    'label'  => 'Telepon Toko',
                     'rules'  => 'required|numeric',
                     'errors' => [
                     'required' => 'Harus diisi!',
@@ -66,7 +55,6 @@ class Toko extends BaseController{
                     ]
                 ],
                 'email_toko' => [
-                    'label'  => 'Email Toko',
                     'rules'  => 'required|valid_email',
                     'errors' => [
                     'required' => 'Harus diisi!',
@@ -74,21 +62,12 @@ class Toko extends BaseController{
                     ]
                 ],
                 'alamat_toko' => [
-                    'label'  => 'Alamat Toko',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Harus diisi!'
-                    ]
-                ],
-                'deskripsi_toko' => [
-                    'label'  => 'Deskripasi Toko',
                     'rules'  => 'required',
                     'errors' => [
                     'required' => 'Harus diisi!'
                     ]
                 ],
                 'logo_toko' => [
-                    'label'  => 'Logo Toko',
                     'rules'  => 'max_size[logo_toko,1024]|is_image[logo_toko]|mime_in[logo_toko,image/jpg,image/jpeg,image/png]',
                     'errors' => [
                     //'uploaded' => 'Harus diisi!',
@@ -101,7 +80,6 @@ class Toko extends BaseController{
             ])) {
                 
                 return redirect()->to(base_url('/tempat/toko'))->withInput();
-
             }
                
                 $logo_toko = $this->request->getFile('logo_toko');
@@ -114,19 +92,8 @@ class Toko extends BaseController{
                     //hapus file lama
                     unlink('admin/assets/toko/'. $this->request->getPost('logo_lama'));
                 }
-
-                $id_toko = $this->request->getPost('toko_id');
-
-                $edit = array(
-                    'nama_toko' => htmlspecialchars($this->request->getPost('nama_toko'), ENT_QUOTES),
-                    'telepon_toko' => htmlspecialchars($this->request->getPost('telepon_toko'), ENT_QUOTES),
-                    'email_toko' => htmlspecialchars($this->request->getPost('email_toko'), ENT_QUOTES),
-                    'alamat_toko' => htmlspecialchars($this->request->getPost('alamat_toko'), ENT_QUOTES),
-                    'deskripsi_toko' => htmlspecialchars($this->request->getPost('deskripsi_toko'), ENT_QUOTES),
-                    'logo_toko' => $nama_logo
-                );
     
-                $this->model_toko->update($id_toko, $edit);
+                $this->modelToko->ubahToko($nama_logo);
                 $this->session->setFlashdata('pesan_toko', 'Toko berhasil diedit!');
                 return redirect()->to(base_url('/tempat/toko'));
 

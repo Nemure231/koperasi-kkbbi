@@ -37,10 +37,14 @@ $routes->post('logout', 'Auth::logout');
 $routes->add('blokir', 'Auth::blokir');
 
 $routes->group('akun', function($routes){
-	$routes->get('profil', 'Pengguna::index', ['filter' => 'cek_akses']);
-	$routes->put('profil/ubah', 'Pengguna::ubah');
-	$routes->get('sandi', 'Sandi::index', ['filter' => 'cek_akses']);
-	$routes->put('sandi/ubah', 'Sandi::ubah');
+	$routes->group('profil', function($routes){
+		$routes->get('', 'Pengguna::index', ['filter' => 'cek_akses']);
+		$routes->put('ubah', 'Pengguna::ubah');
+	});
+	$routes->group('sandi', function($routes){
+		$routes->get('', 'Sandi::index', ['filter' => 'cek_akses']);
+		$routes->put('ubah', 'Sandi::ubah');
+	});
 });
 
 $routes->group('beranda', function($routes){
@@ -51,113 +55,134 @@ $routes->group('beranda', function($routes){
 
 
 $routes->group('suplai', function($routes){
-	$routes->get('barang', 'Barang::index', ['filter' => 'cek_akses']);
-	$routes->post('barang/tambah', 'Barang::tambah');
-	$routes->put('barang/ubah', 'Barang::ubah');
-	$routes->delete('barang/hapus', 'Barang::hapus');
-
-	$routes->get('satuan', 'Satuan::index', ['filter' => 'cek_akses']);
-	$routes->post('satuan/tambah', 'Satuan::tambah');
-	$routes->put('satuan/ubah', 'Satuan::ubah');
-	$routes->delete('satuan/hapus', 'Satuan::hapus');
-
-	$routes->get('kategori', 'Kategori::index', ['filter' => 'cek_akses']);
-	$routes->post('kategori/tambah', 'Kategori::tambah');
-	$routes->put('kategori/ubah', 'Kategori::ubah');
-	$routes->delete('kategori/hapus', 'Kategori::hapus');
-
-	$routes->get('merek', 'Merek::index', ['filter' => 'cek_akses']);
-	$routes->post('merek/tambah', 'Merek::tambah');
-	$routes->put('merek/ubah', 'Merek::ubah');
-	$routes->delete('merek/hapus', 'Merek::hapus');
-
-	$routes->get('supplier', 'Supplier::index', ['filter' => 'cek_akses']);
-	$routes->post('supplier/tambah', 'Supplier::tambah');
-	$routes->put('supplier/ubah', 'Supplier::ubah');
-	$routes->delete('supplier/hapus', 'Supplier::hapus');
-
-	$routes->get('kode/barang', 'KodeBarang::index', ['filter' => 'cek_akses']);
-	$routes->put('kode/barang/ubah', 'KodeBarang::ubah');
-	
-	$routes->get('kode/transaksi', 'KodeTransaksi::index', ['filter' => 'cek_akses']);
-	$routes->put('kode/transaksi/ubah', 'KodeTransaksi::ubah');
-
-	$routes->get('stok', 'Stok::index', ['filter' => 'cek_akses']);
-	$routes->post('stok/cari', 'Stok::cari');
+	$routes->group('barang', function($routes){
+		$routes->get('', 'Barang::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah', 'Barang::tambah');
+		$routes->put('ubah', 'Barang::ubah');
+		$routes->delete('hapus', 'Barang::hapus');
+	});
+	$routes->group('satuan', function($routes){
+		$routes->get('', 'Satuan::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah', 'Satuan::tambah');
+		$routes->put('ubah', 'Satuan::ubah');
+		$routes->delete('hapus', 'Satuan::hapus');
+	});
+	$routes->group('kategori', function($routes){
+		$routes->get('', 'Kategori::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah', 'Kategori::tambah');
+		$routes->put('ubah', 'Kategori::ubah');
+		$routes->delete('hapus', 'Kategori::hapus');
+	});
+	$routes->group('merek', function($routes){
+		$routes->get('', 'Merek::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah', 'Merek::tambah');
+		$routes->put('ubah', 'Merek::ubah');
+		$routes->delete('hapus', 'Merek::hapus');
+	});
+	$routes->group('supplier', function($routes){
+		$routes->get('', 'Supplier::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah', 'Supplier::tambah');
+		$routes->put('ubah', 'Supplier::ubah');
+		$routes->delete('hapus', 'Supplier::hapus');
+	});
+	$routes->group('kode', function($routes){
+		$routes->get('barang', 'KodeBarang::index', ['filter' => 'cek_akses']);
+		$routes->put('barang/ubah', 'KodeBarang::ubah');
+		
+		$routes->get('transaksi', 'KodeTransaksi::index', ['filter' => 'cek_akses']);
+		$routes->put('transaksi/ubah', 'KodeTransaksi::ubah');
+	});
+	$routes->group('stok', function($routes){
+		$routes->get('', 'Stok::index', ['filter' => 'cek_akses']);
+		$routes->post('cari', 'Stok::cari');
+	});
 
 });
 
 $routes->group('fitur', function($routes){
 
-	$routes->get('kasir', 'Kasir::index', ['filter' => 'cek_akses']);
-	$routes->post('kasir/tambah_keranjang', 'Kasir::tambah_keranjang');
-	$routes->post('kasir/tambah_transaksi_sementara', 'Kasir::tambah_transaksi_sementara');
-	$routes->put('kasir/ubah_jenis_kasir', 'Kasir::ubah_jenis_kasir');
-	$routes->delete('kasir/hapus_barang', 'Kasir::hapus_barang');
-	$routes->delete('kasir/hapus_keranjang', 'Kasir::hapus_keranjang');
-
-	$routes->get('kasir/invoice/(:any)', 'Invoice::index/$1', ['filter' => 'cek_akses']);
-	$routes->post('kasir/invoice/tambah', 'Invoice::tambah');
-	$routes->delete('kasir/invoice/hapus', 'Invoice::hapus');	
-
-	$routes->get('utang', 'Utang::index', ['filter' => 'cek_akses']);
-	$routes->get('utang/invoice/(:any)', 'InvoiceUtang::index/$1');
-	$routes->post('utang/invoice/tambah', 'InvoiceUtang::tambah');
-
-	$routes->get('barang_masuk', 'BarangMasuk::index', ['filter' => 'cek_akses']);
-	$routes->post('barang_masuk/tambah_barang', 'BarangMasuk::tambah_barang');
-	$routes->post('barang_masuk/tambah_pengirim', 'BarangMasuk::tambah_pengirim');
-	$routes->post('barang_masuk/tambah', 'BarangMasuk::tambah');
-	$routes->get('barang_masuk/ambil_detail', 'BarangMasuk::ambil_detail');
-	$routes->post('barang_masuk/ambil_harga', 'BarangMasuk::ambil_harga');
+	$routes->group('kasir', function($routes){
+		$routes->get('', 'Kasir::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah_keranjang', 'Kasir::tambah_keranjang');
+		$routes->post('tambah_transaksi_sementara', 'Kasir::tambah_transaksi_sementara');
+		$routes->put('ubah_jenis_kasir', 'Kasir::ubah_jenis_kasir');
+		$routes->delete('hapus_barang', 'Kasir::hapus_barang');
+		$routes->delete('hapus_keranjang', 'Kasir::hapus_keranjang');
+		
+		$routes->group('invoice', function($routes){
+			$routes->get('(:any)', 'Invoice::index/$1', ['filter' => 'cek_akses']);
+			$routes->post('tambah', 'Invoice::tambah');
+			$routes->delete('hapus', 'Invoice::hapus');
+		});
+	});
+	$routes->group('utang', function($routes){
+		$routes->get('', 'Utang::index', ['filter' => 'cek_akses']);
+		$routes->get('invoice/(:any)', 'InvoiceUtang::index/$1');
+		$routes->post('invoice/tambah', 'InvoiceUtang::tambah');
+	});
+	$routes->group('barang_masuk', function($routes){
+		$routes->get('', 'BarangMasuk::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah_barang', 'BarangMasuk::tambah_barang');
+		$routes->post('tambah_pengirim', 'BarangMasuk::tambah_pengirim');
+		$routes->post('tambah', 'BarangMasuk::tambah');
+		$routes->get('ambil_detail', 'BarangMasuk::ambil_detail');
+		$routes->post('ambil_harga', 'BarangMasuk::ambil_harga');
+	});
 });
 
 
 $routes->group('laporan', function($routes){
 
 	$routes->add('masuk/cari', 'LaporanMasuk::index', ['filter' => 'cek_akses']);
-
 	$routes->add('keluar/cari', 'LaporanKeluar::index', ['filter' => 'cek_akses']);
 
-	$routes->add('summary/tanggal', 'LaporanSummary::index', ['filter' => 'cek_akses']);
-	$routes->add('summary/bulan', 'LaporanSummary::bulan', ['filter' => 'cek_akses']);
-	$routes->add('summary/tahun', 'LaporanSummary::tahun', ['filter' => 'cek_akses']);
+	$routes->group('summary', function($routes){
+		$routes->add('tanggal', 'LaporanSummary::index', ['filter' => 'cek_akses']);
+		$routes->add('bulan', 'LaporanSummary::bulan', ['filter' => 'cek_akses']);
+		$routes->add('tahun', 'LaporanSummary::tahun', ['filter' => 'cek_akses']);
+	});
 });
 
 
 
 $routes->group('pengaturan', function($routes){
 
-	$routes->get('role', 'Role::index', ['filter' => 'cek_akses']);
-	$routes->post('role/tambah', 'Role::tambah');
-	$routes->put('role/ubah', 'Role::ubah');
-	$routes->delete('role/hapus', 'Role::hapus');
+	$routes->group('role', function($routes){
+		$routes->get('', 'Role::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah', 'Role::tambah');
+		$routes->put('ubah', 'Role::ubah');
+		$routes->delete('hapus', 'Role::hapus');
 
-	$routes->get('role/akses/(:num)', 'RoleAkses::index/$1');
-	$routes->post('role/akses/ubah', 'RoleAkses::ubah');
-
-	$routes->get('menu', 'Menu::index', ['filter' => 'cek_akses']);
-	$routes->post('menu/tambah', 'Menu::tambah');
-	$routes->put('menu/ubah', 'Menu::ubah');
-	$routes->delete('menu/hapus', 'Menu::hapus');
-
-	$routes->get('menu_utama', 'MenuUtama::index', ['filter' => 'cek_akses']);
-	$routes->post('menu_utama/tambah', 'MenuUtama::tambah');
-	$routes->put('menu_utama/ubah', 'MenuUtama::ubah');
-	$routes->delete('menu_utama/hapus', 'MenuUtama::hapus');
-
-	$routes->get('submenu', 'Submenu::index', ['filter' => 'cek_akses']);
-	$routes->post('submenu/tambah', 'Submenu::tambah');
-	$routes->put('submenu/ubah', 'Submenu::ubah');
-	$routes->delete('submenu/hapus', 'Submenu::hapus');
+		$routes->get('akses/(:num)', 'RoleAkses::index/$1');
+		$routes->post('akses/ubah', 'RoleAkses::ubah');
+	});
+	$routes->group('menu', function($routes){
+		$routes->get('', 'Menu::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah', 'Menu::tambah');
+		$routes->put('ubah', 'Menu::ubah');
+		$routes->delete('hapus', 'Menu::hapus');
+	});
+	$routes->group('menu_utama', function($routes){
+		$routes->get('', 'MenuUtama::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah', 'MenuUtama::tambah');
+		$routes->put('ubah', 'MenuUtama::ubah');
+		$routes->delete('hapus', 'MenuUtama::hapus');
+	});
+	$routes->group('submenu', function($routes){
+		$routes->get('', 'Submenu::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah', 'Submenu::tambah');
+		$routes->put('ubah', 'Submenu::ubah');
+		$routes->delete('hapus', 'Submenu::hapus');
+	});
 });
 
 $routes->group('tempat', function($routes){
-
-	$routes->get('karyawan', 'Karyawan::index', ['filter' => 'cek_akses']);
-	$routes->post('karyawan/tambah', 'Karyawan::tambah');
-	$routes->post('karyawan/ubah', 'Karyawan::ubah');
-	$routes->delete('karyawan/hapus', 'Karyawan::hapus');
+	$routes->group('karyawan', function($routes){
+		$routes->get('', 'Karyawan::index', ['filter' => 'cek_akses']);
+		$routes->post('tambah', 'Karyawan::tambah');
+		$routes->post('ubah', 'Karyawan::ubah');
+		$routes->delete('hapus', 'Karyawan::hapus');
+	});
 
 	$routes->get('toko', 'Toko::index', ['filter' => 'cek_akses']);
 	$routes->post('toko/ubah', 'Toko::ubah');
