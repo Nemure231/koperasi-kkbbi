@@ -3,88 +3,57 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\Model_stok;
-use App\Models\Model_user_menu;
-use App\Models\Model_user;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
+use App\Models\ModelBarang;
 
 class Stok extends BaseController
 {
 	
 	public function __construct(){
-        
-        $this->model_user_menu = new Model_user_menu();
-		$this->model_user = new Model_user();
-        $this->model_stok = new Model_stok();
         $this->request = \Config\Services::request();
-		$this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
+        $this->modelBarang = new ModelBarang();
 	}
 
-	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
-
-
+	protected $helpers = ['url', 'form', 'kpos', 'cookie'];
 
     public function index(){
-		
 
-		$role = $this->session->get('role_id');
-        $email = $this->session->get('email');
-		
-
-		
-        $stok = $this->model_stok->select('min_stok, id_stok')->asArray()
-                ->where('id_stok', 58)->first();
 		$data = [
 			'title' => ucfirst('Pengaturan Stok'),
             'nama_menu_utama' => ucfirst('Stok'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-            'stok' => $stok,
-            'habis' => $this->model_stok->GetAllStokHampirHabis(),
             'session' => $this->session,
-            'validation' => $this->validation,
+            'input_minimal_stok' => [
+                'type' => 'text', 
+                'name'=> 'min_stok',
+                'class'=>'form-control',
+                'placeholder'=> 'Minimal stok ....'
+            ],
             'form_stok' => [
                 'id' => 'formStok',
-                'name'=>'formStok'
-            ],
-			'input_id_stokH' => [
-				'name' => 'id_stok',
-				'id'=> 'id_stok', 
-				'value' => ''.$stok['id_stok'].'', 
-				'type'=> 'hidden'
+                'name'=>'formStok',
+                'class' => 'card-header-form'
             ]
 		];
 		tampilan_admin('admin/admin-stok/v_stok', 'admin/admin-stok/v_js_stok', $data);
     }
 
-    public function ubah(){
-        if(!$this->validate([
-            'min_stok' => [
-                'label'  => 'Stok Minimal',
-                'rules'  => 'required|numeric',
-                'errors' => [
-                'required' => 'Stok harus diisi!',
-                'numeric' => 'Stok harus angka!'
-                ]
-            ]
-        ])) {
-        
-            return redirect()->to(base_url('/pengaturan/stok'))->withInput();
+    public function cari(){
 
+        $min_stok = $this->request->getPost('min_stok');
+
+        if($min_stok){
+            $stok = $this->modelBarang->cariStok($min_stok);
+        }else{
+            $stok = '';
         }
-
-        $id_stok = $this->request->getPost('id_stok');
-        $edit = [
-            'min_stok' => $this->request->getPost('min_stok')
-        ];
-
-        $this->model_stok->update($id_stok, $edit);
-
         $this->session->setFlashdata('pesan_stok', 'Stok berhasil dicari!');
-        return redirect()->to(base_url('/pengaturan/stok'));
+        $this->session->setFlashdata('data_stok', $stok);
+        return redirect()->to(base_url('/suplai/stok'))->withInput();
 
     }
 }

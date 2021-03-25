@@ -76,6 +76,15 @@ $routes->group('suplai', function($routes){
 	$routes->put('supplier/ubah', 'Supplier::ubah');
 	$routes->delete('supplier/hapus', 'Supplier::hapus');
 
+	$routes->get('kode/barang', 'KodeBarang::index', ['filter' => 'cek_akses']);
+	$routes->put('kode/barang/ubah', 'KodeBarang::ubah');
+	
+	$routes->get('kode/transaksi', 'KodeTransaksi::index', ['filter' => 'cek_akses']);
+	$routes->put('kode/transaksi/ubah', 'KodeTransaksi::ubah');
+
+	$routes->get('stok', 'Stok::index', ['filter' => 'cek_akses']);
+	$routes->post('stok/cari', 'Stok::cari');
+
 });
 
 $routes->group('fitur', function($routes){
@@ -141,15 +150,6 @@ $routes->group('pengaturan', function($routes){
 	$routes->post('submenu/tambah', 'Submenu::tambah');
 	$routes->put('submenu/ubah', 'Submenu::ubah');
 	$routes->delete('submenu/hapus', 'Submenu::hapus');
-
-	$routes->get('kode/barang', 'KodeBarang::index', ['filter' => 'cek_akses']);
-	$routes->put('kode/barang/ubah', 'KodeBarang::ubah');
-	
-	$routes->get('kode/transaksi', 'KodeTransaksi::index', ['filter' => 'cek_akses']);
-	$routes->put('kode/transaksi/ubah', 'KodeTransaksi::ubah');
-
-	$routes->get('stok', 'Stok::index', ['filter' => 'cek_akses']);
-	$routes->put('stok/ubah', 'Stok::ubah');
 });
 
 $routes->group('tempat', function($routes){

@@ -77,7 +77,7 @@ class KodeBarang extends BaseController
 
             ])) {
                
-                return redirect()->to(base_url('/pengaturan/kode/barang'))->withInput();
+                return redirect()->to(base_url('/suplai/kode/barang'))->withInput();
 
             }
 
@@ -90,7 +90,7 @@ class KodeBarang extends BaseController
                 
                     $this->model_kode_barang->update($id, $ubah);
                     $this->session->setFlashdata('pesan_kode_barang', 'Kode barang berhasil diubah!');
-                    return redirect()->to(base_url('/pengaturan/kode/barang'));
+                    return redirect()->to(base_url('/suplai/kode/barang'));
         
     }
 

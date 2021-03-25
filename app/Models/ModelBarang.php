@@ -120,6 +120,28 @@ class ModelBarang extends Model{
         );
     }
 
+    public function cariStok($min_stok){
+        $ambil_token = get_cookie('jwt_token');
+        $res_barang = json_encode(['data' => '']);
+        try {
+            $respon_ambil_barang = $this->_client->request(
+                'GET',
+                'suplai/stok/cari/'.$min_stok,
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_barang = $respon_ambil_barang->getBody();
+        } catch (ClientException $e) {
+            
+        }
+
+        $barang = json_decode($res_barang, true);
+        return $barang['data'];
+    }
+
 }
 
 ?>
