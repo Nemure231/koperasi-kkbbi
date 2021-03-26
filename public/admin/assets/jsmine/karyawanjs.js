@@ -35,7 +35,6 @@ function previewImg1() {
 
 const flashDataHapus = $('#flash-data-hapus').data('flashdatahapus');
 const flashData = $('.flash-data').data('flashdata');
-const flashDataSalah = $('.errors').html();
 
 if (flashData) {
    Swal.fire({
@@ -47,17 +46,9 @@ if (flashData) {
       icon: 'success'
    });
 
-} else if (flashDataSalah) {
+}
 
-   Swal.fire({
-      title: 'Gagal',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      html: ' ' + flashDataSalah,
-      icon: 'error'
-   });
-} else if (flashDataHapus) {
+if (flashDataHapus) {
 
    Swal.fire({
       title: 'Berhasil',
@@ -79,22 +70,31 @@ $(document).ready(function () {
    $('#role_idE').select2();
 
    $("#usus").DataTable();
-   $('#swal2-content ul li').css("color", "#dc3545");
+
+   // $('.rum').on('click', function () {
+
+   //    //$('#is_active').attr('name', 'is_active');
+   //    if(this.checked){
+   //       //$('#is_active').val('1');
+   //       $('#is_active').attr('name', 'is_active');
+   //       $('#is_active1').attr('name', '');
+   //    }else{
+   //       //$('#is_active1').val('2');
+   //       $('#is_active1').attr('name', 'is_active');
+   //       $('#is_active').attr('name', '');
+   //    }
+	// });
 
 
-   $('.rum').on('click', function () {
-
-      //$('#is_active').attr('name', 'is_active');
-      if(this.checked){
-         //$('#is_active').val('1');
-         $('#is_active').attr('name', 'is_active');
-         $('#is_active1').attr('name', '');
-      }else{
-         //$('#is_active1').val('2');
-         $('#is_active1').attr('name', 'is_active');
-         $('#is_active').attr('name', '');
+   $('#status').click(function () {
+      var cek = this.checked;
+      if(cek == true){
+         $(this).val(1);
       }
-	});
+      if(cek == false){
+         $(this).val(2);
+      }
+   });
 
    $('#tombolTambahUser').click(function () {
       $('#judulKaryawan').html("Tambah Karyawan");
@@ -117,7 +117,6 @@ $(document).ready(function () {
       var getUrl = window.location;
       var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
       $('#judulKaryawanE').html("Ubah Karyawan");
-      // $('#formEditKaryawan').attr("action", "toko/editkaryawan/" + id);
       $('#imgE').attr("src", baseUrl + "/public/admin/assets/profile/" + foto);
       $('#img-labelE').text(foto);
       $('#user_id').val(id);
@@ -144,6 +143,7 @@ $(document).ready(function () {
       $('#role_idE').select2({dropdownParent: $('#modalKaryawanE')});
    });
 
+
    $('.cekE').on('click', function () {
 
       //$('#is_active').attr('name', 'is_active');
@@ -156,15 +156,35 @@ $(document).ready(function () {
          $('#is_activeE').attr('name', '');
       }
    });
+
+   var validasi_tambah = $('.validasi_tambah').html();
+   var validasi_edit = $('.validasi_edit').html();
+   if (validasi_tambah != 0) {
+      $('#modalKaryawan').modal('show');
+   }
+
+   if (validasi_edit != 0) {
+      $('#modalKaryawanE').modal('show');
+
+         menu_id = $('#old_role_id').val();
+         $('#edit_role_id').val(menu_id);
+
+
+         $('#edit_role_id').select2({
+            dropdownParent: $('#modalKaryawanE'),
+            tags: true
+         });
+   }
+
+
+   $('table').on('click', '.tombolHapusUser', function () {
+
+      var user_id = $(this).data("id_user");
+      $('#modalUserHapus').modal('show');
+      $('#hidden_id_user').val(user_id);
+   
+   });
+
+
   
-
-});
-
-
-$('table').on('click', '.tombolHapusUser', function () {
-
-   var user_id = $(this).data("id_user");
-   $('#modalUserHapus').modal('show');
-   $('#hidden_id_user').val(user_id);
-
 });

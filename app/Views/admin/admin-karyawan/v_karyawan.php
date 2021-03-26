@@ -55,13 +55,13 @@ width:100%!important;
                     <?php foreach($karyawan as $k):?>
                     <tr>
                       <td><?php echo $i; ?></td>
-                      <td><?php echo $k['nama']; ?></td>
+                      <td><?php echo $k['name']; ?></td>
                       <td><?php echo $k['email']; ?></td>
                       <td><?php echo $k['telepon']; ?></td>
                       <td><?php echo $k['alamat']; ?></td>
-                      <td><?php echo $k['role']; ?></td>
+                      <td><?php echo $k['nama_role']; ?></td>
                       <td>
-                        <?php if ($k['is_active'] == 1){
+                        <?php if ($k['status'] == 1){
                               echo '<div class="badge badge-success">Aktif</div>';
                             }else{
                               echo '<div class="badge badge-danger">Tidak aktif</div>';
@@ -74,13 +74,13 @@ width:100%!important;
                       </td>
                       <td>
                         <a href="javascript:void(0)" id="tombolEditUser" class="mb-3 btn btn-warning mr-1 tombolEditUser"
-                          data-id_user="<?php echo $k['id_user'];?>" data-nama="<?php echo $k['nama'];?>"
+                          data-id_user="<?php echo $k['id'];?>" data-nama="<?php echo $k['name'];?>"
                           data-telepon="<?php echo $k['telepon'];?>" data-alamat="<?php echo $k['alamat'];?>"
-                          data-role_id="<?php echo $k['role_id'];?>" data-is_active="<?php echo $k['is_active'];?>"
+                          data-role_id="<?php echo $k['role_id'];?>" data-is_active="<?php echo $k['status'];?>"
                           data-gambar="<?php echo $k['gambar'];?>" data-email="<?php echo $k['email'];?>">
                           <i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" id="tombolHapusUser" class="btn btn-danger tombolHapusUser"
-                          data-id_user="<?php echo $k['id_user'];?>">
+                          data-id_user="<?php echo $k['id'];?>">
                           <i class="fas fa-trash"></i>
                         </a>
                         
@@ -115,8 +115,56 @@ width:100%!important;
               </div>
             </div>
             <?php endif; ?>
-            <div class="invisible"><?php echo $validation->listErrors(); ?></div>
+            <div class="invisible">
+              <div class="validasi_tambah">
+              0
+              <?php $validasi_tambah = $session->getFlashdata('pesan_validasi_tambah_karyawan');
+              $validasi_gambar_tambah = $session->getFlashdata('pesan_validasi_tambah_karyawan_gambar');
 
+
+              if($validasi_tambah){
+                echo $validasi_tambah['name']; 
+                echo $validasi_tambah['email']; 
+                echo $validasi_tambah['password'];
+                echo $validasi_tambah['telepon'];
+                echo $validasi_tambah['alamat'];
+                echo $validasi_tambah['gambar'];
+                echo $validasi_tambah['role_id'];
+              }
+
+              if($validasi_gambar_tambah){
+                echo $validasi_gambar_tambah;
+              }
+              
+            
+              // echo $validation->showError('gambar');
+              
+              ?>
+              
+
+              </div>
+              <div class="validasi_edit">
+              0
+              <?php $validasi_edit = $session->getFlashdata('pesan_validasi_edit_karyawan');
+              $validasi_gambar_edit = $session->getFlashdata('pesan_validasi_edit_karyawan_gambar');
+              
+              if($validasi_edit){
+                echo $validasi_edit['name']; 
+                echo $validasi_edit['email']; 
+                echo $validasi_edit['telepon'];
+                echo $validasi_edit['alamat'];
+                echo $validasi_edit['gambar'];
+                echo $validasi_edit['role_id'];
+
+              }
+
+              // echo $validation->showError('gambarE');
+              
+              ?>
+              
+
+              </div>
+            </div>
 
 
           </div>
@@ -128,7 +176,7 @@ width:100%!important;
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalKaryawan" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalKaryawan" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div id="judbuk" class="modal-header bg-primary">
@@ -138,56 +186,90 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open_multipart(base_url().'/tempat/karyawan/tambah', $formtambah);    ?>
-      <!-- < ?php echo form_input($id_hidd); ?> -->
-      <?php echo csrf_field(); ?>
+      <?php echo form_open_multipart(base_url().'/tempat/karyawan/tambah', $form_tambah);    ?>
+      <?php $pesan_tambah = $session->getFlashdata('pesan_validasi_tambah_karyawan');?>
+      <?php $pesan_tambah_gambar = $session->getFlashdata('pesan_validasi_tambah_karyawan_gambar');?>
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-6">
             <div class="row">
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Nama</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($nama); ?>
+                <?php
+                $class_tambah_name = ($pesan_tambah['name'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "name",
+                  'class' => "form-control "."$class_tambah_name"."",
+                  'value' => set_value('name', ''),
+                  'type' => "text"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['name'].'</div>' : ''; ?>
               </div>
 
 
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Nomor Telepon</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($telepon); ?>
+                <?php
+                $class_tambah_telepon = ($pesan_tambah['telepon'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "telepon",
+                  'class' => "form-control "."$class_tambah_telepon"."",
+                  'value' => set_value('telepon', ''),
+                  'type' => "text"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['telepon'].'</div>' : ''; ?>
               </div>
 
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Role</label>
-                <select class="custom-select" name="role_id" id="role_id">
-                  <option value=""></option>
+                <select class="custom-select <?php echo ($pesan_tambah['role_id'] ?? []) ? 'is-invalid' : ''; ?>" name="role_id" id="role_id">
+                  <option value="">--Pilih--</option>
                   <?php foreach ($role as $r) :?>
 
-                  <option value="<?php echo $r['id_role'];?>"><?php echo $r['role'];?>
+                  <option value="<?php echo $r['id_role'];?>"><?php echo $r['nama_role'];?>
                   </option>
                   <?php endforeach;?>
                 </select>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['role_id'].'</div>' : ''; ?>
               </div>
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>E-mail</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($email); ?>
+                <?php
+                $class_tambah_email = ($pesan_tambah['email'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "email",
+                  'class' => "form-control "."$class_tambah_email"."",
+                  'value' => set_value('email', ''),
+                  'type' => "text"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['email'].'</div>' : ''; ?>
               </div>
 
               
 
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Sandi</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($sandi); ?>
+                <?php
+                $class_tambah_password = ($pesan_tambah['password'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "password",
+                  'class' => "form-control "."$class_tambah_password"."",
+                  'value' => set_value('password', ''),
+                  'type' => "text"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['password'].'</div>' : ''; ?>
               </div>
 
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Ulangi Sandi</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($ulang_sandi); ?>
+                <?php
+                $class_tambah_password_confirmation = ($pesan_tambah['password'] ?? []) ? 'is-invalid' : '';
+                echo form_input([
+                  'name' => "password_confirmation",
+                  'class' => "form-control "."$class_tambah_password_confirmation"."",
+                  'type' => "text"
+                ]); ?>
               </div>
 
               
@@ -200,27 +282,40 @@ width:100%!important;
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Alamat</label>
                 <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_textarea($alamat); ?>
+                <?php
+                $class_tambah_alamat = ($pesan_tambah['alamat'] ?? []) ? 'is-invalid' : '';
+                echo form_textarea([
+                  'name' => "alamat",
+                  'class' => "form-control "."$class_tambah_alamat"."",
+                  'value' => set_value('alamat', ''),
+                  'type' => "text"
+                ]); ?>
+                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['alamat'].'</div>' : ''; ?>
               </div>
               <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
                 <label>Foto</label>
                 <img src="<?php echo base_url('admin/assets/profile').'/'. 'default.png' ?>" class="img-thumbnail img-prev"
                   style="height: 150px; width: 150px; object-fit:cover;">
+                  
               </div>
+    
               <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
               <div class="form-group col-sm-12 col-md-12 col-lg-12 mt-3 pt-1">
                 <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="gambar" name="gambar" onchange="previewImg()">
+                  <input type="file" class="custom-file-input <?php echo ($pesan_tambah_gambar ?? []) ? 'is-invalid' : ''; ?>" id="gambar" name="gambar" onchange="previewImg()">
+                  <?php echo ($pesan_tambah_gambar ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah_gambar.'</div>' : ''; ?>
+              
                   <label class="custom-file-label text-left cass" for="Sampulbuku">Pilih gambar</label>
                 </div>
+
+               
               </div>
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-              <input type="hidden" class="custom-switch-input1" id="is_active1" checked value="2">
                 <div class="control-label">Status karyawan</div>
                 <label class="custom-switch">
                   <span class="custom-switch-description mr-2">Tidak aktif</span>
-                  <input type="checkbox" name="is_active" class="custom-switch-input rum" id="is_active" checked value="1">
+                  <input type="checkbox" name="status" class="custom-switch-input" id="status" checked value="1">
                   
                   <span class="custom-switch-indicator"></span>
                   <span class="custom-switch-description">Aktif</span>
@@ -244,7 +339,7 @@ width:100%!important;
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalKaryawanE" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalKaryawanE" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div id="judbuk" class="modal-header bg-primary">
@@ -254,10 +349,16 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open_multipart(base_url().'/tempat/karyawan/ubah', $formedit);    ?>
-      <!-- <input type="hidden" name="_method" value="PUT"> -->
-      <?php echo csrf_field(); ?>
-      <?php echo form_input($hiddenIdKaryawan); ?>
+      <?php echo form_open_multipart(base_url().'/tempat/karyawan/ubah', $form_edit);    ?>
+      <?php $old_data = $session->getFlashdata('old_edit_input');?>
+      <?php echo form_input([
+          'name' => 'edit_id_karyawan',
+          'id'=>'edit_id_karyawan',
+          'type'=> 'hidden',
+          'value' => $old_data['id'] ?? ''
+        ]); ?>
+        <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_karyawan');?>
+      
       <input type="hidden" id="gambarE_lama" name="gambarE_lama">
       <div class="modal-body">
         <div class="row">
@@ -265,36 +366,78 @@ width:100%!important;
             <div class="row">
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Nama</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($namaE); ?>
+                <?php
+                $class_edit_name = ($pesan_edit['name'] ?? []) ? 'is-invalid' : '';
+                // $value_edit_name = set_value('edit_name', '');
+                echo form_input([
+                  'id' => "edit_name",
+                  'name' => "edit_name",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_name"."",
+                  'value' => set_value('edit_name', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['name'].'</div>' : ''; ?>
+						
               </div>
 
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Role</label>
-                <select class="custom-select" name="role_idE" id="role_idE">
+                <input id="old_role_id" type="hidden" value="<?php echo $old_data['role_id'] ?? ''; ?>" />
+                <select class="custom-select hapus-validasi-border <?php echo ($pesan_edit['role_id'] ?? []) ? 'is-invalid' : ''; ?>" name="edit_role_id" id="edit_role_id">
                   <option value=""></option>
                   <?php foreach ($role as $r) :?>
 
-                  <option value="<?php echo $r['id_role'];?>"><?php echo $r['role'];?>
+                  <option value="<?php echo $r['id_role'];?>"><?php echo $r['nama_role'];?>
                   </option>
                   <?php endforeach;?>
                 </select>
+                <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['role_id'].'</div>' : ''; ?>
               </div>
 
               <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label>Nomor Telepon</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($teleponE); ?>
+                <?php
+                $class_edit_telepon = ($pesan_edit['telepon'] ?? []) ? 'is-invalid' : '';
+                // $value_edit_telepon = set_value('edit_telepon', '');
+                echo form_input([
+                  'id' => "edit_telepon",
+                  'telepon' => "edit_telepon",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_telepon"."",
+                  'value' => set_value('edit_telepon', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['telepon'].'</div>' : ''; ?>
+						
               </div>
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>E-mail</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($emailE); ?>
+                <?php
+                $class_edit_email = ($pesan_edit['email'] ?? []) ? 'is-invalid' : '';
+                // $value_edit_email = set_value('edit_email', '');
+                echo form_input([
+                  'id' => "edit_email",
+                  'email' => "edit_email",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_email"."",
+                  'value' => set_value('edit_email', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['email'].'</div>' : ''; ?>
+						
               </div>
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Alamat</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_textarea($alamatE); ?>
+                <?php
+                $class_edit_alamat = ($pesan_edit['alamat'] ?? []) ? 'is-invalid' : '';
+                // $value_edit_alamat = set_value('edit_alamat', '');
+                echo form_textarea([
+                  'id' => "edit_alamat",
+                  'alamat' => "edit_alamat",
+                  'class' => "form-control hapus-validasi-border "."$class_edit_alamat"."",
+                  'value' => set_value('edit_alamat', ''),
+                  'type' => "text"
+                ]); ?>
+              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['alamat'].'</div>' : ''; ?>
+						
               </div>
             </div>
           </div>
@@ -340,7 +483,7 @@ width:100%!important;
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalUserHapus" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalUserHapus" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div id="judbuk" class="modal-header">
@@ -376,8 +519,8 @@ width:100%!important;
 
 
         <?php echo form_open(base_url().'/tempat/karyawan/hapus', $form_hapus);    ?>
-        <?php echo form_input($hidden_id_user); ?>
-        <?php echo csrf_field(); ?>
+        <?php echo form_input($hapus_id_karyawan); ?>
+        
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         <?php echo form_close(); ?>
