@@ -158,6 +158,10 @@ width:100%!important;
 
               }
 
+              if($validasi_gambar_edit){
+                echo $validasi_gambar_edit;
+              }
+
               // echo $validation->showError('gambarE');
               
               ?>
