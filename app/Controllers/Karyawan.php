@@ -40,6 +40,7 @@ class Karyawan extends BaseController{
             'form_tambah' => ['id' => 'form-tambah-karyawan'],
             'form_edit' =>  ['id' => 'form-edit-karyawan'],
             'form_hapus' =>  ['class' => 'btn btn-block'],
+            'hapus_gambar' =>  ['id' => 'hapus_gambar', 'name' => 'hapus_gambar', 'type' => 'hidden'],
             'hapus_id_karyawan' => ['name' => 'hapus_id_karyawan', 'id'=>'hapus_id_karyawan', 'type'=> 'hidden'],
         ];
         tampilan_admin('admin/admin-karyawan/v_karyawan', 'admin/admin-karyawan/v_js_karyawan', $data);
@@ -68,18 +69,19 @@ class Karyawan extends BaseController{
             }
 
                 $sampul_buku = $this->request->getFile('gambar');
-                if($sampul_buku->getError() == 4){
-                    $nama_gambar = 'default.png';
-                }else{
-                    ///pindahkan gambar
+
+                if($validasi_gambar == '' && $sampul_buku->isValid()){
+
                     $nama_gambar = $sampul_buku->getRandomName();
                     $sampul_buku->move('admin/assets/profile/', $nama_gambar);
-                    ///ambil namam gambar
+
+                }else{
+                    $nama_gambar = 'default.png';
                 }
-                
-               
+              
                 $validasi =  $this->modelKaryawan->tambahKaryawan($nama_gambar);
                 if($validasi){
+
                     $this->session->setFlashdata('pesan_validasi_tambah_karyawan',  $validasi);
                     $this->session->setFlashdata('pesan_validasi_tambah_karyawan_gambar',  $validasi_gambar);
                     return redirect()->to(base_url('/tempat/karyawan'))->withInput();
@@ -111,21 +113,24 @@ class Karyawan extends BaseController{
             }
 
                 $foto = $this->request->getFile('edit_gambar');
-
-                //cek gambar aapakah tetap gambar lama
-                if($foto->getError() == 4){
-                    $nama_foto = $this->request->getPost('edit_gambar_lama');
-                }else{
+                $nama_gambar_lama = $this->request->getPost('edit_gambar_lama');
+                
+                if($validasi_edit_gambar == '' && $foto->isValid()){
                     $nama_foto = $foto->getRandomName();
                     $foto->move('admin/assets/profile/', $nama_foto);
                     //hapus file lama
-                    unlink('admin/assets/profile/'. $this->request->getPost('edit_gambar_lama'));
+                    if($nama_gambar_lama != 'default.png'){
+                        unlink('admin/assets/profile/'. $nama_gambar_lama);
+                    }
+                }else{
+                    $nama_foto = $nama_gambar_lama;
                 }
                 
                 $validasi = $this->modelKaryawan->ubahKaryawan($nama_foto);
                 $old = [
                     'id_karyawan' => $this->request->getPost('edit_id_karyawan'),
                     'role_id' => $this->request->getPost('edit_role_id'),
+                    'gambar'  => $nama_gambar_lama
                 ];
                 if($validasi){
                     $this->session->setFlashdata('pesan_validasi_edit_karyawan',  $validasi);
@@ -141,14 +146,17 @@ class Karyawan extends BaseController{
 
   
     public function hapus(){
-        $user_id = $this->request->getPost('hidden_id_user');
-            $hapus = $this->model_user->asArray()->find($user_id);
-            if($hapus['gambar'] != 'default.png'){
-                unlink('admin/assets/profile/'. $hapus['gambar']);
+       
+        
+        $model = $this->modelKaryawan->hapusKaryawan();
+        if($model == true){
+            $hapus = $this->request->getPost('hapus_gambar');
+            if($hapus != 'default.png'){
+                unlink('admin/assets/profile/'. $hapus);
             }
-            $this->model_user->HapusKaryawan($user_id);
-            $this->session->setFlashdata('hapus_karyawan', 'Karyawan berhasil dihapus!');
-            return redirect()->to(base_url('/tempat/karyawan'));
+        }
+        $this->session->setFlashdata('hapus_karyawan', 'Karyawan berhasil dihapus!');
+        return redirect()->to(base_url('/tempat/karyawan'));
 
 
     

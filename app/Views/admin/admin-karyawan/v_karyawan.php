@@ -80,7 +80,8 @@ width:100%!important;
                           data-gambar="<?php echo $k['gambar'];?>" data-email="<?php echo $k['email'];?>">
                           <i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" id="tombolHapusUser" class="btn btn-danger tombolHapusUser"
-                          data-id_user="<?php echo $k['id'];?>">
+                          data-id_user="<?php echo $k['id'];?>"
+                          data-gambar="<?php echo $k['gambar'];?>">
                           <i class="fas fa-trash"></i>
                         </a>
                         
@@ -448,15 +449,16 @@ width:100%!important;
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
                 <label>Foto</label>
+                <input id="old_gambar" type="hidden" value="<?php echo $old_data['gambar'] ?? ''; ?>" />
                 <img id="imgE" class="img-thumbnail img-prev1" style="height: 150px; width: 150px; object-fit:cover;">
               </div>
               <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <div class="custom-file">
-                  <input type="file" class="custom-file-input <?php echo ($pesan_edit_gambar ?? []) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('edit_gambar', '') ?>" id="edit_gambar" name="edit_gambar" onchange="previewImg1()">
+                  <input type="file" class="custom-file-input hapus-validasi-border <?php echo ($pesan_edit_gambar ?? []) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('edit_gambar', '') ?>" id="edit_gambar" name="edit_gambar" onchange="previewImg1()">
                   <label class="custom-file-label cuss text-left" id="img-labelE" for="Sampulbuku">Pilih gambar</label>
                 
-                  <?php echo ($pesan_edit_gambar ?? []) ? '<div class="invalid-feedback">'.$pesan_edit_gambar.'</div>' : ''; ?>
+                  <?php echo ($pesan_edit_gambar ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit_gambar.'</div>' : ''; ?>
               
                 </div>
               </div>
@@ -464,7 +466,7 @@ width:100%!important;
                 <div class="control-label">Status karyawan</div>
                 <label class="custom-switch">
                   <span class="custom-switch-description mr-2">Tidak aktif</span>
-                  <input type="checkbox" class="custom-switch-input" id="edit_status" value="1">
+                  <input type="checkbox" class="custom-switch-input" name="edit_status" id="edit_status" value="1">
                   
                   <span class="custom-switch-indicator"></span>
                   <span class="custom-switch-description">Aktif</span>
@@ -524,6 +526,7 @@ width:100%!important;
 
         <?php echo form_open(base_url().'/tempat/karyawan/hapus', $form_hapus);    ?>
         <?php echo form_input($hapus_id_karyawan); ?>
+        <?php echo form_input($hapus_gambar); ?>
         
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>

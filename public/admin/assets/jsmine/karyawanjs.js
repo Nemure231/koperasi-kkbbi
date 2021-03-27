@@ -141,12 +141,12 @@ $(document).ready(function () {
       $('#modalKaryawanE').modal('show');
 
       role_id = $('#old_role_id').val();
+      gambar = $('#old_gambar').val();
       $('#edit_role_id').val(role_id);
-      
       var getUrl = window.location;
       var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-      $('#imgE').attr("src", baseUrl + "/public/admin/assets/profile/" + foto);
-      $('#img-labelE').text(foto);
+      $('#imgE').attr("src", baseUrl + "/public/admin/assets/profile/" + gambar);
+      $('#img-labelE').text(gambar);
 
       $('#edit_role_id').select2({
          dropdownParent: $('#modalKaryawanE'),
@@ -158,11 +158,16 @@ $(document).ready(function () {
    $('table').on('click', '.tombolHapusUser', function () {
 
       var user_id = $(this).data("id_user");
+      var gambar = $(this).data("gambar");
       $('#modalUserHapus').modal('show');
-      $('#hidden_id_user').val(user_id);
+      $('#hapus_id_karyawan').val(user_id);
+      $('#hapus_gambar').val(gambar);
    
    });
-
+   $('#modalKaryawanE').on('hidden.bs.modal', function (event) {
+      $('.hapus-validasi').remove('invalid-feedback');
+      $('.hapus-validasi-border').removeClass('is-invalid');
+   });
 
   
 });

@@ -47,6 +47,7 @@ class ModelKaryawan extends Model{
             $respon_ambil_karyawan = $this->_client->request(
                 'POST',
                 'tempat/karyawan/tambah'
+                // .$nama_gambar
                 .'?name='. htmlspecialchars($this->request->getPost('name'), ENT_QUOTES)
                 .'&email='. htmlspecialchars($this->request->getPost('email'), ENT_QUOTES)
                 .'&password='. $this->request->getPost('password')
@@ -63,8 +64,8 @@ class ModelKaryawan extends Model{
                     // 'multipart' => [
                     //     [
                     //         'name'     => $nama_gambar,
-                    //         'contents' => Psr7\Utils::tryFopen('/home/yolando/Composer', 'r'),
-                    //         'filename' => $gambar
+                    //         'contents' => Psr7\Utils::tryFopen($path, 'r'),
+                    //         // 'filename' => $gambar
                     //     ],
                     // ]
                 ],
@@ -110,19 +111,20 @@ class ModelKaryawan extends Model{
         return $result = $validasi['data'];
     }
 
-    public function hapusMenuUtama(){
-        $id_menu_utama = $this->request->getPost('hapus_id_menu_utama');
+    public function hapusKaryawan(){
+        $id_karyawan = $this->request->getPost('hapus_id_karyawan');
         $ambil_token = get_cookie('jwt_token');
-       
         $respon_ambil_user = $this->_client->request(
             'DELETE',
-            'pengaturan/menu_utama/hapus/'.$id_menu_utama,
+            'tempat/karyawan/hapus/'.$id_karyawan,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"
                 ]
             ],
         );
+
+        return true;
     }
 
 
