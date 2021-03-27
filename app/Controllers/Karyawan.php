@@ -40,7 +40,6 @@ class Karyawan extends BaseController{
             'form_tambah' => ['id' => 'form-tambah-karyawan'],
             'form_edit' =>  ['id' => 'form-edit-karyawan'],
             'form_hapus' =>  ['class' => 'btn btn-block'],
-            'edit_id_karyawan' => ['name' => 'edit_id_karyawan', 'id'=>'user_id', 'type'=> 'hidden'],
             'hapus_id_karyawan' => ['name' => 'hapus_id_karyawan', 'id'=>'hapus_id_karyawan', 'type'=> 'hidden'],
         ];
         tampilan_admin('admin/admin-karyawan/v_karyawan', 'admin/admin-karyawan/v_js_karyawan', $data);
@@ -64,7 +63,6 @@ class Karyawan extends BaseController{
 
 
             ])) {
-                // return redirect()->to(base_url('/tempat/karyawan'))->withInput();
                 $validasi_gambar = $this->validation->getError('gambar');
 
             }
@@ -93,11 +91,11 @@ class Karyawan extends BaseController{
     }
 
     public function ubah(){
-
+            $validasi_edit_gambar = '';
             if(!$this->validate([
-                'gambarE' => [
+                'edit_gambar' => [
                     'label'  => 'Gambar',
-                    'rules'  => 'max_size[gambarE,1024]|is_image[gambarE]|mime_in[gambarE,image/jpg,image/jpeg,image/png]',
+                    'rules'  => 'max_size[edit_gambar,1024]|is_image[edit_gambar]|mime_in[edit_gambar,image/jpg,image/jpeg,image/png]',
                     'errors' => [
                         //'uploaded' => 'Sampul buku harus dipilih!',
                         'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
@@ -108,20 +106,20 @@ class Karyawan extends BaseController{
 
             ])) {
                 
-                return redirect()->to(base_url('/tempat/karyawan'))->withInput();
+                $validasi_edit_gambar = $this->validation->getError('edit_gambar');
 
             }
 
-                $foto = $this->request->getFile('gambarE');
+                $foto = $this->request->getFile('edit_gambar');
 
                 //cek gambar aapakah tetap gambar lama
                 if($foto->getError() == 4){
-                    $nama_foto = $this->request->getPost('gambarE_lama');
+                    $nama_foto = $this->request->getPost('edit_gambar_lama');
                 }else{
                     $nama_foto = $foto->getRandomName();
                     $foto->move('admin/assets/profile/', $nama_foto);
                     //hapus file lama
-                    unlink('admin/assets/profile/'. $this->request->getPost('gambarE_lama'));
+                    unlink('admin/assets/profile/'. $this->request->getPost('edit_gambar_lama'));
                 }
                 
                 $validasi = $this->modelKaryawan->ubahKaryawan($nama_foto);
@@ -131,10 +129,11 @@ class Karyawan extends BaseController{
                 ];
                 if($validasi){
                     $this->session->setFlashdata('pesan_validasi_edit_karyawan',  $validasi);
-                    $this->session->setFlashdata('old_edit_input',  $old);  
+                    $this->session->setFlashdata('old_edit_input',  $old);
+                    $this->session->setFlashdata('pesan_validasi_edit_karyawan_gambar',  $validasi_edit_gambar);
                     return redirect()->to(base_url('/tempat/karyawan'))->withInput();
                 }else{
-                    $this->session->setFlashdata('pesan', 'Karyawan baru berhasil diubah!');
+                    $this->session->setFlashdata('pesan', 'Karyawan berhasil diubah!');
                     return redirect()->to(base_url('/tempat/karyawan'));
                 }
              

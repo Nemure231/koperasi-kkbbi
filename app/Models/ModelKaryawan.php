@@ -79,13 +79,13 @@ class ModelKaryawan extends Model{
     }
 
 
-    public function ubahKaryawan(){
+    public function ubahKaryawan($nama_gambar){
         $id_karyawan = $this->request->getPost('edit_id_karyawan');
         $result = '';
         $validasi = array('data' => '');
         try {
             $ambil_token = get_cookie('jwt_token');
-            $respon_ambil_menu_utama = $this->_client->request(
+            $respon_ambil_karyawan = $this->_client->request(
                 'PUT',
                 'tempat/karyawan/ubah/'.$id_karyawan
                 .'?name='. htmlspecialchars($this->request->getPost('edit_name'), ENT_QUOTES)
@@ -93,6 +93,7 @@ class ModelKaryawan extends Model{
                 .'&telepon='. $this->request->getPost('edit_telepon')
                 .'&alamat='. htmlspecialchars($this->request->getPost('edit_alamat'), ENT_QUOTES)
                 .'&gambar='. $nama_gambar
+                .'&role_id='. $this->request->getPost('edit_role_id')
                 .'&status='. $this->request->getPost('edit_status'),
                 ['headers' => 
                     [
@@ -100,7 +101,7 @@ class ModelKaryawan extends Model{
                     ]
                 ],
             )->getBody();
-            json_decode($respon_ambil_menu_utama, true);
+            json_decode($respon_ambil_karyawan, true);
         } catch (ClientException $e) {
             // echo Psr7\Message::toString($e->getRequest());
             $validasi = json_decode($e->getResponse()->getBody(), true);

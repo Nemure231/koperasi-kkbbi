@@ -73,7 +73,7 @@ width:100%!important;
                           style="height: 100px; width: 100px; object-fit:cover;">
                       </td>
                       <td>
-                        <a href="javascript:void(0)" id="tombolEditUser" class="mb-3 btn btn-warning mr-1 tombolEditUser"
+                        <a href="javascript:void(0)" id="tombolEditUser" class="btn btn-warning tombolEditUser"
                           data-id_user="<?php echo $k['id'];?>" data-nama="<?php echo $k['name'];?>"
                           data-telepon="<?php echo $k['telepon'];?>" data-alamat="<?php echo $k['alamat'];?>"
                           data-role_id="<?php echo $k['role_id'];?>" data-is_active="<?php echo $k['status'];?>"
@@ -136,8 +136,6 @@ width:100%!important;
                 echo $validasi_gambar_tambah;
               }
               
-            
-              // echo $validation->showError('gambar');
               
               ?>
               
@@ -346,14 +344,15 @@ width:100%!important;
 <div class="modal fade" data-backdrop="static" id="modalKaryawanE" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div id="judbuk" class="modal-header bg-primary">
-        <h5 class="modal-title text-light" id="judulKaryawanE"></h5>
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light">Edit Karyawan</h5>
         <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open_multipart(base_url().'/tempat/karyawan/ubah', $form_edit);    ?>
+      <?php $pesan_edit_gambar = $session->getFlashdata('pesan_validasi_edit_karyawan_gambar');?>
       <?php $old_data = $session->getFlashdata('old_edit_input');?>
       <?php echo form_input([
           'name' => 'edit_id_karyawan',
@@ -363,7 +362,7 @@ width:100%!important;
         ]); ?>
         <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_karyawan');?>
       
-      <input type="hidden" id="gambarE_lama" name="gambarE_lama">
+      <input type="hidden" id="edit_gambar_lama" name="edit_gambar_lama">
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-6">
@@ -372,7 +371,6 @@ width:100%!important;
                 <label>Nama</label>
                 <?php
                 $class_edit_name = ($pesan_edit['name'] ?? []) ? 'is-invalid' : '';
-                // $value_edit_name = set_value('edit_name', '');
                 echo form_input([
                   'id' => "edit_name",
                   'name' => "edit_name",
@@ -405,7 +403,7 @@ width:100%!important;
                 // $value_edit_telepon = set_value('edit_telepon', '');
                 echo form_input([
                   'id' => "edit_telepon",
-                  'telepon' => "edit_telepon",
+                  'name' => "edit_telepon",
                   'class' => "form-control hapus-validasi-border "."$class_edit_telepon"."",
                   'value' => set_value('edit_telepon', ''),
                   'type' => "text"
@@ -420,7 +418,7 @@ width:100%!important;
                 // $value_edit_email = set_value('edit_email', '');
                 echo form_input([
                   'id' => "edit_email",
-                  'email' => "edit_email",
+                  'name' => "edit_email",
                   'class' => "form-control hapus-validasi-border "."$class_edit_email"."",
                   'value' => set_value('edit_email', ''),
                   'type' => "text"
@@ -435,7 +433,7 @@ width:100%!important;
                 // $value_edit_alamat = set_value('edit_alamat', '');
                 echo form_textarea([
                   'id' => "edit_alamat",
-                  'alamat' => "edit_alamat",
+                  'name' => "edit_alamat",
                   'class' => "form-control hapus-validasi-border "."$class_edit_alamat"."",
                   'value' => set_value('edit_alamat', ''),
                   'type' => "text"
@@ -455,16 +453,18 @@ width:100%!important;
               <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="gambarE" name="gambarE" onchange="previewImg1()">
+                  <input type="file" class="custom-file-input <?php echo ($pesan_edit_gambar ?? []) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('edit_gambar', '') ?>" id="edit_gambar" name="edit_gambar" onchange="previewImg1()">
                   <label class="custom-file-label cuss text-left" id="img-labelE" for="Sampulbuku">Pilih gambar</label>
+                
+                  <?php echo ($pesan_edit_gambar ?? []) ? '<div class="invalid-feedback">'.$pesan_edit_gambar.'</div>' : ''; ?>
+              
                 </div>
               </div>
               <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-              <input type="hidden" class="custom-switch-input cekE" id="is_activeE1" checked value="2">
                 <div class="control-label">Status karyawan</div>
                 <label class="custom-switch">
                   <span class="custom-switch-description mr-2">Tidak aktif</span>
-                  <input type="checkbox" class="custom-switch-input cekE" id="is_activeE" value="1">
+                  <input type="checkbox" class="custom-switch-input" id="edit_status" value="1">
                   
                   <span class="custom-switch-indicator"></span>
                   <span class="custom-switch-description">Aktif</span>
