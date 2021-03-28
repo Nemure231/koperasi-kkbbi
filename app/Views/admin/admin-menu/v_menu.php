@@ -129,14 +129,7 @@
 
 					<div class="form-group">
             <label>Nama Menu</label>
-            <?php
-                $class_tambah_nama_menu = ($pesan_tambah['nama_menu'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "nama_menu",
-                  'class' => "form-control "."$class_tambah_nama_menu"."",
-                  'value' => set_value('nama_menu', ''),
-                  'type' => "text"
-                ]); ?>
+            <?php echo tambah_input_helper('nama_menu', 'text', $pesan_tambah['nama_menu'] ?? []); ?>
               <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['nama_menu'].'</div>' : ''; ?>
 					</div>
 
@@ -165,12 +158,7 @@
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open(base_url().'/pengaturan/menu/ubah', $form_edit);    ?>
       <?php $old_data = $session->getFlashdata('old_edit_input');?>
-      <?php echo form_input([
-          'name' => 'edit_id_menu',
-          'id'=> 'edit_id_menu',
-          'type'=> 'hidden',
-          'value' => $old_data['id_menu'] ?? ''
-        ]); ?>
+      <?php echo edit_input_id_helper('edit_id_menu', 'edit_id_menu', $old_data['id_menu'] ?? '', 'hidden'); ?>
       <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_menu');?>
       <input type="hidden" name="_method" value="PUT">
       <div class="modal-body">
@@ -179,15 +167,7 @@
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Nama Menu</label>
               <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['nama_menu'] -->
-              <?php
-                $class_edit_nama_menu = ($pesan_edit['nama_menu'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'id' => "edit_nama_menu",
-                  'name' => "edit_nama_menu",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_menu"."",
-                  'value' => set_value('edit_nama_menu', ''),
-                  'type' => "text"
-                ]); ?>
+              <?php echo edit_input_helper('edit_nama_menu', 'edit_nama_menu', 'text', $pesan_edit['nama_menu'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_menu'].'</div>' : ''; ?>
               
             </div>

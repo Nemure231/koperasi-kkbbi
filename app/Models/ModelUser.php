@@ -135,28 +135,31 @@ class ModelUser extends Model{
     }
 
     public function ubahUser(){
-        $ambil_token = get_cookie('jwt_token');
+    
         $id_user = $this->session->get('id_user');
-       
-        $respon_ambil_user = $this->_client->request(
-            'PUT',
-            'akun/profil/ubah/'.$id_user
-            .'?name='. htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES).
-            '&telepon='. htmlspecialchars($this->request->getPost('telepon'), ENT_QUOTES).
-            '&alamat='. htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
-                    ]
+        $result = '';
+        $validasi = array('data' => '');
+        try {
+            $ambil_token = get_cookie('jwt_token');
+            $respon_ambil_user = $this->_client->request(
+                'PUT',
+                'akun/profil/ubah/'.$id_user
+                .'?name='. htmlspecialchars($this->request->getPost('name'), ENT_QUOTES).
+                '&telepon='. htmlspecialchars($this->request->getPost('telepon'), ENT_QUOTES).
+                '&alamat='. htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES),
+                    ['headers' => 
+                        [
+                        'Authorization' => "Bearer {$ambil_token}"
+                        ]
                 ],
-                // ['query' => 
-                //     [
-                //     'name' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
-                //     'telepon' => $this->request->getPost('telepon'),
-                //     'alamat' => htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES)
-                //     ]
-                // ],
-        );
+            )->getBody();
+            json_decode($respon_ambil_user, true);
+        } catch (ClientException $e) {
+            // echo Psr7\Message::toString($e->getRequest());
+            $validasi = json_decode($e->getResponse()->getBody(), true);
+        }
+
+        return $result = $validasi['data'];
                 
 
     }
@@ -188,20 +191,45 @@ class ModelUser extends Model{
 
 
     public function ubahSandi(){
-        $ambil_token = get_cookie('jwt_token');
-        $id_user = $this->session->get('id_user');
+        // $ambil_token = get_cookie('jwt_token');
+        // $id_user = $this->session->get('id_user');
        
-        $respon_ambil_user = $this->_client->request(
-            'PUT',
-            'akun/sandi/ubah/'.$id_user
-            .'?sandi_lama='. $this->request->getPost('katasandi_sebelum').
-            '&sandi_baru='. $this->request->getPost('katasandi_baru'),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
-                    ]
-                ],
-        );
+        // $respon_ambil_user = $this->_client->request(
+        //     'PUT',
+        //     'akun/sandi/ubah/'.$id_user
+        //     .'?sandi_lama='. $this->request->getPost('katasandi_sebelum').
+        //     '&sandi_baru='. $this->request->getPost('katasandi_baru'),
+        //         ['headers' => 
+        //             [
+        //             'Authorization' => "Bearer {$ambil_token}"
+        //             ]
+        //         ],
+        // );
+
+
+        $id_user = $this->session->get('id_user');
+        $result = '';
+        $validasi = array('data' => '');
+        try {
+            $ambil_token = get_cookie('jwt_token');
+            $respon_ambil_sandi = $this->_client->request(
+                'PUT',
+                'akun/sandi/ubah/'.$id_user
+                .'?sandi_lama='. $this->request->getPost('katasandi_sebelum').
+                '&sandi_baru='. $this->request->getPost('katasandi_baru'),
+                    ['headers' => 
+                        [
+                        'Authorization' => "Bearer {$ambil_token}"
+                        ]
+                    ],
+            )->getBody();
+            json_decode($respon_ambil_sandi, true);
+        } catch (ClientException $e) {
+            // echo Psr7\Message::toString($e->getRequest());
+            $validasi = json_decode($e->getResponse()->getBody(), true);
+        }
+
+        return $result = $validasi['data'];
                 
 
     }

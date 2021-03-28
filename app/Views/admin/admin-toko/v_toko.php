@@ -37,29 +37,23 @@
 
                 <div class="form-group col-sm-12 col-md-6 col-lg-4">
                   <label>Nama Toko</label>
-                  <input type="text" name="nama_toko"
-                    class="form-control <?php echo ($validation->hasError('nama_toko')) ? 'is-invalid' : ''; ?>"
-                    value="<?php echo esc($toko['nama_toko']); ?>">
-                  <div class="invalid-feedback text-danger">
-                    <?php echo $validation->showError('nama_toko'); ?>
+                  <?php echo edit_input_helper_no_modal('nama_toko', 'text', $toko['nama_toko'], $validation->hasError('nama_toko')); ?>
+                  <div class="invalid-feedback">
+                  <?php echo $validation->getError('nama_toko'); ?>
                   </div>
                 </div>
                 <div class="form-group col-sm-12 col-md-6 col-lg-4">
                   <label>E-mail</label>
-                  <input type="text" name="email_toko"
-                    class="form-control <?php echo ($validation->hasError('email_toko')) ? 'is-invalid' : ''; ?>"
-                    value="<?php echo esc($toko['email_toko']); ?>">
-                  <div class="invalid-feedback text-danger">
-                    <?php echo $validation->showError('email_toko'); ?>
+                  <?php echo edit_input_helper_no_modal('email_toko', 'text', $toko['email_toko'], $validation->hasError('email_toko')); ?>
+                  <div class="invalid-feedback">
+                  <?php echo $validation->getError('email_toko'); ?>
                   </div>
                 </div>
                 <div class=" form-group col-sm-12 col-md-12 col-lg-4">
                   <label>Telepon</label>
-                  <input type="text" name="telepon_toko"
-                    class="form-control <?php echo ($validation->hasError('telepon_toko')) ? 'is-invalid' : ''; ?>"
-                    value="<?php echo esc($toko['telepon_toko']); ?>">
-                  <div class="invalid-feedback text-danger">
-                    <?php echo $validation->showError('telepon_toko'); ?>
+                  <?php echo edit_input_helper_no_modal('telepon_toko', 'text', $toko['telepon_toko'], $validation->hasError('telepon_toko')); ?>
+                  <div class="invalid-feedback">
+                  <?php echo $validation->getError('telepon_toko'); ?>
                   </div>
                 </div>
               </div>
@@ -67,11 +61,9 @@
               <div class="row">
                 <div class="form-group col-sm-12 col-md-12 col-lg-12">
                   <label>Alamat</label>
-                  <textarea
-                    class="form-control <?php echo ($validation->hasError('alamat_toko')) ? 'is-invalid' : ''; ?>"
-                    name="alamat_toko"><?php echo esc($toko['alamat_toko']); ?></textarea>
-                  <div class="invalid-feedback text-danger">
-                    <?php echo $validation->showError('alamat_toko'); ?>
+                  <?php echo edit_textarea_helper_no_modal('alamat_toko', 'text', $toko['alamat_toko'], $validation->hasError('alamat_toko')); ?>
+                  <div class="invalid-feedback">
+                    <?php echo $validation->getError('alamat_toko'); ?>
                   </div>
                 </div>
               </div>
@@ -87,10 +79,10 @@
                   <div class="row">
                     <div class="col-12 mb-3">
                       <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="logo_toko" name="logo_toko"
+                        <input type="file" class="custom-file-input <?php echo ($validation->hasError('logo_toko')) ? 'is-invalid' : ''; ?>" id="logo_toko" name="logo_toko"
                           onchange="previewImg()">
-                        <div class="text-danger">
-                          <?php echo $validation->showError('logo_toko'); ?>
+                        <div class="invalid-feedback">
+                          <?php echo $validation->getError('logo_toko'); ?>
                         </div>
                         <label class="custom-file-label text-left"
                           for="logo_toko"><?php echo esc($toko["logo_toko"]); ?></label>

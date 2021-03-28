@@ -69,6 +69,90 @@ use App\Models\ModelAksesRole;
             echo view($javascript_page);
 
         }
+
+        function tambah_input_helper($name, $type, $validasi){
+
+            $class = ($validasi) ? 'is-invalid' : '';
+              echo form_input([
+                'name' => $name,
+                'class' => "form-control "."$class"."",
+                'value' => set_value($name, ''),
+                'type' => $type
+              ]);
+        }
+
+        function tambah_textarea_helper($name, $type, $validasi){
+
+            $class = ($validasi) ? 'is-invalid' : '';
+              echo form_textarea([
+                'name' => $name,
+                'class' => "form-control "."$class"."",
+                'value' => set_value($name, ''),
+                'type' => $type
+              ]);
+        }
+
+        function tambah_input_password_helper($name, $type, $validasi){
+
+            $class = ($validasi) ? 'is-invalid' : '';
+              echo form_input([
+                'name' => $name,
+                'class' => "form-control "."$class"."",
+                'type' => $type
+              ]);
+        }
+
+        function edit_input_helper_no_modal($name, $type, $value, $validasi){
+            $class = ($validasi) ? 'is-invalid' : '';
+            echo form_input([
+              'name' => $name,
+              'class' => "form-control "."$class"."",
+              'value' => $value,
+              'type' => $type,
+              'autofocus' => ''
+            ]);
+        }
+
+        function edit_textarea_helper_no_modal($name, $type, $value, $validasi){
+            $class = ($validasi) ? 'is-invalid' : '';
+            echo form_textarea([
+              'name' => $name,
+              'class' => "form-control "."$class"."",
+              'value' => $value,
+              'type' => $type
+            ]);
+        }
+
+        function edit_input_helper($name, $id, $type, $validasi){
+            $class = ($validasi) ? 'is-invalid' : '';
+            echo form_input([
+              'id' => $id,
+              'name' => $name,
+              'class' => "form-control hapus-validasi-border "."$class"."",
+              'value' => set_value($name, ''),
+              'type' => $type
+            ]);
+        }
+
+        function edit_textarea_helper($name, $id, $type, $validasi){
+            $class = ($validasi) ? 'is-invalid' : '';
+            echo form_textarea([
+              'id' => $id,
+              'name' => $name,
+              'class' => "form-control hapus-validasi-border "."$class"."",
+              'value' => set_value($name, ''),
+              'type' => $type
+            ]);
+        }
+
+        function edit_input_id_helper($name, $id, $value, $type){
+            echo form_input([
+                'name' => $name,
+                'id'=> $id,
+                'type'=> $type,
+                'value' => $value
+              ]);
+        }
     
     
 ?>

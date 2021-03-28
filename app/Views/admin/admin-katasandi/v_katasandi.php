@@ -6,10 +6,7 @@
 </style>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/css/animate.min.css' ?>">
 <!-- Main Content -->
-<div id="flash-data-salah" data-flashdatasalah="<?php echo $session->getFlashdata('salah');  ?>"></div>
-<div id="flash-data-sama" data-flashdatasama="<?php echo $session->getFlashdata('sama');  ?>"></div>
 <div class="flash-data" data-flashdata="<?php echo $session->getFlashdata('pesan');  ?>"></div>
-
 
 <div class="main-content">
   <section class="section">
@@ -22,8 +19,9 @@
 
         <div class="col-sm-12 col-md-12 col-lg-12">
         <?php echo form_open(base_url().'/akun/sandi/ubah', $attr);    ?>
+        <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_sandi');?>
         <input type="hidden" name="_method" value="PUT">
-          <?php echo csrf_field(); ?>
+    
       
 
             <div class="card card-primary">
@@ -34,20 +32,21 @@
                 <div class="row">
                   <div class="form-group col-lg-12 col-sm-12 col-md-12">
                     <label for="katasandi_sebelum">Kata sandi sebelumnya</label>
-                    <input type="password" class="form-control <?php echo ($validation->hasError('katasandi_sebelum')) ? 'is-invalid' : ''; ?>" id="katasandi_sebelum" name="katasandi_sebelum"
-                      placeholder="" autofocus>
-                      <label class="text-danger"><?php echo $validation->showError('katasandi_sebelum'); ?></label>
+                      <?php $salah = $session->getFlashdata('salah'); ?>
+                      <?php echo edit_input_helper_no_modal('katasandi_sebelum', 'password', '', $salah ?? ''); ?>
+                      <?php echo ($salah ?? '') ? '<div class="invalid-feedback ">'.$salah.'</div>' : ''; ?>
                   </div>
                   <div class="form-group col-lg-6 col-sm-12 col-md-6">
                     <label for="katasandi_baru">Kata sandi baru</label>
-                    <input type="password" class="form-control <?php echo ($validation->hasError('katasandi_baru')) ? 'is-invalid' : ''; ?>" id="katasandi_baru" name="katasandi_baru" placeholder="">
-                    <label class="text-danger"><?php echo $validation->showError('katasandi_baru'); ?></label>
+                    <?php $sama = $session->getFlashdata('sama'); ?>
+                    <?php echo edit_input_helper_no_modal('katasandi_baru', 'password', '', $pesan_edit['sandi_baru'] ?? $sama ?? ''); ?>
+                    <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback ">'.$pesan_edit['sandi_baru'].'</div>' : ''; ?>
+                    <?php echo ($sama ?? '') ? '<div class="invalid-feedback ">'.$sama.'</div>' : ''; ?>
                   </div>
+
                   <div class="form-group col-lg-6 col-sm-12 col-md-6">
                     <label for="katasandi_baru1">Ulangi kata sandi baru</label>
-                    <input type="password" class="form-control <?php echo ($validation->hasError('katasandi_baru1')) ? 'is-invalid' : ''; ?>" id="katasandi_baru1" name="katasandi_baru1"
-                      placeholder="">
-                    <label class="text-danger"><?php echo $validation->showError('katasandi_baru1'); ?> </label>
+                    <?php echo edit_input_helper_no_modal('katasandi_baru1', 'password', '', $pesan_edit['sandi_baru'] ?? []); ?>
                   </div>
                 </div>
               </div>

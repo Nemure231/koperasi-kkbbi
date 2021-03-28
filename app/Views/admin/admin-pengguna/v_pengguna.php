@@ -25,41 +25,29 @@
                 </div>
               </div>
               <?php echo form_open(base_url().'/akun/profil/ubah', $form_pengguna); ?>
+              <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_pengguna');?>
               <input type="hidden" name="_method" value="PUT">
               <div class="row">
                 <div class="form-group col-md-12 col-lg-4">
                   <label>Nama</label>
-                  <input type="text"
-                    class="form-control <?php echo ($validation->hasError('nama')) ? 'is-invalid' : ''; ?>" autofocus=""
-                    name="nama" value="<?php echo $user['name']; ?>">
-                  <div class="invalid-feedback">
-                    <?php echo $validation->showError('nama'); ?>
-                  </div>
+                  <?php echo edit_input_helper_no_modal('name', 'text', $user['name'], $pesan_edit['name'] ?? []); ?>
+                  <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['name'].'</div>' : ''; ?>
                 </div>
 
                 <div class="form-group col-md-7 col-lg-4">
                   <label>E-mail</label>
-
                   <?php echo form_input($email); ?>
                 </div>
                 <div class=" form-group col-md-5 col-lg-4">
                   <label>Phone</label>
-                  <input type="text"
-                    class="form-control <?php echo ($validation->hasError('telepon')) ? 'is-invalid' : ''; ?>"
-                    name="telepon" value="<?php echo $user['telepon']; ?>">
-                  <div class="invalid-feedback">
-                    <?php echo $validation->showError('telepon'); ?>
-                  </div>
+                  <?php echo edit_input_helper_no_modal('telepon', 'text', $user['telepon'], $pesan_edit['telepon'] ?? []); ?>
+                  <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['telepon'].'</div>' : ''; ?>
                 </div>
 
                 <div class="form-group col-md-12 col-12">
                   <label>Alamat</label>
-                  <textarea type="text"
-                    class="form-control <?php echo ($validation->hasError('alamat')) ? 'is-invalid' : ''; ?>"
-                    autofocus="" name="alamat"><?php echo $user['alamat']; ?></textarea>
-                  <div class="invalid-feedback">
-                    <?php echo $validation->showError('alamat'); ?>
-                  </div>
+                  <?php echo edit_textarea_helper_no_modal('alamat', 'text', $user['alamat'], $pesan_edit['alamat'] ?? []); ?>
+                  <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['alamat'].'</div>' : ''; ?>
                 </div>
 
               </div>

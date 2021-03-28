@@ -38,37 +38,16 @@ class Pengguna extends BaseController{
 
 
 	public function ubah(){
-        if(!$this->validate([
-            'nama' => [
-                'label'  => 'Nama',
-                'rules'  => 'required',
-                'errors' => [
-                'required' => 'Nama harus diisi!'
-                ]
-            ],
-			'telepon' => [
-                'label'  => 'Nomor Telepon',
-                'rules'  => 'required|numeric',
-                'errors' => [
-				'required' => 'Nomor telepon harus diisi!',
-				'numeric' => 'Nomor telepon harus dengan angka!'
-                ]
-			],
-            'alamat' => [
-                'label'  => 'Alamat',
-                'rules'  => 'required',
-                'errors' => [
-                'required' => 'ALamat harus diisi!'                
-                ]
-            ]
 
-            ])) {
-                return redirect()->to(base_url('akun/profil'))->withInput();
+		$validasi = $this->modelUser->ubahUser();	
+		
+		if($validasi){
+            $this->session->setFlashdata('pesan_validasi_edit_pengguna',  $validasi);
+            return redirect()->to(base_url('/akun/profil'))->withInput();
+        }else{
+            $this->session->setFlashdata('pesan_pengguna', 'Profil berhasil diperbarui');
+			return redirect()->to(base_url('/akun/profil'));
         }
-
-		$this->modelUser->ubahUser();	
-        $this->session->setFlashdata('pesan_pengguna', 'Profil berhasil diperbarui');
-		return redirect()->to(base_url('akun/profil'));
 	}
 
 

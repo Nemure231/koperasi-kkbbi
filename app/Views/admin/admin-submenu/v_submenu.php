@@ -180,14 +180,7 @@ width:100%!important;
 					<div class="row">
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<label>Nama submenu</label>
-                <?php
-                $class_tambah_nama_submenu = ($pesan_tambah['nama_submenu'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "nama_submenu",
-                  'class' => "form-control "."$class_tambah_nama_submenu"."",
-                  'value' => set_value('nama_submenu', ''),
-                  'type' => "text"
-                ]); ?>
+              <?php echo tambah_input_helper('nama_submenu', 'text', $pesan_tambah['nama_submenu'] ?? []); ?>
                 <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['nama_submenu'].'</div>' : ''; ?>
 						</div>
 
@@ -220,29 +213,14 @@ width:100%!important;
 
 						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Url</label>
-              <?php
-                $class_tambah_url_submenu = ($pesan_tambah['url_submenu'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "url_submenu",
-                  'class' => "form-control "."$class_tambah_url_submenu"."",
-                  'value' => set_value('url_submenu', ''),
-                  'type' => "text"
-                ]); ?>
+              <?php echo tambah_input_helper('url_submenu', 'text', $pesan_tambah['url_submenu'] ?? []); ?>
               <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['url_submenu'].'</div>' : ''; ?>
 						</div>
 						<div class="form-group col-lg-6 col-md-6 col-sm-6">
             <label>Ikon</label>
-            <?php
-                $class_tambah_ikon_submenu = ($pesan_tambah['ikon_submenu'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "ikon_submenu",
-                  'class' => "form-control "."$class_tambah_ikon_submenu"."",
-                  'value' => set_value('ikon_submenu', ''),
-                  'type' => "text"
-                ]); ?>
+            <?php echo tambah_input_helper('ikon_submenu', 'text', $pesan_tambah['ikon_submenu'] ?? []); ?>
               <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['ikon_submenu'].'</div>' : ''; ?>
 						</div>
-
 
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<div class="form-check">
@@ -290,28 +268,14 @@ width:100%!important;
 			<?php echo form_open(base_url().'/pengaturan/submenu/ubah', $form_edit); ?>
       <?php $old_data = $session->getFlashdata('old_edit_input');?>
       <input type="hidden" name="_method" value="PUT">
-		    <?php echo form_input([
-          'name' => 'edit_id_submenu',
-          'id'=>'edit_id_submenu',
-          'type'=> 'hidden',
-          'value' => $old_data['id_submenu'] ?? ''
-        ]); ?>
+      <?php echo edit_input_id_helper('edit_id_submenu', 'edit_id_submenu', $old_data['id_submenu'] ?? '', 'hidden'); ?>
         <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_submenu');?>
 				<div class="modal-body">
 					<div class="row">
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<label>Nama submenu</label>
 						
-              <?php
-                $class_edit_nama_submenu = ($pesan_edit['nama_submenu'] ?? []) ? 'is-invalid' : '';
-                // $value_edit_nama_submenu = set_value('edit_nama_submenu', '');
-                echo form_input([
-                  'id' => "edit_nama_submenu",
-                  'name' => "edit_nama_submenu",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_submenu"."",
-                  'value' => set_value('edit_nama_submenu', ''),
-                  'type' => "text"
-                ]); ?>
+              <?php echo edit_input_helper('edit_nama_submenu', 'edit_nama_submenu', 'text', $pesan_edit['nama_submenu'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_submenu'].'</div>' : ''; ?>
 						
 						</div>
@@ -345,31 +309,13 @@ width:100%!important;
 
 						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Url</label>
-							<?php
-                $class_edit_url_submenu = ($pesan_edit['url_submenu'] ?? []) ? 'is-invalid' : '';
-                // $value_edit_url_submenu = set_value('edit_url_submenu', '');
-                echo form_input([
-                  'id'  => "edit_url_submenu", 
-                  'name' => "edit_url_submenu",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_url_submenu"."",
-                  'value' => set_value('edit_url_submenu', ''),
-                  'type' => "text"
-                ]); ?>
+              <?php echo edit_input_helper('edit_url_submenu', 'edit_url_submenu', 'text', $pesan_edit['url_submenu'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['url_submenu'].'</div>' : ''; ?>
 						
 						</div>
 						<div class="form-group col-lg-6 col-md-6 col-sm-12">
 							<label>Ikon</label>
-              <?php
-                $class_edit_ikon_submenu = ($pesan_edit['ikon_submenu'] ?? []) ? 'is-invalid' : '';
-                // $value_edit_ikon_submenu = set_value('edit_ikon_submenu', '');
-                echo form_input([
-                  'id' => "edit_ikon_submenu",
-                  'name' => "edit_ikon_submenu",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_ikon_submenu"."",
-                  'value' => set_value('edit_ikon_submenu', ''),
-                  'type' => "text"
-                ]); ?>
+              <?php echo edit_input_helper('edit_ikon_submenu', 'edit_ikon_submenu', 'text', $pesan_edit['ikon_submenu'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['ikon_submenu'].'</div>' : ''; ?>
 						
 						</div>

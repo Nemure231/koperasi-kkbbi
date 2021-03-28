@@ -34,53 +34,25 @@ class Sandi extends BaseController{
 
 	public function ubah(){
 
-		if(!$this->validate([
-			'katasandi_sebelum' => [
-				'label'  => 'Kata sandi sebelum',
-				'rules'  => 'required|trim',
-				'errors' => [
-					'required' => 'Harus diisi harus diisi!'
-
-				]
-			],
-			'katasandi_baru' => [
-				'label'  => 'Sandi Baru',
-				'rules'  => 'required|trim|min_length[6]|matches[katasandi_baru1]',
-				'errors' => [
-					'required' => 'Harus diisi!',
-					'matches' => '',
-					'min_length' => 'Terlalu pendek!'
-				]
-			],
-			'katasandi_baru1' => [
-				'label'  => 'Sandi Ulangi',
-				'rules'  => 'required|trim|min_length[6]|matches[katasandi_baru]',
-				'errors' => [
-					'required' => 'Harus diisi!',
-					'matches' => 'Harus sesuai dengan kata sandi baru!',
-					'min_length' => ''
-				]
-			]
-
-		])) {
-			return redirect()->to(base_url('/akun/sandi'))->withInput();
-		}
-
 		$data = $this->modelUser->ambilSatuSandi();
 		$pass_sebelum = $this->request->getPost('katasandi_sebelum');
 		$pass_baru = $this->request->getPost('katasandi_baru');
 		if (!password_verify($pass_sebelum, $data['password'])) {
 			$this->session->setFlashdata('salah', 'Kata sandi sebelumnya salah!');
 			return redirect()->to(base_url('/akun/sandi'));
-
 		}else{
 			if ($pass_sebelum == $pass_baru) {
 				$this->session->setFlashdata('sama', 'Kata sandi baru tidak boleh sama dengan kata sandi sebelumnya!');
 				return redirect()->to(base_url('/akun/sandi'));
 			}else{
-				$this->modelUser->ubahSandi();
-				$this->session->setFlashdata('pesan', 'Kata sandi berhasil diubah!');
-				return redirect()->to(base_url('/akun/sandi'));
+				$validasi = $this->modelUser->ubahSandi();
+				if($validasi){
+					$this->session->setFlashdata('pesan_validasi_edit_sandi',  $validasi);
+					return redirect()->to(base_url('/akun/sandi'));
+				}else{
+					$this->session->setFlashdata('pesan', 'Kata sandi berhasil diubah!');
+					return redirect()->to(base_url('/akun/sandi'));
+				}
 			}
 		}
 	}

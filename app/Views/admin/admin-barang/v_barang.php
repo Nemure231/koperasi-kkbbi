@@ -225,14 +225,7 @@ width:100%!important;
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Nama Barang</label>
-                <?php
-                $class_tambah_nama_barang = ($pesan_tambah['nama_barang'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "nama_barang",
-                  'class' => "form-control "."$class_tambah_nama_barang"."",
-                  'value' => set_value('nama_barang', ''),
-                  'type' => "text"
-                ]); ?>
+                <?php echo tambah_input_helper('nama_barang', 'text', $pesan_tambah['nama_barang'] ?? []); ?>
                 <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['nama_barang'].'</div>' : ''; ?>
               </div>
 
@@ -291,50 +284,22 @@ width:100%!important;
               </div>
               <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label>Harga Konsumen</label>
-                <?php
-                $class_tambah_harga_konsumen = ($pesan_tambah['harga_konsumen'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "harga_konsumen",
-                  'class' => "form-control "."$class_tambah_harga_konsumen"."",
-                  'value' => set_value('harga_konsumen', ''),
-                  'type' => "number"
-                ]); ?>
+                <?php echo tambah_input_helper('harga_konsumen', 'number', $pesan_tambah['harga_konsumen'] ?? []); ?>
                 <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['harga_konsumen'].'</div>' : ''; ?>
               </div>
               <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label>Harga Anggota</label>
-                <?php
-                $class_tambah_harga_anggota = ($pesan_tambah['harga_anggota'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "harga_anggota",
-                  'class' => "form-control "."$class_tambah_harga_anggota"."",
-                  'value' => set_value('harga_anggota', ''),
-                  'type' => "number"
-                ]); ?>
+                <?php echo tambah_input_helper('harga_anggota', 'number', $pesan_tambah['harga_anggota'] ?? []); ?>
                 <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['harga_anggota'].'</div>' : ''; ?>
               </div>
               <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label>Harga Pokok</label>
-                <?php
-                $class_tambah_harga_pokok = ($pesan_tambah['harga_pokok'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "harga_pokok",
-                  'class' => "form-control "."$class_tambah_harga_pokok"."",
-                  'value' => set_value('harga_pokok', ''),
-                  'type' => "number"
-                ]); ?>
+                <?php echo tambah_input_helper('harga_pokok', 'number', $pesan_tambah['harga_pokok'] ?? []); ?>
                 <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['harga_pokok'].'</div>' : ''; ?>
               </div>
               <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label>Stok Barang</label>
-                <?php
-                $class_tambah_stok_barang = ($pesan_tambah['stok_barang'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "stok_barang",
-                  'class' => "form-control "."$class_tambah_stok_barang"."",
-                  'value' => set_value('stok_barang', ''),
-                  'type' => "number"
-                ]); ?>
+                <?php echo tambah_input_helper('stok_barang', 'number', $pesan_tambah['stok_barang'] ?? []); ?>
                 <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['stok_barang'].'</div>' : ''; ?>
               </div>
              
@@ -369,12 +334,7 @@ width:100%!important;
       <?php echo form_open(base_url().'/suplai/barang/ubah', $form_edit);    ?>
       <?php $old_data = $session->getFlashdata('old_edit_input');?>
       <input type="hidden" name="_method" value="PUT">
-      <?php echo form_input([
-          'name' => 'edit_id_barang',
-          'id'=>'edit_id_barang',
-          'type'=> 'hidden',
-          'value' => $old_data['id_barang'] ?? ''
-        ]); ?>
+      <?php echo edit_input_id_helper('edit_id_barang', 'edit_id_barang', $old_data['id_barang'] ?? '', 'hidden'); ?>
         <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_barang');?>
      
       <div class="modal-body">
@@ -385,15 +345,7 @@ width:100%!important;
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Nama Barang</label>
-                <?php
-                $class_edit_nama_barang = ($pesan_edit['nama_barang'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'id' => "edit_nama_barang",
-                  'name' => "edit_nama_barang",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_barang"."",
-                  'value' => set_value('edit_nama_barang', ''),
-                  'type' => "text"
-                ]); ?>
+                <?php echo edit_input_helper('edit_nama_barang', 'edit_nama_barang', 'text', $pesan_edit['nama_barang'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_barang'].'</div>' : ''; ?>
 						
               </div>
@@ -456,57 +408,25 @@ width:100%!important;
               </div>
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Harga Konsumen</label>
-                <?php
-                $class_edit_harga_konsumen = ($pesan_edit['harga_konsumen'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'id' => "edit_harga_konsumen",
-                  'name' => "edit_harga_konsumen",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_harga_konsumen"."",
-                  'value' => set_value('edit_harga_konsumen', ''),
-                  'type' => "number"
-                ]); ?>
+                <?php echo edit_input_helper('edit_harga_konsumen', 'edit_harga_konsumen', 'number', $pesan_edit['harga_konsumen'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['harga_konsumen'].'</div>' : ''; ?>
 						
               </div>
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Harga Anggota</label>
-                <?php
-                $class_edit_harga_anggota = ($pesan_edit['harga_anggota'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'id' => "edit_harga_anggota",
-                  'name' => "edit_harga_anggota",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_harga_anggota"."",
-                  'value' => set_value('edit_harga_anggota', ''),
-                  'type' => "number"
-                ]); ?>
+                <?php echo edit_input_helper('edit_harga_anggota', 'edit_harga_anggota', 'text', $pesan_edit['harga_anggota'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['harga_anggota'].'</div>' : ''; ?>
 						
               </div>
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Harga Pokok</label>
-                <?php
-                $class_edit_harga_pokok = ($pesan_edit['harga_pokok'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'id' => "edit_harga_pokok",
-                  'name' => "edit_harga_pokok",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_harga_pokok"."",
-                  'value' => set_value('edit_harga_pokok', ''),
-                  'type' => "number"
-                ]); ?>
+                <?php echo edit_input_helper('edit_harga_pokok', 'edit_harga_pokok', 'number', $pesan_edit['harga_pokok'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['harga_pokok'].'</div>' : ''; ?>
 						
               </div>
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Stok Barang</label>
-                <?php
-                $class_edit_stok_barang = ($pesan_edit['stok_barang'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'id' => "edit_stok_barang",
-                  'name' => "edit_stok_barang",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_stok_barang"."",
-                  'value' => set_value('edit_stok_barang', ''),
-                  'type' => "number"
-                ]); ?>
+                <?php echo edit_input_helper('edit_stok_barang', 'edit_stok_barang', 'number', $pesan_edit['stok_barang'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['stok_barang'].'</div>' : ''; ?>
 						
               </div>

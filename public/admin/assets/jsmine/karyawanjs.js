@@ -74,12 +74,11 @@ $(document).ready(function () {
          $(this).val(1);
       }
       if(cek == false){
-         $(this).val(2);
+         $(this).val('');
       }
    });
 
    $('#tombolTambahUser').click(function () {
-      $('#judulKaryawan').html("Tambah Karyawan");
       $('#modalKaryawan').modal('show');
       $('#role_id').select2({dropdownParent: $('#modalKaryawan')});
       
@@ -112,7 +111,7 @@ $(document).ready(function () {
       }
 
       if(status == 2){
-         $('#edit_status').prop('checked', false).val(2);
+         $('#edit_status').prop('checked', false).val('');
       }
       $('#modalKaryawanE').modal('show');
       $('#edit_role_id').select2({dropdownParent: $('#modalKaryawanE')});
@@ -126,7 +125,7 @@ $(document).ready(function () {
       }
 
       if(cek == false){
-         $(this).val(2);
+         $(this).val('');
       }
 
    });

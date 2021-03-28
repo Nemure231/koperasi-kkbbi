@@ -128,7 +128,7 @@ class Karyawan extends BaseController{
                 
                 $validasi = $this->modelKaryawan->ubahKaryawan($nama_foto);
                 $old = [
-                    'id_karyawan' => $this->request->getPost('edit_id_karyawan'),
+                    'id' => $this->request->getPost('edit_id_karyawan'),
                     'role_id' => $this->request->getPost('edit_role_id'),
                     'gambar'  => $nama_gambar_lama
                 ];

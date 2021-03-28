@@ -146,28 +146,14 @@ width:100%!important;
 
 					<div class="form-group">
           <label>Nama Menu Utama</label>
-          <?php
-                $class_tambah_nama_menu_utama = ($pesan_tambah['nama_menu_utama'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "nama_menu_utama",
-                  'class' => "form-control "."$class_tambah_nama_menu_utama"."",
-                  'value' => set_value('nama_menu_utama', ''),
-                  'type' => "text"
-                ]); ?>
-                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['nama_menu_utama'].'</div>' : ''; ?>
+          <?php echo tambah_input_helper('nama_menu_utama', 'text', $pesan_tambah['nama_menu_utama'] ?? []); ?>
+          <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['nama_menu_utama'].'</div>' : ''; ?>
 					</div>
 
           <div class="form-group">
           <label>Ikon Menu Utama</label>
-          <?php
-                $class_tambah_ikon_menu_utama = ($pesan_tambah['ikon_menu_utama'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "ikon_menu_utama",
-                  'class' => "form-control "."$class_tambah_ikon_menu_utama"."",
-                  'value' => set_value('ikon_menu_utama', ''),
-                  'type' => "text"
-                ]); ?>
-                <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['ikon_menu_utama'].'</div>' : ''; ?>
+          <?php echo tambah_input_helper('ikon_menu_utama', 'text', $pesan_tambah['ikon_menu_utama'] ?? []); ?>
+          <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['ikon_menu_utama'].'</div>' : ''; ?>
 					</div>
 
           <div class="form-group">
@@ -209,30 +195,15 @@ width:100%!important;
       <?php echo form_open(base_url().'/pengaturan/menu_utama/ubah', $form_edit);    ?>
       <?php $old_data = $session->getFlashdata('old_edit_input');?>
       <input type="hidden" name="_method" value="PUT">
-      <?php echo form_input([
-          'name' => 'edit_id_menu_utama',
-          'id'=>'edit_id_menu_utama',
-          'type'=> 'hidden',
-          'value' => $old_data['id_menu_utama'] ?? ''
-        ]); ?>
-        <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_menu_utama');?>
-      
+      <?php echo edit_input_id_helper('edit_id_menu_utama', 'edit_id_menu_utama', $old_data['id_menu_utama'] ?? '', 'hidden'); ?>
+      <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_menu_utama');?>
       
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Nama Menu Utama</label>
-              <?php
-                $class_edit_nama_menu_utama = ($pesan_edit['nama_menu_utama'] ?? []) ? 'is-invalid' : '';
-                // $value_edit_nama_menu_utama = set_value('edit_nama_menu_utama', '');
-                echo form_input([
-                  'id' => "edit_nama_menu_utama",
-                  'name' => "edit_nama_menu_utama",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_menu_utama"."",
-                  'value' => set_value('edit_nama_menu_utama', ''),
-                  'type' => "text"
-                ]); ?>
+              <?php echo edit_input_helper('edit_nama_menu_utama', 'edit_nama_menu_utama', 'text', $pesan_edit['nama_menu_utama'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_menu_utama'].'</div>' : ''; ?>
 						
             </div>
@@ -240,16 +211,7 @@ width:100%!important;
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Ikon Menu Utama</label>
-              <?php
-                $class_edit_ikon_menu_utama = ($pesan_edit['ikon_menu_utama'] ?? []) ? 'is-invalid' : '';
-                // $value_edit_ikon_menu_utama = set_value('edit_ikon_menu_utama', '');
-                echo form_input([
-                  'id' => "edit_ikon_menu_utama",
-                  'name' => "edit_ikon_menu_utama",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_ikon_menu_utama"."",
-                  'value' => set_value('edit_ikon_menu_utama', ''),
-                  'type' => "text"
-                ]); ?>
+              <?php echo edit_input_helper('edit_ikon_menu_utama', 'edit_ikon_menu_utama', 'text', $pesan_edit['ikon_menu_utama'] ?? []) ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['ikon_menu_utama'].'</div>' : ''; ?>
 						
             </div>

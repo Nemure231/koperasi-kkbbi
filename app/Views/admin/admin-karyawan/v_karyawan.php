@@ -183,7 +183,7 @@ width:100%!important;
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div id="judbuk" class="modal-header bg-primary">
-        <h5 class="modal-title text-light" id="judulKaryawan"></h5>
+        <h5 class="modal-title text-light">Tambah Karyawan</h5>
         <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -198,28 +198,14 @@ width:100%!important;
             <div class="row">
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Nama</label>
-                <?php
-                $class_tambah_name = ($pesan_tambah['name'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "name",
-                  'class' => "form-control "."$class_tambah_name"."",
-                  'value' => set_value('name', ''),
-                  'type' => "text"
-                ]); ?>
+                <?php echo tambah_input_helper('name', 'text', $pesan_tambah['name'] ?? []); ?>
                 <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['name'].'</div>' : ''; ?>
               </div>
 
 
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Nomor Telepon</label>
-                <?php
-                $class_tambah_telepon = ($pesan_tambah['telepon'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "telepon",
-                  'class' => "form-control "."$class_tambah_telepon"."",
-                  'value' => set_value('telepon', ''),
-                  'type' => "text"
-                ]); ?>
+                <?php echo tambah_input_helper('telepon', 'number', $pesan_tambah['telepon'] ?? []); ?>
                 <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['telepon'].'</div>' : ''; ?>
               </div>
 
@@ -238,14 +224,7 @@ width:100%!important;
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>E-mail</label>
-                <?php
-                $class_tambah_email = ($pesan_tambah['email'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "email",
-                  'class' => "form-control "."$class_tambah_email"."",
-                  'value' => set_value('email', ''),
-                  'type' => "text"
-                ]); ?>
+                <?php echo tambah_input_helper('email', 'text', $pesan_tambah['email'] ?? []); ?>
                 <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['email'].'</div>' : ''; ?>
               </div>
 
@@ -253,26 +232,13 @@ width:100%!important;
 
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Sandi</label>
-                <?php
-                $class_tambah_password = ($pesan_tambah['password'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "password",
-                  'class' => "form-control "."$class_tambah_password"."",
-                  'value' => set_value('password', ''),
-                  'type' => "text"
-                ]); ?>
+                <?php echo tambah_input_password_helper('password', 'password', $pesan_tambah['password'] ?? []); ?>
                 <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['password'].'</div>' : ''; ?>
               </div>
 
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Ulangi Sandi</label>
-                <?php
-                $class_tambah_password_confirmation = ($pesan_tambah['password'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "password_confirmation",
-                  'class' => "form-control "."$class_tambah_password_confirmation"."",
-                  'type' => "text"
-                ]); ?>
+                <?php echo tambah_input_password_helper('password_confirmation', 'password', $pesan_tambah['password'] ?? []); ?>
               </div>
 
               
@@ -284,15 +250,7 @@ width:100%!important;
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Alamat</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php
-                $class_tambah_alamat = ($pesan_tambah['alamat'] ?? []) ? 'is-invalid' : '';
-                echo form_textarea([
-                  'name' => "alamat",
-                  'class' => "form-control "."$class_tambah_alamat"."",
-                  'value' => set_value('alamat', ''),
-                  'type' => "text"
-                ]); ?>
+                <?php echo tambah_textarea_helper('alamat', 'text', $pesan_tambah['alamat'] ?? []); ?>
                 <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['alamat'].'</div>' : ''; ?>
               </div>
               <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
@@ -318,6 +276,7 @@ width:100%!important;
                 <div class="control-label">Status karyawan</div>
                 <label class="custom-switch">
                   <span class="custom-switch-description mr-2">Tidak aktif</span>
+                  <input type="hidden" name="status" value="2">
                   <input type="checkbox" name="status" class="custom-switch-input" id="status" checked value="1">
                   
                   <span class="custom-switch-indicator"></span>
@@ -355,30 +314,17 @@ width:100%!important;
       <?php echo form_open_multipart(base_url().'/tempat/karyawan/ubah', $form_edit);    ?>
       <?php $pesan_edit_gambar = $session->getFlashdata('pesan_validasi_edit_karyawan_gambar');?>
       <?php $old_data = $session->getFlashdata('old_edit_input');?>
-      <?php echo form_input([
-          'name' => 'edit_id_karyawan',
-          'id'=>'edit_id_karyawan',
-          'type'=> 'hidden',
-          'value' => $old_data['id'] ?? ''
-        ]); ?>
-        <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_karyawan');?>
+      <?php echo edit_input_id_helper('edit_id_karyawan', 'edit_id_karyawan', $old_data['id'] ?? '', 'hidden'); ?>
+      <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_karyawan');?>
       
-      <input type="hidden" id="edit_gambar_lama" name="edit_gambar_lama">
+      <input type="hidden" id="edit_gambar_lama" name="edit_gambar_lama" value="<?php echo  $old_data['gambar'] ?? ''; ?> ">
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-6">
             <div class="row">
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Nama</label>
-                <?php
-                $class_edit_name = ($pesan_edit['name'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'id' => "edit_name",
-                  'name' => "edit_name",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_name"."",
-                  'value' => set_value('edit_name', ''),
-                  'type' => "text"
-                ]); ?>
+                <?php echo edit_input_helper('edit_name', 'edit_name', 'text', $pesan_edit['name'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['name'].'</div>' : ''; ?>
 						
               </div>
@@ -399,46 +345,19 @@ width:100%!important;
 
               <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label>Nomor Telepon</label>
-                <?php
-                $class_edit_telepon = ($pesan_edit['telepon'] ?? []) ? 'is-invalid' : '';
-                // $value_edit_telepon = set_value('edit_telepon', '');
-                echo form_input([
-                  'id' => "edit_telepon",
-                  'name' => "edit_telepon",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_telepon"."",
-                  'value' => set_value('edit_telepon', ''),
-                  'type' => "text"
-                ]); ?>
+                <?php echo edit_input_helper('edit_telepon', 'edit_telepon', 'number', $pesan_edit['telepon'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['telepon'].'</div>' : ''; ?>
 						
               </div>
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>E-mail</label>
-                <?php
-                $class_edit_email = ($pesan_edit['email'] ?? []) ? 'is-invalid' : '';
-                // $value_edit_email = set_value('edit_email', '');
-                echo form_input([
-                  'id' => "edit_email",
-                  'name' => "edit_email",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_email"."",
-                  'value' => set_value('edit_email', ''),
-                  'type' => "text"
-                ]); ?>
+                <?php echo edit_input_helper('edit_email', 'edit_email', 'text', $pesan_edit['email'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['email'].'</div>' : ''; ?>
 						
               </div>
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Alamat</label>
-                <?php
-                $class_edit_alamat = ($pesan_edit['alamat'] ?? []) ? 'is-invalid' : '';
-                // $value_edit_alamat = set_value('edit_alamat', '');
-                echo form_textarea([
-                  'id' => "edit_alamat",
-                  'name' => "edit_alamat",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_alamat"."",
-                  'value' => set_value('edit_alamat', ''),
-                  'type' => "text"
-                ]); ?>
+                <?php echo edit_textarea_helper('edit_alamat', 'edit_alamat', 'text', $pesan_edit['alamat'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['alamat'].'</div>' : ''; ?>
 						
               </div>
@@ -466,6 +385,7 @@ width:100%!important;
                 <div class="control-label">Status karyawan</div>
                 <label class="custom-switch">
                   <span class="custom-switch-description mr-2">Tidak aktif</span>
+                  <input type="hidden" name="edit_status" value="2">
                   <input type="checkbox" class="custom-switch-input" name="edit_status" id="edit_status" value="1">
                   
                   <span class="custom-switch-indicator"></span>

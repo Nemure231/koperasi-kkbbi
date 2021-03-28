@@ -142,14 +142,7 @@
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Nama kategori</label>
-              <?php
-                $class_tambah_nama_kategori = ($pesan_tambah['nama_kategori'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "nama_kategori",
-                  'class' => "form-control "."$class_tambah_nama_kategori"."",
-                  'value' => set_value('nama_kategori', ''),
-                  'type' => "text"
-                ]); ?>
+              <?php echo tambah_input_helper('nama_kategori', 'text', $pesan_tambah['nama_kategori'] ?? []); ?>
               <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback ">'.$pesan_tambah['nama_kategori'].'</div>' : ''; ?>
             </div>
           </div>
@@ -183,12 +176,7 @@
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open(base_url().'/suplai/kategori/ubah', $form_edit);    ?>
       <?php $old_data = $session->getFlashdata('old_edit_input');?>
-      <?php echo form_input([
-          'name' => 'edit_id_kategori',
-          'id'=> 'edit_id_kategori',
-          'type'=> 'hidden',
-          'value' => $old_data['id_kategori'] ?? ''
-        ]); ?>
+      <?php echo edit_input_id_helper('edit_id_kategori', 'edit_id_kategori', $old_data['id_kategori'] ?? '', 'hidden'); ?>
       <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_kategori');?>
       <input type="hidden" name="_method" value="PUT">
       <div class="modal-body">
@@ -196,15 +184,7 @@
           <div class="col-lg-12">
             <div class="form-group col-sm-12 col-md-12 col-lg-12">
               <label>Nama kategori</label>
-              <?php
-                $class_edit_nama_kategori = ($pesan_edit['nama_kategori'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'id' => "edit_nama_kategori",
-                  'name' => "edit_nama_kategori",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_kategori"."",
-                  'value' => set_value('edit_nama_kategori', ''),
-                  'type' => "text"
-                ]); ?>
+              <?php echo edit_input_helper('edit_nama_kategori', 'edit_nama_kategori', 'text', $pesan_edit['nama_kategori'] ?? []); ?>
               <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_kategori'].'</div>' : ''; ?>
               
             </div>

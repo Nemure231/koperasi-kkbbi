@@ -137,15 +137,8 @@
 
 					<div class="form-group">
           <label>Nama Role</label>
-          <?php
-              $class_tambah_nama_role = ($pesan_tambah['nama_role'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'name' => "nama_role",
-                  'class' => "form-control "."$class_tambah_nama_role"."",
-                  'value' => set_value('nama_role', ''),
-                  'type' => "text"
-                ]); ?>
-              <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_tambah['nama_role'].'</div>' : ''; ?>
+            <?php echo tambah_input_helper('nama_role', 'text', $pesan_tambah['nama_role'] ?? []); ?>
+            <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_tambah['nama_role'].'</div>' : ''; ?>
 					</div>
 
 				</div>
@@ -174,27 +167,13 @@
       <?php echo form_open(base_url().'/pengaturan/role/ubah', $form_edit);    ?>
       <?php $old_data = $session->getFlashdata('old_edit_input');?>
       <input type="hidden" name="_method" value="PUT">
-      <?php echo form_input([
-          'name' => 'edit_id_role',
-          'id'=> 'edit_id_role',
-          'type'=> 'hidden',
-          'value' => $old_data['id_role'] ?? ''
-        ]); ?>
+      <?php echo edit_input_id_helper('edit_id_role', 'edit_id_role', $old_data['id_role'] ?? '', 'hidden'); ?>
       <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_role');?>
 				<div class="modal-body">
-
 					<div class="form-group">
           <label>Nama Role</label>
-          <?php
-                $class_edit_nama_role = ($pesan_edit['nama_role'] ?? []) ? 'is-invalid' : '';
-                echo form_input([
-                  'id' => "edit_nama_role",
-                  'name' => "edit_nama_role",
-                  'class' => "form-control hapus-validasi-border "."$class_edit_nama_role"."",
-                  'value' => set_value('edit_nama_role', ''),
-                  'type' => "text"
-                ]); ?>
-              <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_role'].'</div>' : ''; ?>
+          <?php echo edit_input_helper('edit_nama_role', 'edit_nama_role', 'text', $pesan_edit['nama_role'] ?? []); ?>
+          <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['nama_role'].'</div>' : ''; ?>
 					</div>
 
 				</div>

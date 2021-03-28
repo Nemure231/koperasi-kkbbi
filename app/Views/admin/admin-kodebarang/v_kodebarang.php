@@ -6,7 +6,6 @@
     <div class="section-header">
       <h1><?php echo esc($title); ?></h1>
     </div>
-
     <div class="section-body">
       <div class="row">
 
@@ -31,7 +30,7 @@
                     <label for="jumlah_angka">Jumlah angka</label>
                     <!-- < ?php echo form_input($input_jumlah_angka); ?> -->
                     <input type="text" name="jumlah_angka" value="<?php echo esc($kode['jumlah_angka']); ?>" id="jumlah_angka" class="form-control <?php echo ($validation->showError('jumlah_angka')) ? 'is-invalid' : ''; ?>" />
-                    <label class="text-danger"><?php echo $validation->showError('jumlah_angka'); ?></label>
+                    <div class="text-danger"><?php echo $validation->showError('jumlah_angka'); ?></label>
                   </div>
                 </div>
               </div>
