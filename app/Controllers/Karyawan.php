@@ -27,13 +27,15 @@ class Karyawan extends BaseController{
 
 	public function index(){
 	
+        $karyawan = $this->modelKaryawan->ambilKaryawan();
 
         $data = [
             'title' => ucfirst('Daftar Karyawan'),
             'nama_menu_utama' => ucfirst('Karyawan'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-            'karyawan' => $this->modelKaryawan->ambilKaryawan(),
+            'karyawan' => $karyawan,
+            // 'gambar' => $this->modelKaryawan->ambilGambarKaryawan($karyawan['gambar']),
             'role' => $this->modelRole->ambilRole(),
             'validation' => $this->validation,
             'session' => $this->session,
@@ -48,44 +50,44 @@ class Karyawan extends BaseController{
 
 
     public function tambah(){
+        // dd(FCPATH);
+            // $validasi_gambar = '';
+            // if(!$this->validate([
+            //     'gambar' => [
+            //         'label'  => 'Gambar',
+            //         'rules'  => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
+            //         'errors' => [
+            //             //'uploaded' => 'Sampul buku harus dipilih!',
+            //             'max_size' => 'Ukuran gambar tidak boleh lebih dari 1MB!',
+            //             'is_image' => 'Format file yang anda upload bukan gambar!',
+            //             'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
+            //         ]
+            //     ]
 
-            $validasi_gambar = '';
-            if(!$this->validate([
-                'gambar' => [
-                    'label'  => 'Gambar',
-                    'rules'  => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
-                    'errors' => [
-                        //'uploaded' => 'Sampul buku harus dipilih!',
-                        'max_size' => 'Ukuran gambar tidak boleh lebih dari 1MB!',
-                        'is_image' => 'Format file yang anda upload bukan gambar!',
-                        'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
-                    ]
-                ]
 
+            // ])) {
+            //     $validasi_gambar = $this->validation->getError('gambar');
 
-            ])) {
-                $validasi_gambar = $this->validation->getError('gambar');
-
-            }
+            // }
 
                 $sampul_buku = $this->request->getFile('gambar');
 
-                if($validasi_gambar == '' && $sampul_buku->isValid()){
+                // // if($validasi_gambar == '' && $sampul_buku->isValid()){
 
-                    $nama_gambar = $sampul_buku->getRandomName();
-                    $sampul_buku->move('admin/assets/profile/', $nama_gambar);
+                    $nama_gambar = $sampul_buku->getName();
+                    $sampul_buku->move('admin/assets/file_sementara/', $nama_gambar);
 
-                }else{
-                    $nama_gambar = 'default.png';
-                }
+                // }else{
+                //     $nama_gambar = 'default.png';
+                // }
               
-                $validasi =  $this->modelKaryawan->tambahKaryawan($nama_gambar);
+                $validasi =  $this->modelKaryawan->tambahKaryawan();
                 if($validasi){
-
+                    unlink('admin/assets/file_sementara/'. $nama_gambar);
                     $this->session->setFlashdata('pesan_validasi_tambah_karyawan',  $validasi);
-                    $this->session->setFlashdata('pesan_validasi_tambah_karyawan_gambar',  $validasi_gambar);
                     return redirect()->to(base_url('/tempat/karyawan'))->withInput();
                 }else{
+                    unlink('admin/assets/file_sementara/'. $nama_gambar);
                     $this->session->setFlashdata('pesan', 'Karyawan baru berhasil ditambahkan!');
                     return redirect()->to(base_url('/tempat/karyawan'));
                 }
@@ -149,12 +151,12 @@ class Karyawan extends BaseController{
        
         
         $model = $this->modelKaryawan->hapusKaryawan();
-        if($model == true){
-            $hapus = $this->request->getPost('hapus_gambar');
-            if($hapus != 'default.png'){
-                unlink('admin/assets/profile/'. $hapus);
-            }
-        }
+        // if($model == true){
+        //     $hapus = $this->request->getPost('hapus_gambar');
+        //     if($hapus != 'default.png'){
+        //         unlink('admin/assets/profile/'. $hapus);
+        //     }
+        // }
         $this->session->setFlashdata('hapus_karyawan', 'Karyawan berhasil dihapus!');
         return redirect()->to(base_url('/tempat/karyawan'));
 

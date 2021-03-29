@@ -69,7 +69,7 @@ width:100%!important;
                             ?>
                       </td>
                       <td>
-                        <img alt="image" src="<?php echo base_url('admin/assets/profile').'/'. $k['gambar']; ?>"
+                        <img alt="image" src="<?php echo gambar_karyawan($k['gambar']); ?>"
                           style="height: 100px; width: 100px; object-fit:cover;">
                       </td>
                       <td>
@@ -120,7 +120,7 @@ width:100%!important;
               <div class="validasi_tambah">
               0
               <?php $validasi_tambah = $session->getFlashdata('pesan_validasi_tambah_karyawan');
-              $validasi_gambar_tambah = $session->getFlashdata('pesan_validasi_tambah_karyawan_gambar');
+              // $validasi_gambar_tambah = $session->getFlashdata('pesan_validasi_tambah_karyawan_gambar');
 
 
               if($validasi_tambah){
@@ -133,9 +133,9 @@ width:100%!important;
                 echo $validasi_tambah['role_id'];
               }
 
-              if($validasi_gambar_tambah){
-                echo $validasi_gambar_tambah;
-              }
+              // if($validasi_gambar_tambah){
+              //   echo $validasi_gambar_tambah;
+              // }
               
               
               ?>
@@ -145,7 +145,7 @@ width:100%!important;
               <div class="validasi_edit">
               0
               <?php $validasi_edit = $session->getFlashdata('pesan_validasi_edit_karyawan');
-              $validasi_gambar_edit = $session->getFlashdata('pesan_validasi_edit_karyawan_gambar');
+              // $validasi_gambar_edit = $session->getFlashdata('pesan_validasi_edit_karyawan_gambar');
               
               if($validasi_edit){
                 echo $validasi_edit['name']; 
@@ -157,9 +157,9 @@ width:100%!important;
 
               }
 
-              if($validasi_gambar_edit){
-                echo $validasi_gambar_edit;
-              }
+              // if($validasi_gambar_edit){
+              //   echo $validasi_gambar_edit;
+              // }
 
               // echo $validation->showError('gambarE');
               
@@ -191,7 +191,7 @@ width:100%!important;
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open_multipart(base_url().'/tempat/karyawan/tambah', $form_tambah);    ?>
       <?php $pesan_tambah = $session->getFlashdata('pesan_validasi_tambah_karyawan');?>
-      <?php $pesan_tambah_gambar = $session->getFlashdata('pesan_validasi_tambah_karyawan_gambar');?>
+      <!-- <//?php $pesan_tambah_gambar = $session->getFlashdata('pesan_validasi_tambah_karyawan_gambar');?> -->
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-6">
@@ -263,8 +263,8 @@ width:100%!important;
               <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
               <div class="form-group col-sm-12 col-md-12 col-lg-12 mt-3 pt-1">
                 <div class="custom-file">
-                  <input type="file" class="custom-file-input <?php echo ($pesan_tambah_gambar ?? []) ? 'is-invalid' : ''; ?>" id="gambar" name="gambar" onchange="previewImg()">
-                  <?php echo ($pesan_tambah_gambar ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah_gambar.'</div>' : ''; ?>
+                  <input type="file" class="custom-file-input <?php echo ($pesan_tambah['gambar'] ?? []) ? 'is-invalid' : ''; ?>" id="gambar" name="gambar" onchange="previewImg()">
+                  <?php echo ($pesan_tambah ?? []) ? '<div class="invalid-feedback">'.$pesan_tambah['gambar'].'</div>' : ''; ?>
               
                   <label class="custom-file-label text-left cass" for="Sampulbuku">Pilih gambar</label>
                 </div>

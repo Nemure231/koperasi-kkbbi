@@ -3,6 +3,7 @@
 use App\Models\ModelSubmenu;
 use App\Models\ModelMenuUtama;
 use App\Models\ModelAksesRole;
+use App\Models\ModelKaryawan;
     
         function check_akses($role_id, $menu_id){
             $model = new ModelAksesRole();
@@ -152,6 +153,11 @@ use App\Models\ModelAksesRole;
                 'type'=> $type,
                 'value' => $value
               ]);
+        }
+
+        function gambar_karyawan($gambar){
+          $model = new ModelKaryawan();
+          return $model->ambilGambarKaryawan($gambar);
         }
     
     

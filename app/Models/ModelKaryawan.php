@@ -37,13 +37,45 @@ class ModelKaryawan extends Model{
         return $karyawan['data'];
     }
 
+    public function ambilGambarKaryawan($gambar){
+        // $gam = pathinfo($gambar, PATHINFO_FILENAME);
+        $ambil_token = get_cookie('jwt_token');
+        $res_gambar = json_encode(['data' => '']);
+        try {
+            $respon_ambil_gambar = $this->_client->request(
+                'GET',
+                'tempat/karyawan/gambar/'.$gambar,
+                ['stream' => true],
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_gambar = $respon_ambil_gambar->getBody();
+        } catch (ClientException $e) {
+            
+        }
 
-    public function tambahKaryawan($nama_gambar){
+        // $karyawan = json_decode($res_gambar, true);
+        // return $karyawan['data'];
+
+        $base64 = base64_encode($res_gambar);
+        $mime = "image/jpeg";
+        return $img = ('data:' . $mime . ';base64,' . $base64);
+        
+    }
+
+
+    public function tambahKaryawan(
+        // $nama_gambar
+        ){
         
         $result = '';
         $validasi = array('data' => '');
         try {
             $ambil_token = get_cookie('jwt_token');
+            $gambar = $this->request->getFile('gambar');
             $respon_ambil_karyawan = $this->_client->request(
                 'POST',
                 'tempat/karyawan/tambah'
@@ -54,20 +86,25 @@ class ModelKaryawan extends Model{
                 .'&password_confirmation='. $this->request->getPost('password_confirmation')
                 .'&telepon='. $this->request->getPost('telepon')
                 .'&alamat='. htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES)
-                .'&gambar='. $nama_gambar
+                // .'&gambar='. $this->request->getFile('gambar')
+                // ->getRandomName();// $nama_gambar
                 .'&status='. $this->request->getPost('status')
                 .'&role_id='. $this->request->getPost('role_id'),
                 [
                     'headers' => [
                             'Authorization' => "Bearer {$ambil_token}"
                     ],
-                    // 'multipart' => [
-                    //     [
-                    //         'name'     => $nama_gambar,
-                    //         'contents' => Psr7\Utils::tryFopen($path, 'r'),
-                    //         // 'filename' => $gambar
-                    //     ],
-                    // ]
+                    'multipart' => [
+                        [
+                            'name'     => 'gambar',
+                            'contents' => file_get_contents(FCPATH.'admin/assets/file_sementara/'.$gambar->getName()),
+                            'filename' => $gambar->getName()
+                        ],
+                        [
+                            'name'     => 'FileInfo',
+                            'contents' => json_encode(['jpg'])
+                        ]
+                    ]
                 ],
             )->getBody();
             json_decode($respon_ambil_karyawan, true);
