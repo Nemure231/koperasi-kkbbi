@@ -155,9 +155,11 @@ use App\Models\ModelKaryawan;
               ]);
         }
 
-        function gambar_karyawan($gambar){
+        function gambar_karyawan($id){
           $model = new ModelKaryawan();
-          return $model->ambilGambarKaryawan($gambar);
+          $src = $model->ambilGambarKaryawan($id);
+          return '<img src="'.$src.'" style="height: 100px; width: 100px; object-fit:cover;"/>';
+
         }
     
     

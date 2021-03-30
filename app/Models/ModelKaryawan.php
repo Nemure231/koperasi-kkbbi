@@ -45,7 +45,6 @@ class ModelKaryawan extends Model{
             $respon_ambil_gambar = $this->_client->request(
                 'GET',
                 'tempat/karyawan/gambar/'.$gambar,
-                ['stream' => true],
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -57,19 +56,13 @@ class ModelKaryawan extends Model{
             
         }
 
-        // $karyawan = json_decode($res_gambar, true);
-        // return $karyawan['data'];
-
-        $base64 = base64_encode($res_gambar);
-        $mime = "image/jpeg";
-        return $img = ('data:' . $mime . ';base64,' . $base64);
+        $karyawan = json_decode($res_gambar, true);
+        return $karyawan['data'];
         
     }
 
 
-    public function tambahKaryawan(
-        // $nama_gambar
-        ){
+    public function tambahKaryawan(){
         
         $result = '';
         $validasi = array('data' => '');
@@ -79,15 +72,12 @@ class ModelKaryawan extends Model{
             $respon_ambil_karyawan = $this->_client->request(
                 'POST',
                 'tempat/karyawan/tambah'
-                // .$nama_gambar
                 .'?name='. htmlspecialchars($this->request->getPost('name'), ENT_QUOTES)
                 .'&email='. htmlspecialchars($this->request->getPost('email'), ENT_QUOTES)
                 .'&password='. $this->request->getPost('password')
                 .'&password_confirmation='. $this->request->getPost('password_confirmation')
                 .'&telepon='. $this->request->getPost('telepon')
                 .'&alamat='. htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES)
-                // .'&gambar='. $this->request->getFile('gambar')
-                // ->getRandomName();// $nama_gambar
                 .'&status='. $this->request->getPost('status')
                 .'&role_id='. $this->request->getPost('role_id'),
                 [
@@ -109,7 +99,6 @@ class ModelKaryawan extends Model{
             )->getBody();
             json_decode($respon_ambil_karyawan, true);
         } catch (ClientException $e) {
-            // echo Psr7\Message::toString($e->getRequest());
             $validasi = json_decode($e->getResponse()->getBody(), true);
         }
 
