@@ -69,15 +69,16 @@ width:100%!important;
                             ?>
                       </td>
                       <td>
-                        <?php echo gambar_karyawan($k['id']); ?>
-                          <!-- style="height: 100px; width: 100px; object-fit:cover;"> -->
+                  
+                        <img src="<?php echo gambar_karyawan($k['id']); ?>" id="tampil_gambar" style="height: 100px; width: 100px; object-fit:cover;"/>
                       </td>
                       <td>
                         <a href="javascript:void(0)" id="tombolEditUser" class="btn btn-warning tombolEditUser"
                           data-id_user="<?php echo $k['id'];?>" data-nama="<?php echo $k['name'];?>"
                           data-telepon="<?php echo $k['telepon'];?>" data-alamat="<?php echo $k['alamat'];?>"
                           data-role_id="<?php echo $k['role_id'];?>" data-is_active="<?php echo $k['status'];?>"
-                          data-gambar="<?php echo $k['gambar'];?>" data-email="<?php echo $k['email'];?>">
+                          data-gambar="<?php echo $k['gambar'];?>" data-email="<?php echo $k['email'];?>"
+                          data-tampil-gambar="<?php echo gambar_karyawan($k['id']); ?>">
                           <i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" id="tombolHapusUser" class="btn btn-danger tombolHapusUser"
                           data-id_user="<?php echo $k['id'];?>"
@@ -369,7 +370,7 @@ width:100%!important;
               <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
                 <label>Foto</label>
                 <input id="old_gambar" type="hidden" value="<?php echo $old_data['gambar'] ?? ''; ?>" />
-                <img id="imgE" class="img-thumbnail img-prev1" style="height: 150px; width: 150px; object-fit:cover;">
+                <img id="imgE" class="img-thumbnail img-prev1 edit_tampil_gambar" style="height: 150px; width: 150px; object-fit:cover;">
               </div>
               <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
               <div class="form-group col-sm-12 col-md-12 col-lg-12">

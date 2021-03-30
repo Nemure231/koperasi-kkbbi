@@ -91,12 +91,14 @@ $(document).ready(function () {
       var email = $(this).data('email');
       var notel = $(this).data('telepon');
       var foto = $(this).data('gambar');
+      var tampil_gambar = $(this).data('tampil-gambar');
       var alamat = $(this).data('alamat');
       var status = $(this).data('is_active');
       var role = $(this).data('role_id');
-      var getUrl = window.location;
-      var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-      $('#imgE').attr("src", baseUrl + "/public/admin/assets/profile/" + foto);
+      // var getUrl = window.location;
+      // var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+      // $('#imgE').attr("src", baseUrl + "/public/admin/assets/profile/" + foto);
+      $('#imgE').attr("src", tampil_gambar);
       $('#img-labelE').text(foto);
       $('#edit_id_karyawan').val(id);
       $('#edit_name').val(nama);

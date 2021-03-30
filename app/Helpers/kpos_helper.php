@@ -158,7 +158,7 @@ use App\Models\ModelKaryawan;
         function gambar_karyawan($id){
           $model = new ModelKaryawan();
           $src = $model->ambilGambarKaryawan($id);
-          return '<img src="'.$src.'" style="height: 100px; width: 100px; object-fit:cover;"/>';
+          return $src;
 
         }
     

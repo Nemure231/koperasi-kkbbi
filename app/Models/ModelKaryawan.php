@@ -69,6 +69,17 @@ class ModelKaryawan extends Model{
         try {
             $ambil_token = get_cookie('jwt_token');
             $gambar = $this->request->getFile('gambar');
+            // $request = \Config\Services::request();
+            // $files = $request->getFiles();
+            // if($gambar->isValid()){
+            //     $path = $gambar->getTempName();
+            //     $name = $gambar->getName();
+            // }else{
+                
+            //     $path = FCPATH.'admin/assets/profile/phpzMRs7d';
+            //     $name = 'phpzMRs7d';
+            // }
+
             $respon_ambil_karyawan = $this->_client->request(
                 'POST',
                 'tempat/karyawan/tambah'
@@ -88,6 +99,7 @@ class ModelKaryawan extends Model{
                         [
                             'name'     => 'gambar',
                             'contents' => file_get_contents(FCPATH.'admin/assets/file_sementara/'.$gambar->getName()),
+                            // 'contents' => Psr7\Utils::tryFopen(FCPATH.'admin/assets/file_sementara/'.$gambar->getName(), 'r'),
                             'filename' => $gambar->getName()
                         ],
                         [

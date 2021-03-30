@@ -50,7 +50,7 @@ class Karyawan extends BaseController{
 
 
     public function tambah(){
-        // dd(FCPATH);
+        // dd($this->request->getFile('gambar')->getPath());
             // $validasi_gambar = '';
             // if(!$this->validate([
             //     'gambar' => [
@@ -72,12 +72,11 @@ class Karyawan extends BaseController{
 
                 $sampul_buku = $this->request->getFile('gambar');
 
-                // // if($validasi_gambar == '' && $sampul_buku->isValid()){
-
+                if($sampul_buku->isValid()){
                     $nama_gambar = $sampul_buku->getName();
                     $sampul_buku->move('admin/assets/file_sementara/', $nama_gambar);
-
-                // }else{
+                }
+                // else{
                 //     $nama_gambar = 'default.png';
                 // }
               
