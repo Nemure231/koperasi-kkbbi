@@ -117,25 +117,47 @@ class ModelKaryawan extends Model{
     }
 
 
-    public function ubahKaryawan($nama_gambar){
+    public function ubahKaryawan(){
         $id_karyawan = $this->request->getPost('edit_id_karyawan');
         $result = '';
         $validasi = array('data' => '');
         try {
             $ambil_token = get_cookie('jwt_token');
+            $gambar = $this->request->getFile('edit_gambar');
+            $cek_path = $gambar->getTempName();
+
+            if(!$cek_path){
+                $path = FCPATH.'admin/assets/profile/default.png';
+                $nama = 'default.png';
+            }else{
+                $nama = $gambar->getName();
+                $path = $gambar->getTempName();
+            }
             $respon_ambil_karyawan = $this->_client->request(
-                'PUT',
+                'POST',
                 'tempat/karyawan/ubah/'.$id_karyawan
-                .'?name='. htmlspecialchars($this->request->getPost('edit_name'), ENT_QUOTES)
+                .'?_method=PUT'
+                .'&name='. htmlspecialchars($this->request->getPost('edit_name'), ENT_QUOTES)
                 .'&email='. htmlspecialchars($this->request->getPost('edit_email'), ENT_QUOTES)
                 .'&telepon='. $this->request->getPost('edit_telepon')
                 .'&alamat='. htmlspecialchars($this->request->getPost('edit_alamat'), ENT_QUOTES)
-                .'&gambar='. $nama_gambar
                 .'&role_id='. $this->request->getPost('edit_role_id')
                 .'&status='. $this->request->getPost('edit_status'),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'multipart' => [
+                        [
+                            'name'     => 'gambar',
+                            // 'contents' => file_get_contents(FCPATH.'admin/assets/file_sementara/'.$gambar->getName()),
+                            'contents' => Psr7\Utils::tryFopen($path, 'r'),
+                            'filename' => $nama
+                        ],
+                        [
+                            'name'     => 'FileInfo',
+                            'contents' => json_encode(['jpg'])
+                        ]
                     ]
                 ],
             )->getBody();

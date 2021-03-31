@@ -180,7 +180,7 @@ $routes->group('tempat', function($routes){
 	$routes->group('karyawan', function($routes){
 		$routes->get('', 'Karyawan::index', ['filter' => 'cek_akses']);
 		$routes->post('tambah', 'Karyawan::tambah');
-		$routes->post('ubah', 'Karyawan::ubah');
+		$routes->put('ubah', 'Karyawan::ubah');
 		$routes->delete('hapus', 'Karyawan::hapus');
 	});
 

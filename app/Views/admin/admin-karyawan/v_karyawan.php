@@ -312,7 +312,8 @@ width:100%!important;
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open_multipart(base_url().'/tempat/karyawan/ubah', $form_edit);    ?>
-      <?php $pesan_edit_gambar = $session->getFlashdata('pesan_validasi_edit_karyawan_gambar');?>
+      <!-- <//?php $pesan_edit_gambar = $session->getFlashdata('pesan_validasi_edit_karyawan_gambar');?> -->
+      <!-- <input type="hidden" name="_method" value="PUT"> -->
       <?php $old_data = $session->getFlashdata('old_edit_input');?>
       <?php echo edit_input_id_helper('edit_id_karyawan', 'edit_id_karyawan', $old_data['id'] ?? '', 'hidden'); ?>
       <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_karyawan');?>
@@ -374,10 +375,10 @@ width:100%!important;
               <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <div class="custom-file">
-                  <input type="file" class="custom-file-input hapus-validasi-border <?php echo ($pesan_edit_gambar ?? []) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('edit_gambar', '') ?>" id="edit_gambar" name="edit_gambar" onchange="previewImg1()">
+                  <input type="file" class="custom-file-input hapus-validasi-border <?php echo ($pesan_edit['gambar'] ?? []) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('edit_gambar', '') ?>" id="edit_gambar" name="edit_gambar" onchange="previewImg1()">
                   <label class="custom-file-label cuss text-left" id="img-labelE" for="Sampulbuku">Pilih gambar</label>
                 
-                  <?php echo ($pesan_edit_gambar ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit_gambar.'</div>' : ''; ?>
+                  <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback hapus-validasi">'.$pesan_edit['gambar'].'</div>' : ''; ?>
               
                 </div>
               </div>
