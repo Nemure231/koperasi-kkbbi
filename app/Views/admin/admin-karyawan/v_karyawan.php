@@ -69,8 +69,7 @@ width:100%!important;
                             ?>
                       </td>
                       <td>
-        
-                        <img src="<?php echo 'http://localhost:8000/gambar/public/'.$k['gambar']; ?>" id="tampil_gambar" style="height: 100px; width: 100px; object-fit:cover;"/>
+                        <img src="<?php echo $k['url_gambar']; ?>" id="tampil_gambar" style="height: 100px; width: 100px; object-fit:cover;"/>
                       </td>
                       <td>
                         <a href="javascript:void(0)" id="tombolEditUser" class="btn btn-warning tombolEditUser"
@@ -78,7 +77,7 @@ width:100%!important;
                           data-telepon="<?php echo $k['telepon'];?>" data-alamat="<?php echo $k['alamat'];?>"
                           data-role_id="<?php echo $k['role_id'];?>" data-is_active="<?php echo $k['status'];?>"
                           data-gambar="<?php echo $k['gambar'];?>" data-email="<?php echo $k['email'];?>"
-                          data-tampil-gambar="<?php echo gambar_karyawan($k['id']); ?>">
+                          data-tampil-gambar="<?php echo $k['url_gambar']; ?>">
                           <i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" id="tombolHapusUser" class="btn btn-danger tombolHapusUser"
                           data-id_user="<?php echo $k['id'];?>"
