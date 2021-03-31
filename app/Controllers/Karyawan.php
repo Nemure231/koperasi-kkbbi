@@ -70,23 +70,23 @@ class Karyawan extends BaseController{
 
             // }
 
-                $sampul_buku = $this->request->getFile('gambar');
+                // $sampul_buku = $this->request->getFile('gambar');
 
-                if($sampul_buku->isValid()){
-                    $nama_gambar = $sampul_buku->getName();
-                    $sampul_buku->move('admin/assets/file_sementara/', $nama_gambar);
-                }
+                // if($sampul_buku->isValid()){
+                //     $nama_gambar = $sampul_buku->getName();
+                //     $sampul_buku->move('admin/assets/file_sementara/', $nama_gambar);
+                // }
                 // else{
                 //     $nama_gambar = 'default.png';
                 // }
               
                 $validasi =  $this->modelKaryawan->tambahKaryawan();
                 if($validasi){
-                    unlink('admin/assets/file_sementara/'. $nama_gambar);
+                    // unlink('admin/assets/file_sementara/'. $nama_gambar);
                     $this->session->setFlashdata('pesan_validasi_tambah_karyawan',  $validasi);
                     return redirect()->to(base_url('/tempat/karyawan'))->withInput();
                 }else{
-                    unlink('admin/assets/file_sementara/'. $nama_gambar);
+                    // unlink('admin/assets/file_sementara/'. $nama_gambar);
                     $this->session->setFlashdata('pesan', 'Karyawan baru berhasil ditambahkan!');
                     return redirect()->to(base_url('/tempat/karyawan'));
                 }

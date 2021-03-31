@@ -69,6 +69,7 @@ class ModelKaryawan extends Model{
         try {
             $ambil_token = get_cookie('jwt_token');
             $gambar = $this->request->getFile('gambar');
+            $path = $gambar->getTempName();
             // $request = \Config\Services::request();
             // $files = $request->getFiles();
             // if($gambar->isValid()){
@@ -98,8 +99,8 @@ class ModelKaryawan extends Model{
                     'multipart' => [
                         [
                             'name'     => 'gambar',
-                            'contents' => file_get_contents(FCPATH.'admin/assets/file_sementara/'.$gambar->getName()),
-                            // 'contents' => Psr7\Utils::tryFopen(FCPATH.'admin/assets/file_sementara/'.$gambar->getName(), 'r'),
+                            // 'contents' => file_get_contents(FCPATH.'admin/assets/file_sementara/'.$gambar->getName()),
+                            'contents' => Psr7\Utils::tryFopen($path, 'r'),
                             'filename' => $gambar->getName()
                         ],
                         [

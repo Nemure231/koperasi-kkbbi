@@ -69,8 +69,8 @@ width:100%!important;
                             ?>
                       </td>
                       <td>
-                  
-                        <img src="<?php echo gambar_karyawan($k['id']); ?>" id="tampil_gambar" style="height: 100px; width: 100px; object-fit:cover;"/>
+        
+                        <img src="<?php echo 'http://localhost:8000/gambar/public/'.$k['gambar']; ?>" id="tampil_gambar" style="height: 100px; width: 100px; object-fit:cover;"/>
                       </td>
                       <td>
                         <a href="javascript:void(0)" id="tombolEditUser" class="btn btn-warning tombolEditUser"
