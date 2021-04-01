@@ -14,7 +14,7 @@
         <div class="col-12 col-md-12 col-lg-12">
           <div class="card profile-widget card-primary">
             <div class="profile-widget-header">
-              <img alt="image" src="<?php echo base_url('admin/assets/profile').'/'. $user['gambar']; ?>"
+              <img alt="image" src="<?= $user['url_gambar']; ?>"
                 class="rounded-circle profile-widget-picture">
       
             </div>

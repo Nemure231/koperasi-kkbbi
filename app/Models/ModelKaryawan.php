@@ -150,13 +150,8 @@ class ModelKaryawan extends Model{
                     'multipart' => [
                         [
                             'name'     => 'gambar',
-                            // 'contents' => file_get_contents(FCPATH.'admin/assets/file_sementara/'.$gambar->getName()),
                             'contents' => Psr7\Utils::tryFopen($path, 'r'),
                             'filename' => $nama
-                        ],
-                        [
-                            'name'     => 'FileInfo',
-                            'contents' => json_encode(['jpg'])
                         ]
                     ]
                 ],

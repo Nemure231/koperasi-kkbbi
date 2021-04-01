@@ -40,63 +40,69 @@ class Toko extends BaseController{
 
     public function ubah(){
 
-            if(!$this->validate([
-                'nama_toko' => [
-                    'rules'  => 'required',
-                    'errors' => [
-                        'required' => 'Harus diisi!'
-                    ]
-                ],
-                'telepon_toko' => [
-                    'rules'  => 'required|numeric',
-                    'errors' => [
-                    'required' => 'Harus diisi!',
-                    'numeric' => 'Harus angka!'
-                    ]
-                ],
-                'email_toko' => [
-                    'rules'  => 'required|valid_email',
-                    'errors' => [
-                    'required' => 'Harus diisi!',
-                    'valid_email' => 'Format e-mail tidak benar!'
-                    ]
-                ],
-                'alamat_toko' => [
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Harus diisi!'
-                    ]
-                ],
-                'logo_toko' => [
-                    'rules'  => 'max_size[logo_toko,1024]|is_image[logo_toko]|mime_in[logo_toko,image/jpg,image/jpeg,image/png]',
-                    'errors' => [
-                    //'uploaded' => 'Harus diisi!',
-                    'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
-                    'is_image' => 'Format file yang anda upload bukan gambar!',
-                    'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
-                    ]
-                ]
+        // dd($this->request->getFile('logo_toko')->getTempName());
 
-            ])) {
+            // if(!$this->validate([
+            //     'nama_toko' => [
+            //         'rules'  => 'required',
+            //         'errors' => [
+            //             'required' => 'Harus diisi!'
+            //         ]
+            //     ],
+            //     'telepon_toko' => [
+            //         'rules'  => 'required|numeric',
+            //         'errors' => [
+            //         'required' => 'Harus diisi!',
+            //         'numeric' => 'Harus angka!'
+            //         ]
+            //     ],
+            //     'email_toko' => [
+            //         'rules'  => 'required|valid_email',
+            //         'errors' => [
+            //         'required' => 'Harus diisi!',
+            //         'valid_email' => 'Format e-mail tidak benar!'
+            //         ]
+            //     ],
+            //     'alamat_toko' => [
+            //         'rules'  => 'required',
+            //         'errors' => [
+            //         'required' => 'Harus diisi!'
+            //         ]
+            //     ],
+            //     'logo_toko' => [
+            //         'rules'  => 'max_size[logo_toko,1024]|is_image[logo_toko]|mime_in[logo_toko,image/jpg,image/jpeg,image/png]',
+            //         'errors' => [
+            //         //'uploaded' => 'Harus diisi!',
+            //         'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
+            //         'is_image' => 'Format file yang anda upload bukan gambar!',
+            //         'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
+            //         ]
+            //     ]
+
+            // ])) {
                 
-                return redirect()->to(base_url('/tempat/toko'))->withInput();
-            }
+            //     return redirect()->to(base_url('/tempat/toko'))->withInput();
+            // }
                
-                $logo_toko = $this->request->getFile('logo_toko');
-                //cek gambar aapakah tetap gambar lama
-                if($logo_toko->getError() == 4){
-                    $nama_logo = $this->request->getPost('logo_lama');
-                }else{
-                    $nama_logo = $logo_toko->getName();
-                    $logo_toko->move('admin/assets/toko/');
-                    //hapus file lama
-                    unlink('admin/assets/toko/'. $this->request->getPost('logo_lama'));
-                }
-    
-                $this->modelToko->ubahToko($nama_logo);
-                $this->session->setFlashdata('pesan_toko', 'Toko berhasil diedit!');
-                return redirect()->to(base_url('/tempat/toko'));
+                // $logo_toko = $this->request->getFile('logo_toko');
+                // //cek gambar aapakah tetap gambar lama
+                // if($logo_toko->getError() == 4){
+                //     $nama_logo = $this->request->getPost('logo_lama');
+                // }else{
+                //     $nama_logo = $logo_toko->getName();
+                //     $logo_toko->move('admin/assets/toko/');
+                //     //hapus file lama
+                //     unlink('admin/assets/toko/'. $this->request->getPost('logo_lama'));
+                // }
+                $validasi = $this->modelToko->ubahToko();
 
+                if($validasi){
+                    $this->session->setFlashdata('pesan_validasi_edit_toko',  $validasi);
+                    return redirect()->to(base_url('/tempat/toko'))->withInput();
+                }else{
+                    $this->session->setFlashdata('pesan_toko', 'Toko berhasil diedit!');
+                    return redirect()->to(base_url('/tempat/toko'));
+                }
     }
 
 }

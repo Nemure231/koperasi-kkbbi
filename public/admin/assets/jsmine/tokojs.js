@@ -13,6 +13,22 @@ function previewImg() {
        imgPrev.src = e.target.result;
     }
  }
+   
+ function previewImg2() {
+    const sampul = document.querySelector('#logo_koperasi');
+    const sampulLabel = document.querySelector('.lebel-koperasi');
+    const imgPrev = document.querySelector('.img-prev2');
+ 
+    sampulLabel.textContent = sampul.files[0].name;
+ 
+    const fileSampul = new FileReader();
+ 
+    fileSampul.readAsDataURL(sampul.files[0]);
+ 
+    fileSampul.onload = function (e) {
+       imgPrev.src = e.target.result;
+    }
+ }
 
  const flashData = $('.flash-data').data('flashdata');
  

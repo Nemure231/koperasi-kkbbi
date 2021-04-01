@@ -185,7 +185,7 @@ $routes->group('tempat', function($routes){
 	});
 
 	$routes->get('toko', 'Toko::index', ['filter' => 'cek_akses']);
-	$routes->post('toko/ubah', 'Toko::ubah');
+	$routes->put('toko/ubah', 'Toko::ubah');
 
 });
 

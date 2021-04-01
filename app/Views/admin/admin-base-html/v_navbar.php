@@ -11,7 +11,7 @@
         </form>
         <ul class="navbar-nav navbar-right">
           <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-            <img alt="image" src="<?php echo base_url('admin/assets/profile').'/'. $user['gambar']; ?>" class="rounded-circle mr-1">
+            <img alt="image" src="<?php echo $user['url_gambar']; ?>" class="rounded-circle mr-1">
             <div class="d-sm-none d-lg-inline-block namo"><?php echo $user['name'];  ?></div></a>
             <div class="dropdown-menu dropdown-menu-right">
               <a href="<?php echo base_url().'/akun/profil' ?>" class="dropdown-item has-icon">

@@ -6,12 +6,11 @@ use App\Models\ModelMenu;
 
 class Pengguna extends BaseController{
 
-	protected $helpers = ['form', 'url', 'array', 'kpos', 'cookie'];
+	protected $helpers = ['form', 'url', 'kpos', 'cookie'];
 
 	public function __construct(){
 		$this->modelUser = new ModelUser();
 		$this->modelMenu = new ModelMenu();
-		$this->validation = \Config\Services::validation();
 	}
 
 	public function index(){
@@ -23,7 +22,6 @@ class Pengguna extends BaseController{
 			'nama_menu_utama' => ucfirst('Profil'),
 			'user' 	=> 	$user,
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-			'validation' => $this->validation,
 			'session' => $this->session,
 			'form_pengguna' => ['id' => 'formPengguna', 'name'=>'formPengguna'],
 			'email' => [

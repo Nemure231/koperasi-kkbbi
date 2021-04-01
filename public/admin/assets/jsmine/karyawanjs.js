@@ -81,8 +81,6 @@ $(document).ready(function () {
    $('#tombolTambahUser').click(function () {
       $('#modalKaryawan').modal('show');
       $('#role_id').select2({dropdownParent: $('#modalKaryawan')});
-      
-
    });
 
    $('table').on('click','.tombolEditUser', function () {
@@ -107,6 +105,8 @@ $(document).ready(function () {
       $('#edit_alamat').val(alamat);
       $('#edit_role_id').val(role);
       $('#edit_gambar_lama').val(foto);
+      $('#edit_url_gambar').val(tampil_gambar);
+      $('#edit_status_lama').val(status);
 
       if(status == 1){
          $('#edit_status').prop('checked', true).val(1);
@@ -143,11 +143,20 @@ $(document).ready(function () {
 
       role_id = $('#old_role_id').val();
       gambar = $('#old_gambar').val();
+      url_gambar = $('#old_url_gambar').val();
+      status = $('#old_status').val();
       $('#edit_role_id').val(role_id);
-      var getUrl = window.location;
-      var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-      $('#imgE').attr("src", baseUrl + "/public/admin/assets/profile/" + gambar);
+      $('#edit_status').val(status);
+      $('#imgE').attr("src", url_gambar);
       $('#img-labelE').text(gambar);
+
+      if(status == 1){
+         $('#edit_status').prop('checked', true).val(1);
+      }
+
+      if(status == 2){
+         $('#edit_status').prop('checked', false).val('');
+      }
 
       $('#edit_role_id').select2({
          dropdownParent: $('#modalKaryawanE'),

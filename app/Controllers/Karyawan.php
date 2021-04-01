@@ -94,76 +94,32 @@ class Karyawan extends BaseController{
     }
 
     public function ubah(){
-            // $validasi_edit_gambar = '';
-            // if(!$this->validate([
-            //     'edit_gambar' => [
-            //         'label'  => 'Gambar',
-            //         'rules'  => 'max_size[edit_gambar,1024]|is_image[edit_gambar]|mime_in[edit_gambar,image/jpg,image/jpeg,image/png]',
-            //         'errors' => [
-            //             //'uploaded' => 'Sampul buku harus dipilih!',
-            //             'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
-            //             'is_image' => 'Format file yang anda upload bukan gambar!',
-            //             'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
-            //         ]
-            //     ]
-
-            // ])) {
                 
-            //     $validasi_edit_gambar = $this->validation->getError('edit_gambar');
-
-            // }
-
-                // $foto = $this->request->getFile('edit_gambar');
-                $nama_gambar_lama = $this->request->getPost('edit_gambar_lama');
-                
-                // if($validasi_edit_gambar == '' && $foto->isValid()){
-                //     $nama_foto = $foto->getRandomName();
-                //     $foto->move('admin/assets/profile/', $nama_foto);
-                //     //hapus file lama
-                //     if($nama_gambar_lama != 'default.png'){
-                //         unlink('admin/assets/profile/'. $nama_gambar_lama);
-                //     }
-                // }else{
-                //     $nama_foto = $nama_gambar_lama;
-                // }
-                
-                $validasi = $this->modelKaryawan->ubahKaryawan();
-                $old = [
-                    'id' => $this->request->getPost('edit_id_karyawan'),
-                    'role_id' => $this->request->getPost('edit_role_id'),
-                    'gambar'  => $nama_gambar_lama
-                ];
-                if($validasi){
-                    $this->session->setFlashdata('pesan_validasi_edit_karyawan',  $validasi);
-                    $this->session->setFlashdata('old_edit_input',  $old);
-                    // $this->session->setFlashdata('pesan_validasi_edit_karyawan_gambar',  $validasi_edit_gambar);
-                    return redirect()->to(base_url('/tempat/karyawan'))->withInput();
-                }else{
-                    $this->session->setFlashdata('pesan', 'Karyawan berhasil diubah!');
-                    return redirect()->to(base_url('/tempat/karyawan'));
-                }
-             
+        $validasi = $this->modelKaryawan->ubahKaryawan();
+        $old = [
+            'id' => $this->request->getPost('edit_id_karyawan'),
+            'role_id' => $this->request->getPost('edit_role_id'),
+            'gambar'  => $this->request->getPost('edit_gambar_lama'),
+            'url_gambar' => $this->request->getPost('edit_url_gambar'),
+            'status' => $this->request->getPost('edit_status_lama')
+        ];
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_edit_karyawan',  $validasi);
+            $this->session->setFlashdata('old_edit_input',  $old);
+            return redirect()->to(base_url('/tempat/karyawan'))->withInput();
+        }else{
+            $this->session->setFlashdata('pesan', 'Karyawan berhasil diubah!');
+            return redirect()->to(base_url('/tempat/karyawan'));
+        }  
     }
 
-  
-    public function hapus(){
-       
-        
+    public function hapus(){ 
         $model = $this->modelKaryawan->hapusKaryawan();
-        // if($model == true){
-        //     $hapus = $this->request->getPost('hapus_gambar');
-        //     if($hapus != 'default.png'){
-        //         unlink('admin/assets/profile/'. $hapus);
-        //     }
-        // }
         $this->session->setFlashdata('hapus_karyawan', 'Karyawan berhasil dihapus!');
         return redirect()->to(base_url('/tempat/karyawan'));
 
 
     
     }
-
-
-   
 }
 ?>

@@ -2,7 +2,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/css/datatabel-boot4.min.css' ?>">
 
 
-
 <!-- Main Content -->
 
 <style type="text/css">
@@ -11,7 +10,6 @@
 width:100%!important;
 }
 </style>
-
 
 <div class="flash-data" data-flashdata="<?php echo $session->getFlashdata('pesan')  ?>"></div>
 <div id="flash-data-hapus" data-flashdatahapus="<?php echo $session->getFlashdata('hapus_karyawan');  ?>"></div>
@@ -24,8 +22,7 @@ width:100%!important;
       <div class="row">
         <div class="col-12 col-sm-12 col-lg-12 col-md-12">
           <div class="card card-primary">
-           
-
+          
             <?php if($karyawan):   ?>
 
             <div class="card-header">
@@ -120,9 +117,7 @@ width:100%!important;
               <div class="validasi_tambah">
               0
               <?php $validasi_tambah = $session->getFlashdata('pesan_validasi_tambah_karyawan');
-              // $validasi_gambar_tambah = $session->getFlashdata('pesan_validasi_tambah_karyawan_gambar');
-
-
+          
               if($validasi_tambah){
                 echo $validasi_tambah['name']; 
                 echo $validasi_tambah['email']; 
@@ -132,12 +127,6 @@ width:100%!important;
                 echo $validasi_tambah['gambar'];
                 echo $validasi_tambah['role_id'];
               }
-
-              // if($validasi_gambar_tambah){
-              //   echo $validasi_gambar_tambah;
-              // }
-              
-              
               ?>
               
 
@@ -145,7 +134,6 @@ width:100%!important;
               <div class="validasi_edit">
               0
               <?php $validasi_edit = $session->getFlashdata('pesan_validasi_edit_karyawan');
-              // $validasi_gambar_edit = $session->getFlashdata('pesan_validasi_edit_karyawan_gambar');
               
               if($validasi_edit){
                 echo $validasi_edit['name']; 
@@ -154,14 +142,7 @@ width:100%!important;
                 echo $validasi_edit['alamat'];
                 echo $validasi_edit['gambar'];
                 echo $validasi_edit['role_id'];
-
               }
-
-              // if($validasi_gambar_edit){
-              //   echo $validasi_gambar_edit;
-              // }
-
-              // echo $validation->showError('gambarE');
               
               ?>
               
@@ -188,10 +169,8 @@ width:100%!important;
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open_multipart(base_url().'/tempat/karyawan/tambah', $form_tambah);    ?>
       <?php $pesan_tambah = $session->getFlashdata('pesan_validasi_tambah_karyawan');?>
-      <!-- <//?php $pesan_tambah_gambar = $session->getFlashdata('pesan_validasi_tambah_karyawan_gambar');?> -->
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-6">
@@ -260,7 +239,7 @@ width:100%!important;
                   
               </div>
     
-              <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
+            
               <div class="form-group col-sm-12 col-md-12 col-lg-12 mt-3 pt-1">
                 <div class="custom-file">
                   <input type="file" class="custom-file-input <?php echo ($pesan_tambah['gambar'] ?? []) ? 'is-invalid' : ''; ?>" id="gambar" name="gambar" onchange="previewImg()">
@@ -312,13 +291,14 @@ width:100%!important;
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
       <?php echo form_open_multipart(base_url().'/tempat/karyawan/ubah', $form_edit);    ?>
-      <!-- <//?php $pesan_edit_gambar = $session->getFlashdata('pesan_validasi_edit_karyawan_gambar');?> -->
-      <!-- <input type="hidden" name="_method" value="PUT"> -->
+      <input type="hidden" name="_method" value="PUT">
       <?php $old_data = $session->getFlashdata('old_edit_input');?>
       <?php echo edit_input_id_helper('edit_id_karyawan', 'edit_id_karyawan', $old_data['id'] ?? '', 'hidden'); ?>
       <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_karyawan');?>
       
       <input type="hidden" id="edit_gambar_lama" name="edit_gambar_lama" value="<?php echo  $old_data['gambar'] ?? ''; ?> ">
+      <input type="hidden" id="edit_url_gambar" name="edit_url_gambar" value="<?php echo  $old_data['url_gambar'] ?? ''; ?>">
+      <input type="hidden" id="edit_status_lama" name="edit_status_lama" value="<?php echo  $old_data['status'] ?? ''; ?>">
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-6">
@@ -370,6 +350,7 @@ width:100%!important;
               <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
                 <label>Foto</label>
                 <input id="old_gambar" type="hidden" value="<?php echo $old_data['gambar'] ?? ''; ?>" />
+                <input id="old_url_gambar" type="hidden" value="<?php echo $old_data['url_gambar'] ?? ''; ?>" />
                 <img id="imgE" class="img-thumbnail img-prev1 edit_tampil_gambar" style="height: 150px; width: 150px; object-fit:cover;">
               </div>
               <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
@@ -386,6 +367,7 @@ width:100%!important;
                 <div class="control-label">Status karyawan</div>
                 <label class="custom-switch">
                   <span class="custom-switch-description mr-2">Tidak aktif</span>
+                  <input id="old_status" type="hidden" value="<?php echo $old_data['status'] ?? ''; ?>" />
                   <input type="hidden" name="edit_status" value="2">
                   <input type="checkbox" class="custom-switch-input" name="edit_status" id="edit_status" value="1">
                   
