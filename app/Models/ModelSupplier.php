@@ -21,7 +21,7 @@ class ModelSupplier extends Model{
         try {
             $respon_ambil_supplier = $this->_client->request(
                 'GET',
-                'suplai/supplier',
+                'supplier',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -45,11 +45,13 @@ class ModelSupplier extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_supplier = $this->_client->request(
                 'POST',
-                'suplai/supplier/tambah'
-                .'?nama_supplier='. htmlspecialchars($this->request->getPost('nama_supplier'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'supplier',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_supplier' => htmlspecialchars($this->request->getPost('nama_supplier'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -71,11 +73,13 @@ class ModelSupplier extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_supplier = $this->_client->request(
                 'PUT',
-                'suplai/supplier/ubah/'.$id_supplier
-                .'?nama_supplier='. htmlspecialchars($this->request->getPost('edit_nama_supplier'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'supplier/'.$id_supplier,
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_supplier' => htmlspecialchars($this->request->getPost('edit_nama_supplier'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -94,7 +98,7 @@ class ModelSupplier extends Model{
 
         $respon_ambil_supplier = $this->_client->request(
             'DELETE',
-            'suplai/supplier/hapus/'.$id_supplier,
+            'supplier/'.$id_supplier,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"
