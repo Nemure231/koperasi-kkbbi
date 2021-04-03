@@ -19,14 +19,12 @@ class ModelUser extends Model{
 
     public function login($email, $sandi){
         $res_token = json_encode(['access_token' => '']);
-			// $eror = null;
 			try {
 				$respon_token = $this->_client->request(
 				'POST',
 				'auth/login',
-				// ['http_errors' => false],
-				['form_params' => 
-					[
+				[
+                    'form_params' => [
 						'email' => $email,
 						'password' => $sandi,
 					]
@@ -35,8 +33,7 @@ class ModelUser extends Model{
 			);
 			$res_token = $respon_token->getBody();
 			} catch (ClientException $e) {
-				// $e->getRequest();
-				// $eror =  $e->getResponse();
+			
 			}
         $token = json_decode($res_token, true);
 
@@ -65,6 +62,24 @@ class ModelUser extends Model{
         return $user;
     }
 
+    public function logout(){
+        $ambil_token = get_cookie('jwt_token');
+		$respon_token = $this->_client->request(
+		'POST',
+		'auth/logout',
+			['headers' => 
+				[
+					'Authorization' => "Bearer {$ambil_token}"
+				]
+			]
+		);
+
+        return $respon_token;
+    }    
+
+
+    ///////PROFIL /////////////////
+
     public function ambilSatuUser(){
         $ambil_token = get_cookie('jwt_token');
         $id_user = $this->session->get('id_user');
@@ -72,7 +87,7 @@ class ModelUser extends Model{
         try {
             $respon_ambil_user = $this->_client->request(
                 'GET',
-                'akun/profil/'.$id_user,
+                'profil/'.$id_user,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -95,7 +110,7 @@ class ModelUser extends Model{
         try {
             $respon_ambil_user = $this->_client->request(
                 'GET',
-                'akun/profil/untuk-profil/'.$id_user,
+                'profil/untuk-profil/'.$id_user,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -118,7 +133,7 @@ class ModelUser extends Model{
         try {
             $respon_ambil_user = $this->_client->request(
                 'GET',
-                'akun/profil/dengan-role/'.$id_user,
+                'profil/dengan-role/'.$id_user,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -143,7 +158,7 @@ class ModelUser extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_user = $this->_client->request(
                 'PUT',
-                'akun/profil/ubah/'.$id_user,
+                'profil/'.$id_user,
                     [
                         'headers' => [
                             'Authorization' => "Bearer {$ambil_token}"
@@ -176,7 +191,7 @@ class ModelUser extends Model{
         try {
             $respon_ambil_sandi = $this->_client->request(
                 'GET',
-                'akun/sandi/'.$id_user,
+                'sandi/'.$id_user,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -201,7 +216,7 @@ class ModelUser extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_sandi = $this->_client->request(
                 'PUT',
-                'akun/sandi/ubah/'.$id_user
+                'sandi/'.$id_user
                 .'?sandi_lama='. $this->request->getPost('katasandi_sebelum').
                 '&sandi_baru='. $this->request->getPost('katasandi_baru'),
                     ['headers' => 
@@ -220,21 +235,6 @@ class ModelUser extends Model{
 
     }
 
-
-    public function logout(){
-        $ambil_token = get_cookie('jwt_token');
-		$respon_token = $this->_client->request(
-		'POST',
-		'auth/logout',
-			['headers' => 
-				[
-					'Authorization' => "Bearer {$ambil_token}"
-				]
-			]
-		);
-
-        return $respon_token;
-    }    
 }
 
 ?>
