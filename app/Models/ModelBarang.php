@@ -45,20 +45,21 @@ class ModelBarang extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_barang = $this->_client->request(
                 'POST',
-                'suplai/barang/tambah'
-                .'?nama_barang='. htmlspecialchars($this->request->getPost('nama_barang'), ENT_QUOTES)
-                .'&kategori_id='.$this->request->getPost('kategori_id')
-                .'&satuan_id='.$this->request->getPost('satuan_id')
-                .'&merek_id='.$this->request->getPost('merek_id')
-                .'&supplier_id='.$this->request->getPost('supplier_id')
-                .'&harga_pokok='.$this->request->getPost('harga_pokok')
-                .'&harga_konsumen='.$this->request->getPost('harga_konsumen')
-                .'&harga_anggota='.$this->request->getPost('harga_anggota')
-                .'&stok_barang='.$this->request->getPost('stok_barang'),
-
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'suplai/barang',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_barang' =>  htmlspecialchars($this->request->getPost('nama_barang'), ENT_QUOTES),
+                        'kategori_id' => $this->request->getPost('kategori_id'),
+                        'satuan_id' => $this->request->getPost('satuan_id'),
+                        'merek_id' => $this->request->getPost('merek_id'),
+                        'supplier_id' => $this->request->getPost('supplier_id'),
+                        'harga_pokok' => $this->request->getPost('harga_pokok'),
+                        'harga_konsumen' => $this->request->getPost('harga_konsumen'),
+                        'harga_anggota' => $this->request->getPost('harga_anggota'),
+                        'stok_barang' => $this->request->getPost('stok_barang')
                     ]
                 ],
             )->getBody();
@@ -80,19 +81,21 @@ class ModelBarang extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_merek = $this->_client->request(
                 'PUT',
-                'suplai/barang/ubah/'.$id_barang
-                .'?nama_barang='. htmlspecialchars($this->request->getPost('edit_nama_barang'), ENT_QUOTES)
-                .'&kategori_id='.$this->request->getPost('edit_kategori_id')
-                .'&satuan_id='.$this->request->getPost('edit_satuan_id')
-                .'&merek_id='.$this->request->getPost('edit_merek_id')
-                .'&supplier_id='.$this->request->getPost('edit_supplier_id')
-                .'&harga_pokok='.$this->request->getPost('edit_harga_pokok')
-                .'&harga_konsumen='.$this->request->getPost('edit_harga_konsumen')
-                .'&harga_anggota='.$this->request->getPost('edit_harga_anggota')
-                .'&stok_barang='.$this->request->getPost('edit_stok_barang'),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'suplai/barang/'.$id_barang,
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_barang' =>  htmlspecialchars($this->request->getPost('edit_nama_barang'), ENT_QUOTES), 
+                        'kategori_id' => $this->request->getPost('edit_kategori_id'),
+                        'satuan_id' => $this->request->getPost('edit_satuan_id'),
+                        'merek_id' => $this->request->getPost('edit_merek_id'),
+                        'supplier_id' => $this->request->getPost('edit_supplier_id'),
+                        'harga_pokok' => $this->request->getPost('edit_harga_pokok'),
+                        'harga_konsumen' => $this->request->getPost('edit_harga_konsumen'),
+                        'harga_anggota' => $this->request->getPost('edit_harga_anggota'),
+                        'stok_barang' => $this->request->getPost('edit_stok_barang')
                     ]
                 ],
             )->getBody();
@@ -111,7 +114,7 @@ class ModelBarang extends Model{
        
         $respon_ambil_merek = $this->_client->request(
             'DELETE',
-            'suplai/barang/hapus/'.$id_barang,
+            'suplai/barang/'.$id_barang,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"

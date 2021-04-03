@@ -22,15 +22,15 @@ class ModelAksesRole extends Model{
             $respon_ambil_akses = $this->_client->request(
                 'GET',
                 'pengaturan/role/akses/cek-akses/'.$role_id.'/'.$uri_menu,
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
                     ]
                 ]
             );
             $res_akses = $respon_ambil_akses->getBody();
         } catch (ClientException $e) {
-            
+        
         }
 
         $akses = json_decode($res_akses, true);
@@ -45,10 +45,11 @@ class ModelAksesRole extends Model{
             $respon_ambil_akses = $this->_client->request(
                 'GET',
                 'pengaturan/role/akses/cek-centang/'.$role_id.'/'.$menu_id,
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
                     ]
+
                 ]
             );
             $res_akses = $respon_ambil_akses->getBody();
@@ -66,12 +67,14 @@ class ModelAksesRole extends Model{
         $ambil_token = get_cookie('jwt_token');
         $respon_akses_role = $this->_client->request(
             'POST',
-            'pengaturan/role/akses/ubah/'.$role_id.'/'.$menu_id
-            .'?role_id='.$role_id
-            .'&menu_id='.$menu_id,
-            ['headers' => 
-                [
-                'Authorization' => "Bearer {$ambil_token}"
+            'pengaturan/role/akses',
+            [
+                'headers' => [
+                    'Authorization' => "Bearer {$ambil_token}"
+                ],
+                'form_params' => [
+                    'role_id' => $role_id,
+                    'menu_id' => $menu_id
                 ]
             ],
         );
