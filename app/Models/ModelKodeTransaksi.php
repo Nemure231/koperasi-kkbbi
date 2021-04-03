@@ -4,8 +4,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
 
- 
-class ModelKodeBarang extends Model{
+
+class ModelKodeTransaksi extends Model{
 
     public function __construct(){
         $this->session = \Config\Services::session();
@@ -16,13 +16,13 @@ class ModelKodeBarang extends Model{
     }
 
 
-    public function ambilKodeBarang(){
+    public function ambilKodeTransaksi(){
         $ambil_token = get_cookie('jwt_token');
         $res_kode = json_encode(['data' => '']);
         try {
             $respon_ambil_kode = $this->_client->request(
                 'GET',
-                'kode/barang',
+                'kode/transaksi',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -34,27 +34,27 @@ class ModelKodeBarang extends Model{
             
         }
 
-        $user = json_decode($res_kode, true);
-        return $user['data'];
+        $kode = json_decode($res_kode, true);
+        return $kode['data'];
     }
 
 
-    public function ubahKodeBarang(){
-        $id_kode_barang = $this->request->getPost('edit_id_kode_barang');
+    public function ubahKodeTransaksi(){
+        $id_kode_transaksi = $this->request->getPost('edit_id_kode_transaksi');
         $result = '';
         $validasi = array('data' => '');
         try {
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_kode = $this->_client->request(
                 'PUT',
-                'kode/barang/'.$id_kode_barang,
+                'kode/transaksi/'.$id_kode_transaksi,
                     [
                         'headers' => [
                             'Authorization' => "Bearer {$ambil_token}"
                         ],
                         'form_params' => [
-                            'huruf_kode_barang' => htmlspecialchars($this->request->getPost('edit_huruf_kode_barang'), ENT_QUOTES),
-                            'jumlah_kode_barang' => htmlspecialchars($this->request->getPost('edit_jumlah_kode_barang'), ENT_QUOTES)
+                            'huruf_kode_transaksi' => htmlspecialchars($this->request->getPost('edit_huruf_kode_transaksi'), ENT_QUOTES),
+                            'jumlah_kode_transaksi' => htmlspecialchars($this->request->getPost('edit_jumlah_kode_transaksi'), ENT_QUOTES)
                         ]
                 ],
             )->getBody();

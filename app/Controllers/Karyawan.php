@@ -1,9 +1,6 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_user;
-use App\Models\Model_user_menu;
-use App\Models\Model_user_role;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
 use App\Models\ModelRole;
@@ -12,18 +9,13 @@ use App\Models\ModelKaryawan;
 class Karyawan extends BaseController{
 
 	public function __construct(){
-        $this->model_user_role = new Model_user_role();
-        $this->model_user = new Model_user();
-        $this->model_user_menu = new Model_user_menu();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
-        $this->request = \Config\Services::request();
-		$this->validation = \Config\Services::validation();
         $this->modelRole = new ModelRole();
         $this->modelKaryawan = new ModelKaryawan();
 		
 	}
-	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
+	protected $helpers = ['url', 'form', 'kpos', 'cookie'];
 
 	public function index(){
 	
@@ -35,7 +27,6 @@ class Karyawan extends BaseController{
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'karyawan' => $karyawan,
-            // 'gambar' => $this->modelKaryawan->ambilGambarKaryawan($karyawan['gambar']),
             'role' => $this->modelRole->ambilRole(),
             'validation' => $this->validation,
             'session' => $this->session,
@@ -50,46 +41,14 @@ class Karyawan extends BaseController{
 
 
     public function tambah(){
-        // dd($this->request->getFile('gambar')->getPath());
-            // $validasi_gambar = '';
-            // if(!$this->validate([
-            //     'gambar' => [
-            //         'label'  => 'Gambar',
-            //         'rules'  => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
-            //         'errors' => [
-            //             //'uploaded' => 'Sampul buku harus dipilih!',
-            //             'max_size' => 'Ukuran gambar tidak boleh lebih dari 1MB!',
-            //             'is_image' => 'Format file yang anda upload bukan gambar!',
-            //             'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
-            //         ]
-            //     ]
-
-
-            // ])) {
-            //     $validasi_gambar = $this->validation->getError('gambar');
-
-            // }
-
-                // $sampul_buku = $this->request->getFile('gambar');
-
-                // if($sampul_buku->isValid()){
-                //     $nama_gambar = $sampul_buku->getName();
-                //     $sampul_buku->move('admin/assets/file_sementara/', $nama_gambar);
-                // }
-                // else{
-                //     $nama_gambar = 'default.png';
-                // }
-              
-                $validasi =  $this->modelKaryawan->tambahKaryawan();
-                if($validasi){
-                    // unlink('admin/assets/file_sementara/'. $nama_gambar);
-                    $this->session->setFlashdata('pesan_validasi_tambah_karyawan',  $validasi);
-                    return redirect()->to(base_url('/tempat/karyawan'))->withInput();
-                }else{
-                    // unlink('admin/assets/file_sementara/'. $nama_gambar);
-                    $this->session->setFlashdata('pesan', 'Karyawan baru berhasil ditambahkan!');
-                    return redirect()->to(base_url('/tempat/karyawan'));
-                }
+        $validasi =  $this->modelKaryawan->tambahKaryawan();
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_tambah_karyawan',  $validasi);
+            return redirect()->to(base_url('/tempat/karyawan'))->withInput();
+        }else{
+            $this->session->setFlashdata('pesan', 'Karyawan baru berhasil ditambahkan!');
+            return redirect()->to(base_url('/tempat/karyawan'));
+        }
             
     }
 

@@ -3,57 +3,36 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\Model_kode_transaksi;
-use App\Models\Model_all;
-use App\Models\Model_user_menu;
-use App\Models\Model_user;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
+use App\Models\ModelKodeTransaksi;
 class KodeTransaksi extends BaseController
 {
 	
 	public function __construct(){
-        $this->model_user_menu = new Model_user_menu();
-		$this->model_user = new Model_user();
-        $this->model_kode_transaksi = new Model_kode_transaksi();
-        $this->request = \Config\Services::request();
-		$this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
+        $this->modelKodeTransaksi = new ModelKodeTransaksi();
 	}
 
-	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
+	protected $helpers = ['url', 'form', 'kpos', 'cookie'];
 
-    ////////////////////////////////////////////KODE BARANG//////////////////////////
     public function index(){
-		
-		$role = $this->session->get('role_id');
-        $email = $this->session->get('email');
-		
-
 	
-        
-        $kode = $this->model_kode_transaksi->select('id_tb_kode_transaksi, huruf_kode_transaksi, jumlah_angka')
-                ->asArray()
-                ->first();
-
+        $kode = $this->modelKodeTransaksi->ambilKodeTransaksi();
 
 		$data = [
 			'title' => ucfirst('Kode Transaksi'),
             'nama_menu_utama' => ucfirst('Kode'),
             'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-            'kode' => $kode,
+            'kode_transaksi' => $kode,
             'session' => $this->session,
             'validation' => $this->validation,
-            'form_kodetransaksi' => [
-                'id' => 'formKodetransaksi',
-                'name'=>'formKodetransaksi'
-            ],
-			'hidd_id_kode_transaksi' => [
-				'name' => 'tb_kode_transaksi_id',
-				'id'=> 'tb_kode_transaksi_id', 
-				'value' => ''.$kode['id_tb_kode_transaksi'].'', 
+            'form_ubah' => ['id' => 'form-tambah-kode-transaksi'],
+			'edit_id_kode_transaksi' => [
+				'name' => 'edit_id_kode_transaksi',
+				'value' => $kode['id_kode_transaksi'], 
 				'type'=> 'hidden'
             ]   
 		];
@@ -62,42 +41,14 @@ class KodeTransaksi extends BaseController
     
 
     public function ubah(){
-
-            if(!$this->validate([
-                'huruf_kode_transaksi' => [
-                    'label'  => 'Huruf kode transaksi',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Huruf kode transaksi harus diisi!'
-                    ]
-                ],
-                'jumlah_angka' => [
-                    'label'  => 'Jumlah angka',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Jumlah angka harus diisi!'
-                    ]
-                ]
-
-            ])) {
-               
-                return redirect()->to(base_url('/suplai/kode/transaksi'))->withInput();
-
-            }
-
-                $id = $this->request->getPost('tb_kode_transaksi_id');
-                $ubah = [
-                    'huruf_kode_transaksi' => htmlspecialchars($this->request->getPost('huruf_kode_transaksi'), ENT_QUOTES),
-                    'jumlah_angka' => htmlspecialchars($this->request->getPost('jumlah_angka'), ENT_QUOTES)
-                ];
-
-                
-                $this->model_kode_transaksi->update($id, $ubah);            
-                $this->session->setFlashdata('pesan_kode_transaksi', 'Kode transaksi berhasil diubah!');
-                return redirect()->to(base_url('/suplai/kode/transaksi'));
-                
-
-        
+        $validasi = $this->modelKodeTransaksi->ubahKodeTransaksi();
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_edit_kode_transaksi',  $validasi);
+            return redirect()->to(base_url('/suplai/kode/transaksi'));
+        }else{
+            $this->session->setFlashdata('pesan_kode_transaksi', 'Kode transaksi berhasil diubah!');
+            return redirect()->to(base_url('/suplai/kode/transaksi'));
+        }
     }
 
 }
