@@ -28,7 +28,6 @@ class KodeTransaksi extends BaseController
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'kode_transaksi' => $kode,
             'session' => $this->session,
-            'validation' => $this->validation,
             'form_ubah' => ['id' => 'form-tambah-kode-transaksi'],
 			'edit_id_kode_transaksi' => [
 				'name' => 'edit_id_kode_transaksi',
