@@ -29,7 +29,6 @@ class KodeBarang extends BaseController
 			'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'kode_barang' => $kode,
             'session' => $this->session,
-            'validation' => $this->validation,
             'edit_id_kode_barang' =>[
                 'name' => 'edit_id_kode_barang',
                 'value' => $kode['id_kode_barang'],
