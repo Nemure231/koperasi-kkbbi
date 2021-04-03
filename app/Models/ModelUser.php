@@ -216,12 +216,15 @@ class ModelUser extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_sandi = $this->_client->request(
                 'PUT',
-                'sandi/'.$id_user
-                .'?sandi_lama='. $this->request->getPost('katasandi_sebelum').
-                '&sandi_baru='. $this->request->getPost('katasandi_baru'),
-                    ['headers' => 
-                        [
-                        'Authorization' => "Bearer {$ambil_token}"
+                'sandi/'.$id_user,
+                    [
+                        'headers' => [
+                            'Authorization' => "Bearer {$ambil_token}"
+                        ],
+                        'form_params' => [
+                            'password_lama' => $this->request->getPost('password_lama'),
+                            'password'=> $this->request->getPost('password'),
+                            'password_confirmation'=> $this->request->getPost('password_confirmation')
                         ]
                     ],
             )->getBody();

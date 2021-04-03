@@ -31,22 +31,22 @@
               <div class="card-body">
                 <div class="row">
                   <div class="form-group col-lg-12 col-sm-12 col-md-12">
-                    <label for="katasandi_sebelum">Kata sandi sebelumnya</label>
+                    <label for="password_lama">Kata sandi sebelumnya</label>
                       <?php $salah = $session->getFlashdata('salah'); ?>
-                      <?php echo edit_input_helper_no_modal('katasandi_sebelum', 'password', '', $salah ?? ''); ?>
+                      <?php echo edit_input_helper_no_modal('password_lama', 'password', '', $salah ?? ''); ?>
                       <?php echo ($salah ?? '') ? '<div class="invalid-feedback ">'.$salah.'</div>' : ''; ?>
                   </div>
                   <div class="form-group col-lg-6 col-sm-12 col-md-6">
-                    <label for="katasandi_baru">Kata sandi baru</label>
+                    <label for="password">Kata sandi baru</label>
                     <?php $sama = $session->getFlashdata('sama'); ?>
-                    <?php echo edit_input_helper_no_modal('katasandi_baru', 'password', '', $pesan_edit['sandi_baru'] ?? $sama ?? ''); ?>
-                    <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback ">'.$pesan_edit['sandi_baru'].'</div>' : ''; ?>
+                    <?php echo edit_input_helper_no_modal('password', 'password', '', $pesan_edit['password'] ?? $sama ?? ''); ?>
+                    <?php echo ($pesan_edit ?? []) ? '<div class="invalid-feedback ">'.$pesan_edit['password'].'</div>' : ''; ?>
                     <?php echo ($sama ?? '') ? '<div class="invalid-feedback ">'.$sama.'</div>' : ''; ?>
                   </div>
 
                   <div class="form-group col-lg-6 col-sm-12 col-md-6">
-                    <label for="katasandi_baru1">Ulangi kata sandi baru</label>
-                    <?php echo edit_input_helper_no_modal('katasandi_baru1', 'password', '', $pesan_edit['sandi_baru'] ?? []); ?>
+                    <label for="password_confirmation">Ulangi kata sandi baru</label>
+                    <?php echo edit_input_helper_no_modal('password_confirmation', 'password', '', $pesan_edit['password'] ?? []); ?>
                   </div>
                 </div>
               </div>

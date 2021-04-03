@@ -35,8 +35,8 @@ class Sandi extends BaseController{
 	public function ubah(){
 
 		$data = $this->modelUser->ambilSatuSandi();
-		$pass_sebelum = $this->request->getPost('katasandi_sebelum');
-		$pass_baru = $this->request->getPost('katasandi_baru');
+		$pass_sebelum = $this->request->getPost('password_lama');
+		$pass_baru = $this->request->getPost('password');
 		if (!password_verify($pass_sebelum, $data['password'])) {
 			$this->session->setFlashdata('salah', 'Kata sandi sebelumnya salah!');
 			return redirect()->to(base_url('/akun/sandi'));
