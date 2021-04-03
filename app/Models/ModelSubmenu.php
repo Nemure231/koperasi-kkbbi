@@ -22,7 +22,7 @@ class ModelSubmenu extends Model{
         try {
             $respon_ambil_submenu = $this->_client->request(
                 'GET',
-                'pengaturan/submenu/untuk-sidebar/'.$menu_id.'/'.$menu_utama_id,
+                'submenu/untuk-sidebar/'.$menu_id.'/'.$menu_utama_id,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -44,7 +44,7 @@ class ModelSubmenu extends Model{
         try {
             $respon_ambil_submenu = $this->_client->request(
                 'GET',
-                'pengaturan/submenu',
+                'submenu',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -67,17 +67,18 @@ class ModelSubmenu extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_submenu = $this->_client->request(
                 'POST',
-                'pengaturan/submenu/tambah'
-                .'?menu_id='.$this->request->getPost('menu_id')
-                .'&menu_utama_id='.$this->request->getPost('menu_utama_id')
-                .'&nama_submenu='. htmlspecialchars($this->request->getPost('nama_submenu'), ENT_QUOTES)
-                .'&url_submenu='. htmlspecialchars($this->request->getPost('url_submenu'), ENT_QUOTES)
-                .'&ikon_submenu='.  htmlspecialchars($this->request->getPost('ikon_submenu'), ENT_QUOTES)
-                .'&status_submenu='. htmlspecialchars($this->request->getPost('status_submenu'), ENT_QUOTES),
-
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'submenu',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'menu_id' => $this->request->getPost('menu_id'),
+                        'menu_utama_id' => $this->request->getPost('menu_utama_id'),
+                        'nama_submenu' =>  htmlspecialchars($this->request->getPost('nama_submenu'), ENT_QUOTES),
+                        'url_submenu' =>  htmlspecialchars($this->request->getPost('url_submenu'), ENT_QUOTES),
+                        'ikon_submenu' =>   htmlspecialchars($this->request->getPost('ikon_submenu'), ENT_QUOTES),
+                        'status_submenu' =>  htmlspecialchars($this->request->getPost('status_submenu'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -99,17 +100,18 @@ class ModelSubmenu extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_submenu = $this->_client->request(
                 'PUT',
-                'pengaturan/submenu/ubah/'.$id_submenu
-                .'?menu_id='.$this->request->getPost('edit_menu_id')
-                .'&menu_utama_id='.$this->request->getPost('edit_menu_utama_id')
-                .'&nama_submenu='. htmlspecialchars($this->request->getPost('edit_nama_submenu'), ENT_QUOTES)
-                .'&url_submenu='. htmlspecialchars($this->request->getPost('edit_url_submenu'), ENT_QUOTES)
-                .'&ikon_submenu='.  htmlspecialchars($this->request->getPost('edit_ikon_submenu'), ENT_QUOTES)
-                .'&status_submenu='. htmlspecialchars($this->request->getPost('edit_status_submenu'), ENT_QUOTES),
-
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'submenu/'.$id_submenu,
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'menu_id'=>$this->request->getPost('edit_menu_id'),
+                        'menu_utama_id'=>$this->request->getPost('edit_menu_utama_id'),
+                        'nama_submenu'=> htmlspecialchars($this->request->getPost('edit_nama_submenu'), ENT_QUOTES),
+                        'url_submenu'=> htmlspecialchars($this->request->getPost('edit_url_submenu'), ENT_QUOTES),
+                        'ikon_submenu'=>  htmlspecialchars($this->request->getPost('edit_ikon_submenu'), ENT_QUOTES),
+                        'status_submenu'=> htmlspecialchars($this->request->getPost('edit_status_submenu'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -129,7 +131,7 @@ class ModelSubmenu extends Model{
 
         $respon_ambil_user = $this->_client->request(
             'DELETE',
-            'pengaturan/submenu/hapus/'.$id_submenu,
+            'submenu/'.$id_submenu,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"
