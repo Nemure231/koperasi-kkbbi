@@ -3,95 +3,53 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\Model_kode_barang;
-use App\Models\Model_user_menu;
-use App\Models\Model_user;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
+use App\Models\ModelKodeBarang;
 
 class KodeBarang extends BaseController
 {
 	
 	public function __construct(){
-        $this->model_user_menu = new Model_user_menu();
-		$this->model_user = new Model_user();
-        $this->model_kode_barang = new Model_kode_barang();
-        $this->request = \Config\Services::request();
-		$this->validation = \Config\Services::validation();
         $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
+        $this->modelKodeBarang = new ModelKodeBarang();
 	}
 
-	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
+	protected $helpers = ['url', 'form', 'kpos', 'cookie'];
 
-	 ////////////////////////////////////////////KODE BARANG//////////////////////////
-     public function index(){
+    public function index(){
 		
-		$role = $this->session->get('role_id');
-        $email = $this->session->get('email');
-
-        $kode = $this->model_kode_barang->select('id_tb_kode_barang, huruf_kode_barang, jumlah_angka')->asArray()
-                ->first();
+        $kode = $this->modelKodeBarang->ambilKodeBarang();
 
 		$data = [
 			'title' => ucfirst('Kode Barang'),
             'nama_menu_utama' => ucfirst('Kode'),
 			'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
 			'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
-            'kode' => $kode,
+            'kode_barang' => $kode,
             'session' => $this->session,
             'validation' => $this->validation,
-            'form_kodebarang' => [
-                'id' => 'formKodebarang',
-                'name'=>'formKodebarang'
+            'edit_id_kode_barang' =>[
+                'name' => 'edit_id_kode_barang',
+                'value' => $kode['id_kode_barang'],
+                'type' => 'hidden'
             ],
-			'hidd_id_kode_barang' => [
-				'name' => 'tb_kode_barang_id',
-				'id'=> 'tb_kode_barang_id',
-				'value' => ''.$kode['id_tb_kode_barang'].'', 
-				'type'=> 'hidden'
-            ]   
+            'form_ubah' => ['id' => 'form-tambah-kode-barang']
 		];
 		tampilan_admin('admin/admin-kodebarang/v_kodebarang', 'admin/admin-kodebarang/v_js_kodebarang', $data);
     }
-    
 
     public function ubah(){
-      
-    
-            if(!$this->validate([
-                'huruf_kode_barang' => [
-                    'label'  => 'Huruf kode Barang',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Huruf kode barang harus diisi!'
-                    ]
-                ],
-                'jumlah_angka' => [
-                    'label'  => 'Jumlah angka',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Jumlah angka harus diisi!'
-                    ]
-                ]
-
-            ])) {
-               
-                return redirect()->to(base_url('/suplai/kode/barang'))->withInput();
-
-            }
-
-                $id = $this->request->getPost('tb_kode_barang_id');
-                $ubah = [
-                    'huruf_kode_barang' => htmlspecialchars($this->request->getPost('huruf_kode_barang'), ENT_QUOTES),
-                    'jumlah_angka' => htmlspecialchars($this->request->getPost('jumlah_angka'), ENT_QUOTES)
-                ];
-
-                
-                    $this->model_kode_barang->update($id, $ubah);
-                    $this->session->setFlashdata('pesan_kode_barang', 'Kode barang berhasil diubah!');
-                    return redirect()->to(base_url('/suplai/kode/barang'));
+        $validasi = $this->modelKodeBarang->ubahKodeBarang();
         
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_edit_kode_barang',  $validasi);
+            return redirect()->to(base_url('/suplai/kode/barang'));
+        }else{
+            $this->session->setFlashdata('pesan_kode_barang', 'Kode barang berhasil diubah!');
+            return redirect()->to(base_url('/suplai/kode/barang'));
+        }
     }
 
 }

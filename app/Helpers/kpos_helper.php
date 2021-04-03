@@ -3,7 +3,6 @@
 use App\Models\ModelSubmenu;
 use App\Models\ModelMenuUtama;
 use App\Models\ModelAksesRole;
-// use App\Models\ModelKaryawan;
     
         function check_akses($role_id, $menu_id){
             $model = new ModelAksesRole();
