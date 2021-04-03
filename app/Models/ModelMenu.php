@@ -16,7 +16,6 @@ class ModelMenu extends Model{
 		]);
     }
 
-
     public function ambilMenuUntukSidebar(){
         $ambil_token = get_cookie('jwt_token');
         $role_id = $this->session->get('role_id');

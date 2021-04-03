@@ -21,7 +21,7 @@ class ModelMenuUtama extends Model{
         try {
             $respon_ambil_menu_utama_utama = $this->_client->request(
                 'GET',
-                'pengaturan/menu_utama/untuk-sidebar/'.$menu_id,
+                'menu_utama/untuk-sidebar/'.$menu_id,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -43,7 +43,7 @@ class ModelMenuUtama extends Model{
         try {
             $respon_ambil_menu_utama = $this->_client->request(
                 'GET',
-                'pengaturan/menu_utama',
+                'menu_utama',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -65,7 +65,7 @@ class ModelMenuUtama extends Model{
         try {
             $respon_ambil_menu_utama = $this->_client->request(
                 'GET',
-                'pengaturan/menu_utama/untuk-submenu',
+                'menu_utama/untuk-submenu',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -88,13 +88,15 @@ class ModelMenuUtama extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_menu_utama = $this->_client->request(
                 'POST',
-                'pengaturan/menu_utama/tambah'
-                .'?menu_id='. htmlspecialchars($this->request->getPost('menu_id'), ENT_QUOTES)
-                .'&nama_menu_utama='. htmlspecialchars($this->request->getPost('nama_menu_utama'), ENT_QUOTES)
-                .'&ikon_menu_utama='. htmlspecialchars($this->request->getPost('ikon_menu_utama'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'menu_utama',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'menu_id' => htmlspecialchars($this->request->getPost('menu_id'), ENT_QUOTES),
+                        'nama_menu_utama' => htmlspecialchars($this->request->getPost('nama_menu_utama'), ENT_QUOTES),
+                        'ikon_menu_utama' => htmlspecialchars($this->request->getPost('ikon_menu_utama'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -116,13 +118,15 @@ class ModelMenuUtama extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_menu_utama = $this->_client->request(
                 'PUT',
-                'pengaturan/menu_utama/ubah/'.$id_menu_utama
-                .'?menu_id='. htmlspecialchars($this->request->getPost('edit_menu_id'), ENT_QUOTES)
-                .'&nama_menu_utama='. htmlspecialchars($this->request->getPost('edit_nama_menu_utama'), ENT_QUOTES)
-                .'&ikon_menu_utama='. htmlspecialchars($this->request->getPost('edit_ikon_menu_utama'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'menu_utama/'.$id_menu_utama,
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'menu_id' => htmlspecialchars($this->request->getPost('edit_menu_id'), ENT_QUOTES),
+                        'nama_menu_utama' => htmlspecialchars($this->request->getPost('edit_nama_menu_utama'), ENT_QUOTES),
+                        'ikon_menu_utama' => htmlspecialchars($this->request->getPost('edit_ikon_menu_utama'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -141,7 +145,7 @@ class ModelMenuUtama extends Model{
        
         $respon_ambil_user = $this->_client->request(
             'DELETE',
-            'pengaturan/menu_utama/hapus/'.$id_menu_utama,
+            'menu_utama/'.$id_menu_utama,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"
