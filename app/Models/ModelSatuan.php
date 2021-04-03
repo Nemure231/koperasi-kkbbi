@@ -22,7 +22,7 @@ class ModelSatuan extends Model{
         try {
             $respon_ambil_satuan = $this->_client->request(
                 'GET',
-                'suplai/satuan',
+                'satuan',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -46,11 +46,13 @@ class ModelSatuan extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_satuan = $this->_client->request(
                 'POST',
-                'suplai/satuan/tambah'
-                .'?nama_satuan='. htmlspecialchars($this->request->getPost('nama_satuan'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'satuan',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_satuan' => htmlspecialchars($this->request->getPost('nama_satuan'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -72,11 +74,13 @@ class ModelSatuan extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_satuan = $this->_client->request(
                 'PUT',
-                'suplai/satuan/ubah/'.$id_satuan
-                .'?nama_satuan='. htmlspecialchars($this->request->getPost('edit_nama_satuan'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'satuan/'.$id_satuan,
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_satuan' => htmlspecialchars($this->request->getPost('edit_nama_satuan'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -95,7 +99,7 @@ class ModelSatuan extends Model{
 
         $respon_ambil_satuan = $this->_client->request(
             'DELETE',
-            'suplai/satuan/hapus/'.$id_satuan,
+            'satuan/'.$id_satuan,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"
