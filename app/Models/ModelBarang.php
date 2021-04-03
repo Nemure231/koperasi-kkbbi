@@ -21,7 +21,7 @@ class ModelBarang extends Model{
         try {
             $respon_ambil_barang = $this->_client->request(
                 'GET',
-                'suplai/barang',
+                'barang',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -45,7 +45,7 @@ class ModelBarang extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_barang = $this->_client->request(
                 'POST',
-                'suplai/barang',
+                'barang',
                 [
                     'headers' => [
                         'Authorization' => "Bearer {$ambil_token}"
@@ -81,7 +81,7 @@ class ModelBarang extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_merek = $this->_client->request(
                 'PUT',
-                'suplai/barang/'.$id_barang,
+                'barang/'.$id_barang,
                 [
                     'headers' => [
                         'Authorization' => "Bearer {$ambil_token}"
@@ -114,7 +114,7 @@ class ModelBarang extends Model{
        
         $respon_ambil_merek = $this->_client->request(
             'DELETE',
-            'suplai/barang/'.$id_barang,
+            'barang/'.$id_barang,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"
@@ -129,7 +129,7 @@ class ModelBarang extends Model{
         try {
             $respon_ambil_barang = $this->_client->request(
                 'GET',
-                'suplai/stok/cari/'.$min_stok,
+                'stok/cari/'.$min_stok,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"

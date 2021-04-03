@@ -23,7 +23,7 @@ class ModelRole extends Model{
         try {
             $respon_ambil_role = $this->_client->request(
                 'GET',
-                'pengaturan/role',
+                'role',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -47,7 +47,7 @@ class ModelRole extends Model{
         try {
             $respon_ambil_role = $this->_client->request(
                 'GET',
-                'pengaturan/role/cek-centang/'.$id_role,
+                'role/cek-centang/'.$id_role,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -70,11 +70,13 @@ class ModelRole extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_role = $this->_client->request(
                 'POST',
-                'pengaturan/role/tambah'
-                .'?nama_role='. htmlspecialchars($this->request->getPost('nama_role'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'role',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_role' =>  htmlspecialchars($this->request->getPost('nama_role'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -96,11 +98,13 @@ class ModelRole extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_role = $this->_client->request(
                 'PUT',
-                'pengaturan/role/ubah/'.$id_role
-                .'?nama_role='. htmlspecialchars($this->request->getPost('edit_nama_role'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'role/'.$id_role,
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_role' => htmlspecialchars($this->request->getPost('edit_nama_role'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -119,7 +123,7 @@ class ModelRole extends Model{
        
         $respon_ambil_user = $this->_client->request(
             'DELETE',
-            'pengaturan/role/hapus/'.$id_role,
+            'role/'.$id_role,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"

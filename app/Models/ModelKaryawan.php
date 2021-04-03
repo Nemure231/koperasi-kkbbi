@@ -21,7 +21,7 @@ class ModelKaryawan extends Model{
         try {
             $respon_ambil_karyawan = $this->_client->request(
                 'GET',
-                'tempat/karyawan',
+                'karyawan',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -44,7 +44,7 @@ class ModelKaryawan extends Model{
     //     try {
     //         $respon_ambil_gambar = $this->_client->request(
     //             'GET',
-    //             'tempat/karyawan/gambar/'.$gambar,
+    //             'karyawan/gambar/'.$gambar,
     //             ['headers' => 
     //                 [
     //                 'Authorization' => "Bearer {$ambil_token}"
@@ -81,7 +81,7 @@ class ModelKaryawan extends Model{
 
             $respon_ambil_karyawan = $this->_client->request(
                 'POST',
-                'tempat/karyawan',
+                'karyawan',
                 [
                     'headers' => [
                             'Authorization' => "Bearer {$ambil_token}"
@@ -154,7 +154,7 @@ class ModelKaryawan extends Model{
             }
             $respon_ambil_karyawan = $this->_client->request(
                 'POST',
-                'tempat/karyawan/'.$id_karyawan,
+                'karyawan/'.$id_karyawan,
                 [
                     'headers' => [
                         'Authorization' => "Bearer {$ambil_token}"
@@ -210,7 +210,7 @@ class ModelKaryawan extends Model{
         $ambil_token = get_cookie('jwt_token');
         $respon_ambil_user = $this->_client->request(
             'DELETE',
-            'tempat/karyawan/'.$id_karyawan,
+            'karyawan/'.$id_karyawan,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"

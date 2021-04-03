@@ -21,7 +21,7 @@ class ModelAksesRole extends Model{
         try {
             $respon_ambil_akses = $this->_client->request(
                 'GET',
-                'pengaturan/role/akses/cek-akses/'.$role_id.'/'.$uri_menu,
+                'role/akses/cek-akses/'.$role_id.'/'.$uri_menu,
                 [
                     'headers' => [
                         'Authorization' => "Bearer {$ambil_token}"
@@ -44,7 +44,7 @@ class ModelAksesRole extends Model{
         try {
             $respon_ambil_akses = $this->_client->request(
                 'GET',
-                'pengaturan/role/akses/cek-centang/'.$role_id.'/'.$menu_id,
+                'role/akses/cek-centang/'.$role_id.'/'.$menu_id,
                 [
                     'headers' => [
                         'Authorization' => "Bearer {$ambil_token}"
@@ -67,7 +67,7 @@ class ModelAksesRole extends Model{
         $ambil_token = get_cookie('jwt_token');
         $respon_akses_role = $this->_client->request(
             'POST',
-            'pengaturan/role/akses',
+            'role/akses',
             [
                 'headers' => [
                     'Authorization' => "Bearer {$ambil_token}"

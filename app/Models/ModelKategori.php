@@ -22,7 +22,7 @@ class ModelKategori extends Model{
         try {
             $respon_ambil_kategori = $this->_client->request(
                 'GET',
-                'suplai/kategori',
+                'kategori',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -46,11 +46,13 @@ class ModelKategori extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_kategori = $this->_client->request(
                 'POST',
-                'suplai/kategori/tambah'
-                .'?nama_kategori='. htmlspecialchars($this->request->getPost('nama_kategori'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'kategori',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_kategori' => htmlspecialchars($this->request->getPost('nama_kategori'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -72,11 +74,13 @@ class ModelKategori extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_kategori = $this->_client->request(
                 'PUT',
-                'suplai/kategori/ubah/'.$id_kategori
-                .'?nama_kategori='. htmlspecialchars($this->request->getPost('edit_nama_kategori'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'kategori/'.$id_kategori,
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_kategori' => htmlspecialchars($this->request->getPost('edit_nama_kategori'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -95,7 +99,7 @@ class ModelKategori extends Model{
        
         $respon_ambil_kategori = $this->_client->request(
             'DELETE',
-            'suplai/kategori/hapus/'.$id_kategori,
+            'kategori/'.$id_kategori,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"
