@@ -28,7 +28,6 @@ class Karyawan extends BaseController{
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'karyawan' => $karyawan,
             'role' => $this->modelRole->ambilRole(),
-            'validation' => $this->validation,
             'session' => $this->session,
             'form_tambah' => ['id' => 'form-tambah-karyawan'],
             'form_edit' =>  ['id' => 'form-edit-karyawan'],
