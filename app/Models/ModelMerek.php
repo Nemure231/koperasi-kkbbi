@@ -21,7 +21,7 @@ class ModelMerek extends Model{
         try {
             $respon_ambil_merek = $this->_client->request(
                 'GET',
-                'suplai/merek',
+                'merek',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -45,11 +45,13 @@ class ModelMerek extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_merek = $this->_client->request(
                 'POST',
-                'suplai/merek/tambah'
-                .'?nama_merek='. htmlspecialchars($this->request->getPost('nama_merek'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'merek',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_merek' => htmlspecialchars($this->request->getPost('nama_merek'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -71,11 +73,13 @@ class ModelMerek extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_merek = $this->_client->request(
                 'PUT',
-                'suplai/merek/ubah/'.$id_merek
-                .'?nama_merek='. htmlspecialchars($this->request->getPost('edit_nama_merek'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'merek/'.$id_merek,
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_merek' => htmlspecialchars($this->request->getPost('edit_nama_merek'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -94,7 +98,7 @@ class ModelMerek extends Model{
        
         $respon_ambil_merek = $this->_client->request(
             'DELETE',
-            'suplai/merek/hapus/'.$id_merek,
+            'merek/'.$id_merek,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"
