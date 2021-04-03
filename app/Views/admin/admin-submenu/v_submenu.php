@@ -224,6 +224,7 @@ width:100%!important;
 
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<div class="form-check">
+              <input name="status_submenu" type="hidden" value="2"/>
                 <?php echo form_input([
                   'id' => 'status_submenu',
                   'name' => 'status_submenu',
@@ -323,13 +324,15 @@ width:100%!important;
 
 						<div class="form-group col-lg-12 col-md-12 col-sm-12">
 							<div class="form-check">
+             
+              <input id="old_status_submenu" type="hidden" value="<?php echo $old_data['status_submenu'] ?? ''; ?>" />
+              <input name="edit_status_submenu" type="hidden" value="2"/>
               <?php echo form_input([
                   'id' => 'edit_status_submenu',
                   'name' => 'edit_status_submenu',
                   'type'=> 'checkbox',
                   'value'=> '1',
                   'class'=> 'form-check-input',
-                  'checked' => ''
                 ]); ?>
 								<label class="form-check-label" for="edit_status_submenu">
 									Aktif?

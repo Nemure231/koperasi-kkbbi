@@ -57,7 +57,7 @@ $(document).ready(function () {
             $(this).val(1);
          }
          if(cek == false){
-            $(this).val(2);
+            $(this).val('');
          }
    
       });
@@ -103,7 +103,7 @@ $(document).ready(function () {
       }
 
       if(cek == false){
-         $(this).val(2);
+         $(this).val('');
       }
 
    });
@@ -127,8 +127,18 @@ $(document).ready(function () {
 
          menu_utama_id = $('#old_menu_utama_id').val();
          menu_id = $('#old_menu_id').val();
+         status_submenu = $('#old_status_submenu').val();
          $('#edit_menu_id').val(menu_id);
          $('#edit_menu_utama_id').val(menu_utama_id);
+         $('#edit_status_submenu').val(status_submenu);
+
+         if(status_submenu == 1){
+            $('#edit_status_submenu').prop('checked', true).val(1);
+         }
+
+         if(status_submenu == 2){
+            $('#edit_status_submenu').prop('checked', false).val('');
+         }
    
          $('#edit_menu_id').select2({
             dropdownParent: $('#modalEditSubMenu'),
@@ -144,6 +154,7 @@ $(document).ready(function () {
    $('#modalEditSubMenu').on('hidden.bs.modal', function (event) {
       $('.hapus-validasi').remove('invalid-feedback');
       $('.hapus-validasi-border').removeClass('is-invalid');
+      $('#edit_status_submenu').prop('checked', false);
    });
 
 });

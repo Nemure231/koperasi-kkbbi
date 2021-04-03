@@ -177,6 +177,7 @@ $(document).ready(function () {
    $('#modalKaryawanE').on('hidden.bs.modal', function (event) {
       $('.hapus-validasi').remove('invalid-feedback');
       $('.hapus-validasi-border').removeClass('is-invalid');
+      $('#edit_status').prop('checked', false);
    });
 
   

@@ -21,9 +21,6 @@
         <?php echo form_open(base_url().'/akun/sandi/ubah', $attr);    ?>
         <?php $pesan_edit = $session->getFlashdata('pesan_validasi_edit_sandi');?>
         <input type="hidden" name="_method" value="PUT">
-    
-      
-
             <div class="card card-primary">
               <div class="card-header">
                 <h4></h4>

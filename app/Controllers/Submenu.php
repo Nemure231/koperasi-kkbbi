@@ -59,7 +59,8 @@ class Submenu extends BaseController{
         $old = [
             'id_submenu' => $this->request->getPost('edit_id_submenu'),
             'menu_id' => $this->request->getPost('edit_menu_id'),
-            'menu_utama_id' => $this->request->getPost('edit_menu_utama_id')
+            'menu_utama_id' => $this->request->getPost('edit_menu_utama_id'),
+            'status_submenu' => $this->request->getPost('edit_status_submenu')
         ];
 
         if($validasi){
