@@ -4,7 +4,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
 
- 
+
 class ModelMenu extends Model{
 
     public function __construct(){
@@ -24,7 +24,7 @@ class ModelMenu extends Model{
         try {
             $respon_ambil_user = $this->_client->request(
                 'GET',
-                'pengaturan/menu/untuk-sidebar/'.$role_id,
+                'menu/untuk-sidebar/'.$role_id,
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -46,7 +46,7 @@ class ModelMenu extends Model{
         try {
             $respon_ambil_menu = $this->_client->request(
                 'GET',
-                'pengaturan/menu',
+                'menu',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -68,7 +68,7 @@ class ModelMenu extends Model{
         try {
             $respon_ambil_menu = $this->_client->request(
                 'GET',
-                'pengaturan/menu/untuk-role-akses',
+                'menu/untuk-role-akses',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -91,11 +91,13 @@ class ModelMenu extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_menu = $this->_client->request(
                 'POST',
-                'pengaturan/menu/tambah'
-                .'?nama_menu='. htmlspecialchars($this->request->getPost('nama_menu'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'menu',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_menu' => htmlspecialchars($this->request->getPost('nama_menu'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -116,11 +118,13 @@ class ModelMenu extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_menu = $this->_client->request(
                 'PUT',
-                'pengaturan/menu/ubah/'.$id_menu
-                .'?nama_menu='. htmlspecialchars($this->request->getPost('edit_nama_menu'), ENT_QUOTES),
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
+                'menu/'.$id_menu,
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'nama_menu' => htmlspecialchars($this->request->getPost('edit_nama_menu'), ENT_QUOTES)
                     ]
                 ],
             )->getBody();
@@ -139,7 +143,7 @@ class ModelMenu extends Model{
        
         $respon_ambil_user = $this->_client->request(
             'DELETE',
-            'pengaturan/menu/hapus/'.$id_menu,
+            'menu/'.$id_menu,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"
