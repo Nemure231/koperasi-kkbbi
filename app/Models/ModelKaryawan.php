@@ -37,29 +37,29 @@ class ModelKaryawan extends Model{
         return $karyawan['data'];
     }
 
-    public function ambilGambarKaryawan($gambar){
-        // $gam = pathinfo($gambar, PATHINFO_FILENAME);
-        $ambil_token = get_cookie('jwt_token');
-        $res_gambar = json_encode(['data' => '']);
-        try {
-            $respon_ambil_gambar = $this->_client->request(
-                'GET',
-                'tempat/karyawan/gambar/'.$gambar,
-                ['headers' => 
-                    [
-                    'Authorization' => "Bearer {$ambil_token}"
-                    ]
-                ]
-            );
-            $res_gambar = $respon_ambil_gambar->getBody();
-        } catch (ClientException $e) {
+    // public function ambilGambarKaryawan($gambar){
+    //     // $gam = pathinfo($gambar, PATHINFO_FILENAME);
+    //     $ambil_token = get_cookie('jwt_token');
+    //     $res_gambar = json_encode(['data' => '']);
+    //     try {
+    //         $respon_ambil_gambar = $this->_client->request(
+    //             'GET',
+    //             'tempat/karyawan/gambar/'.$gambar,
+    //             ['headers' => 
+    //                 [
+    //                 'Authorization' => "Bearer {$ambil_token}"
+    //                 ]
+    //             ]
+    //         );
+    //         $res_gambar = $respon_ambil_gambar->getBody();
+    //     } catch (ClientException $e) {
             
-        }
+    //     }
 
-        $karyawan = json_decode($res_gambar, true);
-        return $karyawan['data'];
+    //     $karyawan = json_decode($res_gambar, true);
+    //     return $karyawan['data'];
         
-    }
+    // }
 
 
     public function tambahKaryawan(){
@@ -81,30 +81,49 @@ class ModelKaryawan extends Model{
 
             $respon_ambil_karyawan = $this->_client->request(
                 'POST',
-                'tempat/karyawan/tambah'
-                .'?name='. htmlspecialchars($this->request->getPost('name'), ENT_QUOTES)
-                .'&email='. htmlspecialchars($this->request->getPost('email'), ENT_QUOTES)
-                .'&password='. $this->request->getPost('password')
-                .'&password_confirmation='. $this->request->getPost('password_confirmation')
-                .'&telepon='. $this->request->getPost('telepon')
-                .'&alamat='. htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES)
-                .'&status='. $this->request->getPost('status')
-                .'&role_id='. $this->request->getPost('role_id'),
+                'tempat/karyawan',
                 [
                     'headers' => [
                             'Authorization' => "Bearer {$ambil_token}"
                     ],
                     'multipart' => [
                         [
+                            'name'     => 'name',
+                            'contents' => htmlspecialchars($this->request->getPost('name'), ENT_QUOTES)
+                        ],
+                        [
+                            'name'     => 'email',
+                            'contents' =>  htmlspecialchars($this->request->getPost('email'), ENT_QUOTES)
+                        ],
+                        [
+                            'name'     => 'password',
+                            'contents' =>  $this->request->getPost('password')
+                        ],
+                        [
+                            'name'     => 'password_confirmation',
+                            'contents' => $this->request->getPost('password_confirmation')
+                        ],
+                        [
+                            'name'     => 'telepon',
+                            'contents' => $this->request->getPost('telepon')
+                        ],
+                        [
+                            'name'     => 'alamat',
+                            'contents' =>  htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES)
+                        ],
+                        [
+                            'name'     => 'status',
+                            'contents' => $this->request->getPost('status')
+                        ],
+                        [
+                            'name'     => 'role_id',
+                            'contents' => $this->request->getPost('role_id')
+                        ],
+                        [
                             'name'     => 'gambar',
-                            // 'contents' => file_get_contents(FCPATH.'admin/assets/file_sementara/'.$gambar->getName()),
                             'contents' => Psr7\Utils::tryFopen($path, 'r'),
                             'filename' => $nama
                         ],
-                        [
-                            'name'     => 'FileInfo',
-                            'contents' => json_encode(['jpg'])
-                        ]
                     ]
                 ],
             )->getBody();
@@ -135,19 +154,40 @@ class ModelKaryawan extends Model{
             }
             $respon_ambil_karyawan = $this->_client->request(
                 'POST',
-                'tempat/karyawan/ubah/'.$id_karyawan
-                .'?_method=PUT'
-                .'&name='. htmlspecialchars($this->request->getPost('edit_name'), ENT_QUOTES)
-                .'&email='. htmlspecialchars($this->request->getPost('edit_email'), ENT_QUOTES)
-                .'&telepon='. $this->request->getPost('edit_telepon')
-                .'&alamat='. htmlspecialchars($this->request->getPost('edit_alamat'), ENT_QUOTES)
-                .'&role_id='. $this->request->getPost('edit_role_id')
-                .'&status='. $this->request->getPost('edit_status'),
+                'tempat/karyawan/'.$id_karyawan,
                 [
                     'headers' => [
                         'Authorization' => "Bearer {$ambil_token}"
                     ],
                     'multipart' => [
+                        [
+                            'name'     => '_method',
+                            'contents' => 'PUT'
+                        ],
+                        [
+                            'name'     => 'name',
+                            'contents' =>  htmlspecialchars($this->request->getPost('edit_name'), ENT_QUOTES)
+                        ],
+                        [
+                            'name'     => 'email',
+                            'contents' => htmlspecialchars($this->request->getPost('edit_email'), ENT_QUOTES)
+                        ],
+                        [
+                            'name'     => 'telepon',
+                            'contents' => $this->request->getPost('edit_telepon')
+                        ],
+                        [
+                            'name'     => 'alamat',
+                            'contents' => htmlspecialchars($this->request->getPost('edit_alamat'), ENT_QUOTES)
+                        ],
+                        [
+                            'name'     => 'role_id',
+                            'contents' => $this->request->getPost('edit_role_id')
+                        ],
+                        [
+                            'name'     => 'status',
+                            'contents' => $this->request->getPost('edit_status')
+                        ],
                         [
                             'name'     => 'gambar',
                             'contents' => Psr7\Utils::tryFopen($path, 'r'),
@@ -170,7 +210,7 @@ class ModelKaryawan extends Model{
         $ambil_token = get_cookie('jwt_token');
         $respon_ambil_user = $this->_client->request(
             'DELETE',
-            'tempat/karyawan/hapus/'.$id_karyawan,
+            'tempat/karyawan/'.$id_karyawan,
             ['headers' => 
                 [
                 'Authorization' => "Bearer {$ambil_token}"
