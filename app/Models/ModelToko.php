@@ -24,7 +24,7 @@ class ModelToko extends Model{
         try {
             $respon_ambil_toko = $this->_client->request(
                 'GET',
-                'tempat/toko',
+                'toko',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -73,12 +73,7 @@ class ModelToko extends Model{
 
             $respon_ambil_toko = $this->_client->request(
                 'POST',
-                'tempat/toko/ubah/'.$id_toko,
-                // .'?_method='.'PUT'
-                // .'&nama_toko=' . htmlspecialchars($this->request->getPost('nama_toko'), ENT_QUOTES)
-                // .'&telepon_toko='. htmlspecialchars($this->request->getPost('telepon_toko'), ENT_QUOTES)
-                // .'&email_toko='. htmlspecialchars($this->request->getPost('email_toko'), ENT_QUOTES)
-                // .'&alamat_toko='.htmlspecialchars($this->request->getPost('alamat_toko'), ENT_QUOTES),
+                'toko/'.$id_toko,
                 [
                     'headers' => [
                         'Authorization' => "Bearer {$ambil_token}"

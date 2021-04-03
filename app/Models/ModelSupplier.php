@@ -85,7 +85,6 @@ class ModelSupplier extends Model{
             )->getBody();
             json_decode($respon_ambil_supplier, true);
         } catch (ClientException $e) {
-            // echo Psr7\Message::toString($e->getRequest());
             $validasi = json_decode($e->getResponse()->getBody(), true);
         }
 
