@@ -11,7 +11,7 @@ class ModelKategori extends Model{
         $this->session = \Config\Services::session();
         $this->request = \Config\Services::request();
         $this->_client = new Client([
-			'base_uri' => 'http://localhost:8000/api/',
+			'base_uri' => getenv('restserver.url'),
 		]);
     }
 

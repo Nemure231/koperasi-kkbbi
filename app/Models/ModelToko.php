@@ -12,7 +12,7 @@ class ModelToko extends Model{
         $this->session = \Config\Services::session();
         $this->request = \Config\Services::request();
         $this->_client = new Client([
-			'base_uri' => 'http://localhost:8000/api/',
+			'base_uri' => getenv('restserver.url'),
 		]);
     }
 
@@ -83,13 +83,6 @@ class ModelToko extends Model{
                     'headers' => [
                         'Authorization' => "Bearer {$ambil_token}"
                     ],
-                    // 'multipart/form-data' => [
-                    //     '_method' => 'PUT',
-                    //     'nama_toko' => htmlspecialchars($this->request->getPost('nama_toko'), ENT_QUOTES),
-                    //     'telepon_toko' => htmlspecialchars($this->request->getPost('telepon_toko'), ENT_QUOTES),
-                    //     'email_toko' => htmlspecialchars($this->request->getPost('email_toko'), ENT_QUOTES),
-                    //     'alamat_toko' => htmlspecialchars($this->request->getPost('alamat_toko'), ENT_QUOTES)
-                    // ],
                     'multipart' => [
                         [
                             'name'     => '_method',
