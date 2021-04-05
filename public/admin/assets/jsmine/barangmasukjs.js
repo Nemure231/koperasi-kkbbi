@@ -98,52 +98,56 @@ $(document).ready(function () {
     var tum = $(this).val();
     // var mom = $(this).attr("data-barang_id", tum);
     // $('div').find('.harga_pokok', )
-
+    var csrfNameHarga = $('#csrf_ambil_harga').attr('name');
+    var csrfHashHarga = $('#csrf_ambil_harga').val();
     $.ajax({
       url: 'barang_masuk/ambil_harga',
-      //method: "POST",
+      method: "POST",
       //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
       //yang kemuidan di kanannya harus disamakan dengan data yang diambil dari data- jquery
       //bergitulah caranya agar dapat menjaalankan fungsi di controller
       data: {
+        [csrfNameHarga]: csrfHashHarga,
         barang_id: tum
       },
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
       },
-      type: "post",
+      // type: "post",
       dataType: 'json',
       context: this,
       success: function (res) {
 
+        $('#csrf_ambil_harga').val(res.data.csrf_hash);
 
-        if (res.data[0].harga_pokok != 0) {
-          $(this).parents('.par').find('.harga_pokok').val(res.data[0].harga_pokok).attr('readonly', '');
+
+        if (res.data.harga[0].harga_pokok != 0) {
+          $(this).parents('.par').find('.harga_pokok').val(res.data.harga[0].harga_pokok).attr('readonly', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilp3').children('.cilp4').children('.cilp5').children('.cilp6').children('.cilp7').find('.gembok-pokok').attr('checked', '');
 
         } else {
-          $(this).parents('.par').find('.harga_pokok').val(res.data[0].harga_pokok).removeAttr('readonly');
+          $(this).parents('.par').find('.harga_pokok').val(res.data.harga[0].harga_pokok).removeAttr('readonly');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilp3').children('.cilp4').children('.cilp5').children('.cilp6').children('.cilp7').find('.gembok-pokok').removeAttr('checked');
         }
 
-        if (res.data[0].harga_konsumen != 0) {
-          $(this).parents('.par').find('.harga_konsumen').val(res.data[0].harga_konsumen).attr('readonly', '');
+        if (res.data.harga[0].harga_konsumen != 0) {
+          $(this).parents('.par').find('.harga_konsumen').val(res.data.harga[0].harga_konsumen).attr('readonly', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilk3').children('.cilk4').children('.cilk5').children('.cilk6').children('.cilk7').find('.gembok-persen-konsumen').attr('checked', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilk3').children('.cilk4').find('.persen_konsumen').attr('readonly', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cil3').children('.cil4').children('.cil5').children('.cil6').children('.cil7').find('.gembok-konsumen').attr('checked', '');
         } else {
-          $(this).parents('.par').find('.harga_konsumen').val(res.data[0].harga_konsumen).removeAttr('readonly');
+          $(this).parents('.par').find('.harga_konsumen').val(res.data.harga[0].harga_konsumen).removeAttr('readonly');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cil3').children('.cil4').children('.cil5').children('.cil6').children('.cil7').find('.gembok-konsumen').removeAttr('checked');
           // $(this).parents('.par').children('.cil1').children('.cil2').children('.cilk3').children('.cilk4').children('.cilk5').children('.cilk6').children('.cilk7').find('.gembok-persen-konsumen').removeAttr('checked');
         }
 
-        if (res.data[0].harga_anggota != 0) {
-          $(this).parents('.par').find('.harga_anggota').val(res.data[0].harga_anggota).attr('readonly', '');
+        if (res.data.harga[0].harga_anggota != 0) {
+          $(this).parents('.par').find('.harga_anggota').val(res.data.harga[0].harga_anggota).attr('readonly', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilg3').children('.cilg4').children('.cilg5').children('.cilg6').children('.cilg7').find('.gembok-persen').attr('checked', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilg3').children('.cilg4').find('.persen').attr('readonly', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.clic3').children('.clic4').children('.clic5').children('.clic6').children('.clic7').find('.gembok-anggota').attr('checked', '');
         } else {
-          $(this).parents('.par').find('.harga_anggota').val(res.data[0].harga_anggota);
+          $(this).parents('.par').find('.harga_anggota').val(res.data.harga[0].harga_anggota);
         }
 
 
@@ -271,46 +275,6 @@ $(document).ready(function () {
   });
 
 
-  $('.submit_nama_pengirim').click(function () {
-
-    var nama = $('#nama_pengirim_barang').val();
-
-    if (nama == '') {
-      Swal.fire({
-        title: 'Gagal',
-        hideClass: {
-          popup: 'animate__animated animate__fadeOutUp animate__fast'
-        },
-        text: 'Nama pengirim harus diisi!',
-        icon: 'error'
-      });
-
-    } else {
-
-
-
-      $.ajax({
-        url: 'barang_masuk/tambah_pengirim',
-        //method: "POST",
-        //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
-        //yang kemuidan di kanannya harus disamakan dengan data yang diambil dari data- jquery
-        //bergitulah caranya agar dapat menjaalankan fungsi di controller
-        data: {
-          nama_pengirim_barang: nama
-        },
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        type: "POST",
-        dataType: 'json',
-        success: function (res) {
-          location.reload();
-
-        }
-      });
-    }
-
-  });
 
   $('.submit_barang').click(function () {
 
@@ -372,8 +336,8 @@ $(document).ready(function () {
       });
 
     } else {
-
       $.ajax({
+        
         url: 'barang_masuk/tambah_barang',
         //method: "POST",
         //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
@@ -406,7 +370,8 @@ $(document).ready(function () {
   $('#tambah_input').click(function () {
 
     
-
+    var csrfNameDetail = $('#csrf_ambil_detail').attr('name');
+    var csrfHashDetail = $('#csrf_ambil_detail').val();
     $.ajax({
       url: 'barang_masuk/ambil_detail',
       type: 'get',
@@ -414,16 +379,16 @@ $(document).ready(function () {
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
      },
-      data: '',
+      data: {
+        [csrfNameDetail]: csrfHashDetail,
+      },
       success: function (res) {
-        //    console.log(res.data);
-        //    return false;
-        //console.log(res.success);
+       $('#csrf_ambil_detail').val(res.data.csrf_hash);
 
         if (res.response == true) {
           
 
-          let barang = res.data;
+          let barang = res.data.barang;
 
           var self = this;
           this.rules = [];
@@ -438,7 +403,7 @@ $(document).ready(function () {
             
           });
 
-          let pengirim = res.data1;
+          let pengirim = res.data.pengirim;
           var self1 = this;
           this.rules1 = [];
 

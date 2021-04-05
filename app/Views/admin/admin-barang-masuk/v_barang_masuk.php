@@ -45,6 +45,8 @@
                   </div>
                 </div>
                 <?php echo form_open(base_url().'/fitur/barang_masuk/tambah_barang', $form_tambah_barang_masuk);    ?>
+                <input type="hidden" id="csrf_ambil_harga" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+                <input type="hidden" id="csrf_ambil_detail" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                 <div class="card-body vim" id="tampil_input">
                   <div class="row par">
                     <div class="col-lg-11 col-md-11 col-sm-10 cil1">

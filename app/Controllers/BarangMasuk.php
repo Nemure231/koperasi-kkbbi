@@ -171,7 +171,7 @@ class BarangMasuk extends BaseController
         $dataArray  = array('response' => false, 'data' => '', 'data1' => '');
 
         if($data && $data1){
-            $dataArray = array('response' => true, 'data' => $data, 'data1' => $data1);
+            $dataArray = array('response' => true, 'data' => ['barang' => $data, 'pengirim' => $data1, 'csrf_hash' => csrf_hash()]);
         }
         echo json_encode($dataArray);
 
@@ -187,7 +187,7 @@ class BarangMasuk extends BaseController
         $arr = array('response' => false, 'data' => '');
 
         if($data){
-            $arr = array('response' => true, 'data' => $data);
+            $arr = array('response' => true, 'data' => ['harga' => $data, 'csrf_hash' => csrf_hash()]);
         }
         echo json_encode($arr);
 
