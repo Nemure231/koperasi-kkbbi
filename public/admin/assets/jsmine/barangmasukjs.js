@@ -118,36 +118,37 @@ $(document).ready(function () {
       context: this,
       success: function (res) {
 
-        $('#csrf_ambil_harga').val(res.data.csrf_hash);
+  
+        $('#csrf_ambil_harga').val(res.csrf_hash);
 
 
-        if (res.data.harga[0].harga_pokok != 0) {
-          $(this).parents('.par').find('.harga_pokok').val(res.data.harga[0].harga_pokok).attr('readonly', '');
+        if (res.data.harga_pokok != 0) {
+          $(this).parents('.par').find('.harga_pokok').val(res.data.harga_pokok).attr('readonly', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilp3').children('.cilp4').children('.cilp5').children('.cilp6').children('.cilp7').find('.gembok-pokok').attr('checked', '');
 
         } else {
-          $(this).parents('.par').find('.harga_pokok').val(res.data.harga[0].harga_pokok).removeAttr('readonly');
+          $(this).parents('.par').find('.harga_pokok').val(res.data.harga_pokok).removeAttr('readonly');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilp3').children('.cilp4').children('.cilp5').children('.cilp6').children('.cilp7').find('.gembok-pokok').removeAttr('checked');
         }
 
-        if (res.data.harga[0].harga_konsumen != 0) {
-          $(this).parents('.par').find('.harga_konsumen').val(res.data.harga[0].harga_konsumen).attr('readonly', '');
+        if (res.data.harga_konsumen != 0) {
+          $(this).parents('.par').find('.harga_konsumen').val(res.data.harga_konsumen).attr('readonly', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilk3').children('.cilk4').children('.cilk5').children('.cilk6').children('.cilk7').find('.gembok-persen-konsumen').attr('checked', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilk3').children('.cilk4').find('.persen_konsumen').attr('readonly', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cil3').children('.cil4').children('.cil5').children('.cil6').children('.cil7').find('.gembok-konsumen').attr('checked', '');
         } else {
-          $(this).parents('.par').find('.harga_konsumen').val(res.data.harga[0].harga_konsumen).removeAttr('readonly');
+          $(this).parents('.par').find('.harga_konsumen').val(res.data.harga_konsumen).removeAttr('readonly');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cil3').children('.cil4').children('.cil5').children('.cil6').children('.cil7').find('.gembok-konsumen').removeAttr('checked');
           // $(this).parents('.par').children('.cil1').children('.cil2').children('.cilk3').children('.cilk4').children('.cilk5').children('.cilk6').children('.cilk7').find('.gembok-persen-konsumen').removeAttr('checked');
         }
 
-        if (res.data.harga[0].harga_anggota != 0) {
-          $(this).parents('.par').find('.harga_anggota').val(res.data.harga[0].harga_anggota).attr('readonly', '');
+        if (res.data.harga_anggota != 0) {
+          $(this).parents('.par').find('.harga_anggota').val(res.data.harga_anggota).attr('readonly', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilg3').children('.cilg4').children('.cilg5').children('.cilg6').children('.cilg7').find('.gembok-persen').attr('checked', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.cilg3').children('.cilg4').find('.persen').attr('readonly', '');
           $(this).parents('.par').children('.cil1').children('.cil2').children('.clic3').children('.clic4').children('.clic5').children('.clic6').children('.clic7').find('.gembok-anggota').attr('checked', '');
         } else {
-          $(this).parents('.par').find('.harga_anggota').val(res.data.harga[0].harga_anggota);
+          $(this).parents('.par').find('.harga_anggota').val(res.data.harga_anggota);
         }
 
 
@@ -374,7 +375,7 @@ $(document).ready(function () {
     var csrfHashDetail = $('#csrf_ambil_detail').val();
     $.ajax({
       url: 'barang_masuk/ambil_detail',
-      type: 'get',
+      method: 'GET',
       dataType: 'json',
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
@@ -383,10 +384,9 @@ $(document).ready(function () {
         [csrfNameDetail]: csrfHashDetail,
       },
       success: function (res) {
-       $('#csrf_ambil_detail').val(res.data.csrf_hash);
-
-        if (res.response == true) {
-          
+        $('#csrf_ambil_detail').val(res.csrf_hash);
+        
+        if (res.success == true) {
 
           let barang = res.data.barang;
 
@@ -403,13 +403,13 @@ $(document).ready(function () {
             
           });
 
-          let pengirim = res.data.pengirim;
+          let pengirim = res.data.supplier;
           var self1 = this;
           this.rules1 = [];
 
           $.each(pengirim, function (i) {
-            var tambah1 = pengirim[i].nama_pengirim_barang;
-            var idk = pengirim[i].id_pengirim_barang;
+            var tambah1 = pengirim[i].nama_supplier;
+            var idk = pengirim[i].id_supplier;
 
             var rus = `<option value="` + idk + `">` + tambah1 + `</option>`;
             self1.rules1.push(rus);
@@ -418,7 +418,6 @@ $(document).ready(function () {
 
           var men = `
 
-                
                  <hr class="rounded mb-3 bg-primary del-gar">
 
           

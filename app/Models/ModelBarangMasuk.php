@@ -14,6 +14,51 @@ class ModelBarangMasuk extends Model{
 		]);
     }
 
+    public function ambilBarangDanSupplier(){
+        $ambil_token = get_cookie('jwt_token');
+        $res_barang = json_encode(['data' => '']);
+        try {
+            $respon_ambil_barang = $this->_client->request(
+                'GET',
+                'barang_masuk/ambil-barang-dan-supplier',
+                ['headers' => 
+                    [
+                    'Authorization' => "Bearer {$ambil_token}"
+                    ]
+                ]
+            );
+            $res_barang = $respon_ambil_barang->getBody();
+        } catch (ClientException $e) {
+    
+        }
+
+        $barang = json_decode($res_barang, true);
+        return $barang;
+    }
+
+    public function ambilHarga(){
+        $id_barang = $this->request->getPost('barang_id');
+        $ambil_token = get_cookie('jwt_token');
+        $res_barang = json_encode(['data' => '']);
+        try {
+            $respon_ambil_barang = $this->_client->request(
+                'GET',
+                'barang_masuk/ambil-harga/'.$id_barang,
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                ]
+            );
+            $res_barang = $respon_ambil_barang->getBody();
+        } catch (ClientException $e) {
+    
+        }
+
+        $barang = json_decode($res_barang, true);
+        return $barang;
+    }
+
 
     public function ambilBarangUntukBarangMasuk(){
         $ambil_token = get_cookie('jwt_token');
@@ -21,7 +66,7 @@ class ModelBarangMasuk extends Model{
         try {
             $respon_ambil_barang = $this->_client->request(
                 'GET',
-                'barang/untuk-barang-masuk',
+                'barang_masuk/untuk-barang-masuk',
                 ['headers' => 
                     [
                     'Authorization' => "Bearer {$ambil_token}"
@@ -44,7 +89,7 @@ class ModelBarangMasuk extends Model{
             $ambil_token = get_cookie('jwt_token');
             $respon_ambil_barang = $this->_client->request(
                 'POST',
-                'barang/tambah/dari-barang-masuk',
+                'barang_masuk/tambah/dari-barang-masuk',
                 [
                     'headers' => [
                         'Authorization' => "Bearer {$ambil_token}"

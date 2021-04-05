@@ -163,33 +163,17 @@ class BarangMasuk extends BaseController
 
     public function ambil_detail(){
 
-
-        $data = $this->model_barang->select('nama_barang, id_barang')->asArray()
-                ->where('id_barang>', 0)->findAll();
-        $data1= $this->model_pengirim_barang->select('id_pengirim_barang, nama_pengirim_barang')
-                ->asArray()->findAll();
-        $dataArray  = array('response' => false, 'data' => '', 'data1' => '');
-
-        if($data && $data1){
-            $dataArray = array('response' => true, 'data' => ['barang' => $data, 'pengirim' => $data1, 'csrf_hash' => csrf_hash()]);
-        }
-        echo json_encode($dataArray);
+        $data = $this->modelBarangMasuk->ambilBarangDanSupplier();
+        $data1 = data_fill($data, 'csrf_hash', csrf_hash());
+        return json_encode($data1);
 
     }
 
     public function ambil_harga(){
 
-
-        $id_barang = $this->request->getPost('barang_id');
-        $data = $this->model_barang->select('harga_pokok, harga_anggota, harga_konsumen')->asArray()
-                ->where('id_barang', $id_barang)
-                ->findAll();
-        $arr = array('response' => false, 'data' => '');
-
-        if($data){
-            $arr = array('response' => true, 'data' => ['harga' => $data, 'csrf_hash' => csrf_hash()]);
-        }
-        echo json_encode($arr);
+        $data = $this->modelBarangMasuk->ambilHarga();
+        $data1 = data_fill($data, 'csrf_hash', csrf_hash());
+        return json_encode($data1);
 
     }
 
