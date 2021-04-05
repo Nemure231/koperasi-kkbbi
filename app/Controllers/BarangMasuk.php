@@ -13,6 +13,12 @@ use App\Models\Model_kategori;
 use App\Models\Model_pengirim_barang;
 use App\Models\ModelUser;
 use App\Models\ModelMenu;
+use App\Models\ModelBarang;
+use App\Models\ModelBarangMasuk;
+use App\Models\ModelSatuan;
+use App\Models\ModelKategori;
+use App\Models\ModelMerek;
+use App\Models\ModelSupplier;
 
 class BarangMasuk extends BaseController
 {
@@ -29,41 +35,37 @@ class BarangMasuk extends BaseController
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
         $this->db = \Config\Database::connect();
-        $this->modelUser = new ModelUsers();
+        $this->modelUser = new ModelUser();
         $this->modelMenu = new ModelMenu();
+        $this->modelBarang = new ModelBarang();
+        $this->modelBarangMasuk = new ModelBarangMasuk();
+        $this->modelSatuan = new modelSatuan();
+        $this->modelKategori = new modelKategori();
+        $this->modelMerek = new modelMerek();
+        $this->modelSupplier = new modelSupplier();
 	}
 
-	protected $helpers = ['url', 'array', 'form', 'kpos', 'cookie'];
+	protected $helpers = ['url','form', 'kpos', 'cookie'];
 
     public function index(){
 		
-		$role = $this->session->get('role_id');
-        $email = $this->session->get('email');
-		
-        
         $kode_barang = $this->model_barang->AutoKodeBarang();
         $data = [
            
             'title'     => ucfirst('Barang Masuk'),
             'nama_menu_utama' => ucfirst('Pembelian'),
-            'user' 	=> 	$this->modeluser->ambilSatuUserBuatProfil(),
+            'user' 	=> 	$this->modelUser->ambilSatuUserBuatProfil(),
             'menu' 	=> 	$this->modelMenu->ambilMenuUntukSidebar(),
             'session'   =>  $this->session,
             'validation'=>  $this->validation,
-            'barang'    =>  $this->model_barang->select('id_barang, nama_barang')->asArray()
-                            ->asArray()->where('id_barang>', 0)->findAll(),
-            'masuk'     =>  $this->model_barang_masuk->select('nama_barang, tanggal_masuk')->asArray()
-                            ->join('barang', 'barang.id_barang = barang_masuk.barang_id')
-                            ->findAll(),
-            'satuan'    =>  $this->model_satuan->select('id_satuan, nama_satuan')->asArray()
-                            ->findAll(),
-            'merek'     =>  $this->model_merek->select('id_merek, nama_merek')->asArray()
-                            ->findAll(),
-            'kategori'=>    $this->model_kategori->select('id_kategori, nama_kategori')->asArray()
-                            ->findAll(),
-            'pengirim'=>    $this->model_pengirim_barang->select('id_pengirim_barang, nama_pengirim_barang')->asArray()
-                            ->findAll(),
-            'form_tambah_barang_masuk' => ['id' => 'formTambahBarangMasuk', 'name'=>'formTambahBarangMasuk'],
+            'barang'    =>  $this->modelBarangMasuk->ambilBarangUntukBarangMasuk(),
+            'satuan'    =>  $this->modelSatuan->ambilSatuan(),
+            'merek'     =>  $this->modelMerek->ambilMerek(),
+            'kategori'=>    $this->modelKategori->ambilKategori(),
+            'supplier'=>    $this->modelSupplier->ambilSupplier(),
+            'form_tambah_barang' => ['id' => 'form-tambah-barang'],
+            'form_tambah_supplier' => ['id' => 'form-tambah-supplier'],
+            'form_tambah_barang_masuk' => ['id' => 'form-tambah-barang_masuk'],
             'form_pengirim' => ['id' => 'formPengirim', 'name'=>'formPengirim', 'autocomplete' => 'on' ],
             'input_jumlah_barang_masuk' => [
                 'type' => 'number',
@@ -110,7 +112,6 @@ class BarangMasuk extends BaseController
              'name' => 'harga_anggota[]',
              'id' => 'harga_anggota',
              'class' => 'form-control harga_anggota',
-            
             'required' => ''
             ],
             'input_harga_konsumen' => [
@@ -129,85 +130,36 @@ class BarangMasuk extends BaseController
              'type' => 'number',
              'id' => 'persen_konsumen',
              'class' => 'form-control persen_konsumen'
-            ],
-            'input_keterangan' => [
-                'type' => 'text',
-                'name' => 'keterangan',
-                'id' => 'keterangan',
-                'class' => 'form-control',
-                'style' => 'min-height:145px;'
-            ],
+            ]
             
         ];
         tampilan_admin('admin/admin-barang-masuk/v_barang_masuk', 'admin/admin-barang-masuk/v_js_barang_masuk', $data);
     }
-    
-    public function tambah_pengirim(){
-            $nama = $this->request->getPost('nama_pengirim_barang');
-            
-            $data = array(
-            'nama_pengirim_barang' => htmlspecialchars($nama, ENT_QUOTES),
-            );
-
-            $this->session->setFlashdata('pesan_pengirim', 'Nama pengirim berhasil ditambahkan!');
-            $this->model_pengirim_barang->insert($data);
-            $this->db->insertID();
-            $status = true;
-            
-
-            echo json_encode(array("status" => $status , 'data' => $data));
-    }
 
     public function tambah_barang(){
-        $kodeb = $this->request->getPost('kode_barang');
-        
 
-        $sop = $this->request->getPost('satuan_id');
-
-        if (is_numeric($sop)){
-            $sem = $sop;
+        $validasi = $this->modelBarangMasuk->tambahBarangDariBarangMasuk();
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_tambah_barang',  $validasi);
+            return redirect()->to(base_url('/fitur/barang_masuk'))->withInput();
         }else{
-            $this->model_satuan->set('nama_satuan', $sop)->insert();
-            $sem = $this->db->insertID();
+            $this->session->setFlashdata('pesan_barangL', 'Barang baru berhasil ditambahkan!');
+            return redirect()->to(base_url('/fitur/barang_masuk'));
         }
-
-        $kat = $this->request->getPost('kategori_id');
-        if (is_numeric($kat)){
-            $ket = $kat;
-        }else{
-            $this->model_kategori->set('nama_kategori', $kat)->insert(); 
-            $ket = $this->db->insertID(); 
-        }
-
-        $mer = $this->request->getPost('merek_id');
-
-        if (is_numeric($mer)){
-            $mar = $mer;
-        }else{
-            $this->model_merek->set('nama_merek', $mer)->insert();
-            $mar = $this->db->insertID();
-        }
-        
-
-
-        $data = array(
-            'nama_barang' => htmlspecialchars($this->request->getPost('nama_barang'), ENT_QUOTES),
-            'kode_barang' => $kodeb, 
-            'satuan_id' => htmlspecialchars($sem, ENT_QUOTES),
-            'kategori_id' => htmlspecialchars($ket, ENT_QUOTES),
-            'merek_id' => htmlspecialchars($mar, ENT_QUOTES),
-            'deskripsi_barang' => htmlspecialchars($this->request->getPost('keterangan'), ENT_QUOTES),
-            'tanggal' => date('Y-m-d H:i:s')
-            );
-    
-        $this->session->setFlashdata('pesan_barangL', 'Barang berhasil ditambahkan!');
-        $id = $this->model_barang->insert($data);
-    
-
-        echo json_encode(array('data' => $data));
-
         
     }
+
+    public function tambah_supplier(){
+        $validasi = $this->modelSupplier->tambahSupplier();
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_tambah_supplier',  $validasi);
+            return redirect()->to(base_url('/fitur/barang_masuk'))->withInput();
+        }else{
+            $this->session->setFlashdata('pesan_pengirim', 'Supplier baru berhasil ditambahkan!');
+            return redirect()->to(base_url('/fitur/barang_masuk'));
+        }
+    }
+
 
     public function ambil_detail(){
 

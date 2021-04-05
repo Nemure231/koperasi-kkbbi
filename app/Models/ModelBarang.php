@@ -125,9 +125,9 @@ class ModelBarang extends Model{
 
     public function cariStok($min_stok){
         $ambil_token = get_cookie('jwt_token');
-        $res_barang = json_encode(['data' => '']);
+        $res_stok = json_encode(['data' => '']);
         try {
-            $respon_ambil_barang = $this->_client->request(
+            $respon_ambil_stok = $this->_client->request(
                 'GET',
                 'stok/cari/'.$min_stok,
                 ['headers' => 
@@ -136,14 +136,15 @@ class ModelBarang extends Model{
                     ]
                 ]
             );
-            $res_barang = $respon_ambil_barang->getBody();
+            $res_stok = $respon_ambil_stok->getBody();
         } catch (ClientException $e) {
             
         }
 
-        $barang = json_decode($res_barang, true);
-        return $barang['data'];
+        $stok = json_decode($res_stok, true);
+        return $stok['data'];
     }
+
 
 }
 

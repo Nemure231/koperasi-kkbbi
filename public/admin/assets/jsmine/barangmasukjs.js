@@ -59,14 +59,40 @@ if (flashDataSalah) {
 
 
 $(document).ready(function () {
-  $('#swal2-content ul li').css("color", "#dc3545");
+
   $("#masmas").DataTable();
-  
+
   $('.barang_id').select2();
   $('.pengirim_barang_id').select2();
-  $('.satuan_id').select2({tags: true});
-  $('.kategori_id').select2({tags: true});
-  $('.merek_id').select2({tags: true});
+  $('#satuan_id').select2({tags: true});
+  $('#kategori_id').select2({tags: true});
+  $('#merek_id').select2({tags: true});
+  
+  
+  $('#tombol-modal-barang').click(function () {
+     
+    $('#modal-barang').modal('show');
+
+ });
+
+  
+ $('#tombol-modal-supplier').click(function () {
+     
+  $('#modal-supplier').modal('show');
+
+});
+
+ var validasi_tambah = $('.validasi_tambah_barang').html();
+ if(validasi_tambah != 0){
+    $('#modal-barang').modal('show');
+ }
+
+ var validasi_tambah_supplier = $('.validasi_tambah_supplier').html();
+ if(validasi_tambah_supplier != 0){
+    $('#modal-supplier').modal('show');
+ }
+
+
 
   $('.vim').on('change', '.barang_id', function () {
     var tum = $(this).val();
