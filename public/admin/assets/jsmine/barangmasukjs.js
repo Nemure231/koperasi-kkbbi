@@ -45,67 +45,110 @@ const flashDataSalah = $('.errors').html();
 
 if (flashDataSalah) {
 
-   Swal.fire({
-      title: 'Gagal',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      html: ' ' + flashDataSalah,
-      icon: 'error'
-   });
+  Swal.fire({
+    title: 'Gagal',
+    hideClass: {
+      popup: 'animate__animated animate__fadeOutUp animate__fast'
+    },
+    html: ' ' + flashDataSalah,
+    icon: 'error'
+  });
 }
-
 
 
 
 $(document).ready(function () {
 
-  $("#masmas").DataTable();
 
+  $("#masmas").DataTable();
   $('.barang_id').select2();
   $('.pengirim_barang_id').select2();
-  $('#satuan_id').select2({tags: true});
-  $('#kategori_id').select2({tags: true});
-  $('#merek_id').select2({tags: true});
-  
-  
+  $('#satuan_id').select2({ tags: true });
+  $('#kategori_id').select2({ tags: true });
+  $('#merek_id').select2({ tags: true });
+
   $('#tombol-modal-barang').click(function () {
-     
+
     $('#modal-barang').modal('show');
-
- });
-
   
- $('#tombol-modal-supplier').click(function () {
-     
-  $('#modal-supplier').modal('show');
+    $.ajax({
+      url: 'barang_masuk/reset_csrf',
+      method: "GET",
+      data: '',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      // type: "post",
+      dataType: 'json',
+      success: function (res) {
+        // alert(res.csrf_hash);
+        $('#csrf_tambah_barang').val(res.csrf_hash);
 
-});
+      }
+    });
 
- var validasi_tambah = $('.validasi_tambah_barang').html();
- if(validasi_tambah != 0){
-    $('#modal-barang').modal('show');
- }
+  });
 
- var validasi_tambah_supplier = $('.validasi_tambah_supplier').html();
- if(validasi_tambah_supplier != 0){
+
+  $('#tombol-modal-supplier').click(function () {
+
     $('#modal-supplier').modal('show');
- }
 
+    $.ajax({
+      url: 'barang_masuk/reset_csrf',
+      method: "GET",
+      data: '',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      // type: "post",
+      dataType: 'json',
+      success: function (res) {
+        // alert(res.csrf_hash);
+        $('#csrf_tambah_supplier').val(res.csrf_hash);
+
+      }
+    });
+
+  });
+
+  var validasi_tambah = $('.validasi_tambah_barang').html();
+  if (validasi_tambah != 0) {
+    $('#modal-barang').modal('show');
+  }
+
+  var validasi_tambah_supplier = $('.validasi_tambah_supplier').html();
+  if (validasi_tambah_supplier != 0) {
+    $('#modal-supplier').modal('show');
+  }
+
+  $('div').on('mouseenter', '.btn-barang-masuk', function () {
+    $.ajax({
+      url: 'barang_masuk/reset_csrf',
+      method: "GET",
+      data: '',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      // type: "post",
+      dataType: 'json',
+      context: this,
+      success: function (res) {
+        // alert(res.csrf_hash);
+        $('#csrf_barang_masuk').val(res.csrf_hash);
+
+      }
+    });
+  });
 
 
   $('.vim').on('change', '.barang_id', function () {
     var tum = $(this).val();
-    // var mom = $(this).attr("data-barang_id", tum);
-    // $('div').find('.harga_pokok', )
     var csrfNameHarga = $('#csrf_ambil_harga').attr('name');
     var csrfHashHarga = $('#csrf_ambil_harga').val();
     $.ajax({
       url: 'barang_masuk/ambil_harga',
       method: "POST",
-      //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
-      //yang kemuidan di kanannya harus disamakan dengan data yang diambil dari data- jquery
-      //bergitulah caranya agar dapat menjaalankan fungsi di controller
       data: {
         [csrfNameHarga]: csrfHashHarga,
         barang_id: tum
@@ -118,7 +161,7 @@ $(document).ready(function () {
       context: this,
       success: function (res) {
 
-  
+
         $('#csrf_ambil_harga').val(res.csrf_hash);
 
 
@@ -191,9 +234,6 @@ $(document).ready(function () {
   $('.vim').on('click', '.del-row', function () {
     $(this).parents('.par').remove();
     $('.vim').parents().find('.del-gar').remove();
-
-
-
   });
 
 
@@ -206,9 +246,6 @@ $(document).ready(function () {
         .children('.cilp4').find('.harga_pokok').removeAttr('readonly');
 
     }
-
-
-
   });
 
 
@@ -265,10 +302,6 @@ $(document).ready(function () {
   });
 
 
-
-
-
-
   $('#tombolTambahBarangMasuk').click(function () {
 
     $('#modalTambahBarangMasuk').modal('show');
@@ -276,101 +309,9 @@ $(document).ready(function () {
   });
 
 
-
-  $('.submit_barang').click(function () {
-
-    var nama_barang = $('#nama_barang').val();
-    var satuan_id = $('.satuan_id').val();
-    var kategori_id = $('.kategori_id').val();
-    var merek_id = $('.merek_id').val();
-    var keterangan = $('#keterangan').val();
-    var kode_barang = $('#kode_barang').val();
-
-    if (nama_barang == '') {
-      Swal.fire({
-        title: 'Gagal',
-        hideClass: {
-          popup: 'animate__animated animate__fadeOutUp animate__fast'
-        },
-        text: 'Nama barang harus diisi!',
-        icon: 'error'
-      });
-
-    } else if (satuan_id == '') {
-      Swal.fire({
-        title: 'Gagal',
-        hideClass: {
-          popup: 'animate__animated animate__fadeOutUp animate__fast'
-        },
-        text: 'Satuan harus dipilih!',
-        icon: 'error'
-      });
-
-    } else if (merek_id == '') {
-      Swal.fire({
-        title: 'Gagal',
-        hideClass: {
-          popup: 'animate__animated animate__fadeOutUp animate__fast'
-        },
-        text: 'Merek harus dipilih!',
-        icon: 'error'
-      });
-
-    } else if (kategori_id == '') {
-      Swal.fire({
-        title: 'Gagal',
-        hideClass: {
-          popup: 'animate__animated animate__fadeOutUp animate__fast'
-        },
-        text: 'Kategori harus dipilih!',
-        icon: 'error'
-      });
-
-    } else if (keterangan == '') {
-      Swal.fire({
-        title: 'Gagal',
-        hideClass: {
-          popup: 'animate__animated animate__fadeOutUp animate__fast'
-        },
-        text: 'Keterangan harus diisi!',
-        icon: 'error'
-      });
-
-    } else {
-      $.ajax({
-        
-        url: 'barang_masuk/tambah_barang',
-        //method: "POST",
-        //yang sebelah kiri adalah data yang diambil lewat get codeigniter,
-        //yang kemuidan di kanannya harus disamakan dengan data yang diambil dari data- jquery
-        //bergitulah caranya agar dapat menjaalankan fungsi di controller
-        data: {
-          kode_barang: kode_barang,
-          nama_barang: nama_barang,
-          satuan_id: satuan_id,
-          kategori_id: kategori_id,
-          merek_id: merek_id,
-          keterangan: keterangan
-        },
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        type: "POST",
-        dataType: 'json',
-        success: function (res) {
-
-          location.reload();
-
-        }
-      });
-    }
-
-  });
-
-
   $('#tambah_input').click(function () {
 
-    
+
     var csrfNameDetail = $('#csrf_ambil_detail').attr('name');
     var csrfHashDetail = $('#csrf_ambil_detail').val();
     $.ajax({
@@ -379,13 +320,13 @@ $(document).ready(function () {
       dataType: 'json',
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
-     },
+      },
       data: {
         [csrfNameDetail]: csrfHashDetail,
       },
       success: function (res) {
         $('#csrf_ambil_detail').val(res.csrf_hash);
-        
+
         if (res.success == true) {
 
           let barang = res.data.barang;
@@ -400,7 +341,7 @@ $(document).ready(function () {
 
             var rus = `<option value="` + idm + `">` + tambah + `</option>`;
             self.rules.push(rus);
-            
+
           });
 
           let pengirim = res.data.supplier;
@@ -413,7 +354,7 @@ $(document).ready(function () {
 
             var rus = `<option value="` + idk + `">` + tambah1 + `</option>`;
             self1.rules1.push(rus);
-            
+
           });
 
           var men = `
@@ -433,7 +374,7 @@ $(document).ready(function () {
                           
                           <label>Barang</label>
 
-                          <select required class="custom-select barang_id" placeholder="Barang ...." name="barang_id[]"
+                          <select  class="custom-select barang_id" placeholder="Barang ...." name="barang_id[]"
                             id="inputGroupSelect05">
                             <option>` + this.rules + `</option>
                                                       </select>
@@ -444,7 +385,7 @@ $(document).ready(function () {
 
                         <div class="form-group col-lg-3 col-md-5 col-sm-8">
                           <label>Pengirim</label>
-                          <select required class="custom-select pengirim_barang_id" id="pengirim_barang_id" data-uniq="1"
+                          <select  class="custom-select pengirim_barang_id" id="pengirim_barang_id"
                             name="pengirim_barang_id[]">
 
                             <option>` + this.rules1 + `</option>
@@ -454,7 +395,7 @@ $(document).ready(function () {
 
                         <div class="form-group col-lg-2 col-md-2 col-sm-4">
                           <label>Jumlah</label>
-                          <input required type="number" name="jumlah_barang_masuk[]" value="" id="jumlah_barang_masuk" class="form-control jumlah_barang_masuk" autofocus=""  />
+                          <input  type="number" name="jumlah_barang_masuk[]" value="" id="jumlah_barang_masuk" class="form-control jumlah_barang_masuk" autofocus=""  />
                         </div>
 
                         <div class="form-group col-lg-3 col-md-12 col-sm-12 cilp3">
@@ -475,7 +416,7 @@ $(document).ready(function () {
                                 
                               </div>
                             </div>
-                            <input required type="number" name="harga_pokok[]" value="" id="harga_pokok" class="form-control harga_pokok"  />
+                            <input  type="number" name="harga_pokok[]" value="" id="harga_pokok" class="form-control harga_pokok"  />
                           </div>
                         </div>
 
@@ -525,7 +466,7 @@ $(document).ready(function () {
                             
                             </div>
                           </div>
-                          <input required type="number" name="harga_anggota[]" value="" id="harga_anggota" class="form-control harga_anggota"  />
+                          <input  type="number" name="harga_anggota[]" value="" id="harga_anggota" class="form-control harga_anggota"  />
                         </div>
                       </div>
 
@@ -575,7 +516,7 @@ $(document).ready(function () {
                               
                               </div>
                             </div>
-                            <input required type="number" name="harga_konsumen[]" value="" id="harga_konsumen" class="form-control harga_konsumen"  />
+                            <input  type="number" name="harga_konsumen[]" value="" id="harga_konsumen" class="form-control harga_konsumen"  />
                           </div>
                         </div>
 
@@ -605,8 +546,6 @@ $(document).ready(function () {
                   
                   </div>`;
 
-          // <input type="number" name="harga_pokok[]" value="" id="harga_pokok" class="form-control harga_pokok"  />
-
           $('#tampil_input').append(men);
           $('.barang_id').select2();
           $('.pengirim_barang_id').select2();
@@ -615,11 +554,11 @@ $(document).ready(function () {
           Swal.fire({
             title: 'Peringatan',
             hideClass: {
-               popup: 'animate__animated animate__fadeOutUp animate__fast'
+              popup: 'animate__animated animate__fadeOutUp animate__fast'
             },
             text: 'Tidak ada barang!',
             icon: 'warning'
-         });
+          });
         }
       }
     });

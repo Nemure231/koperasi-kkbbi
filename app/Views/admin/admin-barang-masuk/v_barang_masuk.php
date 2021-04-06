@@ -39,14 +39,25 @@
             <div class="col-lg-12 vom">
               <div class="card">
                 <div class="card-header">
-                  <h4>Tambah barang masuk</h4>
+                  <h4>Tambah barang masuk <?php $validasi_tambah_barang_masuk = $session->getFlashdata('pesan_validasi_tambah_barang_masuk');
+                
+                if($validasi_tambah_barang_masuk){
+                  echo $validasi_tambah_barang_masuk['barang_id']; 
+                  echo $validasi_tambah_barang_masuk['supplier_id']; 
+                  echo $validasi_tambah_barang_masuk['harga_pokok']; 
+                  echo $validasi_tambah_barang_masuk['kuantitas'];         
+                }?></h4>
                   <div class="card-header-action">
                     <a class="btn btn-icon btn-primary" id="tambah_input" href="javascript:void(0)">Tambah Input</a>
                   </div>
                 </div>
-                <?php echo form_open(base_url().'/fitur/barang_masuk/tambah_barang', $form_tambah_barang_masuk);    ?>
                 <input type="hidden" id="csrf_ambil_harga" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                 <input type="hidden" id="csrf_ambil_detail" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+                
+                <!-- <//?php echo form_open(base_url().'/fitur/barang_masuk/tambah', $form_tambah_barang_masuk);    ?> -->
+                
+                <form action="<?php echo base_url().'/fitur/barang_masuk/tambah'; ?>" id="form-tambah-barang_masuk" method="post" accept-charset="utf-8">
+                <input type="hidden" id="csrf_barang_masuk" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                 <div class="card-body vim" id="tampil_input">
                   <div class="row par">
                     <div class="col-lg-11 col-md-11 col-sm-10 cil1">
@@ -56,9 +67,11 @@
   
                           <label>Barang</label>
 
-                          <select required="" class="custom-select barang_id" placeholder="Barang ...."
+                          <select 
+              
+                          class="custom-select barang_id" placeholder="Barang ...."
                             name="barang_id[]" id="inputGroupSelect05">
-                            <option value=""></option>
+                            <option value="">--Pilih--</option>
                             <?php foreach ($barang as $b):?>
                             <option value="<?php echo $b['id_barang']; ?>"><?php echo $b['nama_barang']; ?>
                             </option>
@@ -68,10 +81,10 @@
 
                         <div class="form-group col-lg-3 col-md-5 col-sm-8">
                           <label>Pengirim</label>
-                          <select required="" class="custom-select pengirim_barang_id" id="pengirim_barang_id"
-                            data-uniq="1" name="pengirim_barang_id[]">
+                          <select class="custom-select pengirim_barang_id" id="pengirim_barang_id"
+                             name="pengirim_barang_id[]">
 
-                            <option value=""></option>
+                            <option value="">--Pilih--</option>
                             <?php foreach ($supplier as $p):?>
                             <option value="<?php echo $p['id_supplier']; ?>">
                               <?php echo $p['nama_supplier']; ?>
@@ -216,7 +229,7 @@
                   <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12  text-right">
 
-                      <button type="submit" id="btn-simpan" class="btn btn-primary">Simpan</button>
+                      <button type="submit" id="btn-barang-masuk" class="btn btn-primary btn-barang-masuk">Simpan</button>
 
                     </div>
                   </div>
@@ -229,6 +242,10 @@
       </div>
     </div>
   </section>
+</div>
+<div class="row text-danger">
+
+
 </div>
 
 <div class="invisible">
@@ -264,8 +281,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/fitur/barang_masuk/tambah_barang', $form_tambah_barang);    ?>
+      <form action="<?php echo base_url().'/fitur/barang_masuk/tambah_barang'; ?>" id="form-tambah-barang" method="post" accept-charset="utf-8">
+      <input type="hidden" id="csrf_tambah_barang" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
       <?php $pesan_tambah = $session->getFlashdata('pesan_validasi_tambah_barang');?>
       <div class="modal-body">
         <div class="row">
@@ -320,7 +337,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" id="btn-simpan" class="btn btn-block btn-primary">Simpan</button>
+        <button type="submit" id="btn-simpan" class="btn btn-block btn-primary btn-barang">Simpan</button>
       </div>
 
       <?php echo form_close(); ?>
@@ -339,8 +356,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/fitur/barang_masuk/tambah_supplier', $form_tambah_supplier);    ?>
+      <form action="<?php echo base_url().'/fitur/barang_masuk/tambah_supplier'; ?>" id="form-tambah-supplier" method="post" accept-charset="utf-8">
+      <input type="hidden" id="csrf_tambah_supplier" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
       <?php $pesan_tambah_supplier = $session->getFlashdata('pesan_validasi_tambah_supplier');?>
       <div class="modal-body">
         <div class="row">

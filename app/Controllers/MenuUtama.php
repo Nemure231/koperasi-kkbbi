@@ -36,6 +36,7 @@ class MenuUtama extends BaseController{
     
 
     public function tambah(){
+
         $validasi = $this->modelMenuUtama->tambahMenuUtama();
         if($validasi){
             $this->session->setFlashdata('pesan_validasi_tambah_menu_utama',  $validasi);

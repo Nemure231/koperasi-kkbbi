@@ -122,12 +122,13 @@ $routes->group('fitur', function($routes){
 	});
 	$routes->group('barang_masuk', function($routes){
 		$routes->get('', 'BarangMasuk::index', ['filter' => 'cek_akses']);
-
+		$routes->get('ambil_detail', 'BarangMasuk::ambil_detail');
+		$routes->get('reset_csrf', 'BarangMasuk::reset_csrf');
+		$routes->post('ambil_harga', 'BarangMasuk::ambil_harga');
 		$routes->post('tambah_barang', 'BarangMasuk::tambah_barang');
 		$routes->post('tambah_supplier', 'BarangMasuk::tambah_supplier');
 		$routes->post('tambah', 'BarangMasuk::tambah');
-		$routes->get('ambil_detail', 'BarangMasuk::ambil_detail');
-		$routes->post('ambil_harga', 'BarangMasuk::ambil_harga');
+
 	});
 });
 

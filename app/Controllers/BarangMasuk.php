@@ -74,7 +74,8 @@ class BarangMasuk extends BaseController
                 //'value' => ''.$stok.'',
                 'class' => 'form-control jumlah_barang_masuk',
                 'autofocus' => '',
-                'required' => ''
+                // 'required' => ''
+                
             ],
             'hidden_kode_barang' => [
                 'type' => 'hidden',
@@ -91,7 +92,7 @@ class BarangMasuk extends BaseController
                 'class' => 'form-control nama_pengirim_barang',
                 'autofocus' => '',
                 'placeholder' => 'Nama supplier ....',
-                'required' => ''
+                
             ],
             'input_nama_barang' => [
                 'type' => 'text',
@@ -105,21 +106,22 @@ class BarangMasuk extends BaseController
              'name' => 'harga_pokok[]',
              'id' => 'harga_pokok',
              'class' => 'form-control harga_pokok',
-             'required' => ''
+            //  'required' => ''
+             
             ],
             'input_harga_anggota' => [
              'type' => 'number',
              'name' => 'harga_anggota[]',
              'id' => 'harga_anggota',
              'class' => 'form-control harga_anggota',
-            'required' => ''
+                
             ],
             'input_harga_konsumen' => [
                 'type' => 'number',
                 'name' => 'harga_konsumen[]',
                 'id' => 'harga_konsumen',
                 'class' => 'form-control harga_konsumen',
-                'required' => ''
+                
             ],
             'input_persen' => [
              'type' => 'number',
@@ -169,6 +171,13 @@ class BarangMasuk extends BaseController
 
     }
 
+    public function reset_csrf(){
+
+        $data = ['csrf_hash' => csrf_hash()];
+        return json_encode($data);
+
+    }
+
     public function ambil_harga(){
 
         $data = $this->modelBarangMasuk->ambilHarga();
@@ -178,57 +187,74 @@ class BarangMasuk extends BaseController
     }
 
      public function tambah(){
-        ////////PERLU VALIDASI NATI AJA///////
 
-        if(!$this->validate([
-            'barang_id' => [
-                'label'  => 'Nama Barang',
-                'rules'  => 'required',
-                'errors' => [
-                'required' => 'Barang harus dipilih!',
-                'numeric' => 'Barang harus dipilih!'
-                ]
-            ],
-            'pengirim_barang_id' => [
-                'label'  => 'Nama Pengirim Barang',
-                'rules'  => 'required',
-                'errors' => [
-                'required' => 'Supplier harus dipilih!',
-                'numeric' => 'Supplier harus dipilih!'
-                ]
-            ]
+
+        // if(!$this->validate([
+        //     'barang_id' => [
+        //         'label'  => 'Nama Barang',
+        //         'rules'  => 'required',
+        //         'errors' => [
+        //         'required' => 'Barang harus dipilih!',
+        //         'numeric' => 'Barang harus dipilih!'
+        //         ]
+        //     ],
+        //     'pengirim_barang_id' => [
+        //         'label'  => 'Nama Pengirim Barang',
+        //         'rules'  => 'required',
+        //         'errors' => [
+        //         'required' => 'Supplier harus dipilih!',
+        //         'numeric' => 'Supplier harus dipilih!'
+        //         ]
+        //     ]
           
             
-        ])) {
+        // ])) {
             
-            return redirect()->to(base_url('/barang/masuk'))->withInput();
-        }
+        //     return redirect()->to(base_url('/fitur/barang_masuk'))->withInput();
+        // }
 
         
-        for ($i= 0; $i < count($this->request->getPost('barang_id')); $i++ ){
+        // for ($i= 0; $i < count($this->request->getPost('barang_id')); $i++ ){
 
-            $data[] = array(
-            'barang_id' => $this->request->getPost('barang_id')[$i],
-            'pengirim_barang_id' => $this->request->getPost('pengirim_barang_id')[$i],
-            'jumlah_barang_masuk' => $this->request->getPost('jumlah_barang_masuk')[$i],
-            'harga_pokok_pb' => $this->request->getPost('harga_pokok')[$i],
-            'total_harga_pokok' => ($this->request->getPost('harga_pokok')[$i] * $this->request->getPost('jumlah_barang_masuk')[$i])
-            );
+        //     $data[] = array(
+        //         // ['csrf_test_name'] => $this->request->getPost('csrf_test_name'),
+        //         'barang_id' => $this->request->getPost('barang_id')[$i],
+        //         'pengirim_barang_id' => $this->request->getPost('pengirim_barang_id')[$i],
+        //         'jumlah_barang_masuk' => $this->request->getPost('jumlah_barang_masuk')[$i],
+        //         'harga_pokok_pb' => $this->request->getPost('harga_pokok')[$i],
+        //         'total_harga_pokok' => ($this->request->getPost('harga_pokok')[$i] * $this->request->getPost('jumlah_barang_masuk')[$i])
+        //     );
 
             
-            $data2[] = array(
-                'barang_id' => $this->request->getPost('barang_id')[$i],
-                'harga_pokok_pb' => $this->request->getPost('harga_pokok')[$i],
-                'jumlah_barang_masuk' => $this->request->getPost('jumlah_barang_masuk')[$i],
-                'pengirim_barang_id' => $this->request->getPost('pengirim_barang_id')[$i],
-                'harga_konsumen' => $this->request->getPost('harga_konsumen')[$i],
-                'harga_anggota' => $this->request->getPost('harga_anggota')[$i]
-                );
-        }
+        //     $data2[] = array(
+        //         // ['csrf_test_name'] => $this->request->getPost('csrf_test_name'),
+        //         'barang_id' => $this->request->getPost('barang_id')[$i],
+        //         'harga_pokok_pb' => $this->request->getPost('harga_pokok')[$i],
+        //         'jumlah_barang_masuk' => $this->request->getPost('jumlah_barang_masuk')[$i],
+        //         'pengirim_barang_id' => $this->request->getPost('pengirim_barang_id')[$i],
+        //         'harga_konsumen' => $this->request->getPost('harga_konsumen')[$i],
+        //         'harga_anggota' => $this->request->getPost('harga_anggota')[$i]
+        //     );
+                
+        // }
 
-        $this->model_barang_masuk->TambahBarangMasuk($data, $data2);
-        $this->session->setFlashdata('pesan_barang_masuk', 'Barang masuk berhasil ditambahkan!');
-        return redirect()->to(base_url('/fitur/barang_masuk'));
+        // dd($data);
+       
+
+        // $this->model_barang_masuk->TambahBarangMasuk($data, $data2);
+        // $this->session->setFlashdata('pesan_barang_masuk', 'Barang masuk berhasil ditambahkan!');
+        // return redirect()->to(base_url('/fitur/barang_masuk'));
+
+
+        $validasi = $this->modelBarangMasuk->tambahBarangMasuk();
+        if($validasi){
+            $this->session->setFlashdata('pesan_validasi_tambah_barang_masuk',  $validasi);
+            return redirect()->to(base_url('/fitur/barang_masuk'))->withInput();
+        }else{
+            $this->session->setFlashdata('pesan_barang_masuk', 'Masuk baru berhasil ditambahkan!');
+            return redirect()->to(base_url('/fitur/barang_masuk'));
+        }
+        
 
     
 

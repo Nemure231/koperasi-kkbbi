@@ -3,6 +3,7 @@ use CodeIgniter\Model;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 class ModelBarangMasuk extends Model{
 
@@ -107,6 +108,37 @@ class ModelBarangMasuk extends Model{
         } catch (ClientException $e) {
             // echo Psr7\Message::toString($e->getRequest());
             $validasi = json_decode($e->getResponse()->getBody(), true);
+        }
+
+        return $result = $validasi['data'];
+    }
+
+    public function tambahBarangMasuk(){
+        $result = '';
+        $validasi = array('data' => '');
+        try {
+            $ambil_token = get_cookie('jwt_token');
+            $respon_ambil_barang = $this->_client->request(
+                'POST',
+                'barang_masuk',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$ambil_token}"
+                    ],
+                    'form_params' => [
+                        'barang_id' => $this->request->getPost('barang_id'),
+                        'supplier_id' => $this->request->getPost('pengirim_barang_id'),
+                        'kuantitas' => $this->request->getPost('jumlah_barang_masuk'),
+                        'harga_pokok' => $this->request->getPost('harga_pokok')
+                    ]
+                ],
+            )->getBody();
+            json_decode($respon_ambil_barang, true);
+        } catch (ServerException $e) {
+            // echo Psr7\Message::toString($e->getRequest());
+            $validasi = json_decode($e->getResponse()->getBody(), true);
+            // echo Psr7\Message::toString($e->getRequest());
+            // echo Psr7\Message::toString($e->getResponse());
         }
 
         return $result = $validasi['data'];
