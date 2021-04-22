@@ -103,6 +103,8 @@ $routes->group('fitur', function($routes){
 
 	$routes->group('kasir', function($routes){
 		$routes->get('', 'Kasir::index', ['filter' => 'cek_akses']);
+		$routes->get('reset_csrf', 'BarangMasuk::reset_csrf', ['filter' => 'cek_akses']);
+		$routes->post('ambil_barang', 'Kasir::ambil_barang');
 		$routes->post('tambah_keranjang', 'Kasir::tambah_keranjang');
 		$routes->post('tambah_transaksi_sementara', 'Kasir::tambah_transaksi_sementara');
 		$routes->put('ubah_jenis_kasir', 'Kasir::ubah_jenis_kasir');

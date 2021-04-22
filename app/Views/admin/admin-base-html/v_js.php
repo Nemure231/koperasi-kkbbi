@@ -9,7 +9,7 @@
   <script type="application/javascript" src="<?php echo base_url().'/admin/assets/js/stisla.js'; ?>"></script>
   
   <!-- JS Libraies -->
-  
+ 
   <!-- Template JS File -->
   <script type="application/javascript" src="<?php echo base_url().'/admin/assets/js/scripts.js'; ?>"></script>
   <script type="application/javascript" src="<?php echo base_url().'/admin/assets/js/custom.js'; ?>"></script>

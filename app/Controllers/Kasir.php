@@ -245,6 +245,44 @@ class Kasir extends BaseController{
        
     }
 
+    public function reset_csrf(){
+
+        $data = ['csrf_hash' => csrf_hash()];
+        return json_encode($data);
+
+    }
+
+
+
+    public function ambil_barang(){
+
+
+        $jenis_kasir = $this->request->getPost('jen_kas');
+        $kode_barang = $this->request->getPost('qode_barang');
+
+        if($jenis_kasir != 5){
+            $barang=$this->model_barang->select('nama_barang, id_barang, stok_barang, nama_satuan, nama_merek')
+                ->select('harga_konsumen as harga')->asArray()
+                ->where('id_barang >', 0)
+                ->where('harga_konsumen >', 0)
+                ->where('kode_barang', $kode_barang)
+                ->join('satuan', 'satuan.id_satuan = barang.satuan_id')
+                ->join('merek', 'merek.id_merek = barang.merek_id')
+                ->first();
+        }else{
+            $barang=$this->model_barang->select('nama_barang, id_barang, stok_barang, nama_satuan, nama_merek')
+                ->select('harga_anggota as harga')->asArray()
+                ->where('id_barang >', 0)
+                ->where('harga_anggota >', 0)
+                ->where('kode_barang', $kode_barang)
+                ->join('satuan', 'satuan.id_satuan = barang.satuan_id')
+                ->join('merek', 'merek.id_merek = barang.merek_id')
+                ->first();
+        }
+
+        echo json_encode(['data' => $barang, 'csrf_hash' => csrf_hash()]);
+    }
+
 
   
 
