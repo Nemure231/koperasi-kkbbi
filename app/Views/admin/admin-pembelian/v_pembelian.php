@@ -1,9 +1,11 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/css/animate.min.css' ?>">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/css/datatabel-boot4.min.css' ?>">
+<link rel="stylesheet"  type="text/css" href="<?php echo base_url().'/admin/assets/modules/izitoast/css/iziToast.min.css' ?>">
 <!-- Main Content -->
 <div class="flash-data" data-flashdata="<?php echo $session->getFlashdata('pesan_pembelian');  ?>"></div>
 <div class="flash-data-transaksi" data-flashdata="<?php echo $session->getFlashdata('pesan_transaksi');  ?>"></div>
-<div class="flash-data-utang" data-flashdata="<?php echo $session->getFlashdata('pesan_transaksi_sementara_utang');  ?>"></div>
+<div class="flash-data-utang"
+  data-flashdata="<?php echo $session->getFlashdata('pesan_transaksi_sementara_utang');  ?>"></div>
 <div class="flash-data-invoice" data-flashdata="<?php echo $session->getFlashdata('pesan_hapus_invoice');  ?>"></div>
 <div class="flash-data-jeniskasir" data-flashdata="<?php echo $session->getFlashdata('pesan_jenis_kasir');  ?>"></div>
 <div class="flash-data-hapus-keranjang-admin"
@@ -25,12 +27,16 @@
     <div class="section-body">
       <div id="idjk" data-role_id_jenis_kasir="<?php echo $role_id_jenis_kasir; ?>" class="invisible"></div>
       <div class="row">
+
+       
+
+
         <div class="col-lg-12" id="purgeall">
           <?php echo form_open(base_url().'/fitur/kasir/tambah_transaksi_sementara', $form_pembelian);    ?>
           <?php echo csrf_field(); ?>
           <?php echo form_input($hidden_kode_transaksi); ?>
           <div class="card card-primary">
-
+            <input type="hidden" id="csrf_kasir" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
             <?php if($keranjang):  ?>
             <div class="card-header">
               <h4>
@@ -48,6 +54,7 @@
 
             </div>
             <div class="card-body">
+
               <div class="table-responsive">
                 <table class="table">
                   <thead>
@@ -101,7 +108,7 @@
                           <!-- <//?php echo $validation->showError('jumlah_uang'); ?> -->
                         </div>
                       </th>
-                      
+
                     </tr>
                     <tr>
                       <th colspan="3">Kembalian</th>
@@ -112,38 +119,40 @@
 
 
                         <label class="text-danger" id="notif-kembalian">
-                         
-                      </label>
+
+                        </label>
                       </th>
-                      
+
                     </tr>
 
                     <tr>
                       <th colspan="3">Nomor Telepon</th>
                       <th colspan="1"></th>
                       <th colspan="2">
-                      <input id="nomor_telepon_hutang" readonly name="nomor_telepon_hutang" class="form-control nomor_telepon_hutang" value="" >
-                      <label class="text-danger" id="err-thph"></label>  
-                      <!-- <//?php echo ($validation->showError('kembalian')) ? 'is-invalid' : ''; ?> -->
+                        <input id="nomor_telepon_hutang" readonly name="nomor_telepon_hutang"
+                          class="form-control nomor_telepon_hutang" value="">
+                        <label class="text-danger" id="err-thph"></label>
+                        <!-- <//?php echo ($validation->showError('kembalian')) ? 'is-invalid' : ''; ?> -->
 
 
-                        
+
                       </th>
-                      
+
                     </tr>
 
                     <tr>
                       <th colspan="3">Nama Pengutang</th>
                       <th colspan="1"></th>
                       <th colspan="2">
-                      <input id="nama_penghutang" readonly name="nama_penghutang" class="form-control nama_penghutang" value="" >
-                      <label class="text-danger" id="err-npht"></label>  
-                      <!-- <//?php echo ($validation->showError('kembalian')) ? 'is-invalid' : ''; ?> -->
+                        <input id="nama_penghutang" readonly name="nama_penghutang" class="form-control nama_penghutang"
+                          value="">
+                        <label class="text-danger" id="err-npht"></label>
+                        <!-- <//?php echo ($validation->showError('kembalian')) ? 'is-invalid' : ''; ?> -->
 
 
-                        
+
                       </th>
-                     
+
                     </tr>
 
 
@@ -166,55 +175,54 @@
                 </div>
 
               </div>
-            
-           
-            <div class="card-footer text-center heh" id="heya">
-              <div class="invisible" id="total2"><?php echo $sum ?></div>
-              <!-- <button type="submit" id="btn-submitt" class="btn btn-primary">Bayar</button> -->
-              <button type="submit" id="btn-simpan" class="btn btn-primary">Simpan</button>
-            </div>
-
-            <?php else  : ?>
 
 
-            <div class="card-header">
-              <h4>Data Keranjang Kosong</h4>
-            </div>
-
-            <div class="card-body">
-              <div class="empty-state" data-height="400">
-                <div class="empty-state-icon">
-                  <i class="fas fa-question"></i>
-                </div>
-                <h2>Belum ada barang di dalam keranjang</h2>
-                <p class="lead">
-                  Silakan tekan tombol dibawah untuk menambahan data
-                </p>
-                <a href="javascript:void(0)" data-role_id_jenis_kasir="<?php echo $role_id_jenis_kasir; ?>"
-                  class="btn btn-icon icon-left btn-primary" id="tombolPembelian"><i class="fas fa-plus"></i> Tambah
-                  keranjang</a>
+              <div class="card-footer text-center heh" id="heya">
+                <div class="invisible" id="total2"><?php echo $sum ?></div>
+                <!-- <button type="submit" id="btn-submitt" class="btn btn-primary">Bayar</button> -->
+                <button type="submit" id="btn-simpan" class="btn btn-primary">Simpan</button>
               </div>
+
+              <?php else  : ?>
+
+              <div class="card-header">
+                <h4>Data Keranjang Kosong</h4>
+              </div>
+
+              <div class="card-body">
+                <div class="empty-state" data-height="400">
+                  <div class="empty-state-icon">
+                    <i class="fas fa-question"></i>
+                  </div>
+                  <h2>Belum ada barang di dalam keranjang</h2>
+                  <p class="lead">
+                    Silakan tekan tombol dibawah untuk menambahan data
+                  </p>
+                  <a href="javascript:void(0)" data-role_id_jenis_kasir="<?php echo $role_id_jenis_kasir; ?>"
+                    class="btn btn-icon icon-left btn-primary" id="tombolPembelian"><i class="fas fa-plus"></i> Tambah
+                    keranjang</a>
+                </div>
+              </div>
+
+
+
+
+
+              <?php endif; ?>
+
+
             </div>
-
-
-
-
-
-            <?php endif; ?>
-
 
           </div>
+          <?php echo form_close(); ?>
 
         </div>
-        <?php echo form_close(); ?>
-
       </div>
-    </div>
   </section>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalPembelian" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="modalPembelian" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -231,11 +239,12 @@
 
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12">
-            <?php echo form_open(base_url().'/fitur/kasir/ubah_jenis_kasir', $form_jenis_kasir);    ?>
+            <!-- <//?php echo form_open(base_url().'/fitur/kasir/ubah_jenis_kasir', $form_jenis_kasir);    ?> -->
+            <form action="<?php echo base_url().'/fitur/kasir/ubah_jenis_kasir'; ?>" class="btn btn-block" method="post" accept-charset="utf-8">
             <input type="hidden" name="_method" value="PUT">
-            <?php echo csrf_field(); ?>
+            <input type="hidden" id="csrf_jenis_kasir" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>"/>
             <?php echo form_input($hidden_id_jenis_kasir); ?>
-            <div class="form-group">
+            <div class="form-group text-left">
               <label>Jenis Kasir</label>
               <div class="input-group">
                 <select class="custom-select role_idE" name="role_idE" id="inputGroupSelect04">
@@ -255,48 +264,86 @@
             <?php echo form_close();    ?>
 
           </div>
+           
+            <div class="col-lg-4">
+
+              <video id="preview" width="220" height="200" style="background-color: black; margin-left: auto;
+            margin-right: auto;
+            display: block"></video>
+              <div class="row mt-2">
+                <input class="form-control mb-2 qode_barang" id="qode_barang" name="qode_barang" placeholder="Kode barang ...."/>
+                <span id="kode_salah" class="text-danger mb-2"></span>
+                <div class="col-lg-6 col-md-6"><button id="kamera-nyala" class="btn btn-danger">Nyala</button></div>
+                <div class="col-lg-6 col-md-6 text-right"><button id="kamera-mati" class="btn btn-success">Mati</button>
+                </div>
+              </div>
 
 
-          <div class="col-lg-12">
-            <div class="table-responsive">
-              <table class="table table-striped" id="pempem">
-                <thead>
-                  <tr>
-                    <th>Kode</th>
-                    <th>Nama</th>
-                    <th>Satuan</th>
-                    <th>Harga</th>
 
-                    <th>Stok</th>
-                    <th>QTY</th>
-                    <th>Opsi</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-
-                  <?php foreach($barang as $b):?>
-                  <tr>
-                    <td><?php echo $b['kode_barang']; ?></td>
-                    <td><?php echo $b['nama_barang']; ?></td>
-                    <td><?php echo $b['nama_satuan']; ?></td>
-                    <td><?php echo 'Rp '. number_format($b['harga'], 0,",","."); ?></td>
-                    <td><?php echo $b['stok_barang']; ?></td>
-                    <td><input oninput="this.value = Math.abs(this.value)" id="qty_barang<?php echo $b['id_barang']; ?>"
-                        min="0" type="number" class="form-control qty2<?php echo $b['id_barang']; ?>"></td>
-                    <td class="text-center">
-                      <a href="javascript:void(0)" class="btn btn-primary mr-1 tambah-keranjang"
-                        data-id_barang="<?php echo $b['id_barang']; ?>"
-                        data-stok_barang="<?php echo $b['stok_barang']; ?>"
-                        data-harga_barang="<?php echo $b['harga']; ?>"><i class="fas fa-plus"></i></a>
-                    </td>
-                  </tr>
-
-                  <?php endforeach;?>
-                </tbody>
-              </table>
             </div>
-          </div>
+
+            <input type="hidden" id="csrf_detail_barang" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+            <div class="col-lg-8">
+              <form action="<?php echo base_url().'/fitur/kasir/tambah_keranjang'; ?>" class="btn btn-block" method="post" accept-charset="utf-8">
+              <input type="hidden" id="id_barang" name="k_barang_id" />
+              <input type="hidden" id="jen_kas" name="jen_kas" value="<?php echo $role_id_jenis_kasir; ?>" />
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="form-group text-left">
+                    <label>Nama Barang</label>
+                    <input type="text" id="nama_barang" class="form-control" readonly />
+
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group text-left">
+                    <label>Satuan</label>
+                    <input type="text" id="nama_satuan" class="form-control" readonly />
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="form-group text-left">
+                    <label>Merek</label>
+                    <input type="text" id="nama_merek" class="form-control" readonly />
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="form-group text-left">
+                    <label>Harga</label>
+                    <input type="number" id="harga_barang" class="form-control" readonly />
+                    <input type="hidden" id="k_harga_barang" name='k_harga_barang'/>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="form-group text-left">
+                    <label>QTY</label>
+                    <div class="input-group mb-2">
+                      <input min="1" id="qty_barang" name="k_qty" oninput="this.value = Math.abs(this.value)" type="number"
+                        class="form-control" id="inlineFormInputGroup2">
+                      <div class="input-group-append">
+                        <div class="input-group-text" id="qty2">...</div>
+                        <input type="hidden" id="qty3" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+              </div>
+              </form>
+
+
+
+
+
+
+            </div>
+          <!-- </form> -->
+
         </div>
 
 
@@ -342,11 +389,11 @@
       </div>
       <div class="modal-footer">
 
-      <?php echo form_open(base_url().'/fitur/kasir/hapus_barang', $form_hapus_barang);    ?>
+        <?php echo form_open(base_url().'/fitur/kasir/hapus_barang', $form_hapus_barang);    ?>
         <?php echo form_input($hidden_kode_hapus_barang); ?>
         <?php echo csrf_field(); ?>
-          <input type="hidden" name="_method" value="DELETE">
-          <button type="submit" class="btn btn-danger">Ya, hapus!</button>
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         <?php echo  form_close(); ?>
 
       </div>
@@ -386,10 +433,10 @@
       </div>
       <div class="modal-footer">
 
-      <?php echo form_open(base_url().'/fitur/kasir/hapus_keranjang', $form_hapus_keranjang);    ?>
+        <?php echo form_open(base_url().'/fitur/kasir/hapus_keranjang', $form_hapus_keranjang);    ?>
         <?php echo csrf_field(); ?>
-          <input type="hidden" name="_method" value="DELETE">
-          <button type="submit" class="btn btn-danger">Hapus keranjang</button>
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit" class="btn btn-danger">Hapus keranjang</button>
         <?php echo form_close(); ?>
 
       </div>
