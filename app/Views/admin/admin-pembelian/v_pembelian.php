@@ -16,10 +16,8 @@
   #jumlah_uang-error,
   #kembalian-error,
   #nomor_telepon_hutang-error {
-    color: #dc3545;
-  }
+    color: #dc3545;}
 </style>
-<script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 <div class="main-content">
   <section class="section">
     <div class="section-header">
@@ -30,49 +28,7 @@
       <div id="idjk" data-role_id_jenis_kasir="<?php echo $role_id_jenis_kasir; ?>" class="invisible"></div>
       <div class="row">
 
-        <!-- <div class="col-lg-12">
-          <div class="row">
-            <div class="col-lg-6">
-            <div class="text-left"> <span>Scan Kode QR di sini</span></div>
-            <video id="preview" width="320" height="240"></video>
-            <div class="text-center">
-              <button id="kamera-nyala" class="btn btn-danger">Nyala</button>
-              <button id="kamera-mati" class="btn btn-success">Mati</button>
-            </div>
-
-              <script type="text/javascript">
-                let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-                scanner.addListener('scan', function (content) {
-                  // $('#rem').val(content)
-                });
-                Instascan.Camera.getCameras().then(function (cameras) {
-                  if (cameras.length > 0) {
-
-                    $('#kamera-nyala').click(function () {
-                      scanner.start(cameras[0]);
-                    });
-
-                    $('#kamera-mati').click(function () {
-                      scanner.stop();
-                    });
-
-                  } else {
-                    console.error('No cameras found.');
-                  }
-                }).catch(function (e) {
-                  console.error(e);
-                });
-              </script>
-            </div>
-
-            <div class="col-lg-6">
-                hhh
-            
-            </div>
-
-          </div>
-
-        </div> -->
+       
 
 
         <div class="col-lg-12" id="purgeall">
@@ -229,7 +185,6 @@
 
               <?php else  : ?>
 
-
               <div class="card-header">
                 <h4>Data Keranjang Kosong</h4>
               </div>
@@ -309,10 +264,6 @@
             <?php echo form_close();    ?>
 
           </div>
-          <!-- <form action="" class="btn btn-block" method="post"
-            accept-charset="utf-8"> -->
-            <!-- <form action="</?php echo base_url().'/fitur/kasir/ambil_barang' ?>" class="btn btn-block" method="post"
-            accept-charset="utf-8"> -->
            
             <div class="col-lg-4">
 
@@ -328,31 +279,6 @@
               </div>
 
 
-              <!-- <script type="text/javascript">
-                let scanner = new Instascan.Scanner({
-                  video: document.getElementById('preview')
-                });
-                scanner.addListener('scan', function (content) {
-                  $('#qode_barang').val(content)
-                });
-                Instascan.Camera.getCameras().then(function (cameras) {
-                  if (cameras.length > 0) {
-
-                    $('#kamera-nyala').click(function () {
-                      scanner.start(cameras[0]);
-                    });
-
-                    $('#kamera-mati').click(function () {
-                      scanner.stop();
-                    });
-
-                  } else {
-                    console.error('No cameras found.');
-                  }
-                }).catch(function (e) {
-                  console.error(e);
-                });
-              </script> -->
 
             </div>
 
