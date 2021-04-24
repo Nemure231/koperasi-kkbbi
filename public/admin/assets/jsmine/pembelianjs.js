@@ -209,27 +209,8 @@ $(document).ready(function () {
 
 
 
-   $(function () {
-      $('#jumlah_uang').on("input change keyup", function () {
-         var total = $('#total2').text();
-         var jumuang = $('#jumlah_uang').val();
-         var hsl = jumuang.replace(/[^\d]/g, "");
-         //$('#jumlah_uang2').val(hsl);
-         // var kem = $('#kembalian').val(hsl - total);
 
-         var kembalian = $('#kembalian').val();
-
-         if (kembalian < 0) {
-            $('#notif-kembalian').text('Kembalian kurang ' + (total - hsl));
-         } else {
-            $('#notif-kembalian').text('');
-         }
-      })
-
-   });
-
-
-   $('#qty_barang').on("input change", function () {
+   $('#qty_barang').on("input change blur", function () {
       var qty = $(this).val();
       var stok = $('#qty3').val();
       var tampilan_stok = $('#qty2').val();
@@ -237,14 +218,44 @@ $(document).ready(function () {
       $('#harga_barang').val(harga * qty);
       $('#qty2').text(stok - qty);
 
+      if(stok > qty){
+         $('#tambah-keranjang').prop('disabled', false);
+      }
+   });
+
+   $('#jumlah_uang').on("input change keyup", function () {
+      
+      var total = $('#total2').val();
+      var jumuang = $('#jumlah_uang').val();
+      var hsl = jumuang.replace(/[^\d]/g, "");
+      //$('#jumlah_uang2').val(hsl);
+      $('#kembalian').val(hsl - total);
+
+      var kembalian = $('#kembalian').val();
+
+      if (kembalian < 0) {
+         $('#notif-kembalian').text('Kembalian kurang ' + (total - hsl));
+      } else {
+         $('#notif-kembalian').text('');
+      }
+   });
+
+
+   $('#tambah-keranjang').click(function () {
+      var qty = $('#qty_barang').val();
+      var stok = $('#qty3').val();
       if(qty > stok){
          iziToast.error({
             title: 'Gagal!',
             message: 'Jumlah barang melebihi stok!',
-            position: 'topRight'
+            position: 'topRight',
+            toastOnce: true
          });
+         $(this).prop('disabled', true);
       }
+     
    });
+
 
 
 
@@ -295,7 +306,8 @@ $(document).ready(function () {
          });
 
       } else {
-         ajax_kode_barang(content);
+         ajax_qr_barang(content);
+         location.reload();
       }
 
    });
@@ -318,7 +330,7 @@ $(document).ready(function () {
       console.error(e);
    });
 
-   $('.qode_barang').on("input change", function () {
+   $('.qode_barang').on("input", function () {
       if ($('#qode_barang').val() == '') {
 
          iziToast.error({
@@ -329,10 +341,36 @@ $(document).ready(function () {
       } else {
          var valkod = $('#qode_barang').val();
          ajax_kode_barang(valkod);
+         
 
       }
 
    });
+
+   function ajax_qr_barang(kode_barang) {
+      var csrfName = $('#csrf_detail_qr').attr('name'); // CSRF Token name
+      var csrfHash = $('#csrf_detail_qr').val(); // CSRF hash
+      var jenkas = $('#jen_kas').val();
+
+      $.ajax({
+         url: 'kasir/tambah_keranjang_qr',
+         data: {
+            [csrfName]: csrfHash,
+            qode_barang: kode_barang,
+            jen_kas: jenkas,
+         },
+         headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+         },
+         method: "POST",
+         dataType: 'json',
+         success: function (res) {
+            location.reload();
+            location.reload();
+
+         }
+      });
+   }
 
 
    function ajax_kode_barang(kode_barang) {
@@ -356,7 +394,6 @@ $(document).ready(function () {
          success: function (res) {
 
             if (res.data) {
-
                $('#id_barang').val(res.data.id_barang);
                $('#nama_barang').val(res.data.nama_barang);
                $('#nama_satuan').val(res.data.nama_satuan);
@@ -368,16 +405,26 @@ $(document).ready(function () {
                $('#qty_barang').attr('max', res.data.stok_barang);
                $('#csrf_detail_barang').val(res.csrf_hash);
                $('#csrf_jenis_kasir').val(res.csrf_hash);
+               $('#csrf_hapus_barang').val(res.csrf_hash);
+               $('#csrf_hapus_keranjang').val(res.csrf_hash);
+               $('#csrf_keranjang').val(res.csrf_hash);
+               $('#csrf_detail_qr').val(res.csrf_hash);
                $('#kode_salah').text('');
                iziToast.success({
                   title: 'Berhasil!',
                   message: 'Barang berhasil ditemukan!',
-                  position: 'topRight'
+                  position: 'topRight',
+                  // toastOnce: true
+                  
                });
             } else {
                $('#kode_salah').text('Barang dengan kode tersebut tidak ada!');
                $('#csrf_detail_barang').val(res.csrf_hash);
                $('#csrf_jenis_kasir').val(res.csrf_hash);
+               $('#csrf_hapus_barang').val(res.csrf_hash);
+               $('#csrf_hapus_keranjang').val(res.csrf_hash);
+               $('#csrf_keranjang').val(res.csrf_hash);
+               $('#csrf_detail_qr').val(res.csrf_hash);
             }
 
          }

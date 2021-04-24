@@ -41,7 +41,8 @@ class Invoice extends BaseController{
             return redirect()->to(base_url('/kasir'));
         }
         $data = [
-           'title' => ucfirst('Invoice'),
+           'title' => ucfirst('Kasir'),
+           'nama_menu_utama' => 'Penjualan',
            'user'   => 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
                     ->join('user_role', 'user_role.id_role = user.role_id')
                     ->where('email', $email)
@@ -89,7 +90,6 @@ class Invoice extends BaseController{
         ];
         tampilan_admin('admin/admin-invoice/v_invoice', 'admin/admin-invoice/v_js_invoice', $data);
     }
-
 
     public function hapus(){
             $uri = $this->request->getPost('hidden_uri');

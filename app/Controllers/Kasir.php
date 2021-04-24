@@ -145,8 +145,18 @@ class Kasir extends BaseController{
     }
     
     public function tambah_keranjang(){ 
-        $barang = $this->request->getPost('k_barang_id');
+        // $barang = $this->request->getPost('k_barang_id');
         $arr = $this->model_keranjang->TambahKeranjangAdmin();
+        $this->session->setFlashdata('pesan_pembelian', 'Produk berhasil ditambahkan ke keranjang!');
+        return redirect()->to(base_url('/fitur/kasir'));
+        // echo json_encode($arr);        
+        
+    }
+
+    public function tambah_keranjang_qr(){ 
+        $arr = $this->model_keranjang->TambahKeranjangAdminQr();
+        $this->session->setFlashdata('pesan_pembelian', 'Produk berhasil ditambahkan ke keranjang!');
+        return redirect()->to(base_url('/fitur/kasir'));
         echo json_encode($arr);        
         
     }

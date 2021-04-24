@@ -27,7 +27,7 @@ class Model_keranjang extends Model{
 		
         $bukuid = $this->request->getPost('k_barang_id');
         //$roleid = $this->request->getPost('k_role_id');
-        $harga = $this->request->getPost('k_harga');
+        $harga = $this->request->getPost('k_harga_barang');
 		$random = rand('1', '1000000000');
 		$data = array(
 			'k_barang_id' => $bukuid,
@@ -53,6 +53,68 @@ class Model_keranjang extends Model{
         //$escape = $this->db->escapeString($stok);
         $this->db->transComplete();
 
+        // $arr = array('success' => $status, 'data' => '');
+        // if($data){
+        //    $status = true;
+        //    $this->session->setFlashdata('pesan_pembelian', 'Produk berhasil ditambahkan ke keranjang!');
+        //    return $arr = array('status' => $status, 'data' => $data);
+        // }
+        
+    }
+
+    public function TambahKeranjangAdminQr(){
+
+        $jenis_kasir = $this->request->getPost('jen_kas');
+        $kode_barang = $this->request->getPost('qode_barang');
+
+        $this->db->transStart();
+        $builder_barang = $this->db->table('barang');
+        if($jenis_kasir != 5){
+            $barang= $builder_barang->select('nama_barang, id_barang, stok_barang')
+                ->select('harga_konsumen as harga')
+                ->where('id_barang >', 0)
+                ->where('harga_konsumen >', 0)
+                ->where('kode_barang', $kode_barang)
+                ->get()
+                ->getRowArray();
+        }else{
+            $barang= $builder_barang->select('nama_barang, id_barang, stok_barang')
+                ->select('harga_anggota as harga')
+                ->where('id_barang >', 0)
+                ->where('harga_anggota >', 0)
+                ->where('kode_barang', $kode_barang)
+                ->get()
+                ->getRowArray();
+        }
+
+        $id = $this->session->get('id_user');
+        $qty = 1;
+        $barangid = $barang['id_barang'];
+        $harga = $barang['harga'];
+		$random = rand('1', '1000000000');
+		$data = array(
+			'k_barang_id' => $barangid,
+            'k_qty' =>  $qty,
+            'k_harga'=> $harga,
+            'k_user_id' => $id,
+			'k_kode_keranjang' => ''.$random.'' . ''.$id.'' . ''.$barangid.''
+        );
+        $status = false;
+    
+
+        $builder = $this->db->table('keranjang');
+        $data3 = $builder->insert($data);
+
+        $qty = $data['k_qty'];
+        $idb = $data['k_barang_id'];
+
+        $qtyesc = $this->db->escapeString($qty);
+        $idbesc = $this->db->escapeString($idb);
+
+    
+        $stok = $this->db->query("update barang set stok_barang=stok_barang-'$qtyesc' where id_barang='$idbesc'");
+        $this->db->transComplete();
+
         $arr = array('success' => $status, 'data' => '');
         if($data){
            $status = true;
@@ -61,6 +123,11 @@ class Model_keranjang extends Model{
         }
         
     }
+
+
+
+
+
 
     public function HapusKeranjangAdmin($kode){
 

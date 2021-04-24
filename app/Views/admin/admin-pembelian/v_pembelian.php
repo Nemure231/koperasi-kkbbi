@@ -32,8 +32,9 @@
 
 
         <div class="col-lg-12" id="purgeall">
-          <?php echo form_open(base_url().'/fitur/kasir/tambah_transaksi_sementara', $form_pembelian);    ?>
-          <?php echo csrf_field(); ?>
+          <!-- <//?php echo form_open(base_url().'/fitur/kasir/tambah_transaksi_sementara', $form_pembelian);    ?> -->
+          <form action="<?php echo base_url().'/fitur/kasir/tambah_transaksi_sementara'; ?>" name="formPembelian" class="formPembelian" id="formPembelian" method="post" accept-charset="utf-8">
+         
           <?php echo form_input($hidden_kode_transaksi); ?>
           <div class="card card-primary">
             <input type="hidden" id="csrf_kasir" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
@@ -102,7 +103,7 @@
                       <th colspan="3">Jumlah uang</th>
                       <th colspan="1"></th>
                       <th colspan="2">
-                        <input type="number" name="jumlah_uang" id="jumlah_uang" class="form-control">
+                        <input type="number" name="jumlah_uang" id="jumlah_uang" class="form-control jumlah_uang">
                         <!-- <//?php echo ($validation->showError('jumlah_uang')) ? 'is-invalid' : ''; ?> -->
                         <div class="invalid-feedback">
                           <!-- <//?php echo $validation->showError('jumlah_uang'); ?> -->
@@ -178,7 +179,8 @@
 
 
               <div class="card-footer text-center heh" id="heya">
-                <div class="invisible" id="total2"><?php echo $sum ?></div>
+                <!-- <div class="invisible" id="total2"><//?php echo $sum ?></div> -->
+                <input type="hidden" id="total2" value="<?php echo $sum ?>"/>
                 <!-- <button type="submit" id="btn-submitt" class="btn btn-primary">Bayar</button> -->
                 <button type="submit" id="btn-simpan" class="btn btn-primary">Simpan</button>
               </div>
@@ -240,7 +242,7 @@
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12">
             <!-- <//?php echo form_open(base_url().'/fitur/kasir/ubah_jenis_kasir', $form_jenis_kasir);    ?> -->
-            <form action="<?php echo base_url().'/fitur/kasir/ubah_jenis_kasir'; ?>" class="btn btn-block" method="post" accept-charset="utf-8">
+            <form action="<?php echo base_url().'/fitur/kasir/ubah_jenis_kasir'; ?>" method="post" accept-charset="utf-8">
             <input type="hidden" name="_method" value="PUT">
             <input type="hidden" id="csrf_jenis_kasir" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>"/>
             <?php echo form_input($hidden_id_jenis_kasir); ?>
@@ -278,13 +280,13 @@
                 </div>
               </div>
 
-
-
             </div>
 
             <input type="hidden" id="csrf_detail_barang" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+            <input type="hidden" id="csrf_detail_qr" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
             <div class="col-lg-8">
-              <form action="<?php echo base_url().'/fitur/kasir/tambah_keranjang'; ?>" class="btn btn-block" method="post" accept-charset="utf-8">
+              <form novalidate action="<?php echo base_url().'/fitur/kasir/tambah_keranjang'; ?>" class="btn btn-block" method="post" accept-charset="utf-8">
+              <input type="hidden" id="csrf_keranjang" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
               <input type="hidden" id="id_barang" name="k_barang_id" />
               <input type="hidden" id="jen_kas" name="jen_kas" value="<?php echo $role_id_jenis_kasir; ?>" />
               <div class="row">
@@ -330,6 +332,12 @@
                     </div>
                   </div>
                 </div>
+                <div class="col-lg-12 text-right">
+                  <button type="submit" id="tambah-keranjang" class="btn btn-primary">Tambah</button>
+
+                </div>
+
+
 
                 
 
@@ -389,9 +397,11 @@
       </div>
       <div class="modal-footer">
 
-        <?php echo form_open(base_url().'/fitur/kasir/hapus_barang', $form_hapus_barang);    ?>
+
+        <form action="<?php echo base_url().'/fitur/kasir/hapus_barang'; ?>" class="btn btn-block" method="post" accept-charset="utf-8">
+        
+        <input type="hidden" id="csrf_hapus_barang" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>"/>
         <?php echo form_input($hidden_kode_hapus_barang); ?>
-        <?php echo csrf_field(); ?>
         <input type="hidden" name="_method" value="DELETE">
         <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         <?php echo  form_close(); ?>
@@ -433,8 +443,9 @@
       </div>
       <div class="modal-footer">
 
-        <?php echo form_open(base_url().'/fitur/kasir/hapus_keranjang', $form_hapus_keranjang);    ?>
-        <?php echo csrf_field(); ?>
+      <form action="<?php echo base_url().'/fitur/kasir/hapus_keranjang'; ?>" class="btn btn-block" method="post" accept-charset="utf-8">
+        
+        <input type="hidden" id="csrf_hapus_keranjang" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>"/>
         <input type="hidden" name="_method" value="DELETE">
         <button type="submit" class="btn btn-danger">Hapus keranjang</button>
         <?php echo form_close(); ?>
