@@ -17,6 +17,8 @@ class Pengguna extends BaseController{
 	}
 
 	public function index(){
+
+	
 		
 		$role = $this->session->get('role_id');
 		$email = $this->session->get('email');

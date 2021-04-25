@@ -24,7 +24,7 @@ class Auth extends BaseController
 		$roleid = $this->session->get('role_id');
 
 		if($roleid){
-			 return redirect()->to(base_url('/pengguna'));
+			 return redirect()->to(base_url('/akun/profil'));
 		}
 	
 		$email = set_value('email', '');
