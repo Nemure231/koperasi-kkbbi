@@ -213,14 +213,42 @@ $(document).ready(function () {
    $('#qty_barang').on("input change blur", function () {
       var qty = $(this).val();
       var stok = $('#qty3').val();
-      var tampilan_stok = $('#qty2').val();
+      var tampilan_stok = $('#qty2').text();
       var harga = $('#k_harga_barang').val();
       $('#harga_barang').val(harga * qty);
       $('#qty2').text(stok - qty);
+      // $('#qty3').val(stok - qty);
 
-      if(stok > qty){
+
+      if(Number(qty) > Number(stok)){
+         $('#tambah-keranjang').prop('disabled', true);
+         iziToast.error({
+            title: 'Gagal!',
+            message: 'Jumlah barang melebihi stok!',
+            position: 'topRight',
+            toastOnce: true
+         });
+      }else{
          $('#tambah-keranjang').prop('disabled', false);
       }
+   });
+
+
+   $('#tambah-keranjang').click(function () {
+      var qty = $('#qty_barang').val();
+      var stok = $('#qty3').text();
+      if(Number(qty) > Number(stok)){
+         iziToast.error({
+            title: 'Gagal!',
+            message: 'Jumlah barang melebihi stok!',
+            position: 'topRight',
+            toastOnce: true
+         });
+         $(this).prop('disabled', true);
+      }else{
+         $('#tambah-keranjang').prop('disabled', false);
+      }
+     
    });
 
    $('#jumlah_uang').on("input change keyup", function () {
@@ -238,22 +266,6 @@ $(document).ready(function () {
       } else {
          $('#notif-kembalian').text('');
       }
-   });
-
-
-   $('#tambah-keranjang').click(function () {
-      var qty = $('#qty_barang').val();
-      var stok = $('#qty3').val();
-      if(qty > stok){
-         iziToast.error({
-            title: 'Gagal!',
-            message: 'Jumlah barang melebihi stok!',
-            position: 'topRight',
-            toastOnce: true
-         });
-         $(this).prop('disabled', true);
-      }
-     
    });
 
 

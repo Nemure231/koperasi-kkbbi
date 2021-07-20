@@ -53,7 +53,7 @@ class Auth extends BaseController
 			
 		];
 
-		if($this->request->getMethod() == 'post'){
+		
 			$this->validation->setRules([
 				'email' => [
 					'label'  => 'Email',
@@ -72,17 +72,46 @@ class Auth extends BaseController
 					]
 				]
 			]);
+		
+
+		
+			tampilan_login('user/user-login/v_login', 'user/user-login/v_js_login', $data);
+
+
+	}
+
+	public function login(){
+
+		if(!$this->validate([
+			'email' => [
+				'label'  => 'Email',
+				'rules'  => 'required|valid_email',
+				'errors' => [
+					'required' => 'Email harus diisi!',
+					'valid_email' => 'Format email tidak benar!'
+				]
+			],
+			'sandi' => [
+				'label'  => 'Sandi',
+				'rules'  => 'required|min_length[3]',
+				'errors' => [
+					'min_length' => 'Terlalu pendek!',
+					'required' => 'Sandi harus diisi!'
+				]
+			]
+
+		])) {
+		   
+			tampilan_login('user/user-login/v_login', 'user/user-login/v_js_login', $data);
+
 		}
 
-		if($this->validation->withRequest($this->request)->run() == FALSE){
-			tampilan_login('user/user-login/v_login', 'user/user-login/v_js_login', $data);
-		}else{
-			
 		$email = $this->request->getPost('email');
 		$sandi = $this->request->getPost('sandi');
 		// $user  = $this->model->GetUserEmail($email);
 
-		$user = $this->user_model->select('id_user, sandi, nama, email, role_id, is_active')->asArray()->where('email', $email)->first();
+		$user = $this->user_model->select('id as id_user, sandi, nama, surel as email, role_id, status as is_active')
+				->asArray()->where('surel', $email)->first();
 	
 	
 		if($user){
@@ -105,7 +134,7 @@ class Auth extends BaseController
 					if($user['role_id']==1){
 
 						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('beranda/dashboard_masuk'));
+						return redirect()->to(base_url('suplai/barang'));
 
 					}
 					if($user['role_id']==2){
@@ -115,12 +144,6 @@ class Auth extends BaseController
 					}
 					
 					if($user['role_id']==3){
-						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('akun/profil'));
-
-					}
-
-					if($user['role_id']==6){
 						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
 						return redirect()->to(base_url('akun/profil'));
 
@@ -158,7 +181,7 @@ class Auth extends BaseController
 				 return redirect()->to(base_url('/'));
 			}
 
-			}else{
+		}else{
 				$this->session->setFlashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
 						<strong>E-mail belum terdaftar!</strong>
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -166,11 +189,13 @@ class Auth extends BaseController
 						</button>
 					</div>');
 				return redirect()->to(base_url('/'))->back()->withInput();
-			}
 		}
-		
-
+			
 	}
+			
+
+	
+
 
 	// public function registrasi(){
 		

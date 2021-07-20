@@ -30,11 +30,11 @@ class KodeBarang extends BaseController
                 ->first();
 
 		$data = [
-			'title' => ucfirst('Kode Barang'),
-            'nama_menu_utama' => ucfirst('Kode'),
-			'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-						->join('user_role', 'user_role.id_role = user.role_id')
-						->where('email', $email)
+			'title' => 'Kode Barang',
+            'nama_menu_utama' => 'Kode',
+            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+						->join('role', 'role.id = user.role_id')
+						->where('surel', $email)
 						->first(),
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
 						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')

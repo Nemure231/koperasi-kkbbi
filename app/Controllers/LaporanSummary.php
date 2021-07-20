@@ -59,8 +59,8 @@ class LaporanSummary extends BaseController{
         }
         
         $data = [
-            'title' => ucfirst('Summary Tanggal'),
-            'nama_menu_utama' => ucfirst('Summary'),
+            'title' => 'Summary Tanggal',
+            'nama_menu_utama' => 'Summary',
             'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
                     ->join('user_role', 'user_role.id_role = user.role_id')
                     ->where('email', $email)

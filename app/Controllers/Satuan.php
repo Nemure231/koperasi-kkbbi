@@ -27,11 +27,11 @@ class Satuan extends BaseController
         
 
         $data = [
-            'title' => ucfirst('Daftar Satuan'),
-            'nama_menu_utama' => ucfirst('Barang'),
-            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-						->join('user_role', 'user_role.id_role = user.role_id')
-						->where('email', $email)
+            'title' => 'Daftar Satuan',
+            'nama_menu_utama' => 'Gudang',
+            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+						->join('role', 'role.id = user.role_id')
+						->where('surel', $email)
 						->first(),
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
 						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
@@ -39,7 +39,7 @@ class Satuan extends BaseController
 						->orderBy('user_access_menu.menu_id', 'ASC')
 						->orderBy('user_access_menu.role_id', 'ASC')
 						->findAll(),
-            'satuan' => $this->model_satuan->select('id_satuan, nama_satuan')
+            'satuan' => $this->model_satuan->select('id as id_satuan, nama as nama_satuan')
 						->findAll(),
             'validation' => $this->validation,
             'session' => $this->session,
@@ -79,7 +79,7 @@ class Satuan extends BaseController
         if(!$this->validate([
                 'nama_satuan' => [
                     'label'  => 'Nama Satuan',
-                    'rules'  => 'required|is_unique[satuan.nama_satuan]',
+                    'rules'  => 'required|is_unique[satuan.nama]',
                     'errors' => [
                     'required' => 'Nama satuan harus diisi!',
                     'is_unique' => 'Nama satuan sudah ada!'
@@ -93,7 +93,7 @@ class Satuan extends BaseController
             }
 
                 $data = array(
-                    'nama_satuan' => htmlspecialchars($this->request->getPost('nama_satuan'), ENT_QUOTES)
+                    'nama' => htmlspecialchars($this->request->getPost('nama_satuan'), ENT_QUOTES)
                 );
 
                 $this->model_satuan->insert($data);
@@ -112,7 +112,7 @@ class Satuan extends BaseController
         $nama = 'required';
 
         if($old != $new){
-            $nama =  'required|is_unique[satuan.nama_satuan]';
+            $nama =  'required|is_unique[satuan.nama]';
         }
             if(!$this->validate([
                 'edit_nama_satuan' => [
@@ -132,7 +132,7 @@ class Satuan extends BaseController
 
                 $id = $this->request->getPost('id_satuanE');
                 $data = array(
-                    'nama_satuan' => htmlspecialchars($this->request->getPost('edit_nama_satuan'), ENT_QUOTES)
+                    'nama' => htmlspecialchars($this->request->getPost('edit_nama_satuan'), ENT_QUOTES)
                 );
 
                 $this->model_satuan->update($id, $data);

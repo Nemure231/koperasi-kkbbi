@@ -30,19 +30,19 @@ class Kategori extends BaseController
         
 
         $data = [
-            'title' =>  ucfirst('Daftar Kategori'),
-            'nama_menu_utama' => ucfirst('Barang'),
-            'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                        ->join('user_role', 'user_role.id_role = user.role_id')
-                        ->where('email', $email)
-                        ->first(),
+            'title' =>  'Daftar Kategori',
+            'nama_menu_utama' => 'Gudang',
+            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+						->join('role', 'role.id = user.role_id')
+						->where('surel', $email)
+						->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                         ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                         ->where('user_access_menu.role_id =', $role)
                         ->orderBy('user_access_menu.menu_id', 'ASC')
                         ->orderBy('user_access_menu.role_id', 'ASC')
                         ->findAll(),
-            'kategori'=>$this->model_kategori->select('id_kategori, nama_kategori')->asArray()
+            'kategori'=>$this->model_kategori->select('id as id_kategori, nama as nama_kategori')->asArray()
                         ->findAll(),
             'validation' => $this->validation,
             'session' => $this->session,
@@ -91,7 +91,7 @@ class Kategori extends BaseController
             if(!$this->validate([
                 'nama_kategori' => [
                     'label'  => 'Nama Kategori',
-                    'rules'  => 'required|is_unique[kategori.nama_kategori]',
+                    'rules'  => 'required|is_unique[kategori.nama]',
                     'errors' => [
                     'required' => 'Nama kategori harus diisi!',
                     'is_unique' => 'Nama kategori sudah ada!'
@@ -105,7 +105,7 @@ class Kategori extends BaseController
             
           
                 $data = array(
-                    'nama_kategori' => htmlspecialchars($this->request->getPost('nama_kategori'), ENT_QUOTES)
+                    'nama' => htmlspecialchars($this->request->getPost('nama_kategori'), ENT_QUOTES)
                 );
                 $this->model_kategori->insert($data);
                 $this->session->setFlashdata('pesan_kategori', 'Kategori baru berhasil ditambahkan!');
@@ -127,7 +127,7 @@ class Kategori extends BaseController
         //$rules_k = 'required';
 
         if($old != $new){
-            $rules =  'required|is_unique[kategori.nama_kategori]';
+            $rules =  'required|is_unique[kategori.nama]';
         }
 
         // if($old_k != $new_k){
@@ -162,7 +162,7 @@ class Kategori extends BaseController
                 $id = $this->request->getPost('id_kategoriE');
                 $data = array(
                     //'kode_kategori' => htmlspecialchars($this->request->getPost('edit_kode_kategori'), ENT_QUOTES),
-                    'nama_kategori' => htmlspecialchars($this->request->getPost('edit_nama_kategori'), ENT_QUOTES)
+                    'nama' => htmlspecialchars($this->request->getPost('edit_nama_kategori'), ENT_QUOTES)
                 );
 
                 $this->model_kategori->update($id, $data);

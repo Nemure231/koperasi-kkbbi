@@ -7,9 +7,9 @@ use App\Models\Model_barang;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
 use App\Models\Model_keranjang;
-use App\Models\Model_transaksi_total;
+use App\Models\Model_detail_transaksi;
 use App\Models\Model_jenis_kasir;
-use App\Models\Model_user_role;
+use App\Models\Model_role;
 use App\Models\Model_transaksi_sementara;
 // use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 // use Mike42\Escpos\Printer;
@@ -23,10 +23,10 @@ class Kasir extends BaseController{
 
         $this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
-        $this->model_user_role = new Model_user_role();
+        $this->model_role = new Model_role();
         $this->model_keranjang = new Model_keranjang();
         $this->model_barang = new Model_barang();
-        $this->model_transaksi_total = new Model_transaksi_total();
+        $this->model_detail_transaksi = new Model_detail_transaksi();
         $this->model_jenis_kasir = new Model_jenis_kasir();
         $this->model_transaksi_sementara = new Model_transaksi_sementara();
         $this->request = \Config\Services::request();
@@ -46,34 +46,34 @@ class Kasir extends BaseController{
         $email = $this->session->get('email');
 		
 
-        $jenis_kasir= $this->model_jenis_kasir->select('id_jenis_kasir, role_id, role')->asArray()
+        $jenis_kasir= $this->model_jenis_kasir->select('jenis_kasir.id as id_jenis_kasir, role_id, nama as role')->asArray()
                     ->where('user_id', $id_user)
-                    ->join('user_role', 'user_role.id_role = jenis_kasir.role_id')
+                    ->join('role', 'role.id = jenis_kasir.role_id')
                     ->first();
 
-        $barang=$this->model_barang->select('nama_barang, id_barang, stok_barang, kode_barang, nama_satuan')
-                ->select('harga_anggota as harga')->asArray()
-                ->where('id_barang >', 0)
+        $barang=$this->model_barang->select('barang.nama as nama_barang, barang.id as id_barang, stok as stok_barang,
+                kode as kode_barang, satuan.nama as nama_satuan')->select('harga_anggota as harga')->asArray()
+                ->where('barang.id >', 0)
                 ->where('harga_anggota >', 0)
-                ->join('satuan', 'satuan.id_satuan = barang.satuan_id')
+                ->join('satuan', 'satuan.id = barang.satuan_id')
                 ->findAll();
         if($jenis_kasir['role_id'] != 5){
-            $barang=$this->model_barang->select('nama_barang, id_barang, stok_barang, kode_barang, nama_satuan')
-                    ->select('harga_konsumen as harga')->asArray()
-                    ->where('id_barang >', 0)
-                    ->where('harga_konsumen >', 0)
-                    ->join('satuan', 'satuan.id_satuan = barang.satuan_id')
-                    ->findAll();
+            $barang=$this->model_barang->select('barang.nama as nama_barang, barang.id as id_barang, stok as stok_barang,
+            kode as kode_barang, satuan.nama as nama_satuan')->select('harga_konsumen as harga')->asArray()
+                ->where('barang.id >', 0)
+                ->where('harga_konsumen >', 0)
+                ->join('satuan', 'satuan.id = barang.satuan_id')
+                ->findAll();
         }
 
-        $kode = $this->model_transaksi_total->AutoKodeTransaksi(); 
+        $kode = $this->model_detail_transaksi->AutoKodeTransaksi(); 
         $data = [
-           'title'  => ucfirst('Kasir'),
-           'nama_menu_utama' => ucfirst('Penjualan'),
-           'user'   => 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                    ->join('user_role', 'user_role.id_role = user.role_id')
-                    ->where('email', $email)
-                    ->first(),
+           'title'  => 'Kasir',
+           'nama_menu_utama' => 'Penjualan',
+           'user' =>$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+					->join('role', 'role.id = user.role_id')
+					->where('surel', $email)
+					->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                     ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                     ->where('user_access_menu.role_id =', $role)
@@ -85,19 +85,19 @@ class Kasir extends BaseController{
            'id_session' => $this->session->get('id_user'),
            'nama_jenis_kasir' => $jenis_kasir['role'],
            'role_id_jenis_kasir' => $jenis_kasir['role_id'],
-           'role' => $this->model_user_role->select('id_role, role')
-                    ->where('id_role!=', 1)->where('id_role!=', 2)
-                    ->where('id_role!=', 3)->where('id_role!=', 6)
+           'role' => $this->model_role->select('id as id_role, nama as role')
+                    ->where('id!=', 1)->where('id!=', 2)
+                    ->where('id!=', 3)->where('id!=', 6)
                     ->findAll(),
            'barang' => $barang,
            'validation' => $this->validation,
-           'keranjang' => $this->model_keranjang->select('id_keranjang, k_qty, k_kode_keranjang,
-                     nama_barang, k_barang_id, COUNT(k_qty) as to_qty')
-                    ->select('k_harga as harga')
-                    ->selectSUM('k_qty', 'tt_qty')->asArray()
-                    ->where('k_user_id', $id_user)
-                    ->join('barang', 'barang.id_barang = keranjang.k_barang_id')
-                    ->groupBy('k_barang_id')
+           'keranjang' => $this->model_keranjang->select('keranjang.id as id_keranjang, qty as k_qty,
+                    keranjang.kode as k_kode_keranjang, barang.nama as nama_barang, barang_id as k_barang_id,
+                    COUNT(qty) as to_qty')->select('keranjang.harga as harga')
+                    ->selectSUM('qty', 'tt_qty')->asArray()
+                    ->where('user_id', $id_user)
+                    ->join('barang', 'barang.id = keranjang.barang_id')
+                    ->groupBy('barang_id')
                     ->findAll(),
             'hidden_kode_transaksi' => ['name' => 'kode_transaksi', 'id'=>'kode_transaksi', 'type'=> 'hidden', 'value' => ''.$kode.''],
             'hidden_id_jenis_kasir' => ['name' => 'id_jenis_kasir', 'id'=>'id_jenis_kasir', 'type'=> 'hidden', 'value' => ''.$jenis_kasir['id_jenis_kasir'].''],
@@ -192,13 +192,13 @@ class Kasir extends BaseController{
             return redirect()->to(base_url('/fitur/kasir'))->withInput();
 
         }
-        $loop = $this->model_keranjang->select('id_keranjang, k_qty, k_kode_keranjang, 
-                nama_barang, k_barang_id, COUNT(k_qty) as to_qty')
-                ->select('k_harga as harga')
-                ->selectSUM('k_qty', 'tt_qty')->asArray()
-                ->where('k_user_id', $id_user)
-                ->join('barang', 'barang.id_barang = keranjang.k_barang_id')                    
-                ->groupBy('k_barang_id')
+        $loop = $this->model_keranjang->select('keranjang.id as id_keranjang, qty, keranjang.kode as k_kode_keranjang, 
+                nama_barang, barang_id as k_barang_id, COUNT(qty) as to_qty')
+                ->select('keranjang.harga as harga')
+                ->selectSUM('qty', 'tt_qty')->asArray()
+                ->where('user_id', $id_user)
+                ->join('barang', 'barang.id = keranjang.barang_id')                    
+                ->groupBy('barang_id')
                 ->findAll();
         $kode =  $this->request->getPost('kode_transaksi');
         $status = $this->request->getPost('status_transaksi');
@@ -233,7 +233,7 @@ class Kasir extends BaseController{
             endforeach;
 		// $this->model_transaksi_sementara->TambahTransaksiSementara($data);
         $this->model_transaksi_sementara->insertBatch($data);
-        $this->model_keranjang->where('k_user_id', $id_user)->delete();
+        $this->model_keranjang->where('user_id', $id_user)->delete();
 
         if($status != 2){
             $this->session->setFlashdata('pesan_transaksi_sementara', 'Transaksi berhasil disimpan ke dalam invoice!');
@@ -272,27 +272,28 @@ class Kasir extends BaseController{
 
     public function ambil_barang(){
 
-
         $jenis_kasir = $this->request->getPost('jen_kas');
         $kode_barang = $this->request->getPost('qode_barang');
 
         if($jenis_kasir != 5){
-            $barang=$this->model_barang->select('nama_barang, id_barang, stok_barang, nama_satuan, nama_merek')
+            $barang=$this->model_barang->select('barang.nama as nama_barang, barang.id as id_barang, barang.stok as stok_barang,
+            satuan.nama as nama_satuan, merek.nama as nama_merek')
                 ->select('harga_konsumen as harga')->asArray()
-                ->where('id_barang >', 0)
+                ->where('barang.id >', 0)
                 ->where('harga_konsumen >', 0)
-                ->where('kode_barang', $kode_barang)
-                ->join('satuan', 'satuan.id_satuan = barang.satuan_id')
-                ->join('merek', 'merek.id_merek = barang.merek_id')
+                ->where('kode', $kode_barang)
+                ->join('satuan', 'satuan.id = barang.satuan_id')
+                ->join('merek', 'merek.id = barang.merek_id')
                 ->first();
         }else{
-            $barang=$this->model_barang->select('nama_barang, id_barang, stok_barang, nama_satuan, nama_merek')
+            $barang=$this->model_barang->select('barang.nama as nama_barang, barang.id as id_barang, barang.stok as stok_barang,
+                satuan.nama as nama_satuan, merek.nama as nama_merek')
                 ->select('harga_anggota as harga')->asArray()
-                ->where('id_barang >', 0)
+                ->where('barang.id >', 0)
                 ->where('harga_anggota >', 0)
-                ->where('kode_barang', $kode_barang)
-                ->join('satuan', 'satuan.id_satuan = barang.satuan_id')
-                ->join('merek', 'merek.id_merek = barang.merek_id')
+                ->where('kode', $kode_barang)
+                ->join('satuan', 'satuan.id = barang.satuan_id')
+                ->join('merek', 'merek.id = barang.merek_id')
                 ->first();
         }
 

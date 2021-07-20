@@ -112,7 +112,7 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/suplai/supplier/tambah', $form_tambah_supplier);    ?>
+      <?php echo form_open(base_url().'/suplai/penyuplai/tambah', $form_tambah_supplier);    ?>
       <!-- < ?php echo form_input($id_hidd); ?> -->
       <?php echo csrf_field(); ?>
       <div class="modal-body">
@@ -155,7 +155,7 @@
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/suplai/supplier/ubah', $form_edit_supplier);    ?>
+      <?php echo form_open(base_url().'/suplai/penyuplai/ubah', $form_edit_supplier);    ?>
       <input type="hidden" name="_method" value="PUT">
       <?php echo form_input($hidden_id_supplier); ?>
       <?php echo csrf_field(); ?>
@@ -221,7 +221,7 @@
       <div class="modal-footer" id="yahaloo">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
         <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-        <?php echo form_open(base_url().'/suplai/supplier/hapus', $form_hapus_supplier);    ?>
+        <?php echo form_open(base_url().'/suplai/penyuplai/hapus', $form_hapus_supplier);    ?>
           <?php echo form_input($hidden_id_supplierH); ?>
           <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">

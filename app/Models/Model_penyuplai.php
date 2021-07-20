@@ -1,9 +1,9 @@
 <?php namespace App\Models;
 use CodeIgniter\Model;
  
-class Model_merek extends Model{
+class Model_penyuplai extends Model{
 
-    protected $table = 'merek';
+    protected $table = 'penyuplai';
     protected $allowedFields = ['nama'];
     
 }

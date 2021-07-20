@@ -3,7 +3,7 @@
 use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
-use App\Models\Model_user_role;
+use App\Models\Model_role;
 use App\Models\Model_user_access_menu;
 
 class RoleAkses extends BaseController{
@@ -12,7 +12,7 @@ class RoleAkses extends BaseController{
         $this->model_user_menu = new Model_user_menu();
         $this->model_user = new Model_user();
         $this->model_user_access_menu = new Model_user_access_menu();
-        $this->model_user_role = new Model_user_role();
+        $this->model_role = new Model_role();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
 	}
@@ -26,22 +26,22 @@ class RoleAkses extends BaseController{
 		
 	
         $data = [
-            'title' => ucfirst('Role'),
-            'nama_menu_utama' => ucfirst('Role'),
-            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                        ->join('user_role', 'user_role.id_role = user.role_id')
-                        ->where('email', $email)
-                        ->first(),
+            'title' => 'Role',
+            'nama_menu_utama' => 'Role',
+            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+						->join('role', 'role.id = user.role_id')
+						->where('surel', $email)
+						->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                         ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                         ->where('user_access_menu.role_id =', $role)
                         ->orderBy('user_access_menu.menu_id', 'ASC')
                         ->orderBy('user_access_menu.role_id', 'ASC')
                         ->findAll(),
-            'idrole' => $this->model_user_role->select('id_role, role')->asArray()
-                        ->where('id_role', $role_id)->first(),
+            'idrole' => $this->model_role->select('id as id_role, nama as role')->asArray()
+                        ->where('id', $role_id)->first(),
             'menurole'  =>$this->model_user_menu->select('id_menu, menu')->asArray()
-                        ->where('id_menu !=', 1)->where('menu !=', 'Role')
+                        //->where('id_menu !=', 1)->where('menu !=', 'Role')
                         ->findAll(),
             'session' => $this->session,
 

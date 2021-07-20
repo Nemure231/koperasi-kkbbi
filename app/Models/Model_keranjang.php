@@ -10,9 +10,8 @@ class Model_keranjang extends Model{
      }
 
     protected $table = 'keranjang';
-    protected $primaryKey = 'id_keranjang';
     protected $allowedFields = [
-        'k_barang_id', 'k_qty',	'k_harga', 'k_user_id',	'k_kode_keranjang'	
+        'barang_id', 'qty',	'harga', 'user_id',	'kode'	
     
     ];
 
@@ -30,11 +29,11 @@ class Model_keranjang extends Model{
         $harga = $this->request->getPost('k_harga_barang');
 		$random = rand('1', '1000000000');
 		$data = array(
-			'k_barang_id' => $bukuid,
-            'k_qty' =>  $remplus,
-            'k_harga'=> $harga,
-            'k_user_id' => $id,
-			'k_kode_keranjang' => ''.$random.'' . ''.$id.'' . ''.$bukuid.''
+			'barang_id' => $bukuid,
+            'qty' =>  $remplus,
+            'harga'=> $harga,
+            'user_id' => $id,
+			'kode' => ''.$random.'' . ''.$id.'' . ''.$bukuid.''
         );
         $status = false;
     
@@ -42,14 +41,14 @@ class Model_keranjang extends Model{
         $builder = $this->db->table('keranjang');
         $data3 = $builder->insert($data);
 
-        $qty = $data['k_qty'];
-        $idb = $data['k_barang_id'];
+        $qty = $data['qty'];
+        $idb = $data['barang_id'];
 
         $qtyesc = $this->db->escapeString($qty);
         $idbesc = $this->db->escapeString($idb);
 
     
-        $stok = $this->db->query("update barang set stok_barang=stok_barang-'$qtyesc' where id_barang='$idbesc'");
+        $stok = $this->db->query("update barang set stok=stok-'$qtyesc' where id='$idbesc'");
         //$escape = $this->db->escapeString($stok);
         $this->db->transComplete();
 
@@ -70,19 +69,19 @@ class Model_keranjang extends Model{
         $this->db->transStart();
         $builder_barang = $this->db->table('barang');
         if($jenis_kasir != 5){
-            $barang= $builder_barang->select('nama_barang, id_barang, stok_barang')
+            $barang= $builder_barang->select('nama as nama_barang, id as id_barang, stok as stok_barang')
                 ->select('harga_konsumen as harga')
-                ->where('id_barang >', 0)
+                ->where('id >', 0)
                 ->where('harga_konsumen >', 0)
-                ->where('kode_barang', $kode_barang)
+                ->where('kode', $kode_barang)
                 ->get()
                 ->getRowArray();
         }else{
-            $barang= $builder_barang->select('nama_barang, id_barang, stok_barang')
+            $barang= $builder_barang->select('nama as nama_barang, id as id_barang, stok as stok_barang')
                 ->select('harga_anggota as harga')
-                ->where('id_barang >', 0)
+                ->where('id >', 0)
                 ->where('harga_anggota >', 0)
-                ->where('kode_barang', $kode_barang)
+                ->where('kode', $kode_barang)
                 ->get()
                 ->getRowArray();
         }
@@ -93,11 +92,11 @@ class Model_keranjang extends Model{
         $harga = $barang['harga'];
 		$random = rand('1', '1000000000');
 		$data = array(
-			'k_barang_id' => $barangid,
-            'k_qty' =>  $qty,
-            'k_harga'=> $harga,
-            'k_user_id' => $id,
-			'k_kode_keranjang' => ''.$random.'' . ''.$id.'' . ''.$barangid.''
+			'barang_id' => $barangid,
+            'qty' =>  $qty,
+            'harga'=> $harga,
+            'user_id' => $id,
+			'kode' => ''.$random.'' . ''.$id.'' . ''.$barangid.''
         );
         $status = false;
     
@@ -105,14 +104,14 @@ class Model_keranjang extends Model{
         $builder = $this->db->table('keranjang');
         $data3 = $builder->insert($data);
 
-        $qty = $data['k_qty'];
-        $idb = $data['k_barang_id'];
+        $qty = $data['qty'];
+        $idb = $data['barang_id'];
 
         $qtyesc = $this->db->escapeString($qty);
         $idbesc = $this->db->escapeString($idb);
 
     
-        $stok = $this->db->query("update barang set stok_barang=stok_barang-'$qtyesc' where id_barang='$idbesc'");
+        $stok = $this->db->query("update barang set stok=stok-'$qtyesc' where id='$idbesc'");
         $this->db->transComplete();
 
         $arr = array('success' => $status, 'data' => '');
@@ -126,28 +125,25 @@ class Model_keranjang extends Model{
 
 
 
-
-
-
     public function HapusKeranjangAdmin($kode){
 
         $this->db->transStart();
         $builder1 = $this->db->table('keranjang');
-        $builder1->select('k_barang_id, k_qty');
+        $builder1->select('barang_id as k_barang_id, qty as k_qty');
         //$builder1->selectSUM('k_qty');
-        $builder1->where('k_kode_keranjang', $kode);
-        $builder1->join('barang', 'barang.id_barang = keranjang.k_barang_id');
-        $builder1->groupBy('k_kode_keranjang');
+        $builder1->where('keranjang.kode', $kode);
+        $builder1->join('barang', 'barang.id = keranjang.barang_id');
+        $builder1->groupBy('keranjang.kode');
         $query = $builder1->get()->getRowArray();
         $qty = $query['k_qty'];
         $idb = $query['k_barang_id'];
         $qtyesc = $this->db->escapeString($qty);
         $idbesc = $this->db->escapeString($idb);
 
-        $stok = $this->db->query("update barang set stok_barang=stok_barang+'$qty' where id_barang='$idb'");
+        $stok = $this->db->query("update barang set stok=stok+'$qty' where id='$idb'");
 
         $builder = $this->db->table('keranjang');
-        $builder->where('k_kode_keranjang', $kode);
+        $builder->where('kode', $kode);
         $builder->delete();
 
         $this->db->transComplete();
@@ -157,9 +153,9 @@ class Model_keranjang extends Model{
         $id_user = $this->session->get('id_user');
         $this->db->transStart();
         $builder1 = $this->db->table('keranjang');
-        $builder1->select('k_barang_id, k_qty');
-        $builder1->where('k_user_id', $id_user);
-        $builder1->join('barang', 'barang.id_barang = keranjang.k_barang_id');
+        $builder1->select('barang_id as k_barang_id, qty as k_qty');
+        $builder1->where('user_id', $id_user);
+        $builder1->join('barang', 'barang.id = keranjang.barang_id');
         //$builder1->groupBy('k_kode_keranjang');
         $query = $builder1->get()->getResultArray();
         //dd($query);
@@ -173,11 +169,11 @@ class Model_keranjang extends Model{
             $idb = $qt2['k_barang_id'];
             $qtyesc = $this->db->escapeString($qty);
             $idbesc = $this->db->escapeString($idb);
-            $stok = $this->db->query("update barang set stok_barang=stok_barang+'$qtyesc' where id_barang='$idbesc'");
+            $stok = $this->db->query("update barang set stok=stok+'$qtyesc' where id='$idbesc'");
         endforeach;
 
         $builder = $this->db->table('keranjang');
-        $builder->where('k_user_id', $id_user);
+        $builder->where('user_id', $id_user);
         $builder->delete();
 
         $this->db->transComplete();

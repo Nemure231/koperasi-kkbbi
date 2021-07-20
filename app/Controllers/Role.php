@@ -3,14 +3,14 @@
 use CodeIgniter\Controller;
 use App\Models\Model_user_menu;
 use App\Models\Model_user;
-use App\Models\Model_user_role;
+use App\Models\Model_role;
 
 class Role extends BaseController{
 
     public function __construct(){
         $this->model_user_menu = new Model_user_menu();
         $this->model_user = new Model_user();
-        $this->model_user_role = new Model_user_role();
+        $this->model_role = new Model_role();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
 	}
@@ -27,20 +27,20 @@ class Role extends BaseController{
 
 		
         $data = [
-            'title' => ucfirst('Role'),
-            'nama_menu_utama' => ucfirst('Role'),
-            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                    ->join('user_role', 'user_role.id_role = user.role_id')
-                    ->where('email', $email)
-                    ->first(),
+            'title' => 'Role',
+            'nama_menu_utama' => 'Role',
+            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+						->join('role', 'role.id = user.role_id')
+						->where('surel', $email)
+						->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                     ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                     ->where('user_access_menu.role_id =', $role)
                     ->orderBy('user_access_menu.menu_id', 'ASC')
                     ->orderBy('user_access_menu.role_id', 'ASC')
                     ->findAll(),
-            'role' => $this->model_user_role->select('id_role, role')->asArray()
-                    ->where('id_role!=', 4)->where('id_role!=', 5)
+            'role' => $this->model_role->select('id as id_role, nama as role')->asArray()
+                    ->where('id!=', 4)->where('id!=', 5)
                     ->findAll(),
             'session' => $this->session,
             'validation' => $this->validation,
@@ -72,7 +72,7 @@ class Role extends BaseController{
         if(!$this->validate([
             'role' => [
                 'label'  => 'Nama Role',
-                'rules'  => 'required|is_unique[user_role.role]',
+                'rules'  => 'required|is_unique[role.nama]',
                 'errors' => [
                 'required' => 'Nama role harus diisi!',
                 'is_unique' => 'Nama role sudah ada!'
@@ -81,15 +81,15 @@ class Role extends BaseController{
             
         ])) {
             
-            return redirect()->to(base_url('/role'))->withInput();
+            return redirect()->to(base_url('/pengaturan/role'))->withInput();
 
         }
 
             $data = array(
-                'role' => htmlspecialchars($this->request->getPost('role'), ENT_QUOTES)
+                'nama' => htmlspecialchars($this->request->getPost('role'), ENT_QUOTES)
             );
 
-            $this->model_user_role->insert($data);
+            $this->model_role->insert($data);
         
             $this->session->setFlashdata('pesan_role', 'Role baru berhasil ditambahkan!');
             return redirect()->to(base_url('/pengaturan/role'));
@@ -104,7 +104,7 @@ class Role extends BaseController{
         $rules = 'required';
 
         if($old != $new){
-            $rules =  'required|is_unique[user_role.role]';
+            $rules =  'required|is_unique[role.nama]';
         }
 
             if(!$this->validate([
@@ -119,15 +119,15 @@ class Role extends BaseController{
                 
             ])) {
                 
-                return redirect()->to(base_url('/role'))->withInput();
+                return redirect()->to(base_url('/pengaturan/role'))->withInput();
 
             }
                 $id_role = $this->request->getPost('role_id');
                 $data = array(
-                    'role' => htmlspecialchars($this->request->getPost('roleE'), ENT_QUOTES)
+                    'nama' => htmlspecialchars($this->request->getPost('roleE'), ENT_QUOTES)
                 );
 
-                $this->model_user_role->update($id_role, $data);
+                $this->model_role->update($id_role, $data);
                 $this->session->setFlashdata('pesan_edit_role', 'Role baru berhasil diedit!');
                 return redirect()->to(base_url('/pengaturan/role'));
                   
@@ -137,7 +137,7 @@ class Role extends BaseController{
 
     public function hapus(){
         $id_role =  $this->request->getPost('hidden_role_id_hapus');
-            $this->model_user_role->delete($id_role);
+            $this->model_role->delete($id_role);
             $this->session->setFlashdata('pesan_hapus_role', 'Role berhasil dihapus!');
             return redirect()->to(base_url('/pengaturan/role'));
         

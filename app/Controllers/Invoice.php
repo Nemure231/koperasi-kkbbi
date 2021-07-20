@@ -33,30 +33,30 @@ class Invoice extends BaseController{
         $tk =   $this->model_transaksi_sementara->select('ts_kode_transaksi, telepon, 
                 ts_uri, ts_jumlah_uang, ts_kembalian, nama, alamat, ts_harga')->asArray()
                 ->where('ts_kode_transaksi', $kod)
-                ->join('barang', 'barang.id_barang = transaksi_sementara.ts_barang_id')
-                ->join('user', 'user.id_user = transaksi_sementara.ts_user_id')
+                ->join('barang', 'barang.id = transaksi_sementara.ts_barang_id')
+                ->join('user', 'user.id = transaksi_sementara.ts_user_id')
                 ->groupBy('ts_kode_transaksi')
                 ->first();
         if(!$tk){
             return redirect()->to(base_url('/kasir'));
         }
         $data = [
-           'title' => ucfirst('Kasir'),
-           'nama_menu_utama' => 'Penjualan',
-           'user'   => 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                    ->join('user_role', 'user_role.id_role = user.role_id')
-                    ->where('email', $email)
-                    ->first(),
+            'title' => 'Kasir',
+            'nama_menu_utama' => 'Penjualan',
+            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+						->join('role', 'role.id = user.role_id')
+						->where('surel', $email)
+						->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                     ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                     ->where('user_access_menu.role_id =', $role)
                     ->orderBy('user_access_menu.menu_id', 'ASC')
                     ->orderBy('user_access_menu.role_id', 'ASC')
                     ->findAll(),
-           'session' => $this->session,
-           'id_session' => $role,
-           'validation' => $this->validation,
-           'toko' =>$this->model_toko->select('id_toko, nama_toko, telepon_toko, email_toko
+            'session' => $this->session,
+            'id_session' => $role,
+            'validation' => $this->validation,
+            'toko' =>$this->model_toko->select('id_toko, nama_toko, telepon_toko, email_toko
                     alamat_toko, deskripsi_toko, logo_toko')->asArray()
                     ->where('id_toko', 1)->first(),
            'transaksi_sementara' => $this->model_transaksi_sementara

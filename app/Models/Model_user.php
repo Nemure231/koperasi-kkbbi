@@ -10,8 +10,7 @@ class Model_user extends Model{
 
 
     protected $table = 'user';
-    protected $primaryKey = 'id_user';
-    protected $allowedFields = ['nama', 'email', 'gambar', 'sandi', 'telepon', 'alamat', 'role_id', 'is_active', 'date_created'];
+    protected $allowedFields = ['nama', 'surel', 'gambar', 'sandi', 'telepon', 'alamat', 'role_id', 'status', 'tanggal'];
     
     public function TambahKaryawan($tambah){
         $this->db->transStart();

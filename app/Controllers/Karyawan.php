@@ -3,12 +3,12 @@
 use CodeIgniter\Controller;
 use App\Models\Model_user;
 use App\Models\Model_user_menu;
-use App\Models\Model_user_role;
+use App\Models\Model_role;
 
 class Karyawan extends BaseController{
 
 	public function __construct(){
-        $this->model_user_role = new Model_user_role();
+        $this->model_role = new Model_role();
         $this->model_user = new Model_user();
         $this->model_user_menu = new Model_user_menu();
         $this->request = \Config\Services::request();
@@ -31,24 +31,24 @@ class Karyawan extends BaseController{
 
        
         $data = [
-            'title' => ucfirst('Daftar Karyawan'),
-            'nama_menu_utama' => ucfirst('Karyawan'),
-            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                        ->join('user_role', 'user_role.id_role = user.role_id')
-                        ->where('email', $email)
-                        ->first(),
+            'title' => 'Daftar Karyawan',
+            'nama_menu_utama' => 'Karyawan',
+            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+						->join('role', 'role.id = user.role_id')
+						->where('surel', $email)
+						->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                         ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                         ->where('user_access_menu.role_id =', $role)
                         ->orderBy('user_access_menu.menu_id', 'ASC')
                         ->orderBy('user_access_menu.role_id', 'ASC')
                         ->findAll(),
-            'karyawan' => $this->model_user->select('id_user, role_id, nama, email, gambar, alamat, 
-                        telepon, is_active, role')->asArray()
-                        ->join('user_role', 'user_role.id_role = user.role_id')
+            'karyawan' => $this->model_user->select('user.id as id_user, role_id, user.nama as nama, surel as email,
+                        gambar, alamat,telepon, status as is_active, role.nama as role')->asArray()
+                        ->join('role', 'role.id = user.role_id')
                         ->findAll(),
-            'role' =>   $this->model_user_role->select('id_role, role')->asArray()
-                        ->where('id_role!=', 4)->where('id_role!=', 5)
+            'role' =>   $this->model_role->select('id as id_role, nama as role')->asArray()
+                        ->where('id!=', 4)->where('id!=', 5)
                         ->findAll(),
             'validation' => $this->validation,
             'session' => $this->session,
@@ -199,16 +199,16 @@ class Karyawan extends BaseController{
                     'matches' => 'Kata sandi harus sama!'
                     ]
                 ],
-                'gambar' => [
-                    'label'  => 'Gambar',
-                    'rules'  => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
-                    'errors' => [
-                        //'uploaded' => 'Sampul buku harus dipilih!',
-                        'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
-                        'is_image' => 'Format file yang anda upload bukan gambar!',
-                        'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
-                    ]
-                ]
+                // 'gambar' => [
+                //     'label'  => 'Gambar',
+                //     'rules'  => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
+                //     'errors' => [
+                //         //'uploaded' => 'Sampul buku harus dipilih!',
+                //         'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
+                //         'is_image' => 'Format file yang anda upload bukan gambar!',
+                //         'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
+                //     ]
+                // ]
 
 
             ])) {
@@ -216,28 +216,28 @@ class Karyawan extends BaseController{
 
             }
 
-                $sampul_buku = $this->request->getFile('gambar');
-                //dd($sampul_buku);
+                // $sampul_buku = $this->request->getFile('gambar');
+                // //dd($sampul_buku);
 
-                if($sampul_buku->getError() == 4){
-                    $nama_gambar = 'default.png';
-                }else{
-                    ///pindahkan gambar
-                    $nama_gambar = $sampul_buku->getRandomName();
-                    $sampul_buku->move('admin/assets/profile/', $nama_gambar);
-                    ///ambil namam gambar
+                // if($sampul_buku->getError() == 4){
+                //     $nama_gambar = 'default.png';
+                // }else{
+                //     ///pindahkan gambar
+                //     $nama_gambar = $sampul_buku->getRandomName();
+                //     $sampul_buku->move('admin/assets/profile/', $nama_gambar);
+                //     ///ambil namam gambar
                    
-                }
+                // }
 
                 $tambah = [
                     'nama' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
-                    'email' => $this->request->getPost('email'),
-                    'gambar' => $nama_gambar,
+                    'surel' => $this->request->getPost('email'),
+                    // 'gambar' => $nama_gambar,
                     'sandi' => password_hash($this->request->getPost('sandi'), PASSWORD_DEFAULT),
                     'telepon' => $this->request->getPost('telepon'),
                     'alamat' => htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES),
                     'role_id' => $this->request->getPost('role_id'),
-                    'is_active' => $this->request->getPost('is_active'),
+                    'status' => $this->request->getPost('is_active'),
                 ];
                 
                 $this->model_user->TambahKaryawan($tambah);
@@ -289,16 +289,16 @@ class Karyawan extends BaseController{
                     'required' => 'Role harus dipilih!'
                     ]
                 ],
-                'gambarE' => [
-                    'label'  => 'Gambar',
-                    'rules'  => 'max_size[gambarE,1024]|is_image[gambarE]|mime_in[gambarE,image/jpg,image/jpeg,image/png]',
-                    'errors' => [
-                        //'uploaded' => 'Sampul buku harus dipilih!',
-                        'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
-                        'is_image' => 'Format file yang anda upload bukan gambar!',
-                        'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
-                    ]
-                ]
+                // 'gambarE' => [
+                //     'label'  => 'Gambar',
+                //     'rules'  => 'max_size[gambarE,1024]|is_image[gambarE]|mime_in[gambarE,image/jpg,image/jpeg,image/png]',
+                //     'errors' => [
+                //         //'uploaded' => 'Sampul buku harus dipilih!',
+                //         'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
+                //         'is_image' => 'Format file yang anda upload bukan gambar!',
+                //         'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
+                //     ]
+                // ]
 
             ])) {
                 
@@ -306,26 +306,26 @@ class Karyawan extends BaseController{
 
             }
 
-                $foto = $this->request->getFile('gambarE');
+                // $foto = $this->request->getFile('gambarE');
 
-                //cek gambar aapakah tetap gambar lama
-                if($foto->getError() == 4){
-                    $nama_foto = $this->request->getPost('gambarE_lama');
-                }else{
-                    $nama_foto = $foto->getRandomName();
-                    $foto->move('admin/assets/profile/', $nama_foto);
-                    //hapus file lama
-                    unlink('admin/assets/profile/'. $this->request->getPost('gambarE_lama'));
-                }
+                // //cek gambar aapakah tetap gambar lama
+                // if($foto->getError() == 4){
+                //     $nama_foto = $this->request->getPost('gambarE_lama');
+                // }else{
+                //     $nama_foto = $foto->getRandomName();
+                //     $foto->move('admin/assets/profile/', $nama_foto);
+                //     //hapus file lama
+                //     unlink('admin/assets/profile/'. $this->request->getPost('gambarE_lama'));
+                // }
                 $id_user = $this->request->getPost('user_id');
                 $edit = [
                     'nama' => htmlspecialchars($this->request->getPost('namaE'), ENT_QUOTES),
-                    'email' => $this->request->getPost('emailE'),
-                    'gambar' => $nama_foto,
+                    'surel' => $this->request->getPost('emailE'),
+                    // 'gambar' => $nama_foto,
                     'telepon' => $this->request->getPost('teleponE'),
                     'alamat' => htmlspecialchars($this->request->getPost('alamatE'), ENT_QUOTES),
                     'role_id' => $this->request->getPost('role_idE'),
-                    'is_active' => $this->request->getPost('is_activeE'),
+                    'status' => $this->request->getPost('is_activeE'),
                 ];
 
                
@@ -340,10 +340,10 @@ class Karyawan extends BaseController{
   
     public function hapus(){
         $user_id = $this->request->getPost('hidden_id_user');
-            $hapus = $this->model_user->asArray()->find($user_id);
-            if($hapus['gambar'] != 'default.png'){
-                unlink('admin/assets/profile/'. $hapus['gambar']);
-            }
+            // $hapus = $this->model_user->asArray()->find($user_id);
+            // if($hapus['gambar'] != 'default.png'){
+            //     unlink('admin/assets/profile/'. $hapus['gambar']);
+            // }
             $this->model_user->HapusKaryawan($user_id);
             $this->session->setFlashdata('hapus_karyawan', 'Karyawan berhasil dihapus!');
             return redirect()->to(base_url('/tempat/karyawan'));

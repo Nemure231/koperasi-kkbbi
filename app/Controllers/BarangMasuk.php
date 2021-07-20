@@ -277,18 +277,18 @@ class BarangMasuk extends BaseController
 
             $data[] = array(
             'barang_id' => $this->request->getPost('barang_id')[$i],
-            'pengirim_barang_id' => $this->request->getPost('pengirim_barang_id')[$i],
-            'jumlah_barang_masuk' => $this->request->getPost('jumlah_barang_masuk')[$i],
-            'harga_pokok_pb' => $this->request->getPost('harga_pokok')[$i],
+            'penyuplai_id' => $this->request->getPost('pengirim_barang_id')[$i],
+            'jumlah' => $this->request->getPost('jumlah_barang_masuk')[$i],
+            'harga_pokok' => $this->request->getPost('harga_pokok')[$i],
             'total_harga_pokok' => ($this->request->getPost('harga_pokok')[$i] * $this->request->getPost('jumlah_barang_masuk')[$i])
             );
 
             
             $data2[] = array(
                 'barang_id' => $this->request->getPost('barang_id')[$i],
-                'harga_pokok_pb' => $this->request->getPost('harga_pokok')[$i],
-                'jumlah_barang_masuk' => $this->request->getPost('jumlah_barang_masuk')[$i],
-                'pengirim_barang_id' => $this->request->getPost('pengirim_barang_id')[$i],
+                'harga_pokok' => $this->request->getPost('harga_pokok')[$i],
+                'jumlah' => $this->request->getPost('jumlah_barang_masuk')[$i],
+                'penyuplai' => $this->request->getPost('pengirim_barang_id')[$i],
                 'harga_konsumen' => $this->request->getPost('harga_konsumen')[$i],
                 'harga_anggota' => $this->request->getPost('harga_anggota')[$i]
                 );

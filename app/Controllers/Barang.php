@@ -7,7 +7,7 @@ use App\Models\Model_user;
 use App\Models\Model_satuan;
 use App\Models\Model_merek;
 use App\Models\Model_kategori;
-use App\Models\Model_pengirim_barang;
+use App\Models\Model_penyuplai;
 
 class Barang extends BaseController{
 
@@ -18,7 +18,7 @@ class Barang extends BaseController{
         $this->model_satuan = new Model_satuan();
         $this->model_merek = new Model_merek();
         $this->model_kategori = new Model_kategori();
-        $this->model_pengirim_barang = new Model_pengirim_barang();
+        $this->model_penyuplai = new Model_penyuplai();
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 		$this->db = \Config\Database::connect();
@@ -41,11 +41,11 @@ class Barang extends BaseController{
         $deskripsi_barang = set_value('deskripsi_barang', '');
         $harga_pokok = set_value('harga_pokok', '');
         $data = [
-            'title' => ucfirst('Daftar Barang'),
-            'nama_menu_utama' => ucfirst('Gudang'),
-            'user' 	=> 	$this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-						->join('user_role', 'user_role.id_role = user.role_id')
-						->where('email', $email)
+            'title' => 'Daftar Barang',
+            'nama_menu_utama' => 'Gudang',
+            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+						->join('role', 'role.id = user.role_id')
+						->where('surel', $email)
 						->first(),
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
 						->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
@@ -53,22 +53,24 @@ class Barang extends BaseController{
 						->orderBy('user_access_menu.menu_id', 'ASC')
 						->orderBy('user_access_menu.role_id', 'ASC')
 						->findAll(),
-            'barang' => $this->model_barang->select('id_barang, deskripsi_barang, harga_pokok, 
-                        nama_barang, nama_pengirim_barang, pengirim_barang_id, nama_kategori, kode_barang,
-                        stok_barang, tanggal, tanggal_update,nama_merek, nama_satuan, kategori_id, satuan_id, 
+            'barang' => $this->model_barang->select('barang.id as id_barang, deskripsi as deskripsi_barang, harga_pokok,
+                        barang.nama as nama_barang, penyuplai.nama as nama_pengirim_barang, penyuplai.id as pengirim_barang_id,
+                        kategori.nama as nama_kategori, kode as kode_barang, stok as stok_barang, barang.tanggal as tanggal,
+                        tanggal_update, merek.nama as nama_merek, satuan.nama as nama_satuan, kategori_id, satuan_id, 
                         merek_id, harga_anggota, harga_konsumen')->asArray()
-                        ->join('kategori', 'kategori.id_kategori = barang.kategori_id')
-                        ->join('satuan', 'satuan.id_satuan = barang.satuan_id')
-                        ->join('merek', 'merek.id_merek = barang.merek_id')
-                        ->join('pengirim_barang', 'pengirim_barang.id_pengirim_barang = barang.pengirim_barang_id')
+
+                        ->join('kategori', 'kategori.id = barang.kategori_id')
+                        ->join('satuan', 'satuan.id = barang.satuan_id')
+                        ->join('merek', 'merek.id = barang.merek_id')
+                        ->join('penyuplai', 'penyuplai.id = barang.penyuplai_id')
                         ->findAll(),
-            'satuan' => $this->model_satuan->select('id_satuan, nama_satuan')->asArray()
+            'satuan' => $this->model_satuan->select('id as id_satuan, nama as nama_satuan')->asArray()
                         ->findAll(),
-            'merek' =>  $this->model_merek->select('id_merek, nama_merek')->asArray()
+            'merek' =>  $this->model_merek->select('id as id_merek, nama as nama_merek')->asArray()
                         ->findAll(),
-            'kategori'=>$this->model_kategori->select('id_kategori, nama_kategori')->asArray()
+            'kategori'=>$this->model_kategori->select('id as id_kategori, nama as nama_kategori')->asArray()
                         ->findAll(),
-            'supplier'=>$this->model_pengirim_barang->select('id_pengirim_barang, nama_pengirim_barang')->asArray()
+            'supplier'=>$this->model_penyuplai->select('id as id_pengirim_barang, nama as nama_pengirim_barang')->asArray()
                         ->findAll(),
             'validation' => $this->validation,
             'session' => $this->session,
@@ -202,7 +204,7 @@ class Barang extends BaseController{
             if(!$this->validate([
                 'nama_barang' => [
                     'label'  => 'Nama Barang',
-                    'rules'  => 'required|is_unique[barang.nama_barang]',
+                    'rules'  => 'required|is_unique[barang.nama]',
                     'errors' => [
                     'required' => 'Nama barang harus diisi!',
                     'is_unique' => 'Nama barang sudah ada!'
@@ -297,7 +299,7 @@ class Barang extends BaseController{
                 if (is_numeric($sap)){
                     $sem = $sap;
                 }else{
-                    $this->model_satuan->set('nama_satuan', $sap)->insert();
+                    $this->model_satuan->set('nama', $sap)->insert();
                     $sem = $this->db->insertID();
                 }
 
@@ -306,7 +308,7 @@ class Barang extends BaseController{
                 if (is_numeric($kat)){
                     $ket = $kat;
                 }else{
-                    $this->model_kategori->set('nama_kategori', $kat)->insert();
+                    $this->model_kategori->set('nama', $kat)->insert();
                     $ket = $this->db->insertID();   
                 }
 
@@ -315,7 +317,7 @@ class Barang extends BaseController{
                 if (is_numeric($mer)){
                     $mar = $mer;
                 }else{
-                    $this->model_merek->set('nama_merek', $mer)->insert();
+                    $this->model_merek->set('nama', $mer)->insert();
                     $mar = $this->db->insertID();    
                 }
 
@@ -324,7 +326,7 @@ class Barang extends BaseController{
                 if (is_numeric($sop)){
                     $sup = $sop;
                 }else{
-                    $this->model_pengirim_barang->set('nama_pengirim_barang', $sop)->insert();
+                    $this->model_penyuplai->set('nama', $sop)->insert();
                     $sup = $this->db->insertID(); 
                 }
 
@@ -332,17 +334,17 @@ class Barang extends BaseController{
 
                 $nama_barang = htmlspecialchars($this->request->getPost('nama_barang'), ENT_QUOTES);
                 $data = array(
-                    'kode_barang' => htmlspecialchars($this->request->getPost('kode_barang'), ENT_QUOTES),
-                    'nama_barang' => $nama_barang,
+                    'kode' => htmlspecialchars($this->request->getPost('kode_barang'), ENT_QUOTES),
+                    'nama' => $nama_barang,
                     'kategori_id' => htmlspecialchars($ket, ENT_QUOTES),
                     'satuan_id' => htmlspecialchars($sem, ENT_QUOTES),
                     'merek_id' => htmlspecialchars($mar, ENT_QUOTES),
-                    'pengirim_barang_id' => htmlspecialchars($sup, ENT_QUOTES),
+                    'penyuplai_id' => htmlspecialchars($sup, ENT_QUOTES),
                     'harga_pokok' => $this->request->getPost('harga_pokok'),
                     'harga_konsumen' => $this->request->getPost('harga_konsumen'),
                     'harga_anggota' => $this->request->getPost('harga_anggota'),
-                    'stok_barang' => $this->request->getPost('stok_barang'),
-                    'deskripsi_barang' => htmlspecialchars($this->request->getPost('deskripsi_barang'), ENT_QUOTES),
+                    'stok' => $this->request->getPost('stok_barang'),
+                    'deskripsi' => htmlspecialchars($this->request->getPost('deskripsi_barang'), ENT_QUOTES),
                     'tanggal' => date('Y-m-d H:i:s')
                 );
     
@@ -363,7 +365,7 @@ class Barang extends BaseController{
         $rules_nama = 'required';
 
         if($old != $new){
-            $rules_nama =  'required|is_unique[barang.nama_barang]';
+            $rules_nama =  'required|is_unique[barang.nama]';
         }
 
             if(!$this->validate([
@@ -464,7 +466,7 @@ class Barang extends BaseController{
                 if (is_numeric($sap)){
                     $sem = $sap;
                 }else{
-                    $this->model_satuan->set('nama_satuan', $sap)->insert();
+                    $this->model_satuan->set('nama', $sap)->insert();
                     $sem = $this->db->insertID();
                 }
 
@@ -473,7 +475,7 @@ class Barang extends BaseController{
                 if (is_numeric($kat)){
                     $ket = $kat;
                 }else{
-                    $this->model_kategori->set('nama_kategori', $kat)->insert();
+                    $this->model_kategori->set('nama', $kat)->insert();
                     $ket = $this->db->insertID();   
                 }
 
@@ -482,7 +484,7 @@ class Barang extends BaseController{
                 if (is_numeric($mer)){
                     $mar = $mer;
                 }else{
-                    $this->model_merek->set('nama_merek', $mer)->insert();
+                    $this->model_merek->set('nama', $mer)->insert();
                     $mar = $this->db->insertID();
                 }
 
@@ -491,23 +493,23 @@ class Barang extends BaseController{
                 if (is_numeric($sop)){
                     $sup = $sop;
                 }else{
-                    $this->model_pengirim_barang->set('nama_pengirim_barang', $sop)->insert();
+                    $this->model_penyuplai->set('nama', $sop)->insert();
                     $sup = $this->db->insertID(); 
                 }
                 
                 
                 
                 $data = array(
-                    'nama_barang' => $nama_barang,
+                    'nama' => $nama_barang,
                     'kategori_id' => htmlspecialchars($ket, ENT_QUOTES),
                     'satuan_id' => htmlspecialchars($sem, ENT_QUOTES),
                     'merek_id' => htmlspecialchars($mar, ENT_QUOTES),
-                    'pengirim_barang_id' => htmlspecialchars($sup, ENT_QUOTES),
+                    'penyuplai_id' => htmlspecialchars($sup, ENT_QUOTES),
                     'harga_pokok' => $this->request->getPost('harga_pokokE'),
                     'harga_konsumen' => $this->request->getPost('harga_konsumenE'),
                     'harga_anggota' => $this->request->getPost('harga_anggotaE'),
-                    'stok_barang' => $this->request->getPost('stok_barangE'),
-                    'deskripsi_barang' => $this->request->getPost('deskripsi_barangE'),
+                    'stok' => $this->request->getPost('stok_barangE'),
+                    'deskripsi' => $this->request->getPost('deskripsi_barangE'),
                     'tanggal_update' => date('Y-m-d H:i:s')
                 );
                 

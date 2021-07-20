@@ -22,7 +22,7 @@
 
               <div class="card-body">
                 <!-- <form method="POST" name="login" id="login" action="<?php //echo base_url().'/auth' ?>" novalidate=""> -->
-                <?php echo form_open(base_url().'/', $attr);    ?>
+                <?php echo form_open(base_url().'/login', $attr);    ?>
                 <?php echo csrf_field(); ?>
                   <div class="form-group">
                     <div class="d-block">

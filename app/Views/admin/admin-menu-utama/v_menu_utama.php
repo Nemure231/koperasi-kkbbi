@@ -112,7 +112,7 @@
 				<div class="modal-body">
 
 					<div class="form-group">
-            <?php echo form_input($nama_menu_utama); ?>
+            <?php echo form_input($nama_menu_utamaa); ?>
 					</div>
 
           <div class="form-group">

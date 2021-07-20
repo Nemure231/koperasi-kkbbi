@@ -28,19 +28,19 @@ class Merek extends BaseController
         
 
         $data = [
-            'title' => ucfirst('Daftar Merek'),
-            'nama_menu_utama' => ucfirst('Barang'),
-            'user' 	=>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                        ->join('user_role', 'user_role.id_role = user.role_id')
-                        ->where('email', $email)
-                        ->first(),
+            'title' => 'Daftar Merek',
+            'nama_menu_utama' => 'Gudang',
+            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+						->join('role', 'role.id = user.role_id')
+						->where('surel', $email)
+						->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                         ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                         ->where('user_access_menu.role_id =', $role)
                         ->orderBy('user_access_menu.menu_id', 'ASC')
                         ->orderBy('user_access_menu.role_id', 'ASC')
                         ->findAll(),
-            'merek' =>  $this->model_merek->select('id_merek, nama_merek')->asArray()
+            'merek' =>  $this->model_merek->select('id as id_merek, nama as nama_merek')->asArray()
                         ->findAll(),
             'validation' => $this->validation,
             'session' => $this->session,
@@ -82,7 +82,7 @@ class Merek extends BaseController
             if(!$this->validate([
                 'nama_merek' => [
                     'label'  => 'Nama Merek',
-                    'rules'  => 'required|is_unique[merek.nama_merek]',
+                    'rules'  => 'required|is_unique[merek.nama]',
                     'errors' => [
                     'required' => 'Nama merek harus diisi!',
                     'is_unique' => 'Nama merek sudah ada!'
@@ -96,7 +96,7 @@ class Merek extends BaseController
             }
 
                 $data = array(
-                    'nama_merek' => htmlspecialchars($this->request->getPost('nama_merek'), ENT_QUOTES)
+                    'nama' => htmlspecialchars($this->request->getPost('nama_merek'), ENT_QUOTES)
                 );
 
                 $this->model_merek->insert($data);
@@ -115,7 +115,7 @@ class Merek extends BaseController
         $nama = 'required';
 
         if($old != $new){
-            $nama =  'required|is_unique[merek.nama_merek]';
+            $nama =  'required|is_unique[merek.nama]';
         } 
 
             if(!$this->validate([
@@ -135,7 +135,7 @@ class Merek extends BaseController
             }
                 $id = $this->request->getPost('id_merekE');
                 $data = array(
-                    'nama_merek' => htmlspecialchars($this->request->getPost('edit_nama_merek'), ENT_QUOTES)
+                    'nama' => htmlspecialchars($this->request->getPost('edit_nama_merek'), ENT_QUOTES)
                 );
 
                 $this->model_merek->update($id, $data);

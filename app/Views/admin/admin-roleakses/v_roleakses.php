@@ -13,6 +13,7 @@
 
 
           <?php if($menurole):  ?>
+            <input type="hidden" id="csrf_akses" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
             <div class="card-header">
               <h4></h4>
             </div>

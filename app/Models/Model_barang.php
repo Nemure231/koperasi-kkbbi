@@ -10,22 +10,26 @@ class Model_barang extends Model{
     }
 
     protected $table = 'barang';
-    protected $primaryKey = 'id_barang';
-    protected $allowedFields = ['nama_barang', 'kode_barang', 'kategori_id', 'satuan_id', 'merek_id', 'pengirim_barang_id', 'harga_pokok', 'harga_konsumen', 'harga_anggota', 'stok_id', 'stok_barang', 'deskripsi_barang', 'gambar_barang', 'tanggal', 'tanggal_update'];
+    // protected $primaryKey = 'id_barang';
+    protected $allowedFields = [
+        'nama', 'kode', 'kategori_id', 'satuan_id', 
+        'merek_id', 'penyuplai_id', 'harga_pokok', 'harga_konsumen',
+        'harga_anggota', 'stok_id', 'stok', 'deskripsi', 'gambar',
+        'tanggal', 'tanggal_update'];
 
 
     public function AutoKodeBarang(){
 
         $this->db->transStart();
         $query = $this->db->table('barang')
-                        ->select('RIGHT(barang.kode_barang,2) as kode_barang', FALSE)
-                        ->orderBy('kode_barang', 'DESC')
+                        ->select('RIGHT(barang.kode,2) as kode', FALSE)
+                        ->orderBy('kode', 'DESC')
                        
                         ->limit(1)->get()->getRowArray();
 
             if (count($query) <>0) {
                 //$query2 = $query->get()->getRowArray();
-                $kode= intval($query['kode_barang']) + 1;
+                $kode= intval($query['kode']) + 1;
             }else{
                 $kode =1;
             }
