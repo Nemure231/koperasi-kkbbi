@@ -126,35 +126,7 @@
 
                     </tr>
 
-                    <tr>
-                      <th colspan="3">Nomor Telepon</th>
-                      <th colspan="1"></th>
-                      <th colspan="2">
-                        <input id="nomor_telepon_hutang" readonly name="nomor_telepon_hutang"
-                          class="form-control nomor_telepon_hutang" value="">
-                        <label class="text-danger" id="err-thph"></label>
-                        <!-- <//?php echo ($validation->showError('kembalian')) ? 'is-invalid' : ''; ?> -->
-
-
-
-                      </th>
-
-                    </tr>
-
-                    <tr>
-                      <th colspan="3">Nama Pengutang</th>
-                      <th colspan="1"></th>
-                      <th colspan="2">
-                        <input id="nama_penghutang" readonly name="nama_penghutang" class="form-control nama_penghutang"
-                          value="">
-                        <label class="text-danger" id="err-npht"></label>
-                        <!-- <//?php echo ($validation->showError('kembalian')) ? 'is-invalid' : ''; ?> -->
-
-
-
-                      </th>
-
-                    </tr>
+                    
 
 
                   </tbody>
