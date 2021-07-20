@@ -135,19 +135,7 @@
               <div class="invisible">
                 <?php echo $validation->listErrors(); ?>
               </div>
-              <div class="row">
-                <div class="col-lg-2">
-                  <div class="form-group nuk">
-                    <div class="control-label">Utang?</div>
-                    <label class="custom-switch mt-2">
-                      <input type="checkbox" name="status_transaksi" value="2" class="custom-switch-input ngutang">
-                      <span class="custom-switch-indicator"></span>
-                      <span class="custom-switch-description">Ya!</span>
-                    </label>
-                  </div>
-                </div>
-
-              </div>
+            
 
 
               <div class="card-footer text-center heh" id="heya">
