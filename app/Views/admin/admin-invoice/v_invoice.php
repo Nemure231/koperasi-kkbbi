@@ -1,5 +1,11 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/css/animate.min.css' ?>">
+<link rel="stylesheet"  type="text/css" href="<?php echo base_url().'/admin/assets/modules/izitoast/css/iziToast.min.css' ?>">
 <!-- Main Content -->
+<style type="text/css">
+  .select2 {
+width:100%!important;
+}
+</style>
 <div class="flash-data" data-flashdata="<?php echo $session->getFlashdata('pesan_transaksi_sementara')  ?>"></div>
 <div class="main-content">
   <section class="section">
@@ -9,11 +15,12 @@
 
     <div class="section-body">
       <?php if($transaksi_sementara):  ?>
+        <input type="hidden"  name="role_id" value="<?php echo $role_id_trans;?>" />
         <?php echo form_open(base_url().'/fitur/kasir/invoice/tambah', $form_invoice);    ?>
         <?php echo form_input($hidden_kode_transaksi); ?>
-        <?php echo form_input($hidden_uri); ?>
+        <!-- <//?php echo form_input($hidden_uri); ?> -->
           <?php echo csrf_field(); ?>
-      <input type="hidden" name="ts_uri" value="<?php echo $row_transaksi_sementara['ts_uri']; ?>">
+      <!-- <input type="hidden" name="ts_uri" value="<//?php echo $row_transaksi_sementara['ts_uri']; ?>"> -->
       <div class="invoice">
         <div class="invoice-print">
           <div class="row">
@@ -44,14 +51,59 @@
               <!-- //set_value('tt_nama_penerima', ''); -->
               <div class="row">
                 <div class="col-md-6">
-                  <address>
-                  <strong>Tambahan:</strong>
+                
                   <div class="form-group">
-                  <label>Nama penerima & Nomor Telepon</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Nama penerima ...." name="tt_nama_penerima" id="tt_nama_penerima" value="<?php echo set_value('tt_nama_penerima', ''); ?>" >
-                        <input type="number" oninput="this.value = Math.abs(this.value)" min="0" class="form-control <?php echo ($validation->hasError('tt_telepon_penerima')) ? 'is-invalid' : ''; ?>" placeholder="No Telepon ...." name="tt_telepon_penerima" id="tt_telepon_penerima" value="<?php echo set_value('tt_telepon_penerima', '0'); ?>" >
-                      </div>
+
+
+                  <?php if($role_id_trans == 4):  ?>
+                    <label>Isi surel</label>
+                     
+
+                        <input class="form-control" type="text" name="surel_konsumen">
+
+                  <?php else  : ?>
+                  <!-- <label>Pilih Anggota</label> -->
+                      <!-- <div class="input-group"> -->
+                      <input type="hidden" id="csrf_surel" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+                      <input type="hidden"  name="detail_transaksi_id" value="<?php echo $row_transaksi_sementara['detail_transaksi_id'];?>" />
+                     
+                        
+                    
+                      <!-- <input type="text" class="form-control" placeholder="Nama penerima ...." name="tt_nama_penerima" id="tt_nama_penerima" value="<?php echo set_value('tt_nama_penerima', ''); ?>" > -->
+                        
+                        <div class="row">
+
+                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                  <label>Anggota</label>
+                                <select class="form-control mb-2 <?php echo ($validation->hasError('penyuplai_id')) ? 'is-invalid' : ''; ?>" name="penyuplai_id" id="penyuplai_id">
+                                  <option value="">--Pilih--</option>
+                                  <?php foreach ($penyuplai as $p) :?>
+
+                                  <option value="<?php echo $p['id'];?>"><?php echo $p['nama'];?>
+                                  </option>
+                                  <?php endforeach;?>
+                                </select>
+                                <div class="invalid-feedback">
+                                  <?php echo $validation->showError('penyuplai_id'); ?>
+                                </div>
+                                    
+                                  </div>
+
+
+
+
+                                <div class="form-group col-lg-6 col-md-6 col-sm-12 mb-2">
+                                <label>Surel</label>
+                                  <input class="form-control <?php echo ($validation->hasError('surel')) ? 'is-invalid' : ''; ?>" type="text" name="surel" id="surel" readonly>
+                                  <div class="invalid-feedback">
+                                  <?php echo $validation->showError('surel'); ?>
+                                </div>
+                                </div>
+
+                        </div>
+                        <!-- <input type="number" oninput="this.value = Math.abs(this.value)" min="0" class="form-control <//?php echo ($validation->hasError('tt_telepon_penerima')) ? 'is-invalid' : ''; ?>" placeholder="No Telepon ...." name="tt_telepon_penerima" id="tt_telepon_penerima" value="</?php echo set_value('tt_telepon_penerima', '0'); ?>" > -->
+                      <!-- </div> -->
+                      <?php endif; ?>
                       
                      
                     </div>
@@ -93,7 +145,7 @@
                         <td><?php echo $i; ?></td>
                         <td><?php echo $ts['nama_barang']; ?></td>
 
-                        <?php if($ts['ts_role_id'] == 4):  ?>
+                        <?php if($role_id_trans == 4):  ?>
                           <td class="text-center"><?php echo 'Rp. '. number_format($ts['harga_konsumen'], 0,",","."); ?></td>
                         <?php else  : ?>
                           <td class="text-center"><?php echo 'Rp. '. number_format($ts['harga_anggota'], 0,",","."); ?></td>
@@ -223,7 +275,7 @@
 
       <?php echo form_open(base_url().'/fitur/kasir/invoice/hapus', $form_hapus_invoice);    ?>
           <?php echo form_input($hidden_kode_transaksi); ?>
-          <?php echo form_input($hidden_uri); ?>
+          <!-- <//?php echo form_input//($hidden_uri); ?> -->
           <?php echo csrf_field(); ?>
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>

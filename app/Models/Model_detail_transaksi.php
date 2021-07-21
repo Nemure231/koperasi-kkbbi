@@ -12,10 +12,10 @@ class Model_detail_transaksi extends Model{
     protected $table = 'detail_transaksi';
     protected $allowedFields = [
         'kode', 'user_id', 'role_id', 'total_harga', 'total_qty', 
-        'jumlah_uang', 'kembalian', 'tt_nama_penerima', 'tt_telepon_penerima', 'tanggal'];
+        'jumlah_uang','penyuplai_id', 'status', 'kembalian', 'tt_nama_penerima', 'tt_telepon_penerima', 'tanggal'];
     
 
-    public function AutoKodeTransaksi(){
+    public function AutoKodeTransaksi($kode_jenis_kasir){
         date_default_timezone_set("Asia/Jakarta");
         $id_user = $this->session->get('id_user');
         $this->db->transStart();
@@ -36,9 +36,9 @@ class Model_detail_transaksi extends Model{
                             ->get()->getRowArray();
     
             $batas= str_pad($kode, "".$kode1['jumlah_angka']."","0", STR_PAD_LEFT);
-            $bulan = date('my');
+            $bulan = date('dmy');
             $random = rand(1, 1000);
-            $kodetampil= "".$kode1['huruf_kode_transaksi']."" .$random.$bulan.$id_user.$batas;
+            $kodetampil= "".$kode1['huruf_kode_transaksi']."" .$kode_jenis_kasir.$id_user.$bulan.$batas;
             return $kodetampil;
             
         $this->db->transComplete();

@@ -31,8 +31,15 @@ $routes->setAutoRoute(false);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 
-$routes->get('/', 'Auth::index');
-$routes->post('login', 'Auth::login');
+
+$routes->get('/', 'Beranda::index');
+
+
+$routes->add('produk', 'Produk::index');
+$routes->add('produk/(:segment)', 'Produk::detail_produk/$1');
+
+$routes->get('login', 'Auth::index');
+$routes->post('aksi_login', 'Auth::login');
 $routes->get('logout', 'Auth::logout');
 $routes->add('blokir', 'Auth::blokir');
 
@@ -92,6 +99,7 @@ $routes->group('fitur', function($routes){
 
 	$routes->get('kasir/invoice/(:any)', 'Invoice::index/$1', ['filter' => 'cek_akses']);
 	$routes->post('kasir/invoice/tambah', 'Invoice::tambah');
+	$routes->post('kasir/invoice/ambil_surel', 'Invoice::ambil_surel');
 	$routes->delete('kasir/invoice/hapus', 'Invoice::hapus');	
 
 	$routes->get('utang', 'Utang::index', ['filter' => 'cek_akses']);

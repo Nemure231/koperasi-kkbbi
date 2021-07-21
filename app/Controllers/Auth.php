@@ -167,7 +167,7 @@ class Auth extends BaseController
 					</button>
 				  </div>');
 					 //redirect(base_url('/'));
-					 return redirect()->to(base_url('/'))->back()->withInput();
+					 return redirect()->to(base_url('/login'))->back()->withInput();
 				}
 
 			}else{
@@ -178,7 +178,7 @@ class Auth extends BaseController
 				  <span aria-hidden="true">&times;</span>
 				</button>
 			  </div>');
-				 return redirect()->to(base_url('/'));
+				 return redirect()->to(base_url('/login'));
 			}
 
 		}else{
@@ -188,7 +188,7 @@ class Auth extends BaseController
 						<span aria-hidden="true">&times;</span>
 						</button>
 					</div>');
-				return redirect()->to(base_url('/'))->back()->withInput();
+				return redirect()->to(base_url('/login'))->back()->withInput();
 		}
 			
 	}

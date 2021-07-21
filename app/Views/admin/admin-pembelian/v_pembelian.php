@@ -95,8 +95,12 @@
 
                     <tr>
                       <th colspan="3">Total</th>
-                      <th colspan="1"><?php echo $sum_qty; ?></th>
-                      <th colspan="2" id="total"><?php echo 'Rp. '. number_format($sum, 0,",","."); ?></th>
+                      <th colspan="1"><?php echo $sum_qty; ?>
+                      <input type="hidden" name="total_qty" value="<?php echo $sum_qty; ?>">
+                      </th>
+                      <th colspan="2" id="total"><?php echo 'Rp. '. number_format($sum, 0,",","."); ?>
+                      <input type="hidden" name="total_harga" value="<?php echo $sum; ?>">
+                      </th>
                     </tr>
 
                     <tr>

@@ -172,7 +172,7 @@ $(document).ready(function () {
 
    $('#tambah-keranjang').click(function () {
       var qty = $('#qty_barang').val();
-      var stok = $('#qty3').text();
+      var stok = $('#qty3').val();
       if(Number(qty) > Number(stok)){
          iziToast.error({
             title: 'Gagal!',

@@ -11,6 +11,7 @@ use App\Models\Model_detail_transaksi;
 use App\Models\Model_jenis_kasir;
 use App\Models\Model_role;
 use App\Models\Model_transaksi_sementara;
+use App\Models\Model_transaksi;
 // use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 // use Mike42\Escpos\Printer;
 // use Setruk\PrintConnectors\FilePrintConnector;
@@ -29,8 +30,10 @@ class Kasir extends BaseController{
         $this->model_detail_transaksi = new Model_detail_transaksi();
         $this->model_jenis_kasir = new Model_jenis_kasir();
         $this->model_transaksi_sementara = new Model_transaksi_sementara();
+        $this->model_transaksi = new Model_transaksi();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
+        $this->db = \Config\Database::connect();
         // $this->connector = new FilePrintConnector();
         // $this->printer = new Printer($this->connector);
 	}
@@ -65,8 +68,8 @@ class Kasir extends BaseController{
                 ->join('satuan', 'satuan.id = barang.satuan_id')
                 ->findAll();
         }
-
-        $kode = $this->model_detail_transaksi->AutoKodeTransaksi(); 
+        $kode_jenis_kasir = $jenis_kasir['role_id'];
+        $kode = $this->model_detail_transaksi->AutoKodeTransaksi($kode_jenis_kasir); 
         $data = [
            'title'  => 'Kasir',
            'nama_menu_utama' => 'Penjualan',
@@ -165,6 +168,7 @@ class Kasir extends BaseController{
 
         $role = $this->session->get('role_id');
         $id_user = $this->session->get('id_user');
+        $kode =  $this->request->getPost('kode_transaksi');
         
 
         if(!$this->validate([
@@ -192,56 +196,66 @@ class Kasir extends BaseController{
             return redirect()->to(base_url('/fitur/kasir'))->withInput();
 
         }
-        $loop = $this->model_keranjang->select('keranjang.id as id_keranjang, qty, keranjang.kode as k_kode_keranjang, 
-                nama_barang, barang_id as k_barang_id, COUNT(qty) as to_qty')
+        $loop = $this->model_keranjang->select('barang_id')
                 ->select('keranjang.harga as harga')
                 ->selectSUM('qty', 'tt_qty')->asArray()
                 ->where('user_id', $id_user)
-                ->join('barang', 'barang.id = keranjang.barang_id')                    
+                // ->join('barang', 'barang.id = keranjang.barang_id')                    
                 ->groupBy('barang_id')
                 ->findAll();
-        $kode =  $this->request->getPost('kode_transaksi');
-        $status = $this->request->getPost('status_transaksi');
 
-        if(!$status){
-            $status = 1;
-        }
 
-        $nama = $this->request->getPost('nama_penghutang');
-        $nomor = $this->request->getPost('nomor_telepon_hutang');
+        $query_detail= $this->model_keranjang
+        //->select('ts_kembalian, ts_jumlah_uang, ts_role_id')
+        ->selectSUM('qty')
+        ->selectSUM('harga', 't_harga')
+        ->where('user_id', $id_user)
+        ->groupBy('user_id')
+        ->get()->getRowArray();
 
-        if(!$nama && !$nomor){
-            $nama = ''; 
-            $nomor = 0;
-        }
-        $jumlah_uang = $this->request->getPost('jumlah_uang');
+        $data_detail = [
+            'user_id' => $id_user,
+            'penyuplai_id' => '0',
+            'kode' => $kode,
+            'total_harga' => $this->request->getPost('total_harga'),
+            'total_qty' => $this->request->getPost('total_qty'),
+            'jumlah_uang' => $this->request->getPost('jumlah_uang'),
+            'kembalian' => $this->request->getPost('kembalian'),
+            'surel_konsumen' => '',
+            'status' => '2'
+        ];
+
+        $this->db->table('detail_transaksi')
+                ->insert($data_detail);
+        $detail_id = $this->db->insertID();
+
 			foreach ($loop as  $item):
+
 				$data[] = array(
-                    'ts_barang_id' => $item['k_barang_id'],
-					'ts_qty' => $item['tt_qty'],
-                    'ts_harga' => $item['tt_qty'] * $item['harga'],
-                    'ts_user_id' => $id_user,
-                    'ts_role_id' => $this->request->getPost('role_id'),
-                    'ts_kode_transaksi' => $kode,
-                    'ts_jumlah_uang' => $jumlah_uang,
-                    'ts_kembalian' => $this->request->getPost('kembalian'),
-					'ts_uri' => url_title($kode, '', true),
-                    'ts_nama_pengutang' => $nama,
-                    'ts_nomor_pengutang' => $nomor,
-                    'ts_status_transaksi' => $status
+                    'detail_transaksi_id' => $detail_id,
+                    'barang_id' => $item['barang_id'],
+					'qty' => $item['tt_qty'],
+                    'harga' => $item['tt_qty'] * $item['harga'],
+                
+                    // 'ts_user_id' => $id_user,
+                    // 'ts_role_id' => $this->request->getPost('role_id'),
+                    // 'ts_kode_transaksi' => $kode,
+                    // 'ts_jumlah_uang' => $jumlah_uang,
+                    // 'ts_kembalian' => $this->request->getPost('kembalian'),
+					// 'ts_uri' => url_title($kode, '', true),
+                    // 'ts_nama_pengutang' => $nama,
+                    // 'ts_nomor_pengutang' => $nomor,
+                    // 'ts_status_transaksi' => $status
 				);			
             endforeach;
-		// $this->model_transaksi_sementara->TambahTransaksiSementara($data);
-        $this->model_transaksi_sementara->insertBatch($data);
-        $this->model_keranjang->where('user_id', $id_user)->delete();
 
-        if($status != 2){
-            $this->session->setFlashdata('pesan_transaksi_sementara', 'Transaksi berhasil disimpan ke dalam invoice!');
-            return redirect()->to(base_url('/fitur/kasir/invoice/'.$kode.''));
-        }else{
-            $this->session->setFlashdata('pesan_transaksi_sementara_utang', 'Utang berhasil disimpan!');
-            return redirect()->to(base_url('/fitur/kasir'));
-        }
+            // dd($data);
+		
+        $this->model_transaksi->insertBatch($data);
+        // $this->model_keranjang->where('user_id', $id_user)->delete();
+        $this->session->setFlashdata('pesan_transaksi_sementara', 'Transaksi berhasil disimpan ke dalam invoice!');
+        return redirect()->to(base_url('/fitur/kasir/invoice/'.$kode.''));
+        
 
     }
 
