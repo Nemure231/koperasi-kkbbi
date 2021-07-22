@@ -88,7 +88,7 @@ class Auth extends BaseController
 				'rules'  => 'required|valid_email',
 				'errors' => [
 					'required' => 'Email harus diisi!',
-					'valid_email' => 'Format email tidak benar!'
+					'valid_email' => 'Harus berformat email!'
 				]
 			],
 			'sandi' => [

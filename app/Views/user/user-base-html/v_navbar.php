@@ -2,7 +2,7 @@
     <div class="main_menu">
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container box_1620">
-          <a class="navbar-brand logo_h" href="<?php echo base_url().'/' ?>"><img style="width:129px; height: 50px;" src="<?php echo base_url('admin/assets/toko').'/'. 'logo.png' ?>" alt=""></a>
+          <a class="navbar-brand logo_h" href="<?php echo base_url().'/' ?>"><img style="width:100px; height: 100px;" src="<?php echo base_url('user/assets/logo').'/'. 'kkbbi.png' ?>" alt=""></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -53,12 +53,30 @@
                   <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/penerbit' ?>">Daftar Penerbit</a>                    
                 </ul>
 							</li>
+
+              <li class="nav-item submenu dropdown 
+                <?php 
+                  if($title == 'Informasi'){
+                    echo 'active';
+                  }elseif($title == 'Tentang Kami'){
+                    echo 'active';
+                  }elseif($title == 'Lokasi'){
+                    echo 'active';
+                  }?> 
+              ">
+                <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                  aria-expanded="false">Informasi</a>
+                <ul class="dropdown-menu">
+                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/tantang-kami' ?>">Tantang Kami</a>                 
+                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/lokasi' ?>">Lokasi</a>
+                </ul>
+							</li>
               
               
               
               
               
-              <li class="nav-item"><a class="nav-link" href="pricing.html">Tentang Kami</a>
+              <!-- <li class="nav-item"><a class="nav-link" href="pricing.html">Tentang Kami</a> -->
               <!-- <li class="nav-item submenu dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                   aria-expanded="false">Pages</a>
@@ -67,7 +85,7 @@
                   <li class="nav-item"><a class="nav-link" href="blog-details.html">Blog Details</a>                 
                 </ul>
 							</li> -->
-              <li class="nav-item"><a class="nav-link" href="contact.html">Lokasi</a></li>
+              <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/pendaftaran' ?>">Pendaftaran</a></li>
               
               
 

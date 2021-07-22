@@ -37,6 +37,8 @@ $routes->get('/', 'Beranda::index');
 
 $routes->add('produk', 'Produk::index');
 $routes->add('produk/(:segment)', 'Produk::detail_produk/$1');
+$routes->get('pendaftaran', 'Pendaftaran::index');
+$routes->post('pendaftaran/tambah', 'Pendaftaran::tambah');
 
 $routes->get('login', 'Auth::index');
 $routes->post('aksi_login', 'Auth::login');
