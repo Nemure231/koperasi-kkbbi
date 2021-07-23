@@ -125,6 +125,9 @@ $routes->group('fitur', function($routes){
 	$routes->get('retur/invoice', 'InvoiceRetur::index', ['filter' => 'cek_akses']);
 	$routes->post('retur/invoice/tambah', 'InvoiceRetur::tambah');
 	$routes->delete('retur/invoice/hapus', 'InvoiceRetur::hapus');
+
+	$routes->get('pendaftar', 'Pendaftar::index', ['filter' => 'cek_akses']);
+	$routes->post('pendaftar/konfirmasi', 'Pendaftar::konfirmasi');
 });
 
 

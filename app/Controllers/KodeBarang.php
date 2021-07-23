@@ -28,6 +28,7 @@ class KodeBarang extends BaseController
 
         $kode = $this->model_kode_barang->select('id_tb_kode_barang, huruf_kode_barang, jumlah_angka')->asArray()
                 ->first();
+    
 
 		$data = [
 			'title' => 'Kode Barang',

@@ -53,18 +53,20 @@ class Pendaftaran extends BaseController{
 			],
 			'telepon' => [
 				// 'label'  => 'Nomor Telepon',
-				'rules'  => 'required|numeric',
+				'rules'  => 'required|numeric|is_unique[penyuplai.telepon]',
 				'errors' => [
 				'required' => 'Harus diisi!',
-				'numeric' => 'Harus angka!'
+				'numeric' => 'Harus angka!',
+				'is_unique' => 'Nomor itu sudah pernah didaftarkan!'
 				]
 			],
 			'surel' => [
 				// 'label'  => 'Alamat',
-				'rules'  => 'required|valid_email',
+				'rules'  => 'required|valid_email|is_unique[penyuplai.surel]',
 				'errors' => [
 					'required' => 'Harus disi!',
-					'valid_emsil' => 'Harus berformat surel!'
+					'valid_emsil' => 'Harus berformat surel!',
+					'is_unique' => 'Surel itu sudah pernah didaftarkan!'
 				
 				]
 			],
@@ -175,7 +177,7 @@ class Pendaftaran extends BaseController{
 			$pendaftaran = [
 				'penyuplai_id'=> $penyuplai_id,
 				'user_id' => 0,
-				'kode' => rand(100000, 999999),
+				'kode' => 'PDN'.rand(100000, 999999),
 				'biaya' => 0,
 				'waktu_awal' => $this->request->getPost('waktu_awal'),
 				'waktu_akhir' => $this->request->getPost('waktu_akhir'),
@@ -190,12 +192,6 @@ class Pendaftaran extends BaseController{
 	}
 
 	public function _sendEmail($penyuplai, $pendaftaran){
-
-		// $id_log = $this->session->get('id_user');
-
-		// if($id_log){
-		// 	 return redirect()->to(base_url('/'));
-		// }
 
 		$config =[
             'protocol'  => 'smtp',
@@ -214,17 +210,9 @@ class Pendaftaran extends BaseController{
         $this->email->setFrom('karol.web980@gmail.com', 'Karol Web');
         $this->email->setTo($penyuplai['surel']);
 
-        // if($type == 'verify'){
             $this->email->setSubject('Konfirmasi Pendaftaran KKBBI');
 			$this->email->setMessage(html_email($penyuplai, $pendaftaran));
-            // $this->email->setMessage('Klik link di bawah ini untuk verifikasi akunmu.:
-            // <a href="'.base_url(). '/verify?email='. $email. '&token='. urlencode($token). '">Aktifkan</a>');
-		// }
-		//else if($type == 'forgot'){
-        // 	$this->email->subject('Atur Ulang Kata Sandi');
-        //     $this->email->message('Klik link ini untuk atur ulang kata sandi akunmu.:
-        //     <a href="'.base_url(). 'login/aturulangpass?email='. $this->mall->PostEmail(). '&token='. urlencode($token). '">Atur Ulang</a>');
-        // }
+      
        
         if ($this->email->send()) {
             return true;

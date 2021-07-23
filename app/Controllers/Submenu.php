@@ -171,24 +171,28 @@ class Submenu extends BaseController{
                     $this->model_user_menu->set('menu', $mei)->insert();
                     $me = $this->db->insertID();
             
-                }
+            }
 
             $menu_utama = $this->request->getPost('menu_utama_id');
 
             if (is_numeric($menu_utama)){
                 $mu = $menu_utama;
             }else{
-                $this->model_menu_utama->set('nama_menu_utama', $menu_utama)->insert();
+                $utama_data= [
+                    'nama_menu_utama' => $menu_utama,
+                    'menu_id' => $me
+                ];
+                $this->model_menu_utama->insert($utama_data);
                 $mu = $this->db->insertID();
             }
 
             $data = array(
-                'menu_id' => htmlspecialchars($me, ENT_QUOTES),
+                'menu_id' => $me,
                 'judul' => htmlspecialchars($this->request->getPost('judul'), ENT_QUOTES),
                 'url' => htmlspecialchars($this->request->getPost('url'), ENT_QUOTES),
                 'icon' => htmlspecialchars($this->request->getPost('icon'), ENT_QUOTES),
                 'is_active' => $isaktif,
-                'menu_utama_id' => htmlspecialchars($mu, ENT_QUOTES),
+                'menu_utama_id' => $mu,
             );
 
             $this->model_user_sub_menu->insert($data);
