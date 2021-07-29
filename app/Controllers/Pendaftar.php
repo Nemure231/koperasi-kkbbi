@@ -57,7 +57,7 @@ class Pendaftar extends BaseController{
             'id' => $this->request->getPost('id_penyuplai'),
             'kode' => $this->request->getPost('kode')
         ];
-        dd($data);
+//        dd($data);
         if(!$this->validate([
             'kode' => [
                 'rules'  => 'required',

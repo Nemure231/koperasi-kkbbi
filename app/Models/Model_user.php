@@ -10,7 +10,7 @@ class Model_user extends Model{
 
 
     protected $table = 'user';
-    protected $allowedFields = ['nama', 'surel', 'gambar', 'sandi', 'telepon', 'alamat', 'role_id', 'status', 'tanggal'];
+    protected $allowedFields = ['nama', 'surel', 'sandi', 'telepon', 'alamat', 'role_id', 'status', 'tanggal'];
     
     public function TambahKaryawan($tambah){
         $this->db->transStart();

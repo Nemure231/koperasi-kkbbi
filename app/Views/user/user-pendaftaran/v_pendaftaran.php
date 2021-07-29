@@ -57,18 +57,18 @@
                     </div>
 
                     <div class="form-group col-lg-6 col-md-6">
-                      <label>Pekerjaan</label>
-                      <input type="text" name="pekerjaan" id="pekerjaan" class="form-control <?php echo ($validation->hasError('pekerjaan')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('pekerjaan', '', TRUE); ?>">
+                      <label>Sandi</label>
+                      <input type="password" name="sandi" id="sandi" class="form-control <?php echo ($validation->hasError('sandi')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('pekerjaan', '', TRUE); ?>">
                       <div class="invalid-feedback">
-                        <?php echo $validation->showError('pekerjaan'); ?>
+                        <?php echo $validation->showError('sandi'); ?>
                       </div>
                     </div>
 
                     <div class="form-group col-lg-6 col-md-6">
-                      <label>No KTP</label>
-                      <input type="text" name="no_ktp" id="no_ktp" class="form-control <?php echo ($validation->hasError('no_ktp')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('no_ktp', '', TRUE); ?>">
+                      <label>Ulang Sandi</label>
+                      <input type="password" name="ulang_sandi" id="ulang_sandi" class="form-control <?php echo ($validation->hasError('ulang_sandi')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('no_ktp', '', TRUE); ?>">
                       <div class="invalid-feedback">
-                        <?php echo $validation->showError('no_ktp'); ?>
+                        <?php echo $validation->showError('ulang_sandi'); ?>
                       </div>
                     </div>
 
@@ -89,6 +89,21 @@
                 <div class="col-lg-6">
 
                   <div class="row">
+                  <div class="form-group col-lg-6 col-md-6">
+                      <label>Pekerjaan</label>
+                      <input type="text" name="pekerjaan" id="pekerjaan" class="form-control <?php echo ($validation->hasError('pekerjaan')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('pekerjaan', '', TRUE); ?>">
+                      <div class="invalid-feedback">
+                        <?php echo $validation->showError('pekerjaan'); ?>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-lg-6 col-md-6">
+                      <label>No KTP</label>
+                      <input type="text" name="no_ktp" id="no_ktp" class="form-control <?php echo ($validation->hasError('no_ktp')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('no_ktp', '', TRUE); ?>">
+                      <div class="invalid-feedback">
+                        <?php echo $validation->showError('no_ktp'); ?>
+                      </div>
+                    </div>
 
                     <div class="form-group col-lg-4 col-md-4">
                       <label>No Rekening<small class="text-info"> (Opsional)</small></label>
@@ -119,33 +134,33 @@
 
                     <div class="form-group col-lg-12">
                           <label>Alamat</label>
-                          <textarea name="alamat" rows="1" id="alamat" class="form-control <?php echo ($validation->hasError('alamat')) ? 'is-invalid' : ''; ?>"><?php echo set_value('alamat', '', TRUE); ?></textarea>
+                          <textarea name="alamat" id="alamat" class="form-control <?php echo ($validation->hasError('alamat')) ? 'is-invalid' : ''; ?>"><?php echo set_value('alamat', '', TRUE); ?></textarea>
                           <div class="invalid-feedback">
                         <?php echo $validation->showError('alamat'); ?>
                       </div>
                         </div>
 
-                    <div class="form-group col-lg-4 col-md-4">
+                    <!-- <div class="form-group col-lg-4 col-md-4">
                       <label>Tanggal</label>
-                      <input type="text" name="tanggal" id="tanggal" class="form-control <?php echo ($validation->hasError('tanggal')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('tanggal', '', TRUE); ?>" aria-describedby="bantuan-tanggal">
+                      <input type="text" name="tanggal" id="tanggal" class="form-control <//?php echo ($validation->hasError('tanggal')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('tanggal', '', TRUE); ?>" aria-describedby="bantuan-tanggal">
                     
                       <small id="bantuan-tanggal" class="form-text text-muted">
                         Tanggal Konfirmasi Pendaftaran yang Anda inginkan.
                       </small>
                       <div class="invalid-feedback">
-                        <?php echo $validation->showError('tanggal'); ?>
+                        <//?php echo $validation->showError('tanggal'); ?>
                       </div>
                     </div>
 
                     <div class="form-group col-lg-4 col-md-4">
                         <label>Dari</label>
                         
-                          <input type="text" value="" class="form-control <?php echo ($validation->hasError('waktu_awal')) ? 'is-invalid' : ''; ?>" name="waktu_awal" id="ts_awal" aria-describedby="bantuan-waktu-awal" >
+                          <input type="text" value="" class="form-control <//?php echo ($validation->hasError('waktu_awal')) ? 'is-invalid' : ''; ?>" name="waktu_awal" id="ts_awal" aria-describedby="bantuan-waktu-awal" >
                           <small id="bantuan-waktu-awal" class="form-text text-muted">
                         Waktu awal konfirmasi pendaftaran.
                       </small>
                         <div class="invalid-feedback">
-                          <?php echo $validation->showError('waktu_awal'); ?>
+                          <//?php echo $validation->showError('waktu_awal'); ?>
                         </div>
                       </div>
                     
@@ -153,15 +168,15 @@
                       <div class="form-group col-lg-4 col-md-4">
                         <label>Sampai</label>
                         
-                          <input type="text" value="" class="form-control <?php echo ($validation->hasError('waktu_akhir')) ? 'is-invalid' : ''; ?>" name="waktu_akhir" id="ts_sampai" aria-describedby="bantuan-waktu-akhir">
+                          <input type="text" value="" class="form-control <//?php echo ($validation->hasError('waktu_akhir')) ? 'is-invalid' : ''; ?>" name="waktu_akhir" id="ts_sampai" aria-describedby="bantuan-waktu-akhir">
                           <small id="bantuan-waktu-akhir" class="form-text text-muted">
                           Waktu awal konfirmasi pendaftaran.
                       </small>
                         
                         <div class="invalid-feedback">
-                          <?php echo $validation->showError('waktu_akhir'); ?>
+                          <//?php echo $validation->showError('waktu_akhir'); ?>
                         </div>
-                      </div>
+                      </div>-->
 
                   </div>
 

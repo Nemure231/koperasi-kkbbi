@@ -85,8 +85,13 @@
                   <li class="nav-item"><a class="nav-link" href="blog-details.html">Blog Details</a>                 
                 </ul>
 							</li> -->
-              <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/pendaftaran' ?>">Pendaftaran</a></li>
-              
+              <?php if(!$role_log): ?>
+              <li class="nav-item <?php echo ($title == 'Pendaftaran') ? 'active' : ''; ?>"><a class="nav-link" href="<?php echo base_url().'/pendaftaran' ?>">Pendaftaran</a></li>
+              <?php endif; ?>
+
+              <?php if($konfirmasi == '2'): ?>
+              <li class="nav-item <?php echo ($title == 'Konfirmasi') ? 'active' : ''; ?>"><a class="nav-link" href="<?php echo base_url().'/konfirmasi' ?>">Konfirmasi</a></li>  
+              <?php endif; ?>
               
 
             </ul>

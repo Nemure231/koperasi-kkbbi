@@ -3,6 +3,8 @@
 use CodeIgniter\Controller;
 use App\Models\Model_user;
 use App\Models\Model_pendaftaran;
+use App\Models\Model_user_token;
+use App\Models\Model_penyuplai;
 
 class Pendaftaran extends BaseController{
 
@@ -10,7 +12,9 @@ class Pendaftaran extends BaseController{
 
 	public function __construct(){
 		$this->model_user =  new Model_user();
+		$this->model_penyuplai = new Model_penyuplai();
 		$this->model_pendaftaran = new Model_pendaftaran();
+		$this->model_user_token =  new Model_user_token();
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 		$this->email = \Config\Services::email();
@@ -21,13 +25,21 @@ class Pendaftaran extends BaseController{
 
 		$role = $this->session->get('role_id');
 		$email = $this->session->get('email');
+		$konfirm = $this->model_user->select('status')->asArray()
+		->where('surel', $email)
+		->first();
+
+		if($role){
+			return redirect()->to(base_url('/'));
+		}
 		
 		$data = [
 			'title' => 'Pendaftaran',
 			'user' => $this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
 				->join('role', 'role.id = user.role_id')
 				->where('surel', $email)
-				->first(),	
+				->first(),
+			'konfirmasi' => $konfirm['status'] ?? NULL,
 			'validation' => $this->validation,
 			'session' => $this->session,
 			'role_log' => $role,
@@ -41,19 +53,16 @@ class Pendaftaran extends BaseController{
 
 	public function tambah(){
 
-		$angka = str_replace(":", "", $this->request->getPost('waktu_sampai'));
 
 		if(!$this->validate([
 			'nama' => [
-				// 'label'  => 'Nama Pendaftaran',
 				'rules'  => 'required',
 				'errors' => [
 				'required' => 'Harus diisi!'
 				]
 			],
 			'telepon' => [
-				// 'label'  => 'Nomor Telepon',
-				'rules'  => 'required|numeric|is_unique[penyuplai.telepon]',
+				'rules'  => 'required|numeric|is_unique[user.telepon]',
 				'errors' => [
 				'required' => 'Harus diisi!',
 				'numeric' => 'Harus angka!',
@@ -61,8 +70,7 @@ class Pendaftaran extends BaseController{
 				]
 			],
 			'surel' => [
-				// 'label'  => 'Alamat',
-				'rules'  => 'required|valid_email|is_unique[penyuplai.surel]',
+				'rules'  => 'required|valid_email|is_unique[user.surel]',
 				'errors' => [
 					'required' => 'Harus disi!',
 					'valid_emsil' => 'Harus berformat surel!',
@@ -71,7 +79,6 @@ class Pendaftaran extends BaseController{
 				]
 			],
 			'pekerjaan' => [
-				// 'label'  => 'Alamat',
 				'rules'  => 'required',
 				'errors' => [
 				'required' => 'Harus diisi!'
@@ -79,7 +86,6 @@ class Pendaftaran extends BaseController{
 				]
 			],
 			'no_ktp' => [
-				// 'label'  => 'Alamat',
 				'rules'  => 'required',
 				'errors' => [
 				'required' => 'Harus diisi!'
@@ -87,7 +93,6 @@ class Pendaftaran extends BaseController{
 				]
 			],
 			'bank' => [
-				// 'label'  => 'Alamat',
 				'rules'  => 'required_with[atas_nama,no_rekening]|permit_empty',
 				'errors' => [
 				'numeric' => 'Harus angka!',
@@ -96,7 +101,6 @@ class Pendaftaran extends BaseController{
 				]
 			],
 			'atas_nama' => [
-				// 'label'  => 'Alamat',
 				'rules'  => 'required_with[no_rekening,bank]|permit_empty',
 				'errors' => [
 				'numeric' => 'Harus angka!',
@@ -105,7 +109,6 @@ class Pendaftaran extends BaseController{
 				]
 			],
 			'no_rekening' => [
-				// 'label'  => 'Alamat',
 				'rules'  => 'required_with[atas_nama,bank]|numeric|permit_empty',
 				'errors' => [
 				'numeric' => 'Harus angka!',
@@ -114,84 +117,81 @@ class Pendaftaran extends BaseController{
 				]
 			],
 			'alamat' => [
-				// 'label'  => 'Alamat',
 				'rules'  => 'required',
 				'errors' => [
 				'required' => 'Harus diisi!'
 				
 				]
 			],
-			'tanggal' => [
-				// 'label'  => '',
-				'rules'  => 'required',
-				'errors' => [
-				'required' => 'Harus diisi!'
-				
-				]
-			],
-			'waktu_awal' => [
-				// 'label'  => 'Alamat',
-				'rules'  => 'required|differs[waktu_akhir]',
-				'errors' => [
-					'required' => 'Harus diisi!',
-					'differs' => 'Tidak boleh sama!'
-				
-				]
-			],
-			'waktu_akhir' => [
-				// 'label'  => 'Alamat',
-				'rules'  => 'required|differs[waktu_awal]',
-				'errors' => [
-				'required' => 'Harus diisi!',
-				'differs' => 'Tidak boleh sama!'
-				
-				]
-			],
-				
+			'sandi' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Harus diisi!'
+                    
+            	]
+            ],
+            'ulang_sandi' => [
+                'rules'  => 'matches[sandi]',
+                'errors' => [
+                    'matches' => 'Harus sama dengan sandi!'
+                ]
+            ]
 				
 
 		])) {
 			return redirect()->to(base_url('pendaftaran'))->withInput();
-
 		}
 
+		$surel = $this->request->getPost('surel');
 
-			
-			$penyuplai = [
-				'nama' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
-				'role_id' => 5,
-				'telepon' => $this->request->getPost('telepon'),
-				'surel' => $this->request->getPost('surel'),
-				'no_ktp' => $this->request->getPost('no_ktp'),
-				'pekerjaan' => htmlspecialchars($this->request->getPost('pekerjaan'), ENT_QUOTES),
-				'no_rekening' => $this->request->getPost('no_rekening'),
-				'bank' => htmlspecialchars($this->request->getPost('bank'), ENT_QUOTES),
-				'atas_nama' => htmlspecialchars($this->request->getPost('atas_nama'), ENT_QUOTES),
-				'status' => 2,
-				'alamat' =>  htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES),				
+		$user = [
+			'role_id' => 5,
+			'nama' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
+			'surel' => $surel,
+			'sandi' => password_hash($this->request->getPost('sandi'), PASSWORD_DEFAULT),
+			'telepon' => $this->request->getPost('telepon'),
+			'alamat' =>  htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES),		
+			'status' => 3,		
+		];
+		$this->model_user->insert($user);
+		$user_id = $this->db->insertID();
+
+		$token = base64_encode(random_bytes(32));
+		$user_token = [
+			'email_token' => $surel,
+			'kode_token' => $token,
+			'date_created' => time()
+		];
+		$this->model_user_token->insert($user_token);
+
+		$penyuplai = [
+			'user_id' => $user_id,
+			'no_ktp' => $this->request->getPost('no_ktp'),
+			'pekerjaan' => htmlspecialchars($this->request->getPost('pekerjaan'), ENT_QUOTES),
+			'no_rekening' => $this->request->getPost('no_rekening'),
+			'bank' => htmlspecialchars($this->request->getPost('bank'), ENT_QUOTES),
+			'atas_nama' => htmlspecialchars($this->request->getPost('atas_nama'), ENT_QUOTES)			
+		];
+
+		$this->model_penyuplai->insert($penyuplai);
+		$penyuplai_id = $this->db->insertID();
+
+
+		$pendaftaran = [
+			'penyuplai_id'=> $penyuplai_id,
+			'kode' => 'PDN'.rand(100000, 999999),
+			'biaya' => 0,
+			'status' => 0
 			];
 
-			$this->db->table('penyuplai')->insert($penyuplai);
-			$penyuplai_id = $this->db->insertID();
-
-			$pendaftaran = [
-				'penyuplai_id'=> $penyuplai_id,
-				'user_id' => 0,
-				'kode' => 'PDN'.rand(100000, 999999),
-				'biaya' => 0,
-				'waktu_awal' => $this->request->getPost('waktu_awal'),
-				'waktu_akhir' => $this->request->getPost('waktu_akhir'),
-				'tanggal' => $this->request->getPost('tanggal'),
-			];
-
-			$this->model_pendaftaran->insert($pendaftaran);
-			$this->session->setFlashdata('pesan_pendaftaran', '<div class="alert alert-success">Pendaftaran berhasil! Silakan cek surel anda!</div>');
-			$this->_sendEmail($penyuplai, $pendaftaran);
-			return redirect()->to(base_url('pendaftaran'));
+		$this->model_pendaftaran->insert($pendaftaran);
+		$this->session->setFlashdata('pesan_pendaftaran', '<div class="alert alert-success">Pendaftaran berhasil! Silakan cek surel anda!</div>');
+		$this->_sendEmail($user, $token, $pendaftaran, 'verify');
+		return redirect()->to(base_url('pendaftaran'));
 	
 	}
 
-	public function _sendEmail($penyuplai, $pendaftaran){
+	public function _sendEmail($user, $token, $pendaftaran, $tipe){
 
 		$config =[
             'protocol'  => 'smtp',
@@ -206,14 +206,21 @@ class Pendaftaran extends BaseController{
 		];
 		
 		$this->email->initialize($config);
-
         $this->email->setFrom('karol.web980@gmail.com', 'Karol Web');
-        $this->email->setTo($penyuplai['surel']);
+        $this->email->setTo($user['surel']);
 
-            $this->email->setSubject('Konfirmasi Pendaftaran KKBBI');
-			$this->email->setMessage(html_email($penyuplai, $pendaftaran));
+
+		if($tipe == 'verify'){
+			$this->email->setSubject('Verifikasi akun KKBBI');
+			$this->email->setMessage(email_verify($user, $token));
+			
+			// $this->email->setMessage(email_konfirm($penyuplai, $pendaftaran));
+		}else if($type == 'forgot'){
+			$this->email->subject('Atur Ulang Kata Sandi');
+			$this->email->message('Klik link ini untuk atur ulang kata sandi akunmu.:
+			<a href="'.base_url(). 'login/aturulangpass?email='. $this->mall->PostEmail(). '&token='. urlencode($token). '">Atur Ulang</a>');
+		}
       
-       
         if ($this->email->send()) {
             return true;
 		}else{
@@ -221,6 +228,8 @@ class Pendaftaran extends BaseController{
             die;
         }
     }
+
+	
 	
 
 }

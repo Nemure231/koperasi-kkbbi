@@ -43,6 +43,9 @@ class Produk extends BaseController{
 		}
 
 		//dd($this->model->GetAllKeranjang());
+		$konfirm = $this->model_user->select('status')->asArray()
+		->where('surel', $email)
+		->first();
 	
 		$data = [
 			'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as 
@@ -50,6 +53,7 @@ class Produk extends BaseController{
 				->join('role', 'role.id = user.role_id')
 				->where('surel', $email)
 				->first(),
+			'konfirmasi' => $konfirm['status'] ?? NULL,
 			'title' => ucfirst('Produk'),
 			'barang' => $barang,
 			'pager' => $this->model_barang->pager,

@@ -23,6 +23,9 @@ class Beranda extends BaseController{
 
 		$role = $this->session->get('role_id');
 		$email = $this->session->get('email');
+		$konfirm = $this->model_user->select('status')->asArray()
+		->where('surel', $email)
+		->first();
 		
 		$data = [
 			'title' => ucfirst('Beranda'),
@@ -31,6 +34,7 @@ class Beranda extends BaseController{
 			->where('surel', $email)
 			->first(),
 			'session' => $this->session,
+			'konfirmasi' => $konfirm['status'] ?? NULL,
 			'form_beranda' => ['id' => 'formBeranda', 'name'=>'formBeranda'],
 			'lima_barang' => $this->model_barang->select('nama, kode')
 							->asArray()->orderBy('id', 'DESC')->findAll(5),
@@ -40,6 +44,7 @@ class Beranda extends BaseController{
 			'role_log' => $role
 			
 		];
+		// dd($data['konfirmasi']);
 
 		
 		tampilan_user('user/user-beranda/v_beranda', 'user/user-beranda/v_js_beranda', $data);

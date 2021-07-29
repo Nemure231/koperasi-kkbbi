@@ -35,15 +35,23 @@ $routes->setAutoRoute(false);
 $routes->get('/', 'Beranda::index');
 
 
+
+
 $routes->add('produk', 'Produk::index');
 $routes->add('produk/(:segment)', 'Produk::detail_produk/$1');
 $routes->get('pendaftaran', 'Pendaftaran::index');
 $routes->post('pendaftaran/tambah', 'Pendaftaran::tambah');
 
+$routes->get('konfirmasi', 'Konfirmasi::index');
+$routes->post('konfirmasi/pilih-jenis', 'Konfirmasi::ubah');
+
 $routes->get('login', 'Auth::index');
 $routes->post('aksi_login', 'Auth::login');
 $routes->get('logout', 'Auth::logout');
 $routes->add('blokir', 'Auth::blokir');
+
+$routes->add('verifikasi', 'Auth::verify');
+
 
 $routes->group('akun', function($routes){
 	$routes->get('profil', 'Pengguna::index', ['filter' => 'cek_akses']);
