@@ -43,7 +43,8 @@ $routes->get('pendaftaran', 'Pendaftaran::index');
 $routes->post('pendaftaran/tambah', 'Pendaftaran::tambah');
 
 $routes->get('konfirmasi', 'Konfirmasi::index');
-$routes->post('konfirmasi/pilih-jenis', 'Konfirmasi::ubah');
+$routes->put('konfirmasi/pilih-jenis', 'Konfirmasi::ubah');
+$routes->put('konfirmasi/unggah-bukti', 'Konfirmasi::unggah');
 
 $routes->get('login', 'Auth::index');
 $routes->post('aksi_login', 'Auth::login');

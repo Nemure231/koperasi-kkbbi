@@ -8,6 +8,8 @@
 <script type="application/javascript" src="<?php echo base_url().'/admin/assets/modules/izitoast/js/iziToast.min.js'; ?>"></script>
 
 <script type="application/javascript" src="<?php echo base_url().'/admin/assets/jsmine/pendaftar.js'; ?>"></script>
+<script type="application/javascript" src="<?php echo base_url().'/admin/assets/modules/chocolat/dist/js/jquery.chocolat.min.js'; ?>"></script>
+
 
 </body>
 

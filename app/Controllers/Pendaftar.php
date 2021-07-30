@@ -38,11 +38,13 @@ class Pendaftar extends BaseController{
                     ->orderBy('user_access_menu.menu_id', 'ASC')
                     ->orderBy('user_access_menu.role_id', 'ASC')
                     ->findAll(),
-           'pendaftar' => $this->model_pendaftaran->select('penyuplai.id as id_penyuplai, nama, pendaftaran.tanggal as tanggal_konfirmasi,
-                        waktu_awal, waktu_akhir, telepon, no_ktp, surel, pekerjaan, no_rekening, bank, atas_nama, alamat')
-                        ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
-                        ->where('status', 2)
-                        ->asArray()->findAll(),
+           'pendaftar' => $this->model_pendaftaran->select('penyuplai.id as id_penyuplai, nama, telepon,
+                    pendaftaran.status as status_konfirmasi, user.status as status_user,
+                    no_ktp, surel, pekerjaan, no_rekening, bank, atas_nama, alamat, pendaftaran.tanggal as tanggal, bukti')
+                    ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
+                    ->join('user', 'user.id = penyuplai.user_id')
+                    ->where('user.status', 2)
+                    ->asArray()->findAll(),
            'validation' => $this->validation,
            'session' => $this->session,
 

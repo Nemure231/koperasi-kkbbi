@@ -1,6 +1,8 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/css/animate.min.css' ?>">
 <link rel="stylesheet"  type="text/css" href="<?php echo base_url().'/admin/assets/modules/izitoast/css/iziToast.min.css' ?>">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/css/datatabel-boot4.min.css' ?>">
+<link rel="stylesheet" type="text/css"
+  href="<?php echo base_url().'/admin/assets/modules/chocolat/dist/css/chocolat.css' ?>">
 
 
 <!-- Main Content -->
@@ -39,10 +41,17 @@
                     <tr>
                       <th class="text-center">#</th>
                       <th>Nama</th>
-                      <th>Tanggal KOnfirmasi</th>
-                      <th>Waktu Awal</th>
-                      <th>Waktu Akhir</th>
-                      <th>Kode</th>
+                      <th>Jenis</th>
+                      <th>Tanggal</th>
+
+
+                    
+                      <th>Bukti</th>
+                      <th>Konfirm</th>
+                    
+                  
+
+
                       <th>Detail</th>
                     </tr>
                   </thead>
@@ -53,28 +62,66 @@
                     <tr>
                       <td><?php echo $i; ?></td>
                       <td><?php echo $p['nama']; ?></td>
-                      <td><?php echo $p['tanggal_konfirmasi']; ?></td>
-                      <td><?php echo $p['waktu_awal']; ?></td>
-                      <td><?php echo $p['waktu_akhir']; ?></td>
-                      <td class="text-center">
-                      <form action="<?php echo base_url().'/fitur/pendaftar/konfirmasi' ?>" method="post" accept-charset="utf-8">
-                      <?php echo csrf_field(); ?>  
-                      <div class="form-group">
-                          <div class="input-group">
-                        
-                            <input type="hidden" name="id_penyuplai" value="<?php echo $p['id_penyuplai']; ?>" class="form-control" placeholder="" aria-label="">
-                            <input type="text" name="kode" class="form-control <?php echo ($validation->hasError('kode')) ? 'is-invalid' : ''; ?>" placeholder="" aria-label="">
-                           
-                            <div class="input-group-append">
-                              <button type="submit" class="btn btn-primary" type="button">Konfirmasi</button>
-                            </div>
-                            <div class="invalid-feedback">
-                        <?php echo $validation->showError('kode'); ?>
-                      </div>
-                          </div>
-                        </div>
-                    </form>
+                      <td><?php 
+                        if($p['status_konfirmasi'] == 1){
+                          echo '<div class="badge badge-success">Online</div>';
+                        }else{
+                          echo '<div class="badge badge-danger">Offline</div>';
+                        }
+                      
+                      ?>
                       </td>
+                      <td><?php echo $p['tanggal']; ?></td>
+
+                      <?php if($p['status_konfirmasi'] == 2): ?>
+                      <td class="text-center">
+                      
+                        
+                              <input type="hidden" name="id_penyuplai" value="<?php echo $p['id_penyuplai']; ?>" class="form-control" placeholder="" aria-label="">
+                              <input placeholder="Kode konfirmasi ...." type="text" name="kode" class="form-control <?php echo ($validation->hasError('kode')) ? 'is-invalid' : ''; ?>" placeholder="" aria-label="">
+                    
+                              <div class="invalid-feedback">
+                                <?php echo $validation->showError('kode'); ?>
+                              </div>
+                        
+                        </form>
+                      </td>
+                      <?php endif; ?>
+                      <?php if($p['status_konfirmasi'] == 1): ?>
+                        <td>
+                      
+
+                          <div class="chocolat-parent">
+               
+                  <a href="<?php echo base_url().'/admin/assets/bukti_transfer/'. $p['bukti'] ?>" class="chocolat-image bukti-href"
+                    title="Pratinjau foto">
+                    <div class="text-center">
+                      <img alt="image" src="<?php echo base_url().'/admin/assets/bukti_transfer/'. $p['bukti'] ?>"
+                        class="img-fluid bukti-img" style="width: 100x; height: 100px; object-fit: cover;">
+                    </div>
+                  </a>
+                </div>
+                        </td>
+                      <?php endif; ?>
+                      
+                      <?php if($p['status_konfirmasi'] == 1): ?>
+                        
+                      <td>
+                      <form action="<?php echo base_url().'/pendaftaran/konfirmasi-online' ?>" method="post" accept-charset="utf-8">
+                      <button type="submit" class="btn btn-primary">Konfirm</button>
+                      </form>
+                        
+                      </td>
+                      <?php endif; ?>
+                      <?php if($p['status_konfirmasi'] == 2): ?>
+                        <td>
+                        <form action="<?php echo base_url().'/pendaftaran/konfirmasi-offline' ?>" method="post" accept-charset="utf-8">
+                        <button type="submit" class="btn btn-primary">Konfirm</button>
+                        </form>
+                        
+                        </td>
+                        <?php endif; ?>
+                     
                       <td>
                       <a href="javascript:void(0)" class="btn btn-info tombol-pendaftar"
                           data-nama="<?php echo $p['nama']; ?>"

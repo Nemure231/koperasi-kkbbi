@@ -2,7 +2,7 @@
     <div class="main_menu">
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container box_1620">
-          <a class="navbar-brand logo_h" href="<?php echo base_url().'/' ?>"><img style="width:100px; height: 100px;" src="<?php echo base_url('user/assets/logo').'/'. 'kkbbi.png' ?>" alt=""></a>
+          <a class="navbar-brand logo_h" href="<?php echo base_url().'/' ?>"><img style="width: 80px; height: 80px; object-fit: cover;" src="<?php echo base_url('user/assets/logo').'/'. 'kkbbi.png' ?>" alt=""></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>

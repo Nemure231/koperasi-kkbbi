@@ -35,7 +35,7 @@ class Konfirmasi extends BaseController{
 				->join('role', 'role.id = user.role_id')
 				->where('surel', $email)
 				->first(),
-			'status_pendaftaran' => $this->model_user->select('pendaftaran.status as status')->asArray()
+			'status_pendaftaran' => $this->model_user->select('pendaftaran.status as status, pendaftaran.kode as kode, pendaftaran.bukti as bukti, pendaftaran.id as id_pendaftaran')->asArray()
 				->join('penyuplai', 'penyuplai.user_id = user.id')
 				->join('pendaftaran', 'pendaftaran.penyuplai_id = penyuplai.id')
 				->where('user.id', $id_user)->first(),
@@ -82,6 +82,59 @@ class Konfirmasi extends BaseController{
 				  </div>');
 		return redirect()->to(base_url('konfirmasi'));
 	}
+
+	public function unggah(){
+		// $bukti = $this->request->getFile('bukti');
+		// dd($bukti);
+		if(!$this->validate([
+			'bukti' => [
+				'rules'  => 'uploaded[bukti]|max_size[bukti,1024]|is_image[bukti]|mime_in[bukti,image/jpg,image/jpeg,image/png]',
+				'errors' => [
+				'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
+				'uploaded' => 'Harus diunggah!',
+				'is_image' => 'Format file yang anda upload bukan gambar!',
+				'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
+				]
+			]
+
+		])) {
+			
+			return redirect()->to(base_url('/konfirmasi'))->withInput();
+		}
+		   
+			$bukti = $this->request->getFile('bukti');
+			$bukti_lama = $this->request->getPost('bukti_lama');
+			//cek gambar aapakah tetap gambar lama
+			if($bukti->getError() == 4){
+				$nama_bukti = $this->request->getPost('bukti_lama');
+			}else{
+				$nama_bukti = time().'.'.$bukti->guessExtension();
+				$bukti->move('admin/assets/bukti_transfer/', $nama_bukti);
+				//hapus file lama
+				if($bukti_lama){
+					unlink('admin/assets/bukti_transfer/'. $bukti_lama);
+				}
+			}
+			
+			$id_pendaftaran = $this->request->getPost('id_pendaftaran');
+
+			$edit = array(
+				'_method' => 'PUT',
+				'bukti' => $nama_bukti
+			);
+
+		
+
+			$this->model_pendaftaran->update($id_pendaftaran, $edit);
+			$this->session->setFlashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>Foto berhasil diunggah!</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					  <span aria-hidden="true">&times;</span>
+					</button>
+				  </div>');
+			return redirect()->to(base_url('/konfirmasi'));
+
+}
 
 
 	
