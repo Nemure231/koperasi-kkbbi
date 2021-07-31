@@ -153,7 +153,7 @@ class Pendaftaran extends BaseController{
 			'alamat' =>  htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES),		
 			'status' => 3,		
 		];
-		$this->model_user->insert($user);
+		// $this->model_user->insert($user);
 		$user_id = $this->db->insertID();
 
 		$token = base64_encode(random_bytes(32));
@@ -162,7 +162,7 @@ class Pendaftaran extends BaseController{
 			'kode_token' => $token,
 			'date_created' => time()
 		];
-		$this->model_user_token->insert($user_token);
+		// $this->model_user_token->insert($user_token);
 
 		$penyuplai = [
 			'user_id' => $user_id,
@@ -173,7 +173,7 @@ class Pendaftaran extends BaseController{
 			'atas_nama' => htmlspecialchars($this->request->getPost('atas_nama'), ENT_QUOTES)			
 		];
 
-		$this->model_penyuplai->insert($penyuplai);
+		// $this->model_penyuplai->insert($penyuplai);
 		$penyuplai_id = $this->db->insertID();
 
 
@@ -184,7 +184,7 @@ class Pendaftaran extends BaseController{
 			'status' => 0
 			];
 
-		$this->model_pendaftaran->insert($pendaftaran);
+		// $this->model_pendaftaran->insert($pendaftaran);
 		$this->session->setFlashdata('pesan_pendaftaran', '<div class="alert alert-success">Pendaftaran berhasil! Silakan cek surel anda!</div>');
 		$this->_sendEmail($user, $token, $pendaftaran, 'verify');
 		return redirect()->to(base_url('pendaftaran'));
@@ -212,7 +212,7 @@ class Pendaftaran extends BaseController{
 
 		if($tipe == 'verify'){
 			$this->email->setSubject('Verifikasi akun KKBBI');
-			$this->email->setMessage(email_verify($user, $token));
+			$this->email->setMessage(sukam());
 			
 			// $this->email->setMessage(email_konfirm($penyuplai, $pendaftaran));
 		}else if($type == 'forgot'){

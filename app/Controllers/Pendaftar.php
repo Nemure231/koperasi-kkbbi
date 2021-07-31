@@ -13,6 +13,7 @@ class Pendaftar extends BaseController{
 		$this->model_user = new Model_user();
         $this->model_pendaftaran = new Model_pendaftaran();
         $this->model_penyuplai =  new Model_penyuplai();
+        $this->email = \Config\Services::email();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
 	}
@@ -38,7 +39,7 @@ class Pendaftar extends BaseController{
                     ->orderBy('user_access_menu.menu_id', 'ASC')
                     ->orderBy('user_access_menu.role_id', 'ASC')
                     ->findAll(),
-           'pendaftar' => $this->model_pendaftaran->select('penyuplai.id as id_penyuplai, nama, telepon,
+           'pendaftar' => $this->model_pendaftaran->select('penyuplai.id as id_penyuplai, user.id as id_user, nama, telepon,
                     pendaftaran.status as status_konfirmasi, user.status as status_user,
                     no_ktp, surel, pekerjaan, no_rekening, bank, atas_nama, alamat, pendaftaran.tanggal as tanggal, bukti')
                     ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
@@ -54,17 +55,17 @@ class Pendaftar extends BaseController{
     }
     
 
-    public function konfirmasi(){
-        $data = [ 
-            'id' => $this->request->getPost('id_penyuplai'),
-            'kode' => $this->request->getPost('kode')
-        ];
-//        dd($data);
+    public function konfirm_offline(){
+
+        $id = $this->request->getPost('id_penyuplai');
+        $kode = $this->model_pendaftaran->select('kode')->asArray()->where('penyuplai_id', $id)->first();
+    
         if(!$this->validate([
             'kode' => [
-                'rules'  => 'required',
+                'rules'  => 'required|in_list['.$kode['kode'].']',
                 'errors' => [
-                'required' => 'Harus diisi!',
+                'required' => 'Kode Konfirmasi harus diisi!',
+                'in_list' =>  'Kode Konfirmasi salah!'
                 ]
             ]
             
@@ -74,62 +75,62 @@ class Pendaftar extends BaseController{
 
         }
 
-            $data = array(
-                'menu' => htmlspecialchars($this->request->getPost('menu'), ENT_QUOTES)
-            );
-
-            $this->model_user_menu->insert($data);
-        
-            $this->session->setFlashdata('pesan_menu', 'Menu baru berhasil ditambahkan!');
-            return redirect()->to(base_url('/pengaturan/menu'));
+        $this->session->setFlashdata('pesan_sukses', 'Invoice berhasil ditemukan!');
+        return redirect()->to(base_url('/fitur/pendaftar/invoice/'. $kode['kode']));
     }
 
-    public function ubah(){
+
+    public function konfirm_online(){
+
+        $id_penyuplai = $this->request->getPost('id_penyuplai');
+        $this->model_pendaftaran->set('biaya', 100000)->where('penyuplai_id', $id_penyuplai)->update();
+
+        $id_user = $this->request->getPost('id_user');
+        $this->model_user->set('status', 1)->where('id', $id_user)->update();
+
+        $this->_sendEmail();
+        
+
+        $this->session->setFlashdata('pesan_sukses', 'Transaksi berhasil disimpan!');
+        return redirect()->to(base_url('/fitur/pendaftar'));
+    }
+
+    public function _sendEmail($token, $type){
+
+		$id_log = $this->session->get('id_user');
+
+		if($id_log){
+			 return redirect()->to(base_url('/'));
+		}
+
+		$config =[
+            'protocol'  => 'smtp',
+            'SMTPHost' => 'smtp.gmail.com',
+            'SMTPUser' => 'karol.web980@gmail.com',
+            'SMTPPass' => '95h:*351dj',
+            'SMTPPort' => 465,
+            'mailType'  => 'html',
+            'charset'   => 'utf-8',
+			'newline'   => "\r\n",
+			'SMTPCrypto' => 'ssl'
+		];
+		
+		$this->email->initialize($config);
+
+		$email = $this->request->getPost('email');
+        $this->email->setFrom('karol.web980@gmail.com', 'Karol Web');
+        $this->email->setTo($email);
+
+        $this->email->setSubject('Verifikasi Akun');
+        $this->email->setMessage();
+		
        
-        $old =  $this->request->getPost('old_menu');
-        $new =  $this->request->getPost('menuE');
-
-        $rules = 'required';
-
-        if($old != $new){
-            $rules =  'required|is_unique[user_menu.menu]';
+        if ($this->email->send()) {
+            return true;
+		}else{
+            echo $this->email->printDebugger();
+            die;
         }
-
-            if(!$this->validate([
-                'menuE' => [
-                    'label'  => 'Nama Menu',
-                    'rules'  => $rules,
-                    'errors' => [
-                    'required' => 'Nama menu harus diisi!',
-                    'is_unique' => 'Nama menu sudah ada!'
-                    ]
-                ]
-                
-            ])) {
-                
-                return redirect()->to(base_url('/pengaturan/menu'))->withInput();
-
-            }
-                $id = $this->request->getPost('hidden_menu_id');
-                $data = array(
-                    'menu' => htmlspecialchars($this->request->getPost('menuE'), ENT_QUOTES)
-                );
-
-                $this->model_user_menu->update($id, $data);
-                $this->session->setFlashdata('pesan_edit_menu', 'Menu baru berhasil diedit!');
-                return redirect()->to(base_url('/pengaturan/menu'));
-                
-      
-    }
-
-    public function hapus(){
-
-        $id_menu = $this->request->getPost('hidden_hapus_menu_id');
-        $this->model_user_menu->delete($id_menu);
-        $this->session->setFlashdata('pesan_hapus_menu', 'Menu berhasil dihapus!');
-        return redirect()->to(base_url('/pengaturan/menu'));
-        
-    
     }
 
    

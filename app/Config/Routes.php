@@ -136,7 +136,12 @@ $routes->group('fitur', function($routes){
 	$routes->delete('retur/invoice/hapus', 'InvoiceRetur::hapus');
 
 	$routes->get('pendaftar', 'Pendaftar::index', ['filter' => 'cek_akses']);
-	$routes->post('pendaftar/konfirmasi', 'Pendaftar::konfirmasi');
+	$routes->put('pendaftar/konfirm-online', 'Pendaftar::konfirm_online');
+	$routes->post('pendaftar/konfirm-offline', 'Pendaftar::konfirm_offline');
+
+
+	$routes->get('pendaftar/invoice/(:any)', 'InvoicePendaftar::index/$1');
+	$routes->put('pendaftar/invoice/ubah', 'InvoicePendaftar::ubah');
 });
 
 
