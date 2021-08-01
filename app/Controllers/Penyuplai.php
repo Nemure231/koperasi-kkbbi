@@ -42,7 +42,10 @@ class Penyuplai extends BaseController
                         ->orderBy('user_access_menu.menu_id', 'ASC')
                         ->orderBy('user_access_menu.role_id', 'ASC')
                         ->findAll(),
-            'supplier'=>$this->model_penyuplai->select('id as id_pengirim_barang, nama as nama_pengirim_barang')
+            'supplier'=>$this->model_penyuplai->select('penyuplai.id as id_pengirim_barang, user.nama as nama_pengirim_barang')
+                        ->where('user.role_id', 5)
+                        ->where('user.status', 1)
+                        ->join('user', 'user.id = penyuplai.user_id') 
                         ->findAll(),
             'validation' => $this->validation,
             'session' => $this->session,

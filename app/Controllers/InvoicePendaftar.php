@@ -18,6 +18,7 @@ class InvoicePendaftar extends BaseController{
         $this->model_toko =  new Model_toko();
         $this->model_transaksi_sementara = new Model_transaksi_sementara();
         $this->model_pendaftaran =  new Model_pendaftaran();
+        $this->email = \Config\Services::email();
         $this->request = \Config\Services::request();
         $this->validation = \Config\Services::validation();
 	}
@@ -84,11 +85,57 @@ class InvoicePendaftar extends BaseController{
             $biaya = $this->request->getPost('biaya');
             $this->model_user->set('status', 1)->where('id', $user['id_user'])->update();
             $this->model_pendaftaran->set('biaya', $biaya)->where('id', $user['id_pendaftaran'])->update();
+            
+            $pendaftaran = $this->model_pendaftaran->select('user.nama as nama, user.surel as surel, pendaftaran.kode as kode, pendaftaran.tanggal as tanggal')
+            ->where('user.id', $user['id_user'])
+            ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
+            ->join('user', 'user.id = penyuplai.user_id') 
+            ->first();
+
+            $this->_sendEmail($pendaftaran);
+
 
             $this->session->setFlashdata('pesan_sukses', 'Transaksi berhasil disimpan!');
             return redirect()->to(base_url('/fitur/pendaftar'));
             
 	}
+
+
+    public function _sendEmail($pendaftaran){
+
+		$config =[
+            'protocol'  => 'smtp',
+            'SMTPHost' => 'smtp.gmail.com',
+            'SMTPUser' => 'karol.web980@gmail.com',
+            'SMTPPass' => '95h:*351dj',
+            'SMTPPort' => 465,
+            'mailType'  => 'html',
+            'charset'   => 'utf-8',
+			'newline'   => "\r\n",
+			'SMTPCrypto' => 'ssl'
+		];
+        $toko = $this->model_toko->select('nama_toko, telepon_toko, email_toko,
+        alamat_toko')->asArray()
+        ->where('id_toko', 1)->first();
+
+		$pembayaran = [
+            'uang' => 100000,
+            'qty'   => 1,
+            'subtotal' => (100000 * 1)
+        ];
+		$this->email->initialize($config);
+        $this->email->setFrom('karol.web980@gmail.com', 'Karol Web');
+        $this->email->setTo($pendaftaran['surel']);
+        $this->email->setSubject('KKBBI: Kuitansi');
+        $this->email->setMessage(email_kuitansi_pendaftar($pendaftaran, $pembayaran, $toko));
+		       
+        if ($this->email->send()) {
+            return true;
+		}else{
+            echo $this->email->printDebugger();
+            die;
+        }
+    }
 
 
 

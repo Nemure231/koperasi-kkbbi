@@ -23,6 +23,7 @@ class Invoice extends BaseController{
         $this->model_user = new Model_user();
         $this->model_penyuplai = new Model_penyuplai();
         $this->model_user_menu = new Model_user_menu();
+        $this->email = \Config\Services::email();
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 		
@@ -76,8 +77,11 @@ class Invoice extends BaseController{
             'toko' =>$this->model_toko->select('id_toko, nama_toko, telepon_toko, email_toko
                     alamat_toko, deskripsi_toko, logo_toko')->asArray()
                     ->where('id_toko', 1)->first(),
-            'penyuplai' => $this->model_penyuplai->select('id, nama')->findAll(),
-            'role_id_trans' => substr($tk['ts_kode_transaksi'], 4),
+            'penyuplai' => $this->model_penyuplai->select('penyuplai.id as id, user.nama as nama')->asArray()
+                    ->where('user.status', 1)
+                    ->join('user', 'user.id = penyuplai.user_id') 
+                    ->findAll(),
+            'role_id_trans' => $tk['ts_kode_transaksi'][3],
            'transaksi_sementara' => $this->model_transaksi
                     ->select('barang.nama as nama_barang, transaksi.harga as ts_harga, transaksi.qty as ts_qty
                     ,harga_konsumen, harga_anggota')
@@ -97,13 +101,7 @@ class Invoice extends BaseController{
                 'type'=> 'hidden', 
                 'value' => ''.$tk['ts_kode_transaksi'].''
             ],
-            // 
-            // 'hidden_uri' => [
-            //     'name' => 'hidden_uri', 
-            //     'id'=>'hidden_uri', 
-            //     'type'=> 'hidden', 
-            //     'value' => ''.$tk['ts_uri'].''
-            // ],
+           
             'hidden_tt_kembalian' => [
                 'name' => 'tt_kembalian', 
                 'id'=>'tt_kembalian', 
@@ -129,9 +127,11 @@ class Invoice extends BaseController{
 
         $penyuplai_id = $this->request->getPost('penyuplai_id');
 
-        $surel=$this->model_penyuplai->select('nama as surel')
+        $surel=$this->model_penyuplai->select('user.surel as surel')
                 ->asArray()
-                ->where('id', $penyuplai_id)
+                ->where('user.status', 1)
+                ->where('penyuplai.id', $penyuplai_id)
+                ->join('user', 'user.id = penyuplai.user_id') 
                 ->first();
 
         echo json_encode(['data' => $surel, 'csrf_hash' => csrf_hash()]);
@@ -148,9 +148,10 @@ class Invoice extends BaseController{
     // }
 
 
-    public function tambah(){
+    public function ubah(){
         $kod = $this->request->getPost('hidden_kode_transaksi');
-        $role_id = $this->request->getPost('role_id');
+        $role_id = $kod[3];
+        // $role_id = $this->request->getPost('role_id');
 		// $uri = $this->request->getPost('hidden_uri');
         $id_user = $this->session->get('id_user');
 
@@ -190,24 +191,81 @@ class Invoice extends BaseController{
             // $this->model_transaksi_sementara->GetAllTransaksiSemantaraForInsertAdmin($kod);
             $data = array(
                 'penyuplai_id' => $this->request->getPost('penyuplai_id'),
-                'status' => 1
+                // 'status' => 1
             );
 
-            // dd($data);
-
             $id = $this->request->getPost('detail_transaksi_id');
-
             $this->model_detail_transaksi->update($id, $data);
-
-
-
 		    // $this->model_transaksi_sementara->where('ts_uri', $uri)->delete();
 
+            $transaksi = $this->model_detail_transaksi->select('user.nama as nama, user.surel as surel,
+                detail_transaksi.kode as kode,detail_transaksi.tanggal as tanggal, total_harga, total_qty, jumlah_uang,
+                kembalian')
+                ->asArray()
+                ->where('detail_transaksi.kode', $kod)
+                ->join('penyuplai', 'penyuplai.id = detail_transaksi.penyuplai_id')
+                ->join('user', 'user.id = penyuplai.user_id')
+                ->first();
+            
+            if($role_id == 5){
+                $barang = $this->model_transaksi->select('barang.nama as nama_barang, transaksi.qty as qty, transaksi.harga as subtotal, harga_anggota as harga,
+                    ')->asArray()
+                    ->where('detail_transaksi.kode', $kod)
+                    ->join('detail_transaksi', 'detail_transaksi.id = transaksi.detail_transaksi_id')
+                    ->join('barang', 'barang.id = transaksi.barang_id')
+                    ->findAll();
+            }
+            if($role_id == 4){
+                $barang = $this->model_transaksi->select('barang.nama as nama_barang, transaksi.qty as qty, transaksi.harga as subtotal, harga_konsumen as harga,
+                ')->asArray()
+                ->where('detail_transaksi.kode', $kod)
+                ->join('detail_transaksi', 'detail_transaksi.id = transaksi.detail_transaksi_id')
+                ->join('barang', 'barang.id = transaksi.barang_id')
+                ->findAll();
+            }
+
+            $this->_sendEmail($transaksi, $barang);
             $this->session->setFlashdata('pesan_transaksi', 'Transaksi berhasil disimpan!');
             return redirect()->to(base_url('/fitur/kasir'));
         
             
         
+    }
+
+    public function _sendEmail($transaksi, $barang){
+
+		$config =[
+            'protocol'  => 'smtp',
+            'SMTPHost' => 'smtp.gmail.com',
+            'SMTPUser' => 'karol.web980@gmail.com',
+            'SMTPPass' => '95h:*351dj',
+            'SMTPPort' => 465,
+            'mailType'  => 'html',
+            'charset'   => 'utf-8',
+			'newline'   => "\r\n",
+			'SMTPCrypto' => 'ssl'
+		];
+        $toko = $this->model_toko->select('nama_toko, telepon_toko, email_toko,
+        alamat_toko')->asArray()
+        ->where('id_toko', 1)->first();
+
+
+
+
+
+
+		$this->email->initialize($config);
+        $this->email->setFrom('karol.web980@gmail.com', 'Karol Web');
+        $this->email->setTo($transaksi['surel']);
+        $this->email->setSubject('KKBBI: Kuitansi');
+        $this->email->setMessage(email_kuitansi($transaksi, $toko,  $barang));
+		       
+        if ($this->email->send()) {
+            return true;
+		}else{
+            echo $this->email->printDebugger();
+            die;
+        }
     }
 }
 ?>

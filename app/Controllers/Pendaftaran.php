@@ -5,6 +5,7 @@ use App\Models\Model_user;
 use App\Models\Model_pendaftaran;
 use App\Models\Model_user_token;
 use App\Models\Model_penyuplai;
+use App\Models\Model_toko;
 
 class Pendaftaran extends BaseController{
 
@@ -12,6 +13,7 @@ class Pendaftaran extends BaseController{
 
 	public function __construct(){
 		$this->model_user =  new Model_user();
+		$this->model_toko =  new Model_toko();
 		$this->model_penyuplai = new Model_penyuplai();
 		$this->model_pendaftaran = new Model_pendaftaran();
 		$this->model_user_token =  new Model_user_token();
@@ -153,7 +155,7 @@ class Pendaftaran extends BaseController{
 			'alamat' =>  htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES),		
 			'status' => 3,		
 		];
-		// $this->model_user->insert($user);
+		$this->model_user->insert($user);
 		$user_id = $this->db->insertID();
 
 		$token = base64_encode(random_bytes(32));
@@ -162,7 +164,7 @@ class Pendaftaran extends BaseController{
 			'kode_token' => $token,
 			'date_created' => time()
 		];
-		// $this->model_user_token->insert($user_token);
+		$this->model_user_token->insert($user_token);
 
 		$penyuplai = [
 			'user_id' => $user_id,
@@ -173,18 +175,18 @@ class Pendaftaran extends BaseController{
 			'atas_nama' => htmlspecialchars($this->request->getPost('atas_nama'), ENT_QUOTES)			
 		];
 
-		// $this->model_penyuplai->insert($penyuplai);
+		$this->model_penyuplai->insert($penyuplai);
 		$penyuplai_id = $this->db->insertID();
 
 
 		$pendaftaran = [
 			'penyuplai_id'=> $penyuplai_id,
-			'kode' => 'PDN'.rand(100000, 999999),
+			'kode' => 'PND'.$user_id.'5'.date('jny'),
 			'biaya' => 0,
 			'status' => 0
 			];
 
-		// $this->model_pendaftaran->insert($pendaftaran);
+		$this->model_pendaftaran->insert($pendaftaran);
 		$this->session->setFlashdata('pesan_pendaftaran', '<div class="alert alert-success">Pendaftaran berhasil! Silakan cek surel anda!</div>');
 		$this->_sendEmail($user, $token, $pendaftaran, 'verify');
 		return redirect()->to(base_url('pendaftaran'));
@@ -192,6 +194,10 @@ class Pendaftaran extends BaseController{
 	}
 
 	public function _sendEmail($user, $token, $pendaftaran, $tipe){
+
+		$toko = $this->model_toko->select('nama_toko, telepon_toko, email_toko,
+                alamat_toko')->asArray()
+                ->where('id_toko', 1)->first();
 
 		$config =[
             'protocol'  => 'smtp',
@@ -211,10 +217,8 @@ class Pendaftaran extends BaseController{
 
 
 		if($tipe == 'verify'){
-			$this->email->setSubject('Verifikasi akun KKBBI');
-			$this->email->setMessage(sukam());
-			
-			// $this->email->setMessage(email_konfirm($penyuplai, $pendaftaran));
+			$this->email->setSubject('KKBBI: Verifikasi');
+			$this->email->setMessage(email_verify($user, $token, $toko));
 		}else if($type == 'forgot'){
 			$this->email->subject('Atur Ulang Kata Sandi');
 			$this->email->message('Klik link ini untuk atur ulang kata sandi akunmu.:

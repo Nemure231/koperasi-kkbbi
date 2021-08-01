@@ -5,12 +5,14 @@ use App\Models\Model_user_menu;
 use App\Models\Model_user;
 use App\Models\Model_pendaftaran;
 use App\Models\Model_penyuplai;
+use App\Models\Model_toko;
 class Pendaftar extends BaseController{
 
     public function __construct(){
 
         $this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
+        $this->model_toko =  new Model_toko();
         $this->model_pendaftaran = new Model_pendaftaran();
         $this->model_penyuplai =  new Model_penyuplai();
         $this->email = \Config\Services::email();
@@ -82,26 +84,42 @@ class Pendaftar extends BaseController{
 
     public function konfirm_online(){
 
+        if(!$this->validate([
+            'biaya' => [
+                'rules'  => 'required|numeric',
+                'errors' => [
+                'required' => 'Jumlah uang harus disi!',
+                'numeric' =>  'Jumlah uang harus angka!'
+                ]
+            ]
+            
+        ])) {
+            
+            return redirect()->to(base_url('/fitur/pendaftar'))->withInput();
+
+        }
+
         $id_penyuplai = $this->request->getPost('id_penyuplai');
-        $this->model_pendaftaran->set('biaya', 100000)->where('penyuplai_id', $id_penyuplai)->update();
+        $biaya = $this->request->getPost('biaya');
+        $this->model_pendaftaran->set('biaya', $biaya)->where('penyuplai_id', $id_penyuplai)->update();
 
         $id_user = $this->request->getPost('id_user');
         $this->model_user->set('status', 1)->where('id', $id_user)->update();
 
-        $this->_sendEmail();
-        
+        $pendaftaran = $this->model_pendaftaran->select('user.nama as nama, user.surel as surel, pendaftaran.kode as kode, pendaftaran.tanggal as tanggal')
+        ->where('user.id', $id_user)
+        ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
+        ->join('user', 'user.id = penyuplai.user_id') 
+        ->first();
 
+        // dd($pendaftaran);
+
+        $this->_sendEmail($pendaftaran);
         $this->session->setFlashdata('pesan_sukses', 'Transaksi berhasil disimpan!');
         return redirect()->to(base_url('/fitur/pendaftar'));
     }
 
-    public function _sendEmail($token, $type){
-
-		$id_log = $this->session->get('id_user');
-
-		if($id_log){
-			 return redirect()->to(base_url('/'));
-		}
+    public function _sendEmail($pendaftaran){
 
 		$config =[
             'protocol'  => 'smtp',
@@ -114,17 +132,21 @@ class Pendaftar extends BaseController{
 			'newline'   => "\r\n",
 			'SMTPCrypto' => 'ssl'
 		];
-		
+        $toko = $this->model_toko->select('nama_toko, telepon_toko, email_toko,
+        alamat_toko')->asArray()
+        ->where('id_toko', 1)->first();
+
+		$pembayaran = [
+            'uang' => 100000,
+            'qty'   => 1,
+            'subtotal' => (100000 * 1)
+        ];
 		$this->email->initialize($config);
-
-		$email = $this->request->getPost('email');
         $this->email->setFrom('karol.web980@gmail.com', 'Karol Web');
-        $this->email->setTo($email);
-
-        $this->email->setSubject('Verifikasi Akun');
-        $this->email->setMessage();
-		
-       
+        $this->email->setTo($pendaftaran['surel']);
+        $this->email->setSubject('KKBBI: Kuitansi');
+        $this->email->setMessage(email_kuitansi_pendaftar($pendaftaran, $pembayaran, $toko));
+		       
         if ($this->email->send()) {
             return true;
 		}else{

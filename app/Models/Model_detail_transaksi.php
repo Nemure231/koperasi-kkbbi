@@ -20,9 +20,9 @@ class Model_detail_transaksi extends Model{
         $id_user = $this->session->get('id_user');
         $this->db->transStart();
         $query = $this->db->table('detail_transaksi')
-                        ->select('RIGHT(detail_transaksi.kode,2) as kode', FALSE)
-                        ->orderBy('kode', 'DESC')
-                        ->limit(1)->get()->getRowArray();
+            ->select('RIGHT(detail_transaksi.kode,3) as kode', FALSE)
+            ->orderBy('kode', 'DESC')
+            ->limit(1)->get()->getRowArray();
 
             if (count($query) <> 0) {
                 //$query2 = $query->get()->getRowArray();
@@ -31,14 +31,14 @@ class Model_detail_transaksi extends Model{
                 $kode =1;
             }
        
-        $kode1 = $this->db->table('tb_kode_transaksi')
-                            ->select('huruf_kode_transaksi, jumlah_angka')
-                            ->get()->getRowArray();
+        // $kode1 = $this->db->table('tb_kode_transaksi')
+        //                     ->select('huruf_kode_transaksi, jumlah_angka')
+        //                     ->get()->getRowArray();
     
-            $batas= str_pad($kode, "".$kode1['jumlah_angka']."","0", STR_PAD_LEFT);
+            $batas= str_pad($kode, ""."3"."","0", STR_PAD_LEFT);
             $bulan = date('dmy');
             $random = rand(1, 1000);
-            $kodetampil= "".$kode1['huruf_kode_transaksi']."" .$kode_jenis_kasir.$id_user.$bulan.$batas;
+            $kodetampil= "".'TSK'."" .$kode_jenis_kasir.$id_user.$bulan.$batas;
             return $kodetampil;
             
         $this->db->transComplete();

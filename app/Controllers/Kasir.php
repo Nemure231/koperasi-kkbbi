@@ -43,7 +43,9 @@ class Kasir extends BaseController{
 	public function index(){
         //$session = \Config\Services::session();
         //$view = \Config\Services::renderer();
-		
+
+
+
 		$role = $this->session->get('role_id');
         $id_user = $this->session->get('id_user');
         $email = $this->session->get('email');
@@ -69,7 +71,7 @@ class Kasir extends BaseController{
                 ->findAll();
         }
         $kode_jenis_kasir = $jenis_kasir['role_id'];
-        $kode = $this->model_detail_transaksi->AutoKodeTransaksi($kode_jenis_kasir); 
+        $kode = $this->model_detail_transaksi->AutoKodeTransaksi($kode_jenis_kasir);
         $data = [
            'title'  => 'Kasir',
            'nama_menu_utama' => 'Penjualan',

@@ -109,7 +109,7 @@ $routes->group('fitur', function($routes){
 	$routes->delete('kasir/hapus_keranjang', 'Kasir::hapus_keranjang');
 
 	$routes->get('kasir/invoice/(:any)', 'Invoice::index/$1', ['filter' => 'cek_akses']);
-	$routes->post('kasir/invoice/tambah', 'Invoice::tambah');
+	$routes->put('kasir/invoice/ubah', 'Invoice::ubah');
 	$routes->post('kasir/invoice/ambil_surel', 'Invoice::ambil_surel');
 	$routes->delete('kasir/invoice/hapus', 'Invoice::hapus');	
 

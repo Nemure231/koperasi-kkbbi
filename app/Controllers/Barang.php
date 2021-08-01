@@ -54,15 +54,17 @@ class Barang extends BaseController{
 						->orderBy('user_access_menu.role_id', 'ASC')
 						->findAll(),
             'barang' => $this->model_barang->select('barang.id as id_barang, deskripsi as deskripsi_barang, harga_pokok,
-                        barang.nama as nama_barang, penyuplai.nama as nama_pengirim_barang, penyuplai.id as pengirim_barang_id,
+                        barang.nama as nama_barang, user.nama as nama_pengirim_barang, penyuplai.id as pengirim_barang_id,
                         kategori.nama as nama_kategori, kode as kode_barang, stok as stok_barang, barang.tanggal as tanggal,
                         tanggal_update, merek.nama as nama_merek, satuan.nama as nama_satuan, kategori_id, satuan_id, 
                         merek_id, harga_anggota, harga_konsumen')->asArray()
-
+                        ->where('user.role_id', 5)
+                        ->where('user.status', 1)
                         ->join('kategori', 'kategori.id = barang.kategori_id')
                         ->join('satuan', 'satuan.id = barang.satuan_id')
                         ->join('merek', 'merek.id = barang.merek_id')
                         ->join('penyuplai', 'penyuplai.id = barang.penyuplai_id')
+                        ->join('user', 'user.id = penyuplai.user_id')
                         ->findAll(),
             'satuan' => $this->model_satuan->select('id as id_satuan, nama as nama_satuan')->asArray()
                         ->findAll(),
@@ -70,7 +72,10 @@ class Barang extends BaseController{
                         ->findAll(),
             'kategori'=>$this->model_kategori->select('id as id_kategori, nama as nama_kategori')->asArray()
                         ->findAll(),
-            'supplier'=>$this->model_penyuplai->select('id as id_pengirim_barang, nama as nama_pengirim_barang')->asArray()
+            'supplier'=>$this->model_penyuplai->select('penyuplai.id as id_pengirim_barang, user.nama as nama_pengirim_barang')
+                        ->where('user.role_id', 5)
+                        ->where('user.status', 1)
+                        ->join('user', 'user.id = penyuplai.user_id') 
                         ->findAll(),
             'validation' => $this->validation,
             'session' => $this->session,

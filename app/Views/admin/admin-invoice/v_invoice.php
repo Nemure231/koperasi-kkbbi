@@ -16,10 +16,11 @@ width:100%!important;
     <div class="section-body">
       <?php if($transaksi_sementara):  ?>
         <input type="hidden"  name="role_id" value="<?php echo $role_id_trans;?>" />
-        <?php echo form_open(base_url().'/fitur/kasir/invoice/tambah', $form_invoice);    ?>
+        <?php echo form_open(base_url().'/fitur/kasir/invoice/ubah', $form_invoice);    ?>
         <?php echo form_input($hidden_kode_transaksi); ?>
+        <input name="_method" type="hidden" value="PUT">
         <!-- <//?php echo form_input($hidden_uri); ?> -->
-          <?php echo csrf_field(); ?>
+        
       <!-- <input type="hidden" name="ts_uri" value="<//?php echo $row_transaksi_sementara['ts_uri']; ?>"> -->
       <div class="invoice">
         <div class="invoice-print">
