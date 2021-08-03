@@ -10,7 +10,7 @@ use App\Models\Model_user;
 use App\Models\Model_satuan;
 use App\Models\Model_merek;
 use App\Models\Model_kategori;
-use App\Models\Model_pengirim_barang;
+use App\Models\Model_penyuplai;
 
 class BarangMasuk extends BaseController
 {
@@ -22,7 +22,7 @@ class BarangMasuk extends BaseController
         $this->model_satuan = new Model_satuan();
         $this->model_merek = new Model_merek();
         $this->model_kategori = new Model_kategori();
-        $this->model_pengirim_barang = new Model_pengirim_barang();
+        $this->model_penyuplai = new Model_penyuplai();
         $this->model_barang = new Model_barang();
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
@@ -42,10 +42,10 @@ class BarangMasuk extends BaseController
            
             'title'     => ucfirst('Barang Masuk'),
             'nama_menu_utama' => ucfirst('Pembelian'),
-            'user' 	    =>  $this->model_user->select('id_user, nama, email, telepon, gambar, alamat, role')->asArray()
-                            ->join('user_role', 'user_role.id_role = user.role_id')
-                            ->where('email', $email)
-                            ->first(),
+            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+						->join('role', 'role.id = user.role_id')
+						->where('surel', $email)
+						->first(),
             'menu' 	    => 	$this->model_user_menu->select('id_menu, menu')->asArray()
                             ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                             ->where('user_access_menu.role_id =', $role)
@@ -54,18 +54,19 @@ class BarangMasuk extends BaseController
                             ->findAll(),
             'session'   =>  $this->session,
             'validation'=>  $this->validation,
-            'barang'    =>  $this->model_barang->select('id_barang, nama_barang')->asArray()
-                            ->asArray()->where('id_barang>', 0)->findAll(),
-            'masuk'     =>  $this->model_barang_masuk->select('nama_barang, tanggal_masuk')->asArray()
-                            ->join('barang', 'barang.id_barang = barang_masuk.barang_id')
+            'barang'    =>  $this->model_barang->select('barang.id as id_barang, barang.nama as nama_barang')->asArray()
                             ->findAll(),
-            'satuan'    =>  $this->model_satuan->select('id_satuan, nama_satuan')->asArray()
+            'masuk'     =>  $this->model_barang_masuk->select('barang.nama as nama_barang, barang.tanggal as tanggal_masuk')->asArray()
+                            ->join('barang', 'barang.id = barang_masuk.barang_id')
                             ->findAll(),
-            'merek'     =>  $this->model_merek->select('id_merek, nama_merek')->asArray()
+            'satuan'    =>  $this->model_satuan->select('satuan.id as id_satuan, satuan.nama as nama_satuan')->asArray()
                             ->findAll(),
-            'kategori'=>    $this->model_kategori->select('id_kategori, nama_kategori')->asArray()
+            'merek'     =>  $this->model_merek->select('merek.id as id_merek, merek.nama as nama_merek')->asArray()
                             ->findAll(),
-            'pengirim'=>    $this->model_pengirim_barang->select('id_pengirim_barang, nama_pengirim_barang')->asArray()
+            'kategori'=>    $this->model_kategori->select('kategori.id as id_kategori, kategori.nama as nama_kategori')->asArray()
+                            ->findAll(),
+            'pengirim'=>    $this->model_penyuplai->select('penyuplai.id as id_pengirim_barang, user.nama as nama_pengirim_barang')->asArray()
+                            ->join('user', 'user.id = penyuplai.user_id')
                             ->findAll(),
             'form_tambah_barang_masuk' => ['id' => 'formTambahBarangMasuk', 'name'=>'formTambahBarangMasuk'],
             'form_pengirim' => ['id' => 'formPengirim', 'name'=>'formPengirim', 'autocomplete' => 'on' ],
@@ -154,7 +155,7 @@ class BarangMasuk extends BaseController
             );
 
             $this->session->setFlashdata('pesan_pengirim', 'Nama pengirim berhasil ditambahkan!');
-            $this->model_pengirim_barang->insert($data);
+            $this->model_penyuplai->insert($data);
             $this->db->insertID();
             $status = true;
             
@@ -171,7 +172,7 @@ class BarangMasuk extends BaseController
         if (is_numeric($sop)){
             $sem = $sop;
         }else{
-            $this->model_satuan->set('nama_satuan', $sop)->insert();
+            $this->model_satuan->set('nama', $sop)->insert();
             $sem = $this->db->insertID();
         }
 
@@ -179,7 +180,7 @@ class BarangMasuk extends BaseController
         if (is_numeric($kat)){
             $ket = $kat;
         }else{
-            $this->model_kategori->set('nama_kategori', $kat)->insert(); 
+            $this->model_kategori->set('nama', $kat)->insert(); 
             $ket = $this->db->insertID(); 
         }
 
@@ -188,7 +189,7 @@ class BarangMasuk extends BaseController
         if (is_numeric($mer)){
             $mar = $mer;
         }else{
-            $this->model_merek->set('nama_merek', $mer)->insert();
+            $this->model_merek->set('nama', $mer)->insert();
             $mar = $this->db->insertID();
         }
         
@@ -216,10 +217,12 @@ class BarangMasuk extends BaseController
     public function ambil_detail(){
 
 
-        $data = $this->model_barang->select('nama_barang, id_barang')->asArray()
-                ->where('id_barang>', 0)->findAll();
-        $data1= $this->model_pengirim_barang->select('id_pengirim_barang, nama_pengirim_barang')
-                ->asArray()->findAll();
+        $data = $this->model_barang->select('barang.nama as nama_barang, barang.id as id_barang')->asArray()
+                ->findAll();
+        $data1= $this->model_penyuplai->select('penyuplai.id as id_pengirim_barang, user.nama as nama_pengirim_barang')
+                ->asArray()
+                ->join('user', 'user.id = penyuplai.user_id')
+                ->findAll();
         $dataArray  = array('response' => false, 'data' => '', 'data1' => '');
 
         if($data && $data1){

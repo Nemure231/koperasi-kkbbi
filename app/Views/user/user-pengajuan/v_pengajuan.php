@@ -71,7 +71,7 @@ width:100%!important;
                       <label>Nama</label>
                       <select
                         class="form-control mb-2 <?php echo ($validation->hasError('nama')) ? 'is-invalid' : ''; ?>"
-                        name="nama" id="nama">
+                        name="nama" id="nama"  aria-describedby="teks-pembantu-barang">
                         <option value="">--Pilih / Isi--</option>
                         <?php foreach ($barang as $b) :?>
 
@@ -83,6 +83,9 @@ width:100%!important;
                       <div class="invalid-feedback">
                         <?php echo $validation->showError('nama'); ?>
                       </div>
+                      <small id="tekt-pembantu-barang" class="form-text text-muted">
+                          Pilihan ini memuat barang yang pernah Anda ajukan, jika barang belum pernah ada, silakan isi kolom dengan nama barang.
+                      </small>
 
                     </div>
 
@@ -245,11 +248,15 @@ width:100%!important;
 
                     <div class="form-group col-lg-12">
                       <label>Deskripsi<small class="text-info"> (Opsional)</small></label>
-                      <textarea name="deskripsi" id="deskripsi"
+                      <textarea name="deskripsi" rows="3" id="deskripsi"
                         class="form-control <?php echo ($validation->hasError('deskripsi')) ? 'is-invalid' : ''; ?>"></textarea>
                       <div class="invalid-feedback">
                         <?php echo $validation->showError('deskripsi'); ?>
                       </div>
+                    </div>
+
+                    <div class="form-group col-lg-12">
+                    <button type="submit" id="tombol-pendaftaran" class="btn btn-block btn-primary">Simpan</button>
                     </div>
 
                     <!-- <div class="form-group col-lg-4 col-md-4">
@@ -307,7 +314,7 @@ width:100%!important;
 
             </div>
             <div class="card-footer text-right" id="heya">
-              <button type="submit" id="tombol-pendaftaran" class="btn btn-primary">Simpan</button>
+             
               <!-- <a href="javascript:void(0)" class="btn btn-primary btn-submit" data-kodet=""
                 id="tbhts">Bayar</a> -->
             </div>

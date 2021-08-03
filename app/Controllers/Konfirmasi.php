@@ -3,6 +3,7 @@
 use CodeIgniter\Controller;
 use App\Models\Model_user;
 use App\Models\Model_pendaftaran;
+use App\Models\Model_toko;
 
 class Konfirmasi extends BaseController{
 
@@ -11,6 +12,8 @@ class Konfirmasi extends BaseController{
 	public function __construct(){
 		$this->model_user = new Model_user();
 		$this->model_pendaftaran = new Model_pendaftaran();
+		$this->model_toko = new Model_toko();
+		$this->email = \Config\Services::email();
 		$this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
 	}
@@ -101,7 +104,6 @@ class Konfirmasi extends BaseController{
 			
 			return redirect()->to(base_url('/konfirmasi'))->withInput();
 		}
-		   
 			$bukti = $this->request->getFile('bukti');
 			$bukti_lama = $this->request->getPost('bukti_lama');
 			//cek gambar aapakah tetap gambar lama
@@ -123,7 +125,15 @@ class Konfirmasi extends BaseController{
 				'bukti' => $nama_bukti
 			);
 
-		
+			$sekretaris = $this->model_user->select('surel, nama')->where('id', 124)->where('role_id', 3)->asArray()->first();
+			$id_user = $this->session->get('id_user');
+			$anggota = $this->model_user->select('nama')->asArray()
+			->where('user.id', $id_user)
+			->first();
+
+			if($bukti_lama == NULL){
+				$this->_sendEmail($sekretaris, $anggota);
+			}
 
 			$this->model_pendaftaran->update($id_pendaftaran, $edit);
 			$this->session->setFlashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -134,7 +144,39 @@ class Konfirmasi extends BaseController{
 				  </div>');
 			return redirect()->to(base_url('/konfirmasi'));
 
-}
+		}
+
+		public function _sendEmail($sekretaris, $anggota){
+
+			$toko = $this->model_toko->select('nama_toko, telepon_toko, email_toko,
+					alamat_toko')->asArray()
+					->where('id_toko', 1)->first();
+	
+			$config =[
+				'protocol'  => 'smtp',
+				'SMTPHost' => 'smtp.gmail.com',
+				'SMTPUser' => 'karol.web980@gmail.com',
+				'SMTPPass' => '95h:*351dj',
+				'SMTPPort' => 465,
+				'mailType'  => 'html',
+				'charset'   => 'utf-8',
+				'newline'   => "\r\n",
+				'SMTPCrypto' => 'ssl'
+			];
+			
+			$this->email->initialize($config);
+			$this->email->setFrom('karol.web980@gmail.com', 'Karol Web');
+			$this->email->setTo($sekretaris['surel']);
+			$this->email->setSubject('KKBBI: Konfirmasi - '.$anggota['nama']);
+			$this->email->setMessage(email_notifikasi($sekretaris, ''.$anggota['nama'].' baru saja mengunggah bukti transfer untuk konfirmasi pendaftaran online!', $toko, 'Konfirmasi'));
+		  
+			if ($this->email->send()) {
+				return true;
+			}else{
+				echo $this->email->printDebugger();
+				die;
+			}
+		}
 
 
 	

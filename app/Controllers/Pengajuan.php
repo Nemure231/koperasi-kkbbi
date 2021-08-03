@@ -287,10 +287,12 @@ class Pengajuan extends BaseController{
 			];
 			// dd($data_pengajuan);
 			$this->model_pengajuan->insert($data_pengajuan);
+			$pengajuan_id = $this->db->insertID(); 
 
 			
 			$data_barang_masuk = [
 				'barang_id' => $barang_id,
+				'pengajuan_id' => $pengajuan_id,
 				'user_id' => '',
 				'penyuplai_id' => $id_penyuplai['id_penyuplai'],
 				'jumlah' => $stok,
@@ -335,7 +337,7 @@ class Pengajuan extends BaseController{
         $this->email->setFrom('karol.web980@gmail.com', 'Karol Web');
         $this->email->setTo($sekretaris['surel']);
 		$this->email->setSubject('KKBBI: Pengajuan - '.$anggota['nama']);
-		$this->email->setMessage(email_notifikasi($sekretaris, ''.$anggota['nama'].' baru saja mengajukan barang!', $toko));
+		$this->email->setMessage(email_notifikasi($sekretaris, ''.$anggota['nama'].' baru saja mengajukan barang!', $toko, 'Pengajuan'));
       
         if ($this->email->send()) {
             return true;

@@ -45,5 +45,12 @@ class Model_barang extends Model{
         $this->db->transComplete();
     }
     
+    public function TambahStok($id, $stok){
+        
+        $this->db->query("update barang set stok=stok+'$stok' where id='$id'");
+    }
+
+            
+
 }
 ?>

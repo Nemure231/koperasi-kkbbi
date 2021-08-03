@@ -150,9 +150,13 @@ $routes->group('fitur', function($routes){
 	$routes->put('pendaftar/konfirm-online', 'Pendaftar::konfirm_online');
 	$routes->post('pendaftar/konfirm-offline', 'Pendaftar::konfirm_offline');
 
-
 	$routes->get('pendaftar/invoice/(:any)', 'InvoicePendaftar::index/$1');
 	$routes->put('pendaftar/invoice/ubah', 'InvoicePendaftar::ubah');
+
+	$routes->get('pengaju', 'Pengaju::index', ['filter' => 'cek_akses']);
+	$routes->put('pengaju/tolak', 'Pengaju::tolak');
+	$routes->put('pengaju/terima', 'Pengaju::terima');
+	$routes->put('pengaju/konfirm', 'Pengaju::konfirm');
 });
 
 
@@ -176,6 +180,8 @@ $routes->group('laporan', function($routes){
 	$routes->add('summary/tanggal', 'LaporanSummary::index', ['filter' => 'cek_akses']);
 	$routes->add('summary/bulan', 'LaporanSummary::bulan', ['filter' => 'cek_akses']);
 	$routes->add('summary/tahun', 'LaporanSummary::tahun', ['filter' => 'cek_akses']);
+
+	$routes->add('keuangan-bulanan', 'LaporanKeuangan::index', ['filter' => 'cek_akses']);
 });
 
 
