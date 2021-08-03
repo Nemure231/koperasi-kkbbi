@@ -9,7 +9,10 @@
 
   <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/modules/bootstrap/css/bootstrap.min.css' ?>">
   <link rel="stylesheet"  type="text/css" href="<?php echo base_url().'/admin/assets/modules/fontawesome/css/all.css' ?>">
+  
+ 
   <link rel="stylesheet" href="<?php echo base_url().'/user/assets1/vendors/themify-icons/themify-icons.css'; ?>">
+  
   <link rel="stylesheet" href="<?php echo base_url().'/user/assets1/vendors/owl-carousel/owl.theme.default.min.css'; ?>">
   <link rel="stylesheet" href="<?php echo base_url().'/user/assets1/vendors/owl-carousel/owl.carousel.min.css'; ?>">
   <link rel="stylesheet" href="<?php echo base_url().'/user/assets1/css/style.css'; ?>">

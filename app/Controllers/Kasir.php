@@ -254,11 +254,10 @@ class Kasir extends BaseController{
             // dd($data);
 		
         $this->model_transaksi->insertBatch($data);
-        // $this->model_keranjang->where('user_id', $id_user)->delete();
+        $this->model_keranjang->where('user_id', $id_user)->delete();
         $this->session->setFlashdata('pesan_transaksi_sementara', 'Transaksi berhasil disimpan ke dalam invoice!');
         return redirect()->to(base_url('/fitur/kasir/invoice/'.$kode.''));
         
-
     }
 
 

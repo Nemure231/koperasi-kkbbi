@@ -76,16 +76,15 @@ class Auth extends BaseController
 			],
 			'sandi' => [
 				'label'  => 'Sandi',
-				'rules'  => 'required|min_length[3]',
+				'rules'  => 'required',
 				'errors' => [
-					'min_length' => 'Terlalu pendek!',
 					'required' => 'Sandi harus diisi!'
 				]
 			]
 
 		])) {
 		   
-			return redirect()->to(base_url('/login'))->withInput();
+			return redirect()->to(base_url('mlogin'))->withInput();
 
 		}
 

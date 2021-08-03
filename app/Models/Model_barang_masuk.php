@@ -11,8 +11,8 @@ class Model_barang_masuk extends Model{
     protected $table = 'barang_masuk';
     // protected $primaryKey = 'id_barang_masuk';
     protected $allowedFields = [
-        'barang_id', 'penyuplai_id', 'jumlah', 
-        'harga_pokok', 'total_harga_pokok', 'tanggal'
+        'barang_id', 'penyuplai_id', 'pengajuan_id', 'jumlah', 
+        'harga_pokok', 'total_harga_pokok','status', 'tanggal'
     ];
 
     public function TambahBarangMasuk($data, $data2){

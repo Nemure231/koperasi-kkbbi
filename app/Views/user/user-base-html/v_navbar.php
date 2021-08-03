@@ -21,21 +21,7 @@
                     echo 'active';
                   }elseif($title == 'Detail Produk'){
                     echo 'active';
-                  }elseif($title == 'Jenis Produk'){
-                    echo 'active';
-                  }elseif($title == 'Detail Jenis Produk'){
-                    echo 'active';
-                  }elseif($title == 'Daftar Penerbit'){
-                    echo 'active';
-                  }elseif($title == 'Detail Penerbit'){
-                    echo 'active';
-                  }elseif($title == 'Daftar Genre'){
-                    echo 'active';
-                  }elseif($title == 'Detail Genre'){
-                    echo 'active';
-                  }elseif($title == 'Daftar Penulis'){
-                    echo 'active';
-                  }elseif($title == 'Detail Penulis'){
+                  }elseif($title == 'Kategori Produk'){
                     echo 'active';
                   }
                 
@@ -47,10 +33,8 @@
                   aria-expanded="false">Produk</a>
                 <ul class="dropdown-menu">
                   <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/produk' ?>">Daftar Produk</a>                 
-                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/jenis' ?>">Jenis Produk</a>
-                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/penulis' ?>">Daftar Penulis</a>
-                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/genre' ?>">Daftar Genre</a>
-                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/penerbit' ?>">Daftar Penerbit</a>                    
+                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/jenis' ?>">Kategori Produk</a>
+                    
                 </ul>
 							</li>
 
@@ -91,6 +75,10 @@
 
               <?php if($konfirmasi == '2'): ?>
               <li class="nav-item <?php echo ($title == 'Konfirmasi') ? 'active' : ''; ?>"><a class="nav-link" href="<?php echo base_url().'/konfirmasi' ?>">Konfirmasi</a></li>  
+              <?php endif; ?>
+
+              <?php if($konfirmasi == '1'): ?>
+              <li class="nav-item <?php echo ($title == 'Pengajuan') ? 'active' : ''; ?>"><a class="nav-link" href="<?php echo base_url().'/pengajuan' ?>">Pengajuan</a></li>  
               <?php endif; ?>
               
 
@@ -167,11 +155,14 @@
             </div>
           </div><!--  card end -->
         </div>
-
       </div>
       <div class="modal-footer">
-        
-        <a href="<?php echo base_url().'/logout' ?>" class="btn btn-block btn-danger"><h6>Ya!</h6></a>
+           <form class="btn btn-block" method="POST" action="<?php echo base_url().'/logout' ?>" accept-charset="utf-8">
+           <?php echo csrf_field(); ?>
+
+        <!-- <a href="<//?php echo base_url().'/logout' ?>" class="btn btn-block btn-danger"><h6>Ya!</h6></a> -->
+        <button type="submit" class="btn btn-danger">Ya!</button>
+          </form>
         
       </div>
 

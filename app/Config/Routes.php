@@ -46,9 +46,20 @@ $routes->get('konfirmasi', 'Konfirmasi::index');
 $routes->put('konfirmasi/pilih-jenis', 'Konfirmasi::ubah');
 $routes->put('konfirmasi/unggah-bukti', 'Konfirmasi::unggah');
 
+
+$routes->get('pengajuan', 'Pengajuan::index');
+$routes->post('pengajuan/ambil_barang', 'Pengajuan::ambil_barang');
+$routes->post('pengajuan/tambah', 'Pengajuan::tambah');
+
+$routes->get('pengajuan/riwayat', 'Pengajuan::riwayat');
+
+
+
+
+
 $routes->get('login', 'Auth::index');
 $routes->post('aksi_login', 'Auth::login');
-$routes->get('logout', 'Auth::logout');
+$routes->post('logout', 'Auth::logout');
 $routes->add('blokir', 'Auth::blokir');
 
 $routes->add('verifikasi', 'Auth::verify');
