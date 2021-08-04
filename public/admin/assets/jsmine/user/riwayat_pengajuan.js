@@ -29,6 +29,15 @@ $(document).ready(function () {
  
     });
 
+    $('table').on('click', '.tombol-alasan', function () {
+        var alasan = $(this).data('alasan');
+        
+        $('#alasan').val(alasan);
+        $('#modal-alasan').modal('show');
+  
+  
+     });
+
   
    
 

@@ -27,7 +27,7 @@
             <h4>Produk terbaru</h4>
             <div class="card-header-action">
               <a href="<?php echo base_url().'/produk' ?>" class="btn btn-primary">
-                View All
+                Lihat semua
               </a>
             </div>
           </div>
@@ -38,17 +38,14 @@
               <article class="article article-style-b">
                 <div class="article-header">
                   <div class="article-image"
-                    data-background="
-                    <!-- <//?php echo base_url('admin/assets/buku').'/'. $fb//['sampul_buku']; ?> -->
-                    
-                    ">
+                    data-background="<?php echo base_url('admin/assets/barang').'/'. $b['gambar']; ?>">
                   </div>
                 </div>
                 <div class="article-details">
                   <div class="article-title mb-2">
                     <h2><a class="text-dark" href="#"><?php echo $b['nama']; ?></a></h2>
                   </div>
-                  <div class="article-header2 text-justify">Hai halo adios gracisa</div>
+                  <div class="article-header2 text-justify"></div>
                   <div class="article-cta">
                     <div class="row">
 

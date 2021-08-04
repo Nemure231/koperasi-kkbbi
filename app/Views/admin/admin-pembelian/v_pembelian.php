@@ -249,7 +249,7 @@
             <input type="hidden" id="csrf_detail_barang" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
             <input type="hidden" id="csrf_detail_qr" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
             <div class="col-lg-8">
-              <form novalidate action="<?php echo base_url().'/fitur/kasir/tambah_keranjang'; ?>" class="btn btn-block" method="post" accept-charset="utf-8">
+              <form action="<?php echo base_url().'/fitur/kasir/tambah_keranjang'; ?>" class="btn btn-block" method="post" accept-charset="utf-8">
               <input type="hidden" id="csrf_keranjang" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
               <input type="hidden" id="id_barang" name="k_barang_id" />
               <input type="hidden" id="jen_kas" name="jen_kas" value="<?php echo $role_id_jenis_kasir; ?>" />

@@ -64,6 +64,7 @@ class Pengajuan extends BaseController{
 			'barang' => $this->model_barang->select('barang.nama as nama, barang.id as id')->asArray()
 				->where('user.id', $id_user)
 				->where('barang.status', 1)
+				->orWhere('barang.status', 3)
 				->join('penyuplai', 'penyuplai.id = barang.penyuplai_id')
 				->join('user', 'user.id = penyuplai.user_id')
 				->findAll(),
@@ -93,6 +94,7 @@ class Pengajuan extends BaseController{
 			 stok, kategori_id, harga_pokok, harga_konsumen, harga_anggota, deskripsi, gambar')->asArray()
             ->where('barang.id', $id_barang)
 			->where('barang.status', 1)
+			->orWhere('barang.status', 3)
             ->join('satuan', 'satuan.id = barang.satuan_id')
 			->join('kategori', 'kategori.id = barang.kategori_id')
             ->join('merek', 'merek.id = barang.merek_id')
@@ -360,6 +362,8 @@ class Pengajuan extends BaseController{
 		if($konfirm['status'] != 1){
 			return redirect()->to(base_url('/'));
 		}
+
+		$id_penyuplai = $this->model_penyuplai->select('id')->where('user_id', $id_user)->first();
 		
 		$data = [
 			'title' => 'Riwayat Pengajuan',
@@ -367,11 +371,12 @@ class Pengajuan extends BaseController{
 				->join('role', 'role.id = user.role_id')
 				->where('surel', $email)
 				->first(),
-			'pengajuan' => $this->model_pengajuan->select('barang.nama as nama_barang, pengajuan.status as status_pengajuan,
+			'pengajuan' => $this->model_pengajuan->select('alasan, barang.nama as nama_barang, pengajuan.status as status_pengajuan,
 				barang.status as status_barang, pengajuan.kode as kode_pengajuan, pengajuan.tanggal as tanggal_pengajuan,
 				pengajuan.stok as jumlah, satuan.nama as nama_satuan, merek.nama as nama_merek, kategori.nama as nama_kategori,
 				barang.harga_anggota as harga_anggota, barang.harga_konsumen as harga_konsumen, barang.harga_pokok as harga_pokok,
 				barang.deskripsi as deskripsi')->asArray()
+				->where('pengajuan.penyuplai_id', $id_penyuplai)
 				->join('barang_masuk', 'barang_masuk.pengajuan_id = pengajuan.id')
 				->join('barang', 'barang.id = barang_masuk.barang_id')
 				->join('satuan', 'satuan.id = barang.satuan_id')

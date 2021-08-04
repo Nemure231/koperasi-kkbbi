@@ -32,8 +32,8 @@ class InvoicePendaftar extends BaseController{
 
 		
 		$data = [
-			'title' => ucfirst('Invoice Utang'),
-            'nama_menu_utama' => 'Fitur',
+			'title' => ucfirst('Invoice Pendaftaran'),
+            'nama_menu_utama' => 'Pendaftaran',
             'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
 						->join('role', 'role.id = user.role_id')
 						->where('surel', $email)

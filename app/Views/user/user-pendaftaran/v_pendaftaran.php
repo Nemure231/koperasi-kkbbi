@@ -19,7 +19,7 @@
             <div class="card-body">
 
               <div class="row">
-                <div class="col-lg-12">
+                <!-- <div class="col-lg-12">
                   <div class="alert alert-info">
                     
                          
@@ -28,12 +28,12 @@
 
                         
                   </div>
-                </div>
+                </div> -->
                 <div class="col-lg-6">
 
                   <div class="row">
                     <div class="form-group col-lg-12 col-md-12">
-                      <label>Nama</label>
+                      <label>Nama Lengkap</label>
                       <input type="text" name="nama" id="nama" class="form-control <?php echo ($validation->hasError('nama')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('nama', '', TRUE); ?>">
                       <div class="invalid-feedback">
                         <?php echo $validation->showError('nama'); ?>

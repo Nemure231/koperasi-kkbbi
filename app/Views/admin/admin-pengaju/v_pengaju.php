@@ -128,6 +128,9 @@
                         data-kode_pengajuan="<?php echo $p['kode_pengajuan']; ?>"
                         data-alasan="Pastikan untuk memberikan alasan yang logis, sopan, dan tidak menyinggung"
                         data-id_penyuplai="<?php echo $p['id_penyuplai']; ?>"
+
+                        data-id_barang=" <?php echo $p['id_barang']; ?>" 
+                        
                         >Tolak</a>
                           
                         <?php else: ?>
@@ -147,6 +150,8 @@
                         data-kode_pengajuan="<?php echo $p['kode_pengajuan']; ?>"
                         data-alasan="Jika pengajuan sudah disetujui, tetapi barang belum dikirim lebih dari seminggu, Anda dapat menolaknya. Pastikan untuk memberikan alasan yang logis, sopan, dan tidak menyinggung"
                         data-id_penyuplai="<?php echo $p['id_penyuplai']; ?>" 
+                        data-id_barang=" <?php echo $p['id_barang']; ?>" 
+                        
                         >Tolak</a>
                         
           
@@ -379,6 +384,8 @@
         <?php echo csrf_field(); ?>
         <input type="hidden" name="kode_pengajuan_tolak" id="kode_pengajuan_tolak" value="">
         <input type="hidden" name="id_pengajuan_tolak" id="id_pengajuan_tolak" value="">
+        <input type="hidden" name="id_barang_tolak" id="id_barang_tolak" value="">
+
         <input type="hidden" name="id_penyuplai_tolak" id="id_penyuplai_tolak" value="">
         <input type="hidden" name="_method" value="PUT">
         <div class="modal-body">

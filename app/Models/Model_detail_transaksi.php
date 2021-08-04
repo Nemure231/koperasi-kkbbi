@@ -159,6 +159,27 @@ class Model_detail_transaksi extends Model{
         return $query;
     }
 
+
+     public function GetAllBarangKeluarBulanCari($month = null, $year = null) {
+
+
+        date_default_timezone_set("Asia/Jakarta");
+        if(!$month && !$year){
+            $month= 04;
+            $year= 2021;
+        }
+        $this->db->transStart();
+        $builder = $this->db->table('barang_masuk');
+        $builder->selectSUM('barang_masuk.total_harga_pokok', 'total_barang_masuk');
+        $builder->where('MONTH(barang_masuk.tanggal)', $month);
+        $builder->where('YEAR(barang_masuk.tanggal)', $year);
+        $builder->groupBy('YEAR(barang_masuk.tanggal)');
+        $query = $builder->get()->getRowArray();
+        $this->db->transComplete();
+
+        return $query;
+    }
+
     // public function GetAllBarangKeluarBulanCari($month = null, $year = null) {
 
 

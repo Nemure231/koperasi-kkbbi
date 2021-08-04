@@ -187,7 +187,7 @@ class Pendaftaran extends BaseController{
 			];
 
 		$this->model_pendaftaran->insert($pendaftaran);
-		$this->session->setFlashdata('pesan_pendaftaran', '<div class="alert alert-success">Pendaftaran berhasil! Silakan cek surel anda!</div>');
+		$this->session->setFlashdata('pesan_pendaftaran', '<div class="alert alert-success">Pendaftaran berhasil! Silakan periksa surel anda untuk melakukan verifikasi!</div>');
 		$this->_sendEmail($user, $token, $pendaftaran, 'verify');
 		return redirect()->to(base_url('pendaftaran'));
 	

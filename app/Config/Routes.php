@@ -181,7 +181,9 @@ $routes->group('laporan', function($routes){
 	$routes->add('summary/bulan', 'LaporanSummary::bulan', ['filter' => 'cek_akses']);
 	$routes->add('summary/tahun', 'LaporanSummary::tahun', ['filter' => 'cek_akses']);
 
-	$routes->add('keuangan-bulanan', 'LaporanKeuangan::index', ['filter' => 'cek_akses']);
+	$routes->get('keuangan-bulanan', 'LaporanKeuangan::index', ['filter' => 'cek_akses']);
+	$routes->post('keuangan-bulanan/cari', 'LaporanKeuangan::cari');
+	$routes->post('keuangan-bulanan/tambah', 'LaporanKeuangan::tambah');
 });
 
 

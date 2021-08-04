@@ -80,6 +80,13 @@
                           
                           >
                           <i class="fas fa-info-circle"></i></a>
+                          <?php if($p['status_pengajuan'] == 3): ?>
+                          <a href="javascript:void(0)" class="btn btn-info tombol-alasan"
+                        data-alasan="<?php echo $p['alasan']; ?>">Alasan</a>
+                        <?php endif; ?>
+                       
+                          
+                       
 
                       </td>
                       
@@ -105,7 +112,7 @@
       <div class="col-lg-12">
 
         <div class="empty-state" data-height="400">
-          <div class="empty-state-icon bg-danger">
+          <div class="empty-state-icon bg-primary">
             <i class="ti-help"></i>
           </div>
           <h2>Data Kosong</h2>
@@ -113,7 +120,7 @@
             Riwayat pengajuan kosong, Anda belum pernah pengajukan barang. Silakan tekan tombol dibawah untuk
             menampilkan halaman pengajuan.
           </p>
-          <a href="<?php echo base_url().'/pengajuan' ?>" class="btn btn-warning mt-4">Pengajuan</a>
+          <a href="<?php echo base_url().'/pengajuan' ?>" class="btn btn-primary mt-4">Pengajuan</a>
         </div>
 
       </div>
@@ -201,6 +208,42 @@
         </div>
 
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-alasan" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light">Alasan</h5>
+        <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><i style="font-size: 24px;" class="fas fa-10x fa-times"></i></span>
+        </button>
+      </div>
+      <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
+
+      
+       
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="form-group text-left">
+                
+                <textarea class="form-control-plaintext text-justify" readonly style="min-height:145px;" id="alasan" value=""></textarea>
+              </div>
+
+
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          
+        </div>
+       
+
     </div>
   </div>
 </div>

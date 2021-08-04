@@ -164,7 +164,7 @@
             </form>
 
 
-                      <form action="" method="post" accept-charset="utf-8">
+                      <!-- <form action="" method="post" accept-charset="utf-8">
                         <div class="row">
                         <div class="col-lg-12">
                           <div class="text-md-right">
@@ -172,11 +172,11 @@
                               <button type="submit" class="btn btn-primary btn-icon icon-left"><i
                                   class="fas fa-cash"></i>Simpan</button>
                             </div>
-                            <!-- <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button> -->
+                         
                           </div>
                         </div>
                         </div>
-                      </form>
+                      </form> -->
                     
 
                       

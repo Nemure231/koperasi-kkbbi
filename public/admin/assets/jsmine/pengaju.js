@@ -20,7 +20,7 @@ $(document).ready(function () {
       var nama_satuan = $(this).data('nama_satuan');
       var nama_merek = $(this).data('nama_merek');
       var jumlah = $(this).data('jumlah');
-      var harga_pokok = $(this).data('harga_konsumen');
+      var harga_pokok = $(this).data('harga_pokok');
       var harga_anggota = $(this).data('harga_anggota');
       var harga_konsumen = $(this).data('harga_konsumen');
       var deskripsi = $(this).data('deskripsi');
@@ -49,10 +49,13 @@ $(document).ready(function () {
       var id_penyuplai = $(this).data('id_penyuplai');
       var alasan = $(this).data('alasan');
       var kode = $(this).data('kode_pengajuan');
+      var id_barang = $(this).data('id_barang');
+      var id_barang_masuk= $(this).data('id_barang_masuk');
       $('#kode_pengajuan_tolak').val(kode);
       $('#id_pengajuan_tolak').val(id_pengajuan);
       $('#id_penyuplai_tolak').val(id_penyuplai);
       $('#alasan').attr('placeholder', alasan);
+      $('#id_barang_tolak').val(id_barang);
       $('#modal-tolak').modal('show');
 
    });

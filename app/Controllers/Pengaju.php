@@ -92,11 +92,21 @@ class Pengaju extends BaseController{
 
         $id_penyuplai = $this->request->getPost('id_penyuplai_tolak');
         $id_pengajuan = $this->request->getPost('id_pengajuan_tolak');
+        $id_barang = $this->request->getPost('id_barang_tolak');
         $data = array(
             'alasan' => htmlspecialchars($this->request->getPost('alasan'), ENT_QUOTES),
             'status' => 3,
         );
         $this->model_pengajuan->update($id_pengajuan, $data);
+
+        $status = $this->model_barang->select('status')->asArray()->where('id', $id_barang)->first();
+
+        if($status['status'] == 2){
+            $this->model_barang->set('status', 3)->where('id', $id_barang)->update();
+        }
+
+        $this->model_barang_masuk->set('status', 3)->where('pengajuan_id', $id_pengajuan)->update();
+
         $kode = $this->request->getPost('kode_pengajuan_tolak');
         $anggota = $this->model_penyuplai->select('user.nama as nama, user.surel as surel')
         ->where('penyuplai.id', $id_penyuplai)
@@ -129,7 +139,7 @@ class Pengaju extends BaseController{
     }
 
     public function konfirm(){
-        
+        $id_user = $this->session->get('id_user');
         $id_barang = $this->request->getPost('id_barang');
         $id_barang_masuk = $this->request->getPost('id_barang_masuk');
         $stok = $this->request->getPost('stok');
@@ -165,10 +175,10 @@ class Pengaju extends BaseController{
         
 
         $this->model_barang->set('status', 1)->where('id', $id_barang)->update();
-        $this->model_barang_masuk->set('status', 1)->where('id', $id_barang_masuk)->update();
+        $this->model_barang_masuk->set('status', 1)->set('user_id', $id_user)->where('pengajuan_id', $id_pengajuan)->update();
         $this->model_barang->TambahStok($id_barang, $stok);
 
-        $this->_sendEmail($transaksi, $barang, NULL, 'konfirm');
+        // $this->_sendEmail($transaksi, $barang, NULL, 'konfirm');
         $this->session->setFlashdata('pesan_sukses', 'Pengajuan berhasil dikonfirmasi!');
         return redirect()->to(base_url('/fitur/pengaju'));
     }

@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css"
+  href="<?php echo base_url().'/admin/assets/modules/chocolat/dist/css/chocolat.css' ?>">
 <style type="text/css">
   #qty_buku-error {
     color: #dc3545;
@@ -20,10 +22,19 @@
                     <div class="row">
 
                       <div class="form-group col-sm-12 col-md-12 col-lg-12 mb-4 pb-1">
-                        <img src="
-                        <!-- <//?php echo base_url('admin/assets/buku').'/'. $barang/['gambar'] ?> -->
-                        "
-                          class="img-thumbnail img-prev" style="height: 260px; width: 180px; object-fit:cover;">
+
+                      <div class="chocolat-parent">
+                          <a href="<?php echo base_url().'/admin/assets/barang/'. $barang['nama_gambar'] ?>"
+                            class="chocolat-image" title="Pratinjau foto">
+                            <div class="text-center">
+                              <img alt="Foto kosong"
+                                src="<?php echo base_url().'/admin/assets/barang/'. $barang['nama_gambar'] ?>"
+                                class="img-fluid" style="height: 260px; width: 180px; object-fit:cover;">
+                            </div>
+                          </a>
+                        </div>
+
+                       
                       </div>
                     </div>
                   </div>

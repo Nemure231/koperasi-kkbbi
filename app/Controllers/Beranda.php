@@ -36,10 +36,13 @@ class Beranda extends BaseController{
 			'session' => $this->session,
 			'konfirmasi' => $konfirm['status'] ?? NULL,
 			'form_beranda' => ['id' => 'formBeranda', 'name'=>'formBeranda'],
-			'lima_barang' => $this->model_barang->select('nama, kode')
-							->asArray()->orderBy('id', 'DESC')->findAll(5),
+			'lima_barang' => $this->model_barang->select('nama, kode, gambar')
+			->where('barang.status', 1)	
+							->asArray()->orderBy('id', 'DESC')->groupBy('id')
+							->findAll(5),
 			'kategori' => $this->model_kategori->select('kategori.id as id, kategori.nama as nama, COUNT(kategori_id) as nom')
-							->join('barang', 'barang.kategori_id = kategori.id')->groupBy('kategori_id')
+						->where('barang.status', 1)	
+						->join('barang', 'barang.kategori_id = kategori.id')->groupBy('kategori_id')				
 						->asArray()->findAll(),
 			'role_log' => $role
 			

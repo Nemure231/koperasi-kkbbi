@@ -113,7 +113,7 @@
                     
                     <ul class="dropdown-menu">
                       <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/profil'?>"><i class="ti-user"></i> <?php echo $user['nama']; ?></a>
-                      <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/pengajuan/riwayat_pengajuan'?>"><i class="ti-package"></i> Riwayat Pengajuan</a>                                  
+                      <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/pengajuan/riwayat'?>"><i class="ti-package"></i> Riwayat Pengajuan</a>                                  
                       <li class="nav-item"><a class="nav-link" href="javascript:void(0)" id="logout-button"><i class="ti-power-off"></i> Keluar</a>                 
                     </ul>
                 </li>

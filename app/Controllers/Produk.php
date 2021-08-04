@@ -30,16 +30,16 @@ class Produk extends BaseController{
 			$barang = $this->model_barang->select('barang.nama as nama, kode')->asArray()
 			->like('barang.nama', $kunci)->orLike('kategori.nama', $kunci)->orLike('deskripsi', $kunci)
 			->orLike('merek.nama', $kunci)
-			->join('kategori', 'kategori.id = barang.kategori_id', 'left')
-			->join('merek', 'merek.id = barang.merek_id', 'left')
-			->join('penyuplai', 'penyuplai.id = barang.penyuplai_id', 'left')
-			->groupBy('barang.nama')->paginate(8, 'beranda');
+			->join('kategori', 'kategori.id = barang.kategori_id')
+			->join('merek', 'merek.id = barang.merek_id')
+			->join('penyuplai', 'penyuplai.id = barang.penyuplai_id')
+			->groupBy('barang.id')->paginate(8, 'beranda');
 		}else{
 			$barang = $this->model_barang->select('barang.nama as nama, kode')->asArray()
-			->join('kategori', 'kategori.id = barang.kategori_id', 'left')
-			->join('merek', 'merek.id = barang.merek_id', 'left')
-			->join('penyuplai', 'penyuplai.id = barang.penyuplai_id', 'left')
-			->groupBy('barang.nama')->paginate(8, 'beranda');
+			->join('kategori', 'kategori.id = barang.kategori_id')
+			->join('merek', 'merek.id = barang.merek_id')
+			->join('penyuplai', 'penyuplai.id = barang.penyuplai_id')
+			->groupBy('barang.id')->paginate(8, 'beranda');
 		}
 
 		//dd($this->model->GetAllKeranjang());
@@ -123,6 +123,9 @@ class Produk extends BaseController{
 
 		$role = $this->session->get('role_id');
 		$surel = $this->session->get('email');
+		$konfirm = $this->model_user->select('status')->asArray()
+		->where('surel', $surel)
+		->first();
 
 		$data = [
 			'user' => $this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
@@ -130,15 +133,18 @@ class Produk extends BaseController{
 			->where('surel', $surel)
 			->first(),
 			'title' => ucfirst('Detail Produk'),
-			'barang' => $this->model_barang->select('barang.nama as nama_barang, barang.gambar as gambar_barang,
+			'barang' => $this->model_barang->select('barang.nama as nama_barang, barang.gambar as nama_gambar,
 				kategori.nama as nama_kategori, satuan.nama as nama_satuan, merek.nama as nama_merek,
-				penyuplai.nama as nama_penyuplai, harga_anggota, harga_konsumen, deskripsi, stok, kategori_id, satuan_id, merek_id, penyuplai_id')
+				user.nama as nama_penyuplai, harga_anggota, harga_konsumen, deskripsi, stok, kategori_id, satuan_id, merek_id, penyuplai_id')
 				->asArray()
+				->where('barang.status', 1)
 				->join('satuan', 'satuan.id = barang.satuan_id')
 				->join('kategori', 'kategori.id = barang.kategori_id')
 				->join('merek', 'merek.id = barang.merek_id')
 				->join('penyuplai', 'penyuplai.id = barang.penyuplai_id')
+				->join('user', 'user.id = penyuplai.user_id')
 				->where('kode', $uri)->first(),
+			'konfirmasi' => $konfirm['status'] ?? NULL,
 			'session' => $this->session,
 			// 'genre' => $this->model->GetAllGenreDetailBuku($uri),
 			// 'penerbit' => $this->model->GetAllPenerbitDetailBuku($uri),

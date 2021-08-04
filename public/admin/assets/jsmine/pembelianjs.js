@@ -215,6 +215,8 @@ $(document).ready(function () {
       ],
    });
 
+   
+
    $('#tombolPembelian').click(function () {
 
       var role_jenis_kasir = $(this).data("role_id_jenis_kasir");
@@ -234,6 +236,12 @@ $(document).ready(function () {
          success: function (res) {
             // alert(res.csrf_hash);
             $('#csrf_jenis_kasir').val(res.csrf_hash);
+            $('#csrf_kasir').val(res.csrf_hash);
+            $('#csrf_detail_barang').val(res.csrf_hash);
+            $('#csrf_detail_qr').val(res.csrf_hash);
+            $('#csrf_keranjang').val(res.csrf_hash);
+            $('#csrf_hapus_barang').val(res.csrf_hash);
+            $('#csrf_hapus_keranjang').val(res.csrf_hash);
 
          }
       });
@@ -357,6 +365,7 @@ $(document).ready(function () {
                $('#csrf_hapus_keranjang').val(res.csrf_hash);
                $('#csrf_keranjang').val(res.csrf_hash);
                $('#csrf_detail_qr').val(res.csrf_hash);
+               $('#csrf_kasir').val(res.csrf_hash);
                $('#kode_salah').text('');
                iziToast.success({
                   title: 'Berhasil!',
@@ -367,12 +376,13 @@ $(document).ready(function () {
                });
             } else {
                $('#kode_salah').text('Barang dengan kode tersebut tidak ada!');
-               $('#csrf_detail_barang').val(res.csrf_hash);
                $('#csrf_jenis_kasir').val(res.csrf_hash);
+               $('#csrf_kasir').val(res.csrf_hash);
+               $('#csrf_detail_barang').val(res.csrf_hash);
+               $('#csrf_detail_qr').val(res.csrf_hash);
+               $('#csrf_keranjang').val(res.csrf_hash);
                $('#csrf_hapus_barang').val(res.csrf_hash);
                $('#csrf_hapus_keranjang').val(res.csrf_hash);
-               $('#csrf_keranjang').val(res.csrf_hash);
-               $('#csrf_detail_qr').val(res.csrf_hash);
             }
 
          }

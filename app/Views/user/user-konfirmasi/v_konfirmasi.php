@@ -11,7 +11,7 @@
       <div class="col-12 col-md-6 col-lg-6">
         <div class="pricing">
           <div class="pricing-title">
-            Pendaftaran
+            Konfirmasi
           </div>
           <div class="pricing-padding">
             <div class="pricing-price">
@@ -43,7 +43,7 @@
       <div class="col-12 col-md-6 col-lg-6">
         <div class="pricing">
           <div class="pricing-title">
-            Pendaftaran
+            Konfirmasi
           </div>
           <div class="pricing-padding">
             <div class="pricing-price">
@@ -174,13 +174,13 @@
       <div class="col-12 col-md-6 col-lg-4">
         <div class="card card-primary">
           <div class="card-header">
-            <h4 class="text-right">Ganti pilihan pendaftaran
+            <h4 class="text-right">Ganti pilihan konfirmasi
             </h4>
           </div>
           <div class="card-body">
             <div class="pricing">
               <div class="pricing-title">
-                Pendaftaran
+                Konfirmasi
               </div>
               <div class="pricing-padding">
                 <div class="pricing-price">
@@ -259,13 +259,13 @@
       <div class="col-12 col-md-6 col-lg-4">
         <div class="card card-primary">
           <div class="card-header">
-            <h4 class="text-right">Ganti pilihan pendaftaran
+            <h4 class="text-right">Ganti pilihan konfirmasi
             </h4>
           </div>
           <div class="card-body">
             <div class="pricing">
               <div class="pricing-title">
-                Pendaftaran
+                Konfirmasi
               </div>
               <div class="pricing-padding">
                 <div class="pricing-price">
