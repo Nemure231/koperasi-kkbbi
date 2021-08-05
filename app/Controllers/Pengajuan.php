@@ -42,8 +42,6 @@ class Pengajuan extends BaseController{
 	}
 
 	public function index(){
-	
-
 		$role = $this->session->get('role_id');
 		$id_user = $this->session->get('id_user');
 		$email = $this->session->get('email');
@@ -57,11 +55,14 @@ class Pengajuan extends BaseController{
 		
 		$data = [
 			'title' => 'Pengajuan',
-			'user' => $this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+			'user' => $this->model_user->select('user.id as id_user,
+				user.nama as nama, surel as email, telepon, gambar,
+				alamat, role.nama as role')->asArray()
 				->join('role', 'role.id = user.role_id')
 				->where('surel', $email)
 				->first(),
-			'barang' => $this->model_barang->select('barang.nama as nama, barang.id as id')->asArray()
+			'barang' => $this->model_barang->select('barang.nama as nama, 
+				barang.id as id')->asArray()
 				->where('user.id', $id_user)
 				->where('barang.status', 1)
 				->orWhere('barang.status', 3)
@@ -80,11 +81,13 @@ class Pengajuan extends BaseController{
 			'role_log' => $role,
 			
 		];
-		
-		tampilan_user('user/user-pengajuan/v_pengajuan', 'user/user-pengajuan/v_js_pengajuan', $data);
+		tampilan_user(
+			'user/user-pengajuan/v_pengajuan',
+			'user/user-pengajuan/v_js_pengajuan',
+			$data
+		);
 		
 	}
-
 
 	public function ambil_barang(){
 
@@ -103,24 +106,16 @@ class Pengajuan extends BaseController{
         echo json_encode(['data' => $barang, 'csrf_hash' => csrf_hash()]);
     }
 
-
 	public function tambah(){
 
-		
-
 		$id_barang = $this->request->getPost('nama');
-
 		if (is_numeric($id_barang)){
 			$rule = 'required_without[nama]';
-			// $kategoriid = 'kosong';
-			// $satuanid = 'kosong';
-			// $merekid = 'kosong';
 			
 		}else{
-			$rule = 'uploaded[input_gambar]|max_size[input_gambar,1024]|is_image[input_gambar]|mime_in[input_gambar,image/jpg,image/jpeg,image/png]';
-			// $kategoriid = 'kategori_id';
-			// $satuanid = 'satuan_id';
-			// $merekid = 'merek_id';
+			$rule = 'uploaded[input_gambar]|max_size[input_gambar,3072]|
+			is_image[input_gambar]|
+			mime_in[input_gambar,image/jpg,image/jpeg,image/png]';
 		}
 
 		if(!$this->validate([
@@ -150,46 +145,42 @@ class Pengajuan extends BaseController{
 				]
 			],
 			'harga_konsumen' => [
-				'label'  => 'Harga Konsumen',
-				'rules'  => 'required|numeric',
+				'rules'  => 'required|numeric|greater_than[0]',
 				'errors' => [
 				'required' => 'Harus diisi!',
 				'numeric' => 'Harus angka!'
 				]
 			],
 			'harga_pokok' => [
-				'rules'  => 'required|numeric',
+				'rules'  => 'required|numeric|greater_than[0]',
 				'errors' => [
 				'required' => 'Harus diisi!',
 				'numeric' => 'Harus angka!'
 				]
 			],
 			'harga_anggota' => [
-				'rules'  => 'required|numeric',
+				'rules'  => 'required|numeric|greater_than[0]',
 				'errors' => [
 				'required' => 'Harus diisi!',
 				'numeric' => 'Harus angka!'
 				]
 			],
 			'stok' => [
-				'rules'  => 'required|numeric',
+				'rules'  => 'required|numeric|greater_than[0]',
 				'errors' => [
 				'required' => 'Harus diisi!',
 				'numeric' => 'Harus angka!'
 				]
+			],	
+            'input_gambar' => [
+                'rules'  => $rule,
+                'errors' => [
+                'uploaded' => 'Harus diunggah!',
+                'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
+                'is_image' => 'Format file yang anda upload bukan gambar!',
+                'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
+                ]
 			],
-				
-                'input_gambar' => [
-                    'rules'  => $rule,
-                    'errors' => [
-                    'uploaded' => 'Harus diunggah!',
-                    'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
-                    'is_image' => 'Format file yang anda upload bukan gambar!',
-                    'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
-                    ]
-					],
-				
-
 		])) {
 			return redirect()->to(base_url('pengajuan'))->withInput();
 		}
@@ -199,25 +190,22 @@ class Pengajuan extends BaseController{
 		$id_kategori = $this->request->getPost('kategori_id');
 		$id_merek = $this->request->getPost('merek_id');
 		$id_user = $this->session->get('id_user');
-		$id_penyuplai = $this->model_penyuplai->select('id as id_penyuplai')->asArray()
+		$id_penyuplai = $this->model_penyuplai->select('id as id_penyuplai')
+				->asArray()
 				->where('user_id', $id_user)
 				->first();
 		$harga_pokok = $this->request->getPost('harga_pokok');
 		$stok = $this->request->getPost('stok');
 
 		if (is_numeric($id_barang)){
-			$barang_id = $id_barang;
-		
-			
+			$barang_id = $id_barang;			
 		}else{
-
             if (is_numeric($id_satuan)){
                 $satuan_id = $id_satuan;
             }else{
                 $this->model_satuan->set('nama', $id_satuan)->insert();
                 $satuan_id = $this->db->insertID();
             }
-        
             
 			if (is_numeric($id_kategori)){
                 $kategori_id = $id_kategori;
@@ -233,8 +221,6 @@ class Pengajuan extends BaseController{
                 $merek_id = $this->db->insertID();    
             }
 			$kode = auto_kode_barang();
-
-
 
 			$writer = new PngWriter();
 
@@ -252,12 +238,10 @@ class Pengajuan extends BaseController{
 			$result = $writer->write($qrCode, null, $label);
 			$result->saveToFile(FCPATH.'/admin/assets/qr/'.$kode.'.png');
 
-
 			$gambar = $this->request->getFile('input_gambar');
 			$nama_gambar = time().'.'.$gambar->guessExtension();
 			$gambar->move('admin/assets/barang/', $nama_gambar);
 		
-
 			$data_barang = [
 				'nama' => $id_barang,
 				'kode' => $kode,
@@ -274,38 +258,36 @@ class Pengajuan extends BaseController{
 				'qr' => $kode.'.png',
 				'status' => 2,
 			];
-			
-
 			$this->model_barang->insert($data_barang);
 			$barang_id = $this->db->insertID();    
 		}
 
-			$data_pengajuan = [
-				'penyuplai_id' => $id_penyuplai['id_penyuplai'],
-				'kode' => 'PNJ'.$id_user.date('jny').rand(1, 999),
-				'stok' => $stok,
-				'alasan' => '',		
-				'status' => 2,		
-			];
-			// dd($data_pengajuan);
-			$this->model_pengajuan->insert($data_pengajuan);
-			$pengajuan_id = $this->db->insertID(); 
-
+		$data_pengajuan = [
+			'penyuplai_id' => $id_penyuplai['id_penyuplai'],
+			'kode' => 'PNJ'.$id_user.date('jny').rand(1, 999),
+			'stok' => $stok,
+			'alasan' => '',		
+			'status' => 2,		
+		];
+		$this->model_pengajuan->insert($data_pengajuan);
+		$pengajuan_id = $this->db->insertID(); 
 			
-			$data_barang_masuk = [
-				'barang_id' => $barang_id,
-				'pengajuan_id' => $pengajuan_id,
-				'user_id' => '',
-				'penyuplai_id' => $id_penyuplai['id_penyuplai'],
-				'jumlah' => $stok,
-				'harga_pokok' => $harga_pokok,
-				'total_harga_pokok' => ($harga_pokok * $stok),
-				'status' => 2
-			];
+		$data_barang_masuk = [
+			'barang_id' => $barang_id,
+			'pengajuan_id' => $pengajuan_id,
+			'user_id' => '',
+			'penyuplai_id' => $id_penyuplai['id_penyuplai'],
+			'jumlah' => $stok,
+			'harga_pokok' => $harga_pokok,
+			'total_harga_pokok' => ($harga_pokok * $stok),
+			'status' => 2
+		];
 			
-			$this->model_barang_masuk->insert($data_barang_masuk);
+		$this->model_barang_masuk->insert($data_barang_masuk);
 		
-		$sekretaris = $this->model_user->select('surel, nama')->where('id', 124)->where('role_id', 3)->asArray()->first();
+		$sekretaris = $this->model_user->select('surel, nama')
+			->where('id', 124)->where('role_id', 3)->asArray()
+			->first();
 		$anggota = $this->model_user->select('nama')->asArray()
 			->where('penyuplai.id', $id_penyuplai['id_penyuplai'])
 			->join('penyuplai', 'penyuplai.user_id = user.id')
@@ -318,7 +300,6 @@ class Pengajuan extends BaseController{
 	}
 
 	public function _sendEmail($sekretaris, $anggota){
-
 		$toko = $this->model_toko->select('nama_toko, telepon_toko, email_toko,
                 alamat_toko')->asArray()
                 ->where('id_toko', 1)->first();
@@ -339,7 +320,9 @@ class Pengajuan extends BaseController{
         $this->email->setFrom('karol.web980@gmail.com', 'Karol Web');
         $this->email->setTo($sekretaris['surel']);
 		$this->email->setSubject('KKBBI: Pengajuan - '.$anggota['nama']);
-		$this->email->setMessage(email_notifikasi($sekretaris, ''.$anggota['nama'].' baru saja mengajukan barang!', $toko, 'Pengajuan'));
+		$this->email->setMessage(email_notifikasi($sekretaris,
+			''.$anggota['nama'].' baru saja mengajukan barang!',
+			$toko, 'Pengajuan'));
       
         if ($this->email->send()) {
             return true;
@@ -348,7 +331,6 @@ class Pengajuan extends BaseController{
             die;
         }
     }
-
 
 	public function riwayat(){
 	
@@ -363,18 +345,24 @@ class Pengajuan extends BaseController{
 			return redirect()->to(base_url('/'));
 		}
 
-		$id_penyuplai = $this->model_penyuplai->select('id')->where('user_id', $id_user)->first();
+		$id_penyuplai = $this->model_penyuplai->select('id')
+			->where('user_id', $id_user)->first();
 		
 		$data = [
 			'title' => 'Riwayat Pengajuan',
-			'user' => $this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+			'user' => $this->model_user->select('user.id as id_user, user.nama as nama,
+				surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
 				->join('role', 'role.id = user.role_id')
 				->where('surel', $email)
 				->first(),
-			'pengajuan' => $this->model_pengajuan->select('alasan, barang.nama as nama_barang, pengajuan.status as status_pengajuan,
-				barang.status as status_barang, pengajuan.kode as kode_pengajuan, pengajuan.tanggal as tanggal_pengajuan,
-				pengajuan.stok as jumlah, satuan.nama as nama_satuan, merek.nama as nama_merek, kategori.nama as nama_kategori,
-				barang.harga_anggota as harga_anggota, barang.harga_konsumen as harga_konsumen, barang.harga_pokok as harga_pokok,
+			'pengajuan' => $this->model_pengajuan->select('alasan, barang.nama as nama_barang,
+				pengajuan.status as status_pengajuan,
+				barang.status as status_barang, pengajuan.
+				kode as kode_pengajuan, pengajuan.tanggal as tanggal_pengajuan,
+				pengajuan.stok as jumlah, satuan.nama as nama_satuan,
+				merek.nama as nama_merek, kategori.nama as nama_kategori,
+				barang.harga_anggota as harga_anggota, barang.harga_konsumen as harga_konsumen,
+				barang.harga_pokok as harga_pokok,
 				barang.deskripsi as deskripsi')->asArray()
 				->where('pengajuan.penyuplai_id', $id_penyuplai)
 				->join('barang_masuk', 'barang_masuk.pengajuan_id = pengajuan.id')
@@ -391,12 +379,11 @@ class Pengajuan extends BaseController{
 			
 		];
 		
-		tampilan_user('user/user-riwayat-pengajuan/v_riwayat_pengajuan', 'user/user-riwayat-pengajuan/v_js_riwayat_pengajuan', $data);
+		tampilan_user(
+			'user/user-riwayat-pengajuan/v_riwayat_pengajuan',
+			'user/user-riwayat-pengajuan/v_js_riwayat_pengajuan',
+			$data
+		);
 		
 	}
-
-
-	
-	
-
 }

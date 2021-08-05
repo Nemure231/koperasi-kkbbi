@@ -37,7 +37,9 @@ class Pendaftaran extends BaseController{
 		
 		$data = [
 			'title' => 'Pendaftaran',
-			'user' => $this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+			'user' => $this->model_user->select('user.id as id_user,
+				user.nama as nama, surel as email, telepon, gambar,
+				alamat, role.nama as role')->asArray()
 				->join('role', 'role.id = user.role_id')
 				->where('surel', $email)
 				->first(),
@@ -48,9 +50,11 @@ class Pendaftaran extends BaseController{
 			
 		];
 		
-		tampilan_user('user/user-pendaftaran/v_pendaftaran', 'user/user-pendaftaran/v_js_pendaftaran', $data);
-		
-
+		tampilan_user(
+			'user/user-pendaftaran/v_pendaftaran',
+			'user/user-pendaftaran/v_js_pendaftaran',
+			$data
+		);
 	}
 
 	public function tambah(){
@@ -60,15 +64,16 @@ class Pendaftaran extends BaseController{
 			'nama' => [
 				'rules'  => 'required',
 				'errors' => [
-				'required' => 'Harus diisi!'
+					'required' => 'Harus diisi!'
 				]
 			],
 			'telepon' => [
-				'rules'  => 'required|numeric|is_unique[user.telepon]',
+				'rules'  => 'required|numeric|is_unique[user.telepon]|
+					greater_than[0]|greater_than_equal_to[100000]',
 				'errors' => [
-				'required' => 'Harus diisi!',
-				'numeric' => 'Harus angka!',
-				'is_unique' => 'Nomor itu sudah pernah didaftarkan!'
+					'required' => 'Harus diisi!',
+					'numeric' => 'Harus angka!',
+					'is_unique' => 'Nomor itu sudah pernah didaftarkan!'
 				]
 			],
 			'surel' => [
@@ -88,30 +93,34 @@ class Pendaftaran extends BaseController{
 				]
 			],
 			'no_ktp' => [
-				'rules'  => 'required',
+				'rules'  => 'required|numeric|greater_than[0]',
 				'errors' => [
 				'required' => 'Harus diisi!'
 				
 				]
 			],
 			'bank' => [
-				'rules'  => 'required_with[atas_nama,no_rekening]|permit_empty',
+				'rules'  => 'required_with[atas_nama,no_rekening]
+					|permit_empty|in_list[BCA,BRI,MANDIRI]',
 				'errors' => [
-				'numeric' => 'Harus angka!',
-				'required_with' => 'Harus diisi saat Atas Nama atau No Rekening ikut diisi!'
+					'numeric' => 'Harus angka!',
+					'required_with' => 'Harus diisi saat Atas Nama atau
+						No Rekening ikut diisi!'
 				
 				]
 			],
 			'atas_nama' => [
 				'rules'  => 'required_with[no_rekening,bank]|permit_empty',
 				'errors' => [
-				'numeric' => 'Harus angka!',
-				'required_with' => 'Harus diisi saat No Rekening atau Bank ikut diisi!'
+					'numeric' => 'Harus angka!',
+					'required_with' => 'Harus diisi saat No 
+					Rekening atau Bank ikut diisi!'
 				
 				]
 			],
 			'no_rekening' => [
-				'rules'  => 'required_with[atas_nama,bank]|numeric|permit_empty',
+				'rules'  => 'required_with[atas_nama,bank]|numeric
+					|permit_empty|greater_than[0]|numeric',
 				'errors' => [
 				'numeric' => 'Harus angka!',
 				'required_with' => 'Harus diisi saat Atas Nama atau Bank ikut diisi!'
@@ -126,7 +135,7 @@ class Pendaftaran extends BaseController{
 				]
 			],
 			'sandi' => [
-                'rules'  => 'required',
+                'rules'  => 'required|min_length[8]',
                 'errors' => [
                     'required' => 'Harus diisi!'
                     
@@ -178,7 +187,6 @@ class Pendaftaran extends BaseController{
 		$this->model_penyuplai->insert($penyuplai);
 		$penyuplai_id = $this->db->insertID();
 
-
 		$pendaftaran = [
 			'penyuplai_id'=> $penyuplai_id,
 			'kode' => 'PND'.$user_id.'5'.date('jny'),
@@ -187,7 +195,9 @@ class Pendaftaran extends BaseController{
 			];
 
 		$this->model_pendaftaran->insert($pendaftaran);
-		$this->session->setFlashdata('pesan_pendaftaran', '<div class="alert alert-success">Pendaftaran berhasil! Silakan periksa surel anda untuk melakukan verifikasi!</div>');
+		$this->session->setFlashdata('pesan_pendaftaran',
+		'<div class="alert alert-success">Pendaftaran berhasil! 
+		Silakan periksa surel anda untuk melakukan verifikasi!</div>');
 		$this->_sendEmail($user, $token, $pendaftaran, 'verify');
 		return redirect()->to(base_url('pendaftaran'));
 	
@@ -222,7 +232,8 @@ class Pendaftaran extends BaseController{
 		}else if($type == 'forgot'){
 			$this->email->subject('Atur Ulang Kata Sandi');
 			$this->email->message('Klik link ini untuk atur ulang kata sandi akunmu.:
-			<a href="'.base_url(). 'login/aturulangpass?email='. $this->mall->PostEmail(). '&token='. urlencode($token). '">Atur Ulang</a>');
+			<a href="'.base_url(). 'login/aturulangpass?email='.
+			$this->mall->PostEmail(). '&token='. urlencode($token). '">Atur Ulang</a>');
 		}
       
         if ($this->email->send()) {
@@ -231,9 +242,6 @@ class Pendaftaran extends BaseController{
             echo $this->email->printDebugger();
             die;
         }
-    }
-
-	
-	
+    }	
 
 }

@@ -37,22 +37,31 @@ class Pengaju extends BaseController{
         
             'title' => 'Pengaju',
             'nama_menu_utama' => 'Pembelian',
-            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
-						->join('role', 'role.id = user.role_id')
-						->where('surel', $email)
-						->first(),
-            'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-                    ->where('user_access_menu.role_id =', $role)
-                    ->orderBy('user_access_menu.menu_id', 'ASC')
-                    ->orderBy('user_access_menu.role_id', 'ASC')
-                    ->findAll(),
-        'pengaju' => $this->model_pengajuan->select('barang.nama as nama_barang, pengajuan.status as status_pengajuan,
-				barang.status as status_barang, pengajuan.kode as kode_pengajuan, pengajuan.tanggal as tanggal_pengajuan,
-				pengajuan.stok as jumlah, satuan.nama as nama_satuan, merek.nama as nama_merek, kategori.nama as nama_kategori,
-				barang.harga_anggota as harga_anggota, barang.harga_konsumen as harga_konsumen, barang.harga_pokok as harga_pokok,
-				barang.deskripsi as deskripsi, user.nama as nama_pengaju, barang.gambar as nama_gambar, barang.id as id_barang,
-                barang_masuk.id as id_barang_masuk, pengajuan.id as id_pengajuan, pengajuan.penyuplai_id as id_penyuplai')->asArray()
+            'user' 	=> 	$this->model_user->select('user.id as id_user,
+                user.nama as nama, surel as email, telepon, gambar,
+                alamat, role.nama as role')->asArray()
+				->join('role', 'role.id = user.role_id')
+				->where('surel', $email)
+				->first(),
+            'menu' => 	$this->model_user_menu->select('id_menu, menu')
+                ->asArray()
+                ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
+                ->where('user_access_menu.role_id =', $role)
+                ->orderBy('user_access_menu.menu_id', 'ASC')
+                ->orderBy('user_access_menu.role_id', 'ASC')
+                ->findAll(),
+            'pengaju' => $this->model_pengajuan->select('barang.nama as nama_barang,
+                pengajuan.status as status_pengajuan,
+				barang.status as status_barang, pengajuan.kode as kode_pengajuan,
+                pengajuan.tanggal as tanggal_pengajuan,
+				pengajuan.stok as jumlah, satuan.nama as nama_satuan,
+                merek.nama as nama_merek, kategori.nama as nama_kategori,
+				barang.harga_anggota as harga_anggota,
+                barang.harga_konsumen as harga_konsumen, barang.harga_pokok as harga_pokok,
+				barang.deskripsi as deskripsi, user.nama as nama_pengaju,
+                barang.gambar as nama_gambar, barang.id as id_barang,
+                barang_masuk.id as id_barang_masuk, pengajuan.id as id_pengajuan,
+                pengajuan.penyuplai_id as id_penyuplai')->asArray()
                 ->where('barang_masuk.status', 2)
                 ->where('user.role_id', 5)
                 ->where('pengajuan.status<', 3)
@@ -70,10 +79,12 @@ class Pengaju extends BaseController{
 
 
         ];
-        tampilan_admin('admin/admin-pengaju/v_pengaju', 'admin/admin-pengaju/v_js_pengaju', $data);
+        tampilan_admin(
+            'admin/admin-pengaju/v_pengaju',
+            'admin/admin-pengaju/v_js_pengaju',
+            $data
+        );
     }
-    
-
     public function tolak(){
 
         if(!$this->validate([
@@ -99,10 +110,13 @@ class Pengaju extends BaseController{
         );
         $this->model_pengajuan->update($id_pengajuan, $data);
 
-        $status = $this->model_barang->select('status')->asArray()->where('id', $id_barang)->first();
+        $status = $this->model_barang->select('status')->asArray()
+        ->where('id', $id_barang)
+        ->first();
 
         if($status['status'] == 2){
-            $this->model_barang->set('status', 3)->where('id', $id_barang)->update();
+            $this->model_barang->set('status', 3)->where('id', $id_barang)
+            ->update();
         }
 
         $this->model_barang_masuk->set('status', 3)->where('pengajuan_id', $id_pengajuan)->update();
@@ -113,9 +127,13 @@ class Pengaju extends BaseController{
         ->join('user', 'user.id = penyuplai.user_id')
         ->first();
 
-        $this->_sendEmail($anggota, 'Mohon maaf, berdasarkan hasil keputusan rapat yang dilakukan oleh Ketua Umum, kami memutuskan
-        untuk menolak barang yang ingin Anda ajukan. Namun, jangan cemas, data barang Anda masih ada di web kami, jika pada kesempatan
-        berikutnya Anda ingin mengajukan barang tersebut lagi, anda hanya perlu memilih barang tersebut. Untuk melihat detail penolakan, silakan periksa halaman riwayat pengajuan.', $kode, 'tolak');
+        $this->_sendEmail($anggota, 'Mohon maaf, berdasarkan hasil keputusan
+            rapat yang dilakukan oleh Ketua Umum, kami memutuskan
+            untuk menolak barang yang ingin Anda ajukan. Namun, jangan cemas,
+            data barang Anda masih ada di web kami, jika pada kesempatan
+            berikutnya Anda ingin mengajukan barang tersebut lagi, anda hanya
+            perlu memilih barang tersebut. Untuk melihat detail penolakan,
+            silakan periksa halaman riwayat pengajuan.', $kode, 'tolak');
         $this->session->setFlashdata('pesan_sukses', 'Pengajuan berhasil ditolak!');
         return redirect()->to(base_url('/fitur/pengaju'));
     }
@@ -131,8 +149,11 @@ class Pengaju extends BaseController{
         $id_pengajuan = $this->request->getPost('id_pengajuan');
         $this->model_pengajuan->set('status', 1)->where('id', $id_pengajuan)->update();
 
-        $this->_sendEmail($anggota, 'Selamat, berdasarkan hasil keputusan rapat yang dilakukan oleh Ketua Umum, kami memutuskan 
-        untuk menerima pengajuan barang Anda. Anda diberi waktu satu minggu mulai dari sekarang untuk mengirim barang tersebut ke koperasi. Untuk melihat detail riwayat pengajuan, silakan periksa halaman riwayat pengajuan', $kode, 'terima');
+        $this->_sendEmail($anggota, 'Selamat, berdasarkan hasilkeputusan rapat
+        yang dilakukan oleh Ketua Umum, kami memutuskan 
+        untuk menerima pengajuan barang Anda. Anda diberi waktu satu minggu mulai dari
+        sekarang untuk mengirim barang tersebut ke koperasi. Untuk melihat detail riwayat pengajuan, 
+        silakan periksa halaman riwayat pengajuan', $kode, 'terima');
 
         $this->session->setFlashdata('pesan_sukses', 'Pengajuan berhasil diterima!');
         return redirect()->to(base_url('/fitur/pengaju'));
@@ -152,7 +173,8 @@ class Pengaju extends BaseController{
         ->first();
         
 
-        $barang = $this->model_barang_masuk->select('barang.nama as nama_barang, barang_masuk.harga_pokok as harga,
+        $barang = $this->model_barang_masuk->select('barang.nama as nama_barang,
+            barang_masuk.harga_pokok as harga,
             ')->asArray()
             ->selectSUM('barang_masuk.total_harga_pokok', 'subtotal')
             ->selectSUM('barang_masuk.jumlah', 'qty')
@@ -161,7 +183,8 @@ class Pengaju extends BaseController{
             ->groupBy('barang_masuk.barang_id')
             ->findAll();
 
-        $transaksi = $this->model_barang_masuk->select('user.nama as nama, pengajuan.kode as kode, pengajuan.tanggal as tanggal,
+        $transaksi = $this->model_barang_masuk->select('user.nama as nama,
+            pengajuan.kode as kode, pengajuan.tanggal as tanggal,
             user.surel as surel')->asArray()
             ->selectSUM('pengajuan.stok', 'total_qty')
             ->selectSUM('total_harga_pokok', 'total_harga')
@@ -175,10 +198,11 @@ class Pengaju extends BaseController{
         
 
         $this->model_barang->set('status', 1)->where('id', $id_barang)->update();
-        $this->model_barang_masuk->set('status', 1)->set('user_id', $id_user)->where('pengajuan_id', $id_pengajuan)->update();
+        $this->model_barang_masuk->set('status', 1)->set('user_id', $id_user)
+            ->where('pengajuan_id', $id_pengajuan)->update();
         $this->model_barang->TambahStok($id_barang, $stok);
 
-        // $this->_sendEmail($transaksi, $barang, NULL, 'konfirm');
+        $this->_sendEmail($transaksi, $barang, NULL, 'konfirm');
         $this->session->setFlashdata('pesan_sukses', 'Pengajuan berhasil dikonfirmasi!');
         return redirect()->to(base_url('/fitur/pengaju'));
     }

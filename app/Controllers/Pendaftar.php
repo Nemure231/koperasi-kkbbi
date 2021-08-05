@@ -6,6 +6,7 @@ use App\Models\Model_user;
 use App\Models\Model_pendaftaran;
 use App\Models\Model_penyuplai;
 use App\Models\Model_toko;
+
 class Pendaftar extends BaseController{
 
     public function __construct(){
@@ -26,41 +27,45 @@ class Pendaftar extends BaseController{
 		$role = $this->session->get('role_id');
         $email = $this->session->get('email');
 		
-        
-        $data = [
-        
+        $data = [        
             'title' => 'Pendaftar',
             'nama_menu_utama' => 'Pendaftaran',
-            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
-						->join('role', 'role.id = user.role_id')
-						->where('surel', $email)
-						->first(),
+            'user' 	=> 	$this->model_user->select('user.id as id_user,
+                user.nama as nama, surel as email,
+                telepon, gambar, alamat, role.nama as role')->asArray()
+				->join('role', 'role.id = user.role_id')
+				->where('surel', $email)
+				->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
-                    ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
-                    ->where('user_access_menu.role_id =', $role)
-                    ->orderBy('user_access_menu.menu_id', 'ASC')
-                    ->orderBy('user_access_menu.role_id', 'ASC')
-                    ->findAll(),
-           'pendaftar' => $this->model_pendaftaran->select('penyuplai.id as id_penyuplai, user.id as id_user, nama, telepon,
-                    pendaftaran.status as status_konfirmasi, user.status as status_user,
-                    no_ktp, surel, pekerjaan, no_rekening, bank, atas_nama, alamat, pendaftaran.tanggal as tanggal, bukti')
-                    ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
-                    ->join('user', 'user.id = penyuplai.user_id')
-                    ->where('user.status', 2)
-                    ->asArray()->findAll(),
-           'validation' => $this->validation,
-           'session' => $this->session,
-
-
+                ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
+                ->where('user_access_menu.role_id =', $role)
+                ->orderBy('user_access_menu.menu_id', 'ASC')
+                ->orderBy('user_access_menu.role_id', 'ASC')
+                ->findAll(),
+            'pendaftar' => $this->model_pendaftaran->select('penyuplai.id as id_penyuplai,
+                user.id as id_user, nama, telepon,
+                pendaftaran.status as status_konfirmasi, user.status as status_user,
+                no_ktp, surel, pekerjaan, no_rekening, bank, atas_nama,
+                alamat, pendaftaran.tanggal as tanggal, bukti')
+                ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
+                ->join('user', 'user.id = penyuplai.user_id')
+                ->where('user.status', 2)
+                ->asArray()->findAll(),
+            'validation' => $this->validation,
+            'session' => $this->session,
         ];
-        tampilan_admin('admin/admin-pendaftar/v_pendaftar', 'admin/admin-pendaftar/v_js_pendaftar', $data);
+        tampilan_admin(
+            'admin/admin-pendaftar/v_pendaftar',
+            'admin/admin-pendaftar/v_js_pendaftar',
+            $data
+        );
     }
     
 
     public function konfirm_offline(){
-
         $id = $this->request->getPost('id_penyuplai');
-        $kode = $this->model_pendaftaran->select('kode')->asArray()->where('penyuplai_id', $id)->first();
+        $kode = $this->model_pendaftaran->select('kode')
+        ->asArray()->where('penyuplai_id', $id)->first();
     
         if(!$this->validate([
             'kode' => [
@@ -81,12 +86,10 @@ class Pendaftar extends BaseController{
         return redirect()->to(base_url('/fitur/pendaftar/invoice/'. $kode['kode']));
     }
 
-
     public function konfirm_online(){
-
         if(!$this->validate([
             'biaya' => [
-                'rules'  => 'required|numeric',
+                'rules'  => 'required|numeric|greater_than[0]|greater_than_equal_to[100000]',
                 'errors' => [
                 'required' => 'Jumlah uang harus disi!',
                 'numeric' =>  'Jumlah uang harus angka!'
@@ -98,21 +101,17 @@ class Pendaftar extends BaseController{
             return redirect()->to(base_url('/fitur/pendaftar'))->withInput();
 
         }
-
         $id_penyuplai = $this->request->getPost('id_penyuplai');
         $biaya = $this->request->getPost('biaya');
         $this->model_pendaftaran->set('biaya', $biaya)->where('penyuplai_id', $id_penyuplai)->update();
-
         $id_user = $this->request->getPost('id_user');
         $this->model_user->set('status', 1)->where('id', $id_user)->update();
-
-        $pendaftaran = $this->model_pendaftaran->select('user.nama as nama, user.surel as surel, pendaftaran.kode as kode, pendaftaran.tanggal as tanggal')
+        $pendaftaran = $this->model_pendaftaran->select('user.nama as nama,
+            user.surel as surel, pendaftaran.kode as kode, pendaftaran.tanggal as tanggal')
         ->where('user.id', $id_user)
         ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
         ->join('user', 'user.id = penyuplai.user_id') 
         ->first();
-
-        // dd($pendaftaran);
 
         $this->_sendEmail($pendaftaran);
         $this->session->setFlashdata('pesan_sukses', 'Transaksi berhasil disimpan!');
@@ -120,7 +119,6 @@ class Pendaftar extends BaseController{
     }
 
     public function _sendEmail($pendaftaran){
-
 		$config =[
             'protocol'  => 'smtp',
             'SMTPHost' => 'smtp.gmail.com',
@@ -146,7 +144,6 @@ class Pendaftar extends BaseController{
         $this->email->setTo($pendaftaran['surel']);
         $this->email->setSubject('KKBBI: Kuitansi');
         $this->email->setMessage(email_kuitansi_pendaftar($pendaftaran, $pembayaran, $toko));
-		       
         if ($this->email->send()) {
             return true;
 		}else{
@@ -155,8 +152,5 @@ class Pendaftar extends BaseController{
         }
     }
 
-   
-
-	
 }
 ?>

@@ -34,7 +34,9 @@ class InvoicePendaftar extends BaseController{
 		$data = [
 			'title' => ucfirst('Invoice Pendaftaran'),
             'nama_menu_utama' => 'Pendaftaran',
-            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+            'user' 	=> 	$this->model_user->select('user.id as id_user,
+                        user.nama as nama, surel as email, telepon, gambar, alamat,
+                        role.nama as role')->asArray()
 						->join('role', 'role.id = user.role_id')
 						->where('surel', $email)
 						->first(),
@@ -46,60 +48,60 @@ class InvoicePendaftar extends BaseController{
                     ->findAll(),
             'validation' => $this->validation,
 			'session' => $this->session,
-            'toko' =>$this->model_toko->select('alamat_toko, nama_toko, telepon_toko, email_toko')->asArray()
+            'toko' =>$this->model_toko->select('alamat_toko, nama_toko,
+                    telepon_toko, email_toko')
+                    ->asArray()
                     ->where('id_toko', 1)->first(),
-            'pendaftar' => $this->model_pendaftaran->select('user.nama as nama, pendaftaran.kode as kode, pendaftaran.tanggal as tanggal')
+            'pendaftar' => $this->model_pendaftaran->select('user.nama as nama,
+                    pendaftaran.kode as kode, pendaftaran.tanggal as tanggal')
                     ->where('pendaftaran.kode', $kode)
                     ->where('user.status', 2)
                     ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
                     ->join('user', 'user.id = penyuplai.user_id')
-                    // ->groupBy('pendaftaran.kode')
                     ->first(),
 			'form_utang' => ['id' => 'formUtang', 'name'=>'formUtang']
 		];
-		tampilan_admin('admin/admin-invoice-pendaftar/v_invoice_pendaftar', 'admin/admin-invoice-pendaftar/v_js_invoice_pendaftar', $data);
+		tampilan_admin(
+            'admin/admin-invoice-pendaftar/v_invoice_pendaftar',
+            'admin/admin-invoice-pendaftar/v_js_invoice_pendaftar',
+            $data
+        );
     }
     
     public function ubah(){
         $kode = $this->request->getPost('kode');
 	
-            if(!$this->validate([
-                'biaya' => [
-                    'rules'  => 'required|numeric',
-                    'errors' => [
-                    'required' => 'Harus diisi!',
-                    'numeric'=> 'Harus angka!'
-                    ]
+        if(!$this->validate([
+            'biaya' => [
+                'rules'  => 'required|numeric|greater_than[0]|greater_than_equal_to[100000]',
+                'errors' => [
+                'required' => 'Harus diisi!',
+                'numeric'=> 'Harus angka!'
                 ]
+            ]
 
-            ])) {
-                return redirect()->to(base_url('/fitur/pendaftar/invoice'.'/'. ''.$kode.''))->withInput();
-            }
-
-            $user= $this->model_pendaftaran->select('user.id as id_user, pendaftaran.id as id_pendaftaran')->asArray()
-                ->where('pendaftaran.kode', $kode)
-                ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
-                ->join('user', 'user.id = penyuplai.user_id')->first();
-
-
-            $biaya = $this->request->getPost('biaya');
-            $this->model_user->set('status', 1)->where('id', $user['id_user'])->update();
-            $this->model_pendaftaran->set('biaya', $biaya)->where('id', $user['id_pendaftaran'])->update();
-            
-            $pendaftaran = $this->model_pendaftaran->select('user.nama as nama, user.surel as surel, pendaftaran.kode as kode, pendaftaran.tanggal as tanggal')
+        ])) {
+            return redirect()->to(base_url('/fitur/pendaftar/invoice'.'/'. ''.$kode.''))->withInput();
+        }
+        $user= $this->model_pendaftaran->select('user.id as id_user,
+            pendaftaran.id as id_pendaftaran')->asArray()
+            ->where('pendaftaran.kode', $kode)
+            ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
+            ->join('user', 'user.id = penyuplai.user_id')->first();
+        $biaya = $this->request->getPost('biaya');
+        $this->model_user->set('status', 1)->where('id', $user['id_user'])->update();
+        $this->model_pendaftaran->set('biaya', $biaya)->where('id', $user['id_pendaftaran'])->update();
+        
+        $pendaftaran = $this->model_pendaftaran->select('user.nama as nama, user.surel as surel,
+            pendaftaran.kode as kode, pendaftaran.tanggal as tanggal')
             ->where('user.id', $user['id_user'])
             ->join('penyuplai', 'penyuplai.id = pendaftaran.penyuplai_id')
             ->join('user', 'user.id = penyuplai.user_id') 
             ->first();
-
-            $this->_sendEmail($pendaftaran);
-
-
-            $this->session->setFlashdata('pesan_sukses', 'Transaksi berhasil disimpan!');
-            return redirect()->to(base_url('/fitur/pendaftar'));
-            
+        $this->_sendEmail($pendaftaran);
+        $this->session->setFlashdata('pesan_sukses', 'Transaksi berhasil disimpan!');
+        return redirect()->to(base_url('/fitur/pendaftar'));    
 	}
-
 
     public function _sendEmail($pendaftaran){
 
@@ -136,8 +138,6 @@ class InvoicePendaftar extends BaseController{
             die;
         }
     }
-
-
 
 }
 ?>
