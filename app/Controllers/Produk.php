@@ -1,21 +1,24 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Model_all;
-// use App\Models\Model_buku;
+use App\Models\Model_merek;
+use App\Models\Model_kategori;
+use App\Models\Model_penyuplai;
 use App\Models\Model_barang;
 use App\Models\Model_user;
+use App\Models\Model_toko;
 
 class Produk extends BaseController{
 
 	protected $helpers = ['url', 'array', 'form', 'kpos'];
 
 	public function __construct(){
-		$this->model = new Model_all();
-		// $this->model2 = new Model_buku();
+		$this->model_merek = new Model_merek();
+		$this->model_kategori = new Model_kategori();
+		$this->model_penyuplai = new Model_penyuplai();
 		$this->model_user = new Model_user();
+		$this->model_toko = new Model_toko();
 		$this->model_barang = new Model_barang();
-		$this->cart = \Config\Services::cart();
 		$this->request = \Config\Services::request();
 	}
 
@@ -26,8 +29,8 @@ class Produk extends BaseController{
 		$kunci = $this->request->getPost('kunci');
 
 		if($kunci){
-			//$barang = $this->model2->cariBuku($kunci);
-			$barang = $this->model_barang->select('barang.nama as nama, kode')->asArray()
+			$barang = $this->model_barang->select('barang.nama as nama, kode, gambar')->asArray()
+			->where('barang.status', 1)
 			->like('barang.nama', $kunci)->orLike('kategori.nama', $kunci)->orLike('deskripsi', $kunci)
 			->orLike('merek.nama', $kunci)
 			->join('kategori', 'kategori.id = barang.kategori_id')
@@ -35,90 +38,37 @@ class Produk extends BaseController{
 			->join('penyuplai', 'penyuplai.id = barang.penyuplai_id')
 			->groupBy('barang.id')->paginate(8, 'beranda');
 		}else{
-			$barang = $this->model_barang->select('barang.nama as nama, kode')->asArray()
+			$barang = $this->model_barang->select('barang.nama as nama, gambar, kode')->asArray()
+			->where('barang.status', 1)
 			->join('kategori', 'kategori.id = barang.kategori_id')
 			->join('merek', 'merek.id = barang.merek_id')
 			->join('penyuplai', 'penyuplai.id = barang.penyuplai_id')
 			->groupBy('barang.id')->paginate(8, 'beranda');
 		}
 
-		//dd($this->model->GetAllKeranjang());
 		$konfirm = $this->model_user->select('status')->asArray()
 		->where('surel', $email)
 		->first();
 	
 		$data = [
-			'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as 
-				email, telepon, gambar, alamat, role.nama as role')->asArray()
-				->join('role', 'role.id = user.role_id')
+			'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
 				->where('surel', $email)
 				->first(),
 			'konfirmasi' => $konfirm['status'] ?? NULL,
 			'title' => ucfirst('Produk'),
 			'barang' => $barang,
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')->asArray()
+						->where('id_toko', 1)->first(),
 			'pager' => $this->model_barang->pager,
 			'role_log' => $role,
-			// 'keranjang' => $this->model->GetAllKeranjang()
-			// 'cart' => $this->cart->contents(),
 			'form_beranda' => ['id' => 'formBeranda', 'name'=>'formBeranda'],
 			'form_item' => ['id' => 'formItem', 'name'=>'formItem'],
 			'form_cari' => ['id' => 'formCari', 'name'=>'formCari', 'class' => 'form-inline flex-nowrap form-domainSearch'],
-			// 'input_judul' => [
-            //     'type' => 'text',
-            //     'name' => 'judul_buku_beranda',
-            //     'id' => 'judul_buku_beranda',
-			// 	'class' => 'form-control-plaintext',
-			// 	'readonly' => ''
-			// ],
-			// 'input_genre' => [
-            //     'type' => 'text',
-            //     'name' => 'genre_beranda',
-            //     'id' => 'genre_beranda',
-			// 	'class' => 'form-control-plaintext',
-			// 	'readonly' => ''
-			// ],
-			// 'input_penulis' => [
-            //     'type' => 'text',
-            //     'name' => 'penulis_beranda',
-            //     'id' => 'penulis_beranda',
-			// 	'class' => 'form-control-plaintext',
-			// 	'readonly' => ''
-			// ],
-			// 'input_penerbit' => [
-            //     'type' => 'text',
-            //     'name' => 'penerbit_beranda',
-            //     'id' => 'penerbit_beranda',
-			// 	'class' => 'form-control-plaintext',
-			// 	'readonly' => ''
-			// ],
-			// 'input_jenis_buku' => [
-            //     'type' => 'text',
-            //     'name' => 'jenis_buku_beranda',
-            //     'id' => 'jenis_buku_beranda',
-			// 	'class' => 'form-control-plaintext',
-			// 	'readonly' => ''
-			// ],
-			// 'input_blurb' => [
-            //     'type' => 'text',
-            //     // 'name' => 'blurb_beranda',
-            //     'id' => 'blurb_beranda',
-			// 	'class' => 'form-control-plaintext',
-			// 	'readonly' => ''
-            // ],
+		
 		];
 		tampilan_user('user/user-produk/v_produk', 'user/user-produk/v_js_produk', $data);
-		
-
 	}
 
-	public function tambahkeranjang(){ 
-		
-
-		$arr = $this->model->TambahKeranjang();
-		echo json_encode($arr);
-		
-	}
-	
 	public function detail_produk($uri){
 
 		$role = $this->session->get('role_id');
@@ -128,12 +78,11 @@ class Produk extends BaseController{
 		->first();
 
 		$data = [
-			'user' => $this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
-			->join('role', 'role.id = user.role_id')
+			'user' => $this->model_user->select('user.nama as nama')->asArray()
 			->where('surel', $surel)
 			->first(),
 			'title' => ucfirst('Detail Produk'),
-			'barang' => $this->model_barang->select('barang.nama as nama_barang, barang.gambar as nama_gambar,
+			'barang' => $this->model_barang->select('barang.stok as stok_barang, barang.nama as nama_barang, barang.gambar as nama_gambar,
 				kategori.nama as nama_kategori, satuan.nama as nama_satuan, merek.nama as nama_merek,
 				user.nama as nama_penyuplai, harga_anggota, harga_konsumen, deskripsi, stok, kategori_id, satuan_id, merek_id, penyuplai_id')
 				->asArray()
@@ -146,10 +95,8 @@ class Produk extends BaseController{
 				->where('kode', $uri)->first(),
 			'konfirmasi' => $konfirm['status'] ?? NULL,
 			'session' => $this->session,
-			// 'genre' => $this->model->GetAllGenreDetailBuku($uri),
-			// 'penerbit' => $this->model->GetAllPenerbitDetailBuku($uri),
-			// 'penulis' => $this->model->GetAllPenulisDetailBuku($uri),
-			// 'keranjang' => $this->model->GetAllKeranjang(),
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')->asArray()
+						->where('id_toko', 1)->first(),
 			'role_log' => $role,
 			'form_detail' => ['id' => 'formDetail', 'name'=>'formDetail']
 			
@@ -157,110 +104,151 @@ class Produk extends BaseController{
 		tampilan_user('user/user-detail-produk/v_detail_produk', 'user/user-detail-produk/v_js_detail_produk', $data);
 	}
 
-	public function jenis(){
+	public function kategori(){
 		$role = $this->session->get('role_id');
+		$surel = $this->session->get('email');
+		$konfirm = $this->model_user->select('status')->asArray()
+			->where('surel', $surel)
+			->first();
 		$data = [
-			'user' => $this->model->UserLogin(),
-			'title' => ucfirst('Jenis Produk'),
-			'jenis' => $this->model->GetAllJenisBukuForUser(),
+			'user' => $this->model_user->select('user.nama as nama')->asArray()
+			->where('surel', $surel)
+			->first(),
+			'title' => ucfirst('Kategori Produk'),
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')->asArray()
+						->where('id_toko', 1)->first(),
+			'konfirmasi' => $konfirm['status'] ?? NULL,
+			'jenis' => $this->model_kategori->select('nama, id')->asArray()->findAll(),
 			'role_log' => $role
 		];
-		tampilan_user('user/user-jenis-produk/v_jenis_produk', 'user/user-jenis-produk/v_js_jenis_produk', $data);
+		tampilan_user('user/user-kategori/v_kategori', 'user/user-kategori/v_js_kategori', $data);
 	}
 
 
-	public function detail_jenis($uri){
+	public function detail_kategori($uri){
 		$role = $this->session->get('role_id');
-		$data = [
-			'user' => $this->model->UserLogin(),
-			'title' => ucfirst('Detail Jenis Produk'),
-			'judul' => $this->model->GetAllJenisBukuUriJudul($uri),
-			'jenisuri' => $this->model->GetAllJenisBukuUri($uri),
-			'role_log' => $role
-			
+		$surel = $this->session->get('email');
 
+		$konfirm = $this->model_user->select('status')->asArray()
+			->where('surel', $surel)
+			->first();
+		$data = [
+			'user' => $this->model_user->select('user.nama as nama')->asArray()
+				->where('surel', $surel)
+				->first(),
+			'title' => ucfirst('Detail Kategori'),
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')->asArray()
+						->where('id_toko', 1)->first(),
+			'konfirmasi' => $konfirm['status'] ?? NULL,
+			'judul' => $this->model_kategori->select('nama')->asArray()->where('id', $uri)->first(),
+			'jenisuri' => $this->model_barang->select('nama, gambar, kode')->asArray()
+					->where('barang.status', 1)
+					->where('kategori_id', $uri)
+					->findAll(),
+			'role_log' => $role
 		];
-		tampilan_user('user/user-detail-jenis-produk/v_detail_jenis_produk', 'user/user-detail-jenis-produk/v_js_detail_jenis_produk', $data);
+		tampilan_user('user/user-detail-kategori/v_detail_kategori', 'user/user-detail-kategori/v_js_detail_kategori', $data);
 	}
 
-	public function penerbit(){
+	public function merek(){
 		$role = $this->session->get('role_id');
+		$surel = $this->session->get('email');
+		$konfirm = $this->model_user->select('status')->asArray()
+			->where('surel', $surel)
+			->first();
 		$data = [
-			'user' => $this->model->UserLogin(),
-			'title' => ucfirst('Daftar Penerbit'),
-			'penerbit' => $this->model->GetAllPenerbitForUser(),
+			'user' => $this->model_user->select('user.nama as nama')->asArray()
+			->where('surel', $surel)
+			->first(),
+			'title' => ucfirst('Merek Produk'),
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')->asArray()
+						->where('id_toko', 1)->first(),
+			'konfirmasi' => $konfirm['status'] ?? NULL,
+			'merek' => $this->model_merek->select('nama, id')->asArray()->findAll(),
 			'role_log' => $role
 		];
-		tampilan_user('user/user-penerbit/v_penerbit', 'user/user-penerbit/v_js_penerbit', $data);
-	}
-
-
-	public function detail_penerbit($uri){
-		$role = $this->session->get('role_id');
-		$data = [
-			'user' => $this->model->UserLogin(),
-			'title' => ucfirst('Detail Penerbit'),
-			'judul' => $this->model->GetAllPenerbitUriJudul($uri),
-			'penerbituri' => $this->model->GetAllPenerbitUri($uri),
-			'role_log' => $role
-			
-		];
-		tampilan_user('user/user-detail-penerbit/v_detail_penerbit','user/user-detail-penerbit/v_js_detail_penerbit', $data);
-	}
-
-	public function genre(){
-		$role = $this->session->get('role_id');
-		$data = [
-			'user' => $this->model->UserLogin(),
-			'title' => ucfirst('Daftar Genre'),
-			'genre' => $this->model->GetAllGenreForUser(),
-			'role_log' => $role
-		];
-		tampilan_user('user/user-genre/v_genre', 'user/user-genre/v_js_genre', $data);
+		tampilan_user('user/user-merek/v_merek', 'user/user-merek/v_js_merek', $data);
 	}
 
 
-	public function detail_genre($uri){
+	public function detail_merek($uri){
 		$role = $this->session->get('role_id');
-		$data = [
-			'user' => $this->model->UserLogin(),
-			'title' => ucfirst('Detail Genre'),
-			'judul' => $this->model->GetAllGenreUriJudul($uri),
-			'genreuri' => $this->model->GetAllGenreUri($uri),
-			'role_log' => $role
-			
-		];
-		tampilan_user('user/user-detail-genre/v_detail_genre','user/user-detail-genre/v_js_detail_genre', $data);
-	}
+		$surel = $this->session->get('email');
 
-	public function penulis(){
-		$role = $this->session->get('role_id');
+		$konfirm = $this->model_user->select('status')->asArray()
+			->where('surel', $surel)
+			->first();
 		$data = [
-			'user' => $this->model->UserLogin(),
-			'title' => ucfirst('Daftar Penulis'),
-			'penulis' => $this->model->GetAllPenulisForUser(),
+			'user' => $this->model_user->select('user.nama as nama')->asArray()
+				->where('surel', $surel)
+				->first(),
+			'title' => ucfirst('Detail Merek'),
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')->asArray()
+						->where('id_toko', 1)->first(),
+			'konfirmasi' => $konfirm['status'] ?? NULL,
+			'judul' => $this->model_merek->select('nama')->asArray()->where('id', $uri)->first(),
+			'merek' => $this->model_barang->select('nama, gambar, kode')->asArray()
+						->where('merek_id', $uri)
+						->where('barang.status', 1)
+						->findAll(),
 			'role_log' => $role
 		];
-		tampilan_user('user/user-penulis/v_penulis', 'user/user-penulis/v_js_penulis', $data);
-	}
-
-
-	public function detail_penulis($uri){
-		$role = $this->session->get('role_id');
-		$data = [
-			'user' => $this->model->UserLogin(),
-			'title' => ucfirst('Detail Penulis'),
-			'judul' => $this->model->GetAllPenulisUriJudul($uri),
-			'penulisuri' => $this->model->GetAllPenulisUri($uri),
-			'role_log' => $role
-			
-		];
-		tampilan_user('user/user-detail-penulis/v_detail_penulis','user/user-detail-penulis/v_js_detail_penulis', $data);
+		tampilan_user('user/user-detail-merek/v_detail_merek', 'user/user-detail-merek/v_js_detail_merek', $data);
 	}
 
 
-	
 
-	
+	public function penyuplai(){
+		$role = $this->session->get('role_id');
+		$surel = $this->session->get('email');
+		$konfirm = $this->model_user->select('status')->asArray()
+			->where('surel', $surel)
+			->first();
+		$data = [
+			'user' => $this->model_user->select('user.nama as nama')->asArray()
+			->where('surel', $surel)
+			->first(),
+			'title' => ucfirst('penyuplai Produk'),
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')->asArray()
+						->where('id_toko', 1)->first(),
+			'konfirmasi' => $konfirm['status'] ?? NULL,
+			'penyuplai' => $this->model_penyuplai->select('user.nama as nama, penyuplai.id as id')->asArray()
+				->where('user.role_id', 5)
+				->where('user.status', 1)
+				->join('user', 'user.id = penyuplai.user_id')
+				->findAll(),
+			'role_log' => $role
+		];
+		tampilan_user('user/user-penyuplai/v_penyuplai', 'user/user-penyuplai/v_js_penyuplai', $data);
+	}
+
+
+	public function detail_penyuplai($uri){
+		$role = $this->session->get('role_id');
+		$surel = $this->session->get('email');
+
+		$konfirm = $this->model_user->select('status')->asArray()
+			->where('surel', $surel)
+			->first();
+		$data = [
+			'user' => $this->model_user->select('user.nama as nama')->asArray()
+				->where('surel', $surel)
+				->first(),
+			'title' => ucfirst('Detail penyuplai'),
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')->asArray()
+						->where('id_toko', 1)->first(),
+			'konfirmasi' => $konfirm['status'] ?? NULL,
+			'judul' => $this->model_penyuplai->select('user.nama as nama')->asArray()
+				->where('penyuplai.id', $uri)
+				->join('user', 'user.id = penyuplai.user_id')
+				->first(),
+			'penyuplai' => $this->model_barang->select('nama, gambar, kode')->asArray()
+				->where('barang.status', 1)
+				->where('penyuplai_id', $uri)
+				->findAll(),
+			'role_log' => $role
+		];
+		tampilan_user('user/user-detail-penyuplai/v_detail_penyuplai', 'user/user-detail-penyuplai/v_js_detail_penyuplai', $data);
+	}	
 
 }

@@ -56,16 +56,13 @@ class Kasir extends BaseController{
                 ->join('satuan', 'satuan.id = barang.satuan_id')
                 ->findAll();
         }
-        $kode_jenis_kasir = $jenis_kasir['role_id'];
-        $kode = $this->model_detail_transaksi->AutoKodeTransaksi($kode_jenis_kasir);
+        
         $data = [
             'title'  => 'Kasir',
             'nama_menu_utama' => 'Penjualan',
-            'user' =>$this->model_user->select('user.id as id_user, user.nama as nama,
-                surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
-				->join('role', 'role.id = user.role_id')
-	    	    ->where('surel', $email)
-				->first(),
+            'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
+            ->where('surel', $email)
+            ->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                 ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                 ->where('user_access_menu.role_id =', $role)
@@ -73,7 +70,7 @@ class Kasir extends BaseController{
                 ->orderBy('user_access_menu.role_id', 'ASC')
                 ->findAll(),
             'session' => $this->session,
-            'kode' => $kode,
+        
             'id_session' => $this->session->get('id_user'),
             'nama_jenis_kasir' => $jenis_kasir['role'],
             'role_id_jenis_kasir' => $jenis_kasir['role_id'],
@@ -91,8 +88,7 @@ class Kasir extends BaseController{
                 ->join('barang', 'barang.id = keranjang.barang_id')
                 ->groupBy('barang_id')
                 ->findAll(),
-            'hidden_kode_transaksi' => ['name' => 'kode_transaksi',
-                'id'=>'kode_transaksi', 'type'=> 'hidden', 'value' => ''.$kode.''],
+            
             'hidden_id_jenis_kasir' => ['name' => 'id_jenis_kasir',
                 'id'=>'id_jenis_kasir', 'type'=> 'hidden', 'value' => ''.$jenis_kasir['id_jenis_kasir'].''],
             'hidden_role_id' => ['name' => 'role_id',
@@ -111,12 +107,16 @@ class Kasir extends BaseController{
                 'class'=> 'btn btn-block'
             ],
         ];
+
         tampilan_admin(
             'admin/admin-pembelian/v_pembelian',
             'admin/admin-pembelian/v_js_pembelian',
             $data
         );
+        
     }
+    
+
 
     public function ubah_jenis_kasir(){
     
@@ -125,7 +125,7 @@ class Kasir extends BaseController{
                 'rules'  => 'required|numeric',
                 'errors' => [
                 'required' => 'Jenis kasir harus dipilih!',
-                'is_unique' => 'Harus angka!'
+                'numeric' => 'Harus angka!'
                 ]
             ]
                 
@@ -143,6 +143,25 @@ class Kasir extends BaseController{
     }
     
     public function tambah_keranjang(){ 
+
+        if(!$this->validate([
+            'k_qty' => [
+                'rules'  => 'required|numeric|alpha_numeric|greater_than[0]',
+                'errors' => [
+                'required' => 'Kuantitas harus diisi!',
+                'numeric' => 'Kuantitas harus angka!',
+                'alpha_numeric' => 'Kuantitas tidak boleh ada - atau +!',
+                'greater_than' => 'Kuantitas tidak boleh nol!'
+                ]
+            ]
+                
+        ])) {
+
+            return redirect()->to(base_url('/fitur/kasir'))->withInput();
+        }
+
+
+
         $arr = $this->model_keranjang->TambahKeranjangAdmin();
         $this->session->setFlashdata('pesan_pembelian',
         'Produk berhasil ditambahkan ke keranjang!');
@@ -163,22 +182,22 @@ class Kasir extends BaseController{
 
         $role = $this->session->get('role_id');
         $id_user = $this->session->get('id_user');
-        $kode =  $this->request->getPost('kode_transaksi');
-        
+        $total_harga = $this->request->getPost('total_harga');
 
         if(!$this->validate([
             'jumlah_uang' => [
-                'rules'  => 'required|numeric|greater_than[0]',
+                'rules'  => 'required|numeric|greater_than[0]|greater_than_equal_to['.$total_harga.']',
                 'errors' => [
-                'required' => 'Jumlah uang harus diisi!',
-                'numeric' => 'Jumlah uang harus angka!'
+                'required' => 'Harus diisi!',
+                'numeric' => 'Harus angka!',
+                'greater_than_equal_to' => 'Jumlah uang kurang!'
                 ]
             ],
             'kembalian' => [
                 'rules'  => 'required|numeric|alpha_numeric',
                 'errors' => [
-                'required' => 'Kembalian harus diisi!',
-                'numeric' => 'Kembalian harus angka!',
+                'required' => 'Harus diisi!',
+                'numeric' => 'Harus angka!',
                 'alpha_numeric' => 'Kembalian tidak boleh minus!'
 
                 ]
@@ -195,7 +214,6 @@ class Kasir extends BaseController{
                 ->groupBy('barang_id')
                 ->findAll();
 
-
         $query_detail= $this->model_keranjang
         ->selectSUM('qty')
         ->selectSUM('harga', 't_harga')
@@ -203,15 +221,16 @@ class Kasir extends BaseController{
         ->groupBy('user_id')
         ->get()->getRowArray();
 
+        $kode = $this->request->getPost('role_id_tambah_transaksi');
+
         $data_detail = [
             'user_id' => $id_user,
             'penyuplai_id' => '0',
-            'kode' => $kode,
-            'total_harga' => $this->request->getPost('total_harga'),
+            'kode' =>  auto_kode_transaksi($kode, $id_user),
+            'total_harga' => $total_harga,
             'total_qty' => $this->request->getPost('total_qty'),
             'jumlah_uang' => $this->request->getPost('jumlah_uang'),
             'kembalian' => $this->request->getPost('kembalian'),
-            'surel_konsumen' => '',
             'status' => '2'
         ];
 
@@ -233,7 +252,7 @@ class Kasir extends BaseController{
         $this->model_keranjang->where('user_id', $id_user)->delete();
         $this->session->setFlashdata('pesan_transaksi_sementara',
         'Transaksi berhasil disimpan ke dalam invoice!');
-        return redirect()->to(base_url('/fitur/kasir/invoice/'.$kode.''));
+        return redirect()->to(base_url('/fitur/kasir/invoice/'.$data_detail['kode'].''));
     }
 
 

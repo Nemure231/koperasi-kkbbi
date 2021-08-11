@@ -1,27 +1,11 @@
 <section class="section-margin">
   <div class="container">
     <div class="row">
-     
-
-      <!-- <//?php if($user && !$user['telepon'] && !$user['alamat']): ?>
-      <div class="col-12 mb-4 mt-5">
-        <div class="hero text-white hero-bg-image hero-bg-parallax"
-          style="background-image: url('<//?php echo base_url('user/assets1/hero/andre-benz-1214056-unsplash.jpg'); ?>');">
-          <div class="hero-inner">
-            <h2 class="text-light">Halo, <//?php echo $user['nama']; ?></h2>
-            <p class="lead">Terima kasih telah mendaftar, pastikan data diri anda lengkap sebelum mengakses situs ini.
-            </p>
-            <div class="mt-4">
-              <a href="<//?php echo base_url().'/profil'?>" class="btn btn-outline-white btn-lg btn-icon icon-left"><i class="far fa-user"></i> Atur data
-                diri</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <//?php endif; ?> -->
+  
 
 
       <div class="col-md-12 col-lg-12 mb-3">
+      <?php echo $session->getFlashdata('pesan'); ?>
         <div class="card">
           <div class="card-header">
             <h4>Produk terbaru</h4>
@@ -52,7 +36,7 @@
                       <div class="col-lg-12 col-md-12 col-sm-12 align-right">
                         <a class="btn btn-block btn-sm btn-primary"
                           href="<?php echo base_url().'/produk'.'/'. ''.$b['kode'].'' ?>">
-                          Detail
+                          Lihat
                         </a>
                       </div>
                     </div>
@@ -61,7 +45,6 @@
                 </div>
               </article>
               <?php endforeach;?>
-
             </div>
           </div>
         </div>
@@ -71,7 +54,12 @@
       <div class="col-lg-12">
         <div class="card">
           <div class="card-header">
-            <h4>Jenis buku</h4>
+            <h4>Kategori</h4>
+            <div class="card-header-action">
+              <a href="<?php echo base_url().'/kategori' ?>" class="btn btn-primary">
+                Lihat semua
+              </a>
+            </div>
 
           </div>
 
@@ -84,9 +72,43 @@
 
                 <a href="<?php echo base_url().'/kategori'.'/'. ''.$k['id'].'' ?>" type="button"
                   class="btn btn-block btn-primary btn-icon icon-left">
-                  <i class="ti-book"></i>
+                  
                   <?php echo $k['nama']; ?>
                   <span class="badge badge-transparent"> <?php echo $k['nom']; ?></span>
+                </a>
+
+              </div>
+              <?php endforeach;?>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <h4>Merek</h4>
+            <div class="card-header-action">
+              <a href="<?php echo base_url().'/merek' ?>" class="btn btn-primary">
+                Lihat semua
+              </a>
+            </div>
+
+          </div>
+
+          <div class="card-body">
+            <div class="row">
+
+
+              <?php foreach($merek as $m):?>
+              <div class="col-md-4 col-lg-3 col-sm-6 mb-4">
+
+                <a href="<?php echo base_url().'/merek'.'/'. ''.$m['id'].'' ?>" type="button"
+                  class="btn btn-block btn-primary btn-icon icon-left">
+                  
+                  <?php echo $m['nama']; ?>
+                  <span class="badge badge-transparent"> <?php echo $m['nomer']; ?></span>
                 </a>
 
               </div>

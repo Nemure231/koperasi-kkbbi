@@ -27,18 +27,17 @@ class LaporanKeuangan extends BaseController{
 	protected $helpers = ['form', 'url', 'array', 'kpos'];
 
     public function index(){
+
+      
         $role = $this->session->get('role_id');
         $email = $this->session->get('email');
        
         $data = [
             'title' => ucfirst('Laporan Keuangan Bulanan'),
             'nama_menu_utama' => ucfirst('Keuangan'),
-            'user' 	=> 	$this->model_user->select('user.id as id_user,
-                user.nama as nama, surel as email, telepon, gambar,
-                alamat, role.nama as role')->asArray()
-                ->join('role', 'role.id = user.role_id')
-                ->where('surel', $email)
-                ->first(),
+            'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
+						->where('surel', $email)
+						->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')
                 ->asArray()
                 ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
@@ -114,7 +113,15 @@ class LaporanKeuangan extends BaseController{
             ->where('YEAR(pendaftaran.tanggal)', $year)
             ->groupBy('YEAR(pendaftaran.tanggal)')
             ->first();
+        
+        $daftar_pengeluaran = $this->model_pengeluaran
+            ->select('nama, total')->asArray()
+            ->where('bulan', $month)
+            ->where('tahun', $year)
+            ->findAll();
 
+        
+        $pengeluaran = $daftar_pengeluaran ?? array();
         $masuk = $total_barang_masuk['total_barang_masuk'] ?? 0;
         $keluar = $total_barang_keluar['total_barang_keluar']?? 0;
         $pendaftaran =$total_pendaftaran['total_pendaftaran']?? 0;
@@ -132,8 +139,11 @@ class LaporanKeuangan extends BaseController{
             'total_barang_keluar' => $keluar,
             'total_pendaftaran' => $pendaftaran,
             'tahun_bulan' => $tahun_bulan,
-            'pesan' => $pesan
+            'pesan' => $pesan,
+            'pengeluaran' => $pengeluaran
         ];
+
+        //  dd($data);
 
         $this->session->setFlashdata('pesan_data', $data);
         return redirect()->to(base_url('/laporan/keuangan-bulanan'));        
@@ -155,14 +165,13 @@ class LaporanKeuangan extends BaseController{
                     'numeric' => 'Total pengeluaran haruus angka!'
                 ]
             ]
-
             ])) {
             return redirect()->to(base_url('/laporan/keuangan-bulanan'))->withInput();
             }
-
-        $bulan_pengeluaran = $this->request->getPost('bulan_pengeluaran');
-        $tahun_pengeluaran = $this->request->getPost('tahun_pengeluaran');
-        $nama_pengeluaran = htmlspecialchars($this->request->getPost('nama_pengeluaran'), ENT_QUOTES);
+        
+        $bulan_pengeluaran =   date('m');
+        $tahun_pengeluaran =  date('Y');
+        $nama_pengeluaran = $this->request->getPost('nama_pengeluaran');
         $total_pengeluaran = $this->request->getPost('total_pengeluaran');
 
         for ($i= 0; $i < count($this->request->getPost('total_pengeluaran')); $i++ ){
@@ -175,7 +184,14 @@ class LaporanKeuangan extends BaseController{
             );
         }   
         $this->model_pengeluaran->insertBatch($data);
-        $this->session->setFlashdata('pesan_sukses', 'Keuangan bulan ini berhasil disismpan!');
+        $this->session->setFlashdata('pesan_sukses', '<div class="alert alert-success alert-dismissible show fade">
+        <div class="alert-body">
+            <button class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+            Keuangan bulan ini berhasil disimpan!
+        </div>
+        </div>');
         return redirect()->to(base_url('/laporan/keuangan-bulanan'));
     }    
 

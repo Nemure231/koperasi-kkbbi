@@ -58,9 +58,31 @@ use App\Models\Model_menu_utama;
               $batas= str_pad($kode, "".'5'."","0", STR_PAD_LEFT);
               $kodetampil= "".'BR-'."" .$batas;
               return $kodetampil;
-              
-          
+  
       }
+
+      function auto_kode_transaksi($kode_jenis_kasir, $id_user){
+        date_default_timezone_set("Asia/Jakarta");
+        $db = \Config\Database::connect();
+        $query = $db->table('detail_transaksi')
+            ->select('RIGHT(detail_transaksi.kode,3) as kode', FALSE)
+            ->orderBy('kode', 'DESC')
+            ->limit(1)->get()->getRowArray();
+
+            if (count($query) <> 0) {
+                //$query2 = $query->get()->getRowArray();
+                $kode= intval($query['kode']) + 1;
+            }else{
+                $kode =1;
+            }
+            $batas= str_pad($kode, ""."3"."","0", STR_PAD_LEFT);
+            $bulan = date('dmy');
+            $random = rand(1, 1000);
+            $kodetampil= "".'TSK'."" .$kode_jenis_kasir.$id_user.$bulan.$batas;
+            return $kodetampil;
+            
+       
+    }
 
 
         // function is_logged_in(){
@@ -542,8 +564,6 @@ use App\Models\Model_menu_utama;
           ';
         }
  
-
-
         function email_verify($user, $token, $toko){
          return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html xmlns="http://www.w3.org/1999/xhtml">
@@ -1319,7 +1339,7 @@ use App\Models\Model_menu_utama;
                                      <tr>
                                        <td class="mini-block">
                                          <span class="header-sm">Tipe</span><br />
-                                         Pendaftaran Calon Anggota <br />
+                                         Pembelian Barang <br />
                                        </td>
                                      </tr>
                                    </table>

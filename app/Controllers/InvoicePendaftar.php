@@ -34,10 +34,7 @@ class InvoicePendaftar extends BaseController{
 		$data = [
 			'title' => ucfirst('Invoice Pendaftaran'),
             'nama_menu_utama' => 'Pendaftaran',
-            'user' 	=> 	$this->model_user->select('user.id as id_user,
-                        user.nama as nama, surel as email, telepon, gambar, alamat,
-                        role.nama as role')->asArray()
-						->join('role', 'role.id = user.role_id')
+            'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
 						->where('surel', $email)
 						->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
@@ -75,8 +72,11 @@ class InvoicePendaftar extends BaseController{
             'biaya' => [
                 'rules'  => 'required|numeric|greater_than[0]|greater_than_equal_to[100000]',
                 'errors' => [
-                'required' => 'Harus diisi!',
-                'numeric'=> 'Harus angka!'
+                    'required' => 'Harus diisi!',
+                    'greater_than' => 'Harus diisi!',
+                    'greater_than_equal_to' => 'Jumlah uang kurang!',
+                    'numeric'=> 'Harus angka!'
+
                 ]
             ]
 

@@ -60,7 +60,7 @@ class Auth extends BaseController
 				'rules'  => 'required|valid_email',
 				'errors' => [
 					'required' => 'Harus diisi!',
-					'valid_email' => 'Harus berformat surel!'
+					'valid_email' => 'Format surel tidak benar!'
 				]
 			],
 			'sandi' => [
@@ -101,18 +101,33 @@ class Auth extends BaseController
 					$this->session->set($data);
 					if($user['role_id']==1){
 
-						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('beranda/dashboard_masuk'));
+						$this->session->setFlashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<strong>Selamat bekerja dan beraktivitas!</strong>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					  </div>');
+						return redirect()->to(base_url('akun/profil'));
 
 					}
 					if($user['role_id']==2){
-						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
-						return redirect()->to(base_url('beranda/dashboard_masuk'));
+						$this->session->setFlashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<strong>Selamat bekerja dan beraktivitas!</strong>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					  </div>');
+						return redirect()->to(base_url('akun/profil'));
 
 					}
 					
 					if($user['role_id']==3){
-						$this->session->setFlashdata('pesan', 'Selamat bekerja dan beraktivitas!');
+						$this->session->setFlashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<strong>Selamat bekerja dan beraktivitas!</strong>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					  </div>');
 						return redirect()->to(base_url('akun/profil'));
 
 					}
@@ -153,7 +168,7 @@ class Auth extends BaseController
 			}else{
 				$this->session->setFlashdata('pesan',
 				'<div class="alert alert-danger alert-dismissible fade show" role="alert">
-				<strong>Email belum diaktivasi!</strong>
+				<strong>Surel belum diverifikasi!</strong>
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				  <span aria-hidden="true">&times;</span>
 				</button>
@@ -164,7 +179,7 @@ class Auth extends BaseController
 		}else{
 			$this->session->setFlashdata('pesan',
 			'<div class="alert alert-danger alert-dismissible fade show" role="alert">
-				<strong>E-mail belum terdaftar!</strong>
+				<strong>Surel belum terdaftar!</strong>
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 				</button>

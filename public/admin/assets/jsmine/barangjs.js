@@ -1,7 +1,6 @@
-$("#buku_id_1").remove();
 
 function previewImg() {
-   const sampul = document.querySelector('#gambar_barang');
+   const sampul = document.querySelector('#input_gambar');
    const sampulLabel = document.querySelector('.custom-file-label');
    const imgPrev = document.querySelector('.img-prev');
 
@@ -17,11 +16,10 @@ function previewImg() {
 }
 
 
-
-function previewImg1() {
-   const sampul = document.querySelector('#gambar_barangE');
-   const sampulLabel = document.querySelector('#img-edit-label');
-   const imgPrev = document.querySelector('.img-prevE');
+function previewImgEdit() {
+   const sampul = document.querySelector('#input_edit_gambar');
+   const sampulLabel = document.querySelector('.edit-label-gambar');
+   const imgPrev = document.querySelector('.edit_gambar');
 
    sampulLabel.textContent = sampul.files[0].name;
 
@@ -232,12 +230,11 @@ $(document).ready(function () {
 
    });
 
-   //GET UPDATE
    $('table').on('click', '.tombolEditBarang', function () {
      
       var id_barang = $(this).data('id_barang');
       var nama_barang = $(this).data('nama_barang');
-      var gambar_barang = $(this).data('gambar_barang');
+      var gambar = $(this).data('gambar');
       var kategori = $(this).data('kategori_id');
       var satuan = $(this).data('satuan_id');
       var merek = $(this).data('merek_id');
@@ -247,9 +244,10 @@ $(document).ready(function () {
       var harga_anggota = $(this).data('harga_anggota');
       var harga_pokok = $(this).data('harga_pokok');
       var stok_barang = $(this).data('stok');
-      // $('#formEditBarang').attr("action", "suplai/barang/ubah");
-      $('#img-edit').attr("src", "admin/assets/barang/" + gambar_barang);
-      $('#img-edit-label').text(gambar_barang);
+      var getUrl = window.location;
+      var baseUrl = getUrl.protocol + "///" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+      $('.edit_gambar').attr("src", baseUrl + "/public/admin/assets/barang/" + gambar);
+      $('.edit-label-gambar').text(gambar);
       $('#id_barangE').val(id_barang);
       $('#nama_barangE').val(nama_barang);
       $('#kategori_idE').val(kategori);
@@ -263,7 +261,7 @@ $(document).ready(function () {
       $('#harga_anggotaE').val(harga_anggota);
       $('#harga_pokokE').val(harga_pokok);
       $('#stok_barangE').val(stok_barang);
-      $('#gambar_barang_lama').val(gambar_barang);
+      $('#gambar_lama').val(gambar);
       $('#merek_idE').select2({
          dropdownParent: $('#modalEditBarang'),
          tags: true
@@ -290,58 +288,23 @@ $(document).ready(function () {
 
       var barang_id = $(this).data("id_barang");
       var gambar_barang = $(this).data('gambar_barang');
-
-      // $('#btn-simpan-hapus').attr("href", "suplai/barang/hapus/" + barang_id);
       $('#id_barangH').val(barang_id);
-      // $('#btn-simpan-hapus2').attr("action", "suplai/barang/kecoh/" + barang_id);
 
       $('#old_gambar').val(gambar_barang);
-      //$('#formGenre').trigger("reset");
-      //$('#judulBukuHapus').html("");
       $('#modalBarangHapus').modal('show');
-
-      //   Swal.fire({
-      //      title: 'Yakin ingin menghapus?',
-      //      text: "Data yang telah dihapus tidak dapat dikembalikan lagi!",
-      //      icon: 'warning',
-      //      hideClass: {
-      //         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      //      },
-      //      showCancelButton: true,
-      //      confirmButtonColor: '#3085d6',
-      //      cancelButtonColor: '#d33',
-      //      cancelButtonText: 'Batal',
-      //      confirmButtonText: 'Ya, hapus!'
-      //   }).then((result) => {
-      //      if (result.value) {
-      //         $.ajax({
-      //            type: "Post",
-      //            url: "buku/hapusbuku",
-      //            data: {
-      //               buku_id: buku_id
-      //            },
-      //            dataType: "json",
-      //            success: function (data) {
-      //               $("#buku_id_" + buku_id).remove();
-
-      //               //location.reload();
-      //            },
-      //            error: function (data) {
-      //               //console.log('Error:', data);
-      //            }
-      //         });
-      //         Swal.fire({
-      //            title: 'Berhasil',
-      //            hideClass: {
-      //               popup: 'animate__animated animate__fadeOutUp animate__fast'
-      //            },
-      //            text: 'Menu berhasil dihapus!',
-      //            icon: 'success'
-      //         });
-
-      //      }
-      //   });
    });
 
+   $('table').on('click', '.tombolLihatGambar', function () {
+
+      var gambar = $(this).data("gambar");
+      var qr = $(this).data('qr');
+      var getUrl = window.location;
+      var baseUrl = getUrl.protocol + "///" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+      // $('#tampil-gambar').attr("src", baseUrl + "/public/admin/assets/barang/" + gambar);
+      $('#tampil-qr').attr("src", baseUrl + "/public/admin/assets/qr/" + qr);
+      $('#modalLihatGambar').modal('show');
+   });
+
+ 
 
 });

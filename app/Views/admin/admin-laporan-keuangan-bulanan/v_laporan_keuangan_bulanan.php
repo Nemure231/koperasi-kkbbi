@@ -15,6 +15,8 @@
                    
      
             <?php echo $session->getFlashdata('pesan_data')['pesan'] ??''; ?>
+
+            <?php echo $session->getFlashdata('pesan_sukses'); ?>
           
                
            </div>
@@ -34,18 +36,11 @@
 
 
                 <div class="row">
-                <div class="col-lg-6 mb-2">
-                <div class="alert alert-primary alert-has-icon">
-                      <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-                      <div class="alert-body">
-                        <div class="alert-title">Petunjuk</div>
-                        Anda juga dapat melakukan pencarian pada bulan yang telah lewat menggunakan form pencarian.
-                      </div>
-                    </div>
+                <div class="col-lg-6">
+                    <a href="javascript:void(0)" class="btn btn-icon icon-left btn-primary" id="tombol-tambah"><i class="fas fa-plus"></i> Tambah pengeluaran</a>
                   
-                   
                 
-                  </div>
+                </div>
                 
                   <div class="col-lg-6">
                   <?php echo form_open(base_url().'/laporan/keuangan-bulanan/cari', $form_bulan);    ?>
@@ -137,39 +132,39 @@
                       <tbody>
                         <tr>
                           <th scope="row"> <?php echo $session->getFlashdata('pesan_data')['tahun_bulan'] ?? ''; ?></th>
-                          <td><?php echo $session->getFlashdata('pesan_data')['total_barang_keluar'] ?? 0; ?></td>
-                          <td><?php echo $session->getFlashdata('pesan_data')['total_barang_masuk'] ?? 0; ?></td>
+                      
 
                           <?php $keluar = $session->getFlashdata('pesan_data')['total_barang_keluar'] ?? 0; ?>
                           <?php $masuk = $session->getFlashdata('pesan_data')['total_barang_masuk'] ?? 0; ?>
+                          <td><?php echo 'Rp.'.number_format($keluar, 0,",","."); ?></td>
+                          <td><?php echo 'Rp.'.number_format($masuk, 0,",","."); ?></td>
 
                           <?php $total = ($masuk - $keluar); ?></td>
-                          <td><?php echo  str_replace("-", "", $total); ?></td>
+                          <?php $totl =  str_replace("-", "", $total); ?>
+                          <td><?php echo 'Rp.'.number_format($totl, 0,",","."); ?></td>
                         </tr>
 
                         <tr>
                           
                           <th scope="row">Jumlah Penjualan Barang</th>
-                          <td><?php echo $session->getFlashdata('pesan_data')['total_barang_keluar'] ?? 0; ?></td>
+                          <?php $barang_keluar = $session->getFlashdata('pesan_data')['total_barang_keluar'] ?? 0; ?>
+                          <td><?php echo 'Rp.'.number_format($barang_keluar, 0,",","."); ?></td>
+                        
                           <td></td>
                           <td></td>
                         </tr>
                         <tr>
                           <th scope="row">Pendaftarn</th>
-                          <td><?php echo $session->getFlashdata('pesan_data')['total_pendaftaran'] ?? 0; ?></td>
+                          <?php $pendaftar = $session->getFlashdata('pesan_data')['total_pendaftaran'] ?? 0; ?>
+                          <td><?php echo 'Rp.'.number_format($pendaftar, 0,",","."); ?></td>
                           <td></td>
                           <td></td>
                         </tr>
                         <tr>
                           <th scope="row">Utang Barang Masuk</th>
-                          <td><?php echo $session->getFlashdata('pesan_data')['total_barang_masuk'] ?? 0; ?></td>
+                          <?php $utng = $session->getFlashdata('pesan_data')['total_barang_masuk'] ?? 0; ?></td>
+                          <td><?php echo 'Rp.'.number_format($utng, 0,",","."); ?></td>
                           <td></td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Cash On Hand</th>
-                          <td>Hasil Perhitungan</td>
-                          <td><a class="btn btn-primary" id="hitung_keuangan" href="javascript:void(0)">Hitung</a></td>
                           <td></td>
                         </tr>
                         <thead>
@@ -181,19 +176,30 @@
                         <?php echo csrf_field(); ?>
                         <input type="hidden" name="bulan_pengeluaran" value="<?php echo $tanggal['bulan'] ?>">
                           <input type="hidden" name="tahun_pengeluaran" value="<?php echo $tanggal['tahun'] ?>">
-                        <tr>
-                          
-                          <td><input type="text" name="nama_pengeluaran[]" class="form-control" placeholder="Nama pengeluaraan"></input></td>
-                          <td><input type="number" name="total_pengeluaran[]" class="form-control" placeholder="Total pengeluaraan"></input></td>
-                          <td><a class="btn btn-icon btn-primary" id="tambah_input" href="javascript:void(0)">Tambah Input <i class="fas fa-plus"></i></a></td>
-                          <td><button type="submit" class="btn btn-primary">Simpan</button></td>
+                          <?php $pengeluaran = $session->getFlashdata('pesan_data')['pengeluaran'] ?? array();?>
+                          <?php $sum=0;?>
+                          <?php foreach($pengeluaran as $k):?>
+                          <tr>
+                            <td><?php echo $k['nama']; ?></td>
+                            <td><?php echo 'Rp.'.number_format($k['total'], 0,",","."); ?></input></td>
+                          </tr>
+
+                          <?php $sum+= $k['total'];?>
+
+                          <?php endforeach; ?>
+                          <tr>
+                            <td>Total</td>
+                              <td><?php echo 'Rp.'.number_format($sum, 0,",",".") ?? 'Rp.0'; ?></td>
+                          </tr>
+                          <tr>
+
+                          <tr>
+                          <th colspan="4"class="text-center">Cash On Hand</th>
                         </tr>
-                        <tr>
-                          
-                          <td><input type="text" name="nama_pengeluaran[]" class="form-control" placeholder="Nama pengeluaraan"></input></td>
-                          <td><input type="number" name="total_pengeluaran[]" class="form-control" placeholder="Total pengeluaraan"></input></td>
-                          <td></td>
-                          <td></td>
+                          <td>Hasil</td>
+                         
+                          <?php $hsl = ($barang_keluar + $pendaftar) - $sum;  ?>
+                          <td><?php echo 'Rp.'.number_format($hsl, 0,",","."); ?> </td>
                         </tr>
                     </form>
 
@@ -228,4 +234,58 @@
 
     </div>
   </section>
+</div>
+
+
+
+!-- Modal -->
+<div class="modal fade" id="modal-muncul" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header bg-primary">
+				<h5 class="modal-title text-light">Tambah Pengeluaran</h5>
+				<button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
+  
+      <form method="POST" action="<?php echo base_url('laporan/keuangan-bulanan/tambah') ?>" accept-charset="utf-8">
+        <?php echo csrf_field(); ?>
+				<div class="modal-body">
+
+      
+                  <div class="alert alert-info">
+                      Pengeluaran yang diisi akan sesuai dengan bulan dan tahun sekarang. Anda dapat mendambahkan kolom inputan dengan menekan tombol di bawah.
+                  </div>
+                
+
+        <a href="javascript:void(0)" class="btn btn-primary mb-3" id="tambah-input">Tambah input</a>
+
+          <div class="row" id="tampil-input">
+
+          
+
+            <div class="form-group col-lg-6">
+              <label>Nama Pengeluaran</label>
+              <input type="text" name="nama_pengeluaran[]" class="form-control"></input>
+            </div>
+            <div class="form-group col-lg-6">
+              <label>Total Pengeluaran</label>
+              <input type="number" name="total_pengeluaran[]" class="form-control"></input>
+            </div>
+
+
+
+          </div>
+
+				</div>
+				<div class="modal-footer">
+
+					<!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
+					<button type="submit" id="btn-simpan" class="btn btn-block btn-primary">Simpan</button>
+				</div>
+        </form>
+		</div>
+	</div>
 </div>

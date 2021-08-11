@@ -21,13 +21,13 @@
         <div class="col-lg-12">
     <div class="row">
       <div class="col-md-3 col-lg-2 text-center text-md-left mb-3 mb-md-0">
-          <h3>Cari produk berdasarkan nama!</h3>
+          <h3>Cari produk!</h3>
         </div>
         <div class="col-md-9 col-lg-10 pl-2 pl-xl-5 mb-3">
           <?php echo form_open(base_url().'/produk', $form_cari); ?>
             <div class="form-group">
               <label for="staticDomainSearch" class="sr-only text-dark">Cari produk</label>
-              <input type="text" name="kunci" class="form-control" id="staticDomainSearch" placeholder="Masukkan pencarianmu ....">
+              <input type="text" name="kunci" class="form-control" id="staticDomainSearch" placeholder="Masukan pencarianmu ....">
             </div>
             <button type="submit" name="submit" class="button rounded-0">Search</button>
           <?php echo form_close(); ?>
@@ -43,9 +43,7 @@
         <article class="article article-style-b">
           <div class="article-header">
             <div class="article-image"
-              data-background="
-              <!-- <//?php echo base_url('admin/assets/buku').'/'. $b//['sampul_buku']; ?> -->
-              ">
+              data-background="<?php echo base_url('admin/assets/barang').'/'. $b['gambar']; ?>">
             </div>
 
           </div>
@@ -53,13 +51,13 @@
             <div class="article-title mb-2">
               <h2><a class="text-dark" href="#"><?php echo $b['nama']; ?></a></h2>
             </div>
-            <div class="article-header2 text-justify">Hai halo adios gracisa</div>
+            <div class="article-header2 text-justify"></div>
             <div class="article-cta">
               <div class="row">
             
                 <div class="col-lg-12 col-md-12 col-sm-12">
                 <a class="btn btn-block btn-sm btn-primary" href="<?php echo base_url().'/produk'.'/'. ''.$b['kode'].'' ?>">
-              Detail
+              Lihat
               </a>
 
                 </div>

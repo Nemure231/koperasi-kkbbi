@@ -57,16 +57,13 @@ width:100%!important;
 
 
                   <?php if($role_id_trans == 4):  ?>
-                    <label>Isi surel</label>
-                     
-
-                        <input class="form-control" type="text" name="surel_konsumen">
+                    
 
                   <?php else  : ?>
                   <!-- <label>Pilih Anggota</label> -->
                       <!-- <div class="input-group"> -->
                       <input type="hidden" id="csrf_surel" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
-                      <input type="hidden"  name="detail_transaksi_id" value="<?php echo $row_transaksi_sementara['detail_transaksi_id'];?>" />
+                      <input type="hidden"  name="detail_transaksi_id" value="<?php echo $row_transaksi_sementara['id_detail'];?>" />
                      
                         
                     
@@ -276,8 +273,7 @@ width:100%!important;
 
       <?php echo form_open(base_url().'/fitur/kasir/invoice/hapus', $form_hapus_invoice);    ?>
           <?php echo form_input($hidden_kode_transaksi); ?>
-          <!-- <//?php echo form_input//($hidden_uri); ?> -->
-          <?php echo csrf_field(); ?>
+          <input name="id_detail_transaksi" type="hidden" value="<?php echo $row_transaksi_sementara['id_detail']; ?>">
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         </form>

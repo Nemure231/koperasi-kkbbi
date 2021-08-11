@@ -45,7 +45,6 @@ width:100%!important;
                       <th>Alamat</th>
                       <th>Role</th>
                       <th>Status</th>
-                      <th>Foto</th>
                       <th>Opsi</th>
                     </tr>
                   </thead>
@@ -68,16 +67,13 @@ width:100%!important;
                             }
                             ?>
                       </td>
+                     
                       <td>
-                        <img alt="image" src="<?php echo base_url('admin/assets/profile').'/'. $k['gambar']; ?>"
-                          style="height: 100px; width: 100px; object-fit:cover;">
-                      </td>
-                      <td>
-                        <a href="javascript:void(0)" id="tombolEditUser" class="mb-3 btn btn-warning mr-1 tombolEditUser"
+                        <a href="javascript:void(0)" id="tombolEditUser" class="btn btn-warning tombolEditUser"
                           data-id_user="<?php echo $k['id_user'];?>" data-nama="<?php echo $k['nama'];?>"
                           data-telepon="<?php echo $k['telepon'];?>" data-alamat="<?php echo $k['alamat'];?>"
                           data-role_id="<?php echo $k['role_id'];?>" data-is_active="<?php echo $k['is_active'];?>"
-                          data-gambar="<?php echo $k['gambar'];?>" data-email="<?php echo $k['email'];?>">
+                          data-email="<?php echo $k['email'];?>">
                           <i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" id="tombolHapusUser" class="btn btn-danger tombolHapusUser"
                           data-id_user="<?php echo $k['id_user'];?>">
@@ -138,9 +134,8 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open_multipart(base_url().'/tempat/karyawan/tambah', $formtambah);    ?>
-      <!-- < ?php echo form_input($id_hidd); ?> -->
-      <?php echo csrf_field(); ?>
+      <?php echo form_open(base_url().'/tempat/karyawan/tambah', $formtambah);    ?>
+   
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-6">
@@ -178,7 +173,16 @@ width:100%!important;
 
               
 
-              <div class="form-group col-sm-6 col-md-6 col-lg-6">
+              
+
+              
+
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="row">
+
+            <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Sandi</label>
                 <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
                 <?php echo form_input($sandi); ?>
@@ -190,41 +194,26 @@ width:100%!important;
                 <?php echo form_input($ulang_sandi); ?>
               </div>
 
-              
-
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="row">
-
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Alamat</label>
                 <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
                 <?php echo form_textarea($alamat); ?>
               </div>
-              <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                <label>Foto</label>
-                <img src="<?php echo base_url('admin/assets/profile').'/'. 'default.png' ?>" class="img-thumbnail img-prev"
-                  style="height: 150px; width: 150px; object-fit:cover;">
-              </div>
-              <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-              <div class="form-group col-sm-12 col-md-12 col-lg-12 mt-3 pt-1">
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="gambar" name="gambar" onchange="previewImg()">
-                  <label class="custom-file-label text-left cass" for="Sampulbuku">Pilih gambar</label>
-                </div>
-              </div>
+             
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-              <input type="hidden" class="custom-switch-input1" id="is_active1" checked value="2">
+              <input type="hidden" value="3">
                 <div class="control-label">Status karyawan</div>
                 <label class="custom-switch">
                   <span class="custom-switch-description mr-2">Tidak aktif</span>
-                  <input type="checkbox" name="is_active" class="custom-switch-input rum" id="is_active" checked value="1">
+                  <input type="checkbox" name="is_active" class="custom-switch-input" checked value="1">
                   
                   <span class="custom-switch-indicator"></span>
                   <span class="custom-switch-description">Aktif</span>
                 </label>
+              </div>
+              <div class="col-12">
+              <button type="submit" id="btn-simpan" class="btn btn-block btn-primary">Simpan</button>
               </div>
 
 
@@ -236,7 +225,7 @@ width:100%!important;
       </div>
       <div class="modal-footer">
         <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
-        <button type="submit" id="btn-simpan" class="btn btn-block btn-primary">Simpan</button>
+        
       </div>
       <?php echo form_close(); ?>
     </div>
@@ -254,11 +243,9 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open_multipart(base_url().'/tempat/karyawan/ubah', $formedit);    ?>
-      <!-- <input type="hidden" name="_method" value="PUT"> -->
-      <?php echo csrf_field(); ?>
+      <?php echo form_open(base_url().'/tempat/karyawan/ubah', $formedit);    ?>
+     
       <?php echo form_input($hiddenIdKaryawan); ?>
-      <input type="hidden" id="gambarE_lama" name="gambarE_lama">
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-6">
@@ -286,51 +273,48 @@ width:100%!important;
                 <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
                 <?php echo form_input($teleponE); ?>
               </div>
-              <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                <label>E-mail</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_input($emailE); ?>
-              </div>
-              <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                <label>Alamat</label>
-                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                <?php echo form_textarea($alamatE); ?>
-              </div>
+            
+            
             </div>
           </div>
           <div class="col-lg-6">
             <div class="row">
+          <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                <label>E-mail</label>
+                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
+                <?php echo form_input($emailE); ?>
+              </div>
+          <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                <label>Alamat</label>
+                <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
+                <?php echo form_textarea($alamatE); ?>
+              </div>
 
-              <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-                <label>Foto</label>
-                <img id="imgE" class="img-thumbnail img-prev1" style="height: 150px; width: 150px; object-fit:cover;">
-              </div>
-              <!-- name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-              <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="gambarE" name="gambarE" onchange="previewImg1()">
-                  <label class="custom-file-label cuss text-left" id="img-labelE" for="Sampulbuku">Pilih gambar</label>
-                </div>
-              </div>
-              <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
-              <input type="hidden" class="custom-switch-input cekE" id="is_activeE1" checked value="2">
+          <div class="form-group col-sm-12 col-md-12 col-lg-12 text-center">
+              <input type="hidden" value="3" name="is_activeE">
                 <div class="control-label">Status karyawan</div>
                 <label class="custom-switch">
                   <span class="custom-switch-description mr-2">Tidak aktif</span>
-                  <input type="checkbox" class="custom-switch-input cekE" id="is_activeE" value="1">
+                  <input type="checkbox" class="custom-switch-input" name="is_activeE" id="is_activeE" value="1">
                   
                   <span class="custom-switch-indicator"></span>
                   <span class="custom-switch-description">Aktif</span>
                 </label>
               </div>
-            </div>
+
+              <div class="col-12">
+                 <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
+        <button type="submit" id="btn-simpan" class="btn btn-block btn-primary">Simpan</button>
+
+                  </div>
+                  </div>
+           
 
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
-        <button type="submit" id="btn-simpan" class="btn btn-block btn-primary">Simpan</button>
+       
       </div>
       <?php echo form_close(); ?>
     </div>

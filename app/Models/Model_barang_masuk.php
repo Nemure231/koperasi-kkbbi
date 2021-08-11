@@ -76,9 +76,10 @@ class Model_barang_masuk extends Model{
 
         $builder = $this->db->table('barang_masuk');
         $builder->select('jumlah as jumlah_barang_masuk, barang.nama as nama_barang, total_harga_pokok,
-        barang_masuk.harga_pokok as harga_pokok_pb, penyuplai.nama as nama_pengirim_barang, 
+        barang_masuk.harga_pokok as harga_pokok_pb, user.nama as nama_pengirim_barang, 
         barang_masuk.tanggal as tanggal_masuk, barang_masuk.tanggal as jam');
         $builder->join('penyuplai', 'penyuplai.id = barang_masuk.penyuplai_id');
+        $builder->join('user', 'user.id = penyuplai.user_id');
         $builder->join('barang', 'barang.id = barang_masuk.barang_id');
         $builder->where('DATE(barang_masuk.tanggal)>=', $awal_minggu);
         $builder->where('DATE(barang_masuk.tanggal)<=', $akhir_minggu);

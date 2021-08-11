@@ -30,8 +30,7 @@ class Merek extends BaseController
         $data = [
             'title' => 'Daftar Merek',
             'nama_menu_utama' => 'Gudang',
-            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
-						->join('role', 'role.id = user.role_id')
+            'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
 						->where('surel', $email)
 						->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()

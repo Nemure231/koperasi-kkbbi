@@ -4,6 +4,7 @@ use CodeIgniter\Controller;
 use App\Models\Model_user;
 use App\Models\Model_user_menu;
 use App\Models\Model_role;
+use App\Models\Model_jenis_kasir;
 
 class Karyawan extends BaseController{
 
@@ -11,8 +12,10 @@ class Karyawan extends BaseController{
         $this->model_role = new Model_role();
         $this->model_user = new Model_user();
         $this->model_user_menu = new Model_user_menu();
+        $this->model_jenis_kasir =  new Model_jenis_kasir();
         $this->request = \Config\Services::request();
 		$this->validation = \Config\Services::validation();
+        $this->db = \Config\Database::connect();
 		
 	}
 	protected $helpers = ['url', 'array', 'form', 'kpos'];
@@ -33,8 +36,7 @@ class Karyawan extends BaseController{
         $data = [
             'title' => 'Daftar Karyawan',
             'nama_menu_utama' => 'Karyawan',
-            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
-						->join('role', 'role.id = user.role_id')
+            'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
 						->where('surel', $email)
 						->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
@@ -43,8 +45,9 @@ class Karyawan extends BaseController{
                         ->orderBy('user_access_menu.menu_id', 'ASC')
                         ->orderBy('user_access_menu.role_id', 'ASC')
                         ->findAll(),
-            'karyawan' => $this->model_user->select('user.id as id_user, role_id, user.nama as nama, surel as email,
-                        gambar, alamat,telepon, status as is_active, role.nama as role')->asArray()
+            'karyawan' => $this->model_user->select('user.id as id_user, role_id, user.nama as nama, surel as email, 
+                        alamat,telepon, status as is_active, role.nama as role')->asArray()
+                        ->where('role_id!=',5)
                         ->join('role', 'role.id = user.role_id')
                         ->findAll(),
             'role' =>   $this->model_role->select('id as id_role, nama as role')->asArray()
@@ -145,94 +148,71 @@ class Karyawan extends BaseController{
 
     public function tambah(){
 
-
             if(!$this->validate([
                 'nama' => [
-                    'label'  => 'Nama',
                     'rules'  => 'required',
                     'errors' => [
-                    'required' => 'Nama harus diisi!'
+                        'required' => 'Nama harus diisi!'
                     ]
                 ],
                 'email' => [
-                    'label'  => 'E-mail',
-                    'rules'  => 'required|valid_email',
+
+                    'rules'  => 'required|valid_email|is_unique[user.surel]',
                     'errors' => [
-                    'required' => 'E-mail harus diisi!',
-                    'valid_email' => 'Format e-mail salah!'
+                    'required' => 'Surel harus diisi!',
+                    'valid_email' => 'Format surel salah!',
+                    'is_unique' => 'Surel itu sudah terdaftar!'
                     ]
                 ],
                 'telepon' => [
-                    'label'  => 'Penulis',
-                    'rules'  => 'required|numeric',
+        
+                    'rules'  => 'required|numeric|is_unique[user.telepon]|greater_than[0]',
                     'errors' => [
-                    'required' => 'Nomor telepon harus diisi!',
-                    'numeric' => 'Nomor telepon harus angka!'
+                    'required' => 'Telepon harus diisi!',
+                    'greater_than' => 'Telepon harus diisi!',
+                    'is_unique' => 'Telepon itu sudah terdaftar!',
+                    'numeric' => 'Telepon harus angka!'
                     ]
                 ],
                 'alamat' => [
-                    'label'  => 'Alamat',
+    
                     'rules'  => 'required',
                     'errors' => [
                     'required' => 'Alamat harus diisi!'
                     ]
                 ],
                 'role_id' => [
-                    'label'  => 'Role',
+                
                     'rules'  => 'required',
                     'errors' => [
                     'required' => 'Role harus dipilih!'
                     ]
                 ],
                 'sandi' => [
-                    'label'  => 'Kata sandi',
-                    'rules'  => 'required',
+                    
+                    'rules'  => 'required|min_length[8]',
                     'errors' => [
-                    'required' => 'Kata sandi harus diisi!'
+                    'required' => 'Sandi harus diisi!',
+                    'min_length' => 'Sandi tidak boleh kurang dari 8 karakter!'
                     
                     ]
                 ],
                 'ulang_sandi' => [
-                    'label'  => 'Ulangi kata sandi',
+                
                     'rules'  => 'matches[sandi]',
                     'errors' => [
-                    'matches' => 'Kata sandi harus sama!'
+                    'matches' => 'Ulangi Sandi harus sama dengan Sandi!'
                     ]
                 ],
-                // 'gambar' => [
-                //     'label'  => 'Gambar',
-                //     'rules'  => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
-                //     'errors' => [
-                //         //'uploaded' => 'Sampul buku harus dipilih!',
-                //         'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
-                //         'is_image' => 'Format file yang anda upload bukan gambar!',
-                //         'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
-                //     ]
-                // ]
-
 
             ])) {
                 return redirect()->to(base_url('/tempat/karyawan'))->withInput();
 
             }
 
-                // $sampul_buku = $this->request->getFile('gambar');
-                // //dd($sampul_buku);
-
-                // if($sampul_buku->getError() == 4){
-                //     $nama_gambar = 'default.png';
-                // }else{
-                //     ///pindahkan gambar
-                //     $nama_gambar = $sampul_buku->getRandomName();
-                //     $sampul_buku->move('admin/assets/profile/', $nama_gambar);
-                //     ///ambil namam gambar
-                   
-                // }
-
-                $tambah = [
+                $data_user = [
                     'nama' => htmlspecialchars($this->request->getPost('nama'), ENT_QUOTES),
                     'surel' => $this->request->getPost('email'),
-                    // 'gambar' => $nama_gambar,
                     'sandi' => password_hash($this->request->getPost('sandi'), PASSWORD_DEFAULT),
                     'telepon' => $this->request->getPost('telepon'),
                     'alamat' => htmlspecialchars($this->request->getPost('alamat'), ENT_QUOTES),
@@ -240,119 +220,92 @@ class Karyawan extends BaseController{
                     'status' => $this->request->getPost('is_active'),
                 ];
                 
-                $this->model_user->TambahKaryawan($tambah);
+                $this->model_user->insert($data_user);
+                $id = $this->db->insertID();
 
-            
-                $this->session->setFlashdata('pesan', 'Karyawan baru berhasil ditambahkan!');
-                return redirect()->to(base_url('/tempat/karyawan'));
-                
-            
+                $data_jenis_kasir = [
+                    'user_id' => $id,
+                    'role_id' => 5
+                ];
+
+            $this->model_jenis_kasir->insert($data_jenis_kasir);
+            $this->session->setFlashdata('pesan', 'Karyawan baru berhasil ditambahkan!');
+            return redirect()->to(base_url('/tempat/karyawan'));
     }
 
     public function ubah(){
+        $id_user = $this->request->getPost('user_id');
 
             if(!$this->validate([
                 'namaE' => [
-                    'label'  => 'Nama',
                     'rules'  => 'required',
                     'errors' => [
                     'required' => 'Nama harus diisi!'
                     ]
                 ],
                 'emailE' => [
-                    'label'  => 'E-mail',
-                    'rules'  => 'required|valid_email',
+                    'rules'  => 'required|valid_email|is_unique[user.surel,id,'.$id_user.']',
                     'errors' => [
-                    'required' => 'E-mail harus diisi!',
-                    'valid_email' => 'Format e-mail salah!'
+                    'required' => 'Surel harus diisi!',
+                    'valid_email' => 'Format surel salah!',
+                    'is_unique' => 'Surel itu sudah terdaftar!'
                     ]
                 ],
                 'teleponE' => [
-                    'label'  => 'Penulis',
-                    'rules'  => 'required|numeric',
+                    'rules'  => 'required|numeric|greater_than[0]|is_unique[user.telepon,id,'.$id_user.']',
                     'errors' => [
-                    'required' => 'Nomor telepon harus diisi!',
-                    'numeric' => 'Nomor telepon harus angka!'
+                    'required' => 'Telepon harus diisi!',
+                    'numeric' => 'Telepon harus angka!',
+                    'greater_than' => 'Telepon harus diisi!',
+                    'is_unique' => 'Telepon itu sudah terdaftar!'
                     ]
                 ],
                 'alamatE' => [
-                    'label'  => 'Alamat',
                     'rules'  => 'required',
                     'errors' => [
                     'required' => 'Alamat harus diisi!'
                     ]
                 ],
                 'role_idE' => [
-                    'label'  => 'Role',
                     'rules'  => 'required',
                     'errors' => [
                     'required' => 'Role harus dipilih!'
                     ]
                 ],
-                // 'gambarE' => [
-                //     'label'  => 'Gambar',
-                //     'rules'  => 'max_size[gambarE,1024]|is_image[gambarE]|mime_in[gambarE,image/jpg,image/jpeg,image/png]',
-                //     'errors' => [
-                //         //'uploaded' => 'Sampul buku harus dipilih!',
-                //         'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
-                //         'is_image' => 'Format file yang anda upload bukan gambar!',
-                //         'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
-                //     ]
-                // ]
-
+               
             ])) {
                 
                 return redirect()->to(base_url('/tempat/karyawan'))->withInput();
 
             }
 
-                // $foto = $this->request->getFile('gambarE');
-
-                // //cek gambar aapakah tetap gambar lama
-                // if($foto->getError() == 4){
-                //     $nama_foto = $this->request->getPost('gambarE_lama');
-                // }else{
-                //     $nama_foto = $foto->getRandomName();
-                //     $foto->move('admin/assets/profile/', $nama_foto);
-                //     //hapus file lama
-                //     unlink('admin/assets/profile/'. $this->request->getPost('gambarE_lama'));
-                // }
-                $id_user = $this->request->getPost('user_id');
                 $edit = [
                     'nama' => htmlspecialchars($this->request->getPost('namaE'), ENT_QUOTES),
                     'surel' => $this->request->getPost('emailE'),
-                    // 'gambar' => $nama_foto,
                     'telepon' => $this->request->getPost('teleponE'),
                     'alamat' => htmlspecialchars($this->request->getPost('alamatE'), ENT_QUOTES),
                     'role_id' => $this->request->getPost('role_idE'),
                     'status' => $this->request->getPost('is_activeE'),
                 ];
 
-               
-
                 $berhasil = $this->model_user->update($id_user, $edit);
                 $this->session->setFlashdata('pesan', 'Karyawan berhasil diedit!');
                 return redirect()->to(base_url('/tempat/karyawan'));
-            
-             
     }
 
-  
     public function hapus(){
         $user_id = $this->request->getPost('hidden_id_user');
-            // $hapus = $this->model_user->asArray()->find($user_id);
-            // if($hapus['gambar'] != 'default.png'){
-            //     unlink('admin/assets/profile/'. $hapus['gambar']);
-            // }
-            $this->model_user->HapusKaryawan($user_id);
-            $this->session->setFlashdata('hapus_karyawan', 'Karyawan berhasil dihapus!');
-            return redirect()->to(base_url('/tempat/karyawan'));
+    
+        $this->model_user->delete($user_id);
+        $this->model_jenis_kasir->where('user_id', $user_id)->delete();
+        
+        $this->session->setFlashdata('hapus_karyawan', 'Karyawan berhasil dihapus!');
+        return redirect()->to(base_url('/tempat/karyawan'));
 
 
     
     }
 
 
-   
 }
 ?>

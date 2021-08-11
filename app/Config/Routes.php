@@ -9,7 +9,6 @@ if (file_exists(SYSTEMPATH . 'Config/Routes.php'))
 {
 	require SYSTEMPATH . 'Config/Routes.php';
 }
-
 /**
  * --------------------------------------------------------------------
  * Router Setup
@@ -38,14 +37,29 @@ $routes->get('/', 'Beranda::index');
 
 
 $routes->add('produk', 'Produk::index');
+
+
+
 $routes->add('produk/(:segment)', 'Produk::detail_produk/$1');
+
+$routes->get('kategori', 'Produk::kategori');
+$routes->add('kategori/(:segment)', 'Produk::detail_kategori/$1');
+
+$routes->get('merek', 'Produk::merek');
+$routes->add('merek/(:segment)', 'Produk::detail_merek/$1');
+
+$routes->get('penyuplai', 'Produk::penyuplai');
+$routes->add('penyuplai/(:segment)', 'Produk::detail_penyuplai/$1');
+
+$routes->get('profil', 'Profil::index');
+
+
 $routes->get('pendaftaran', 'Pendaftaran::index');
 $routes->post('pendaftaran/tambah', 'Pendaftaran::tambah');
 
 $routes->get('konfirmasi', 'Konfirmasi::index');
 $routes->put('konfirmasi/pilih-jenis', 'Konfirmasi::ubah');
 $routes->put('konfirmasi/unggah-bukti', 'Konfirmasi::unggah');
-
 
 $routes->get('pengajuan', 'Pengajuan::index');
 $routes->post('pengajuan/ambil_barang', 'Pengajuan::ambil_barang');
@@ -149,6 +163,7 @@ $routes->group('fitur', function($routes){
 	$routes->get('pendaftar', 'Pendaftar::index', ['filter' => 'cek_akses']);
 	$routes->put('pendaftar/konfirm-online', 'Pendaftar::konfirm_online');
 	$routes->post('pendaftar/konfirm-offline', 'Pendaftar::konfirm_offline');
+	$routes->post('pendaftar/beritahu', 'Pendaftar::beritahu');
 
 	$routes->get('pendaftar/invoice/(:any)', 'InvoicePendaftar::index/$1');
 	$routes->put('pendaftar/invoice/ubah', 'InvoicePendaftar::ubah');
@@ -165,17 +180,6 @@ $routes->group('laporan', function($routes){
 	$routes->add('masuk', 'LaporanMasuk::index', ['filter' => 'cek_akses']);
 	$routes->add('keluar', 'LaporanKeluar::index', ['filter' => 'cek_akses']);
 
-	// $routes->add('masuk/harian', 'LaporanMasuk::index', ['filter' => 'cek_akses']);
-	// $routes->add('masuk/mingguan', 'LaporanMasuk::mingguan', ['filter' => 'cek_akses']);
-	// $routes->add('masuk/bulanan', 'LaporanMasuk::bulanan', ['filter' => 'cek_akses']);
-	// $routes->add('masuk/tahunan', 'LaporanMasuk::tahunan', ['filter' => 'cek_akses']);
-
-	// $routes->add('keluar/harian', 'LaporanKeluar::index', ['filter' => 'cek_akses']);
-	// $routes->add('keluar/mingguan', 'LaporanKeluar::mingguan', ['filter' => 'cek_akses']);
-	// $routes->add('keluar/bulanan', 'LaporanKeluar::bulanan', ['filter' => 'cek_akses']);
-	// $routes->add('keluar/tahunan', 'LaporanKeluar::tahunan', ['filter' => 'cek_akses']);
-
-	// $routes->add('retur', 'LaporanRetur::index', ['filter' => 'cek_akses']);
 
 	$routes->add('summary/tanggal', 'LaporanSummary::index', ['filter' => 'cek_akses']);
 	$routes->add('summary/bulan', 'LaporanSummary::bulan', ['filter' => 'cek_akses']);

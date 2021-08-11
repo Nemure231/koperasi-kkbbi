@@ -30,8 +30,7 @@ class Dashboard extends BaseController{
 		$data = [
 			'title' => 	'Dashboard Masuk',
 			'nama_menu_utama' => 'Dashboard',
-			'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
-						->join('role', 'role.id = user.role_id')
+			'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
 						->where('surel', $email)
 						->first(),
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
@@ -44,6 +43,7 @@ class Dashboard extends BaseController{
 			'row_masuk_hari' => $this->model_barang_masuk->selectSUM('total_harga_pokok', 'total_bmh')
 						->selectSUM('jumlah', 'total_jbm')->asArray()
 						->groupBy('DAY(tanggal)')
+						->where('status', 1)
 						->where('DAY(tanggal)', $hari)
 						->where('MONTH(tanggal)', $bulan)
 						->where('YEAR(tanggal)', $tahun)
@@ -51,17 +51,20 @@ class Dashboard extends BaseController{
 			'row_masuk_bulan' =>$this->model_barang_masuk->selectSUM('total_harga_pokok', 'total_bmb')
 						->selectSUM('jumlah', 'total_jbm')->asArray()
 						->groupBy('MONTH(tanggal)')
+						->where('status', 1)
 						->where('MONTH(tanggal)', $bulan)
 						->where('YEAR(tanggal)', $tahun)
 						->first(),
 			'row_masuk_tahun' =>$this->model_barang_masuk->selectSUM('total_harga_pokok', 'total_bmt')
 						->selectSUM('jumlah', 'total_jbm')->asArray()
 						->groupBy('YEAR(tanggal)')
+						->where('status', 1)
 						->where('YEAR(tanggal)', $tahun)
 						->first(),
 			
 			'chart_masuk_tanggal'=>	$this->model_barang_masuk->select('DATE(tanggal) AS tanggal')->asArray()
 						->selectSUM('total_harga_pokok', 'thp')
+						->where('status', 1)
 						->where('MONTH(tanggal)', $bulan)
 						->where('YEAR(tanggal)', $tahun)
 						->groupBy('DATE(tanggal)')
@@ -69,12 +72,14 @@ class Dashboard extends BaseController{
 						->findAll(),
 			'chart_masuk_bulan' =>$this->model_barang_masuk->select('MONTHNAME(tanggal) AS bulan')->asArray()
 						->selectSUM('total_harga_pokok', 'tmb')
+						->where('status', 1)
 						->where('YEAR(tanggal)', $tahun)
 						->groupBy('MONTH(tanggal)')
 						->orderBy('MONTH(tanggal)', 'ASC')
 						->findAll(),
 			'chart_masuk_tahun'=>$builder = $this->model_barang_masuk->select('YEAR(tanggal) AS tahun')->asArray()
 						->selectSUM('total_harga_pokok', 'thm')
+						->where('status', 1)
 						->groupBy('YEAR(tanggal)')
 						->orderBy('YEAR(tanggal)', 'ASC')
 						->findAll(),
@@ -94,8 +99,7 @@ class Dashboard extends BaseController{
 		$data = [
 			'title' => 'Dashboard Keluar',
 			'nama_menu_utama' => 'Dashboard',
-			'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
-						->join('role', 'role.id = user.role_id')
+			'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
 						->where('surel', $email)
 						->first(),
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
@@ -108,8 +112,8 @@ class Dashboard extends BaseController{
 			'row_keluar_hari'=>	$this->model_detail_transaksi->selectSUM('total_harga', 'total_bkh')
 								->selectSUM('total_qty', 'total_ttq')->asArray()
 								->groupBy('DAY(tanggal)')
-								//->where('id>', 0);
-								->where('id>', 1)
+	
+								->where('status', 1)
 								->where('DAY(tanggal)', $hari)
 								->where('MONTH(tanggal)', $bulan)
 								->where('YEAR(tanggal)', $tahun)
@@ -117,14 +121,14 @@ class Dashboard extends BaseController{
 			'row_keluar_bulan' =>$this->model_detail_transaksi->selectSUM('total_harga', 'total_bkb')
 								->selectSUM('total_qty', 'total_ttq')->asArray()
 								->groupBy('MONTH(tanggal)')
-								->where('id>', 1)
+								->where('status', 1)
 								->where('MONTH(tanggal)', $bulan)
 								->where('YEAR(tanggal)', $tahun)
 								->first(),
 			'row_keluar_tahun'=>$this->model_detail_transaksi->selectSUM('total_harga', 'total_bkt')	
 								->selectSUM('total_qty', 'total_ttq')->asArray()
 								->groupBy('YEAR(tanggal)')
-								->where('id>', 1)
+								->where('status', 1)
 								->where('YEAR(tanggal)', $tahun)
 								->first(),
 			'chart_keluar_tanggal' => $this->model_detail_transaksi->select('DATE(tanggal) AS tanggal')
@@ -137,14 +141,14 @@ class Dashboard extends BaseController{
 								->findAll(),
 			'chart_keluar_bulan'=>$this->model_detail_transaksi->select('MONTHNAME(tanggal) AS bulan')
 								->selectSUM('total_harga', 'tkb')->asArray()
-								->where('id>', 1)
+								->where('status', 1)
 								->where('YEAR(tanggal)', date('y'))
 								->groupBy('MONTH(tanggal)')
 								->orderBy('MONTH(tanggal)', 'ASC')
 								->findAll(),
 			'chart_keluar_tahun'=> $this->model_detail_transaksi->select('YEAR(tanggal) AS tahun')
 								->selectSUM('total_harga', 'tkt')->asArray()
-								->where('id>', 1)
+								->where('status', 1)
 								->groupBy('YEAR(tanggal)')
 								->orderBy('YEAR(tanggal)', 'ASC')
 								->findAll()

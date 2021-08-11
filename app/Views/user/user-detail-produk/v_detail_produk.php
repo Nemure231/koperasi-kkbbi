@@ -45,7 +45,7 @@
                   <div class="form-group col-sm-12 col-md-12 col-lg-6">
                     <strong>Kategori</strong>
                     <!-- < ?php echo form_input//($input_genre); ?> -->
-                    <p class="detail-buku text-dark" id="genred" name="genred">
+                    <p class="text-dark">
                     
                       <a href="<?php echo base_url().'/kategori'.'/'. ''.$barang['kategori_id'].'' ?>"
                         class="badge badge-primary"><?php echo $barang['nama_kategori'] ?></a>
@@ -58,10 +58,10 @@
                   <div class="form-group col-sm-12 col-md-12 col-lg-6">
                     <strong>Satuan</strong>
                     <!-- < ?php echo form_input//($input_penulis); ?> -->
-                    <p class="detail-buku text-dark" id="penulisd" name="penulisd">
+                    <p class="text-dark">
                   
-                      <a href="<?php echo base_url().'/satuan'.'/'. ''.$barang['satuan_id'].'' ?>"
-                        class="badge badge-primary"><?php echo $barang['nama_satuan'] ?></a>
+                     
+                        <?php echo $barang['nama_satuan'] ?>
                     
                     </p>
 
@@ -70,7 +70,7 @@
                   <div class="form-group col-sm-12 col-md-12 col-lg-6">
                     <strong>Merek</strong>
                     <!-- < ?php echo form_input//($input_penerbit); ?> -->
-                    <p class="detail-buku text-dark" id="penerbitd" name="penerbitd">
+                    <p class="text-dark">
                       
                       <a href="<?php echo base_url().'/merek'.'/'. ''.$barang['merek_id'].'' ?>"
                         class="badge badge-primary"><?php echo $barang['nama_merek'] ?></a>
@@ -80,9 +80,17 @@
 
                   </div>
                   <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                    <strong>Stok</strong>
+                    <!-- < ?php echo form_input//($input_jenis_buku); ?> -->
+                    <p class="text-dark"><?php echo $barang['stok_barang']; ?></p>
+                    
+
+                  </div>
+
+                  <div class="form-group col-sm-12 col-md-12 col-lg-12">
                     <strong>Penyuplai</strong>
                     <!-- < ?php echo form_input//($input_jenis_buku); ?> -->
-                    <p class="detail-buku text-dark" id="jenis_bukud" name="jenis_bukud">
+                    <p class="text-dark">
                       <a href="<?php echo base_url().'/penyuplai'.'/'. ''.$barang['penyuplai_id'].'' ?>"
                         class="badge badge-primary"><?php echo $barang['nama_penyuplai']; ?></a>
                     </p>
@@ -92,7 +100,7 @@
                   <div class="form-group col-sm-12 col-md-6 col-lg-6">
                     <strong>Harga Konsumen</strong>
                     <!-- < ?php echo form_input//($input_jenis_buku); ?> -->
-                    <p class="detail-buku text-dark" id="harga_bukud" name="harga_bukud">
+                    <p class="text-dark" id="harga_bukud" name="harga_bukud">
                       <?php echo 'Rp '. number_format($barang['harga_konsumen'], 0,",","."); ?>
                     </p>
                   </div>
@@ -100,10 +108,14 @@
                   <div class="form-group col-sm-12 col-md-6 col-lg-6">
                     <strong>Harga Anggota</strong>
                     <!-- < ?php echo form_input//($input_jenis_buku); ?> -->
-                    <p class="detail-buku text-dark" id="harga_bukud" name="harga_bukud">
+                    <p class="text-dark" id="harga_bukud" name="harga_bukud">
                       <?php echo 'Rp '. number_format($barang['harga_anggota'], 0,",","."); ?>
                     </p>
                   </div>
+                  
+
+
+
                 </div>
               </div>
               <div class="col-lg-4">

@@ -56,11 +56,13 @@ class Pengajuan extends BaseController{
 		$data = [
 			'title' => 'Pengajuan',
 			'user' => $this->model_user->select('user.id as id_user,
-				user.nama as nama, surel as email, telepon, gambar,
+				user.nama as nama, surel as email, telepon,
 				alamat, role.nama as role')->asArray()
 				->join('role', 'role.id = user.role_id')
 				->where('surel', $email)
 				->first(),
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')->asArray()
+						->where('id_toko', 1)->first(),
 			'barang' => $this->model_barang->select('barang.nama as nama, 
 				barang.id as id')->asArray()
 				->where('user.id', $id_user)
@@ -113,41 +115,40 @@ class Pengajuan extends BaseController{
 			$rule = 'required_without[nama]';
 			
 		}else{
-			$rule = 'uploaded[input_gambar]|max_size[input_gambar,3072]|
-			is_image[input_gambar]|
-			mime_in[input_gambar,image/jpg,image/jpeg,image/png]';
+			$rule = 'uploaded[input_gambar]|max_size[input_gambar,3072]|is_image[input_gambar]|mime_in[input_gambar,image/jpg,image/jpeg,image/png]';
 		}
 
 		if(!$this->validate([
 			'nama' => [
 				'rules'  => 'required',
 				'errors' => [
-				'required' => 'Harus dipilih/diisi!',
+				'required' => 'Harus dipilih atau diisi!',
 				]
 			],
 			'kategori_id' => [
 				'rules'  => 'required',
 				'errors' => [
-				'required' => 'Harus dipilih!',
+				'required' => 'Harus dipilih atau diisi!',
 				]
 			],
 			'satuan_id' => [
 				'rules'  => 'required',
 				'errors' => [
-				'required' => 'Harus dipilih!'
+				'required' => 'Harus dipilih atau disi!'
 				
 				]
 			],
 			'merek_id' => [
 				'rules'  => 'required',
 				'errors' => [
-				'required' => 'Harus dipilih!',
+				'required' => 'Harus dipilih atau diisi!',
 				]
 			],
 			'harga_konsumen' => [
 				'rules'  => 'required|numeric|greater_than[0]',
 				'errors' => [
 				'required' => 'Harus diisi!',
+				'greater_than' => 'Harus diisi!',
 				'numeric' => 'Harus angka!'
 				]
 			],
@@ -155,6 +156,7 @@ class Pengajuan extends BaseController{
 				'rules'  => 'required|numeric|greater_than[0]',
 				'errors' => [
 				'required' => 'Harus diisi!',
+				'greater_than' => 'Harus diisi!',
 				'numeric' => 'Harus angka!'
 				]
 			],
@@ -162,6 +164,7 @@ class Pengajuan extends BaseController{
 				'rules'  => 'required|numeric|greater_than[0]',
 				'errors' => [
 				'required' => 'Harus diisi!',
+				'greater_than' => 'Harus diisi!',
 				'numeric' => 'Harus angka!'
 				]
 			],
@@ -169,6 +172,7 @@ class Pengajuan extends BaseController{
 				'rules'  => 'required|numeric|greater_than[0]',
 				'errors' => [
 				'required' => 'Harus diisi!',
+				'greater_than' => 'Harus diisi!',
 				'numeric' => 'Harus angka!'
 				]
 			],	
@@ -176,8 +180,8 @@ class Pengajuan extends BaseController{
                 'rules'  => $rule,
                 'errors' => [
                 'uploaded' => 'Harus diunggah!',
-                'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
-                'is_image' => 'Format file yang anda upload bukan gambar!',
+                'max_size' => 'Ukuran gambar tidak boleh lebih dari 3MB!',
+                'is_image' => 'Format gambar salah!',
                 'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
                 ]
 			],
@@ -221,7 +225,6 @@ class Pengajuan extends BaseController{
                 $merek_id = $this->db->insertID();    
             }
 			$kode = auto_kode_barang();
-
 			$writer = new PngWriter();
 
 			$qrCode = QrCode::create($kode)
@@ -234,7 +237,7 @@ class Pengajuan extends BaseController{
 				->setBackgroundColor(new Color(255, 255, 255));
 
 			$label = Label::create($kode)
-				->setTextColor(new Color(255, 255, 255));
+				->setTextColor(new Color(0, 0, 0));
 			$result = $writer->write($qrCode, null, $label);
 			$result->saveToFile(FCPATH.'/admin/assets/qr/'.$kode.'.png');
 
@@ -351,14 +354,15 @@ class Pengajuan extends BaseController{
 		$data = [
 			'title' => 'Riwayat Pengajuan',
 			'user' => $this->model_user->select('user.id as id_user, user.nama as nama,
-				surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+				surel as email, telepon, alamat, role.nama as role')->asArray()
 				->join('role', 'role.id = user.role_id')
 				->where('surel', $email)
 				->first(),
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')->asArray()
+				->where('id_toko', 1)->first(),
 			'pengajuan' => $this->model_pengajuan->select('alasan, barang.nama as nama_barang,
 				pengajuan.status as status_pengajuan,
-				barang.status as status_barang, pengajuan.
-				kode as kode_pengajuan, pengajuan.tanggal as tanggal_pengajuan,
+				barang.status as status_barang, pengajuan.kode as kode_pengajuan, pengajuan.tanggal as tanggal_pengajuan,
 				pengajuan.stok as jumlah, satuan.nama as nama_satuan,
 				merek.nama as nama_merek, kategori.nama as nama_kategori,
 				barang.harga_anggota as harga_anggota, barang.harga_konsumen as harga_konsumen,

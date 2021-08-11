@@ -8,6 +8,14 @@ use App\Models\Model_satuan;
 use App\Models\Model_merek;
 use App\Models\Model_kategori;
 use App\Models\Model_penyuplai;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
 
 class Barang extends BaseController{
 
@@ -33,7 +41,7 @@ class Barang extends BaseController{
 
         $email = $this->session->get('email');
 
-        $kode_barang = $this->model_barang->AutoKodeBarang();
+      
         $nama_barang = set_value('nama_barang', '');
         $harga_konsumen = set_value('harga_konsumen', '');
         $harga_anggota = set_value('harga_anggota', '');
@@ -43,8 +51,7 @@ class Barang extends BaseController{
         $data = [
             'title' => 'Daftar Barang',
             'nama_menu_utama' => 'Gudang',
-            'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
-						->join('role', 'role.id = user.role_id')
+            'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
 						->where('surel', $email)
 						->first(),
 			'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
@@ -53,7 +60,7 @@ class Barang extends BaseController{
 						->orderBy('user_access_menu.menu_id', 'ASC')
 						->orderBy('user_access_menu.role_id', 'ASC')
 						->findAll(),
-            'barang' => $this->model_barang->select('barang.id as id_barang, deskripsi as deskripsi_barang, harga_pokok,
+            'barang' => $this->model_barang->select('qr, barang.gambar as nama_gambar, barang.id as id_barang, deskripsi as deskripsi_barang, harga_pokok,
                         barang.nama as nama_barang, user.nama as nama_pengirim_barang, penyuplai.id as pengirim_barang_id,
                         kategori.nama as nama_kategori, kode as kode_barang, stok as stok_barang, barang.tanggal as tanggal,
                         tanggal_update, merek.nama as nama_merek, satuan.nama as nama_satuan, kategori_id, satuan_id, 
@@ -82,14 +89,6 @@ class Barang extends BaseController{
             'form_tambah_barang' => ['id' => 'formTambahBarang', 'name'=>'formTambahBarang'],
             'form_edit_barang' =>  ['id' => 'formEditBarang', 'name'=>'formEditBarang'],
             'form_hapus_barang' =>  ['id' => 'formHapusBarang', 'name'=>'formHapusBarang', 'class' => 'btn btn-block'],
-            'hidden_kode_barang' => [
-                'type' => 'hidden',
-                'name' => 'kode_barang',
-                'id' => 'kode_barang',
-                'value' => ''.$kode_barang.'',
-                'class' => 'form-control',
-                'autofocus' => ''
-            ],
             'input_nama_barang' => [
                 'type' => 'text',
                 'name' => 'nama_barang',
@@ -214,14 +213,7 @@ class Barang extends BaseController{
                     'required' => 'Nama barang harus diisi!',
                     'is_unique' => 'Nama barang sudah ada!'
                     ]
-                ],
-                'kode_barang' => [
-                    'label'  => 'Kode Barang',
-                    'rules'  => 'required',
-                    'errors' => [
-                    'required' => 'Kode barang harus diisi!'
-                    ]
-                ],
+                    ],
                 'kategori_id' => [
                     'label'  => 'Kategori',
                     'rules'  => 'required',
@@ -289,9 +281,17 @@ class Barang extends BaseController{
                     'label'  => 'Deskripsi Barang',
                     'rules'  => 'required',
                     'errors' => [
-                    'required' => 'Dskripsi barang harus diisi!'
+                    'required' => 'Deskripsi barang harus diisi!'
                     ]
-                ]
+                ],
+                'gambar' => [
+                    'rules'  => 'max_size[gambar,3072]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
+                    'errors' => [
+                    'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
+                    'is_image' => 'Format file yang anda upload bukan gambar!',
+                    'mime_in' => 'Format gambar yang diperbolehkan JPG, JPEG, dan PNG!'
+                    ]
+			],
 
             ])) {
                 
@@ -337,9 +337,20 @@ class Barang extends BaseController{
 
                 date_default_timezone_set("Asia/Jakarta");
 
+
+                $gambar = $this->request->getFile('gambar');
+                if($gambar->getError() == 4){
+                    $nama_gambar = 'default.jpg';
+                }else{
+                    $nama_gambar = time().'.'.$gambar->guessExtension();
+			        $gambar->move('admin/assets/barang/', $nama_gambar);
+                }
+
+
+                $kode_br = auto_kode_barang();
                 $nama_barang = htmlspecialchars($this->request->getPost('nama_barang'), ENT_QUOTES);
                 $data = array(
-                    'kode' => htmlspecialchars($this->request->getPost('kode_barang'), ENT_QUOTES),
+                    'kode' => $kode_br,
                     'nama' => $nama_barang,
                     'kategori_id' => htmlspecialchars($ket, ENT_QUOTES),
                     'satuan_id' => htmlspecialchars($sem, ENT_QUOTES),
@@ -350,16 +361,29 @@ class Barang extends BaseController{
                     'harga_anggota' => $this->request->getPost('harga_anggota'),
                     'stok' => $this->request->getPost('stok_barang'),
                     'deskripsi' => htmlspecialchars($this->request->getPost('deskripsi_barang'), ENT_QUOTES),
+                    'gambar' => $nama_gambar,
+                    'qr' => $kode_br.'.png',
                     'tanggal' => date('Y-m-d H:i:s')
                 );
-    
+
+                $writer = new PngWriter();
+                $qrCode = QrCode::create('BR-00004')
+                    ->setEncoding(new Encoding('UTF-8'))
+                    ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
+                    ->setSize(300)
+                    ->setMargin(10)
+                    ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
+                    ->setForegroundColor(new Color(0, 0, 0))
+                    ->setBackgroundColor(new Color(255, 255, 255));
+                $label = Label::create('BR-00004')
+                    ->setTextColor(new Color(0, 0, 0));
+                $result = $writer->write($qrCode, null, $label);
+                $result->saveToFile(FCPATH.'/admin/assets/qr/'.'BR-00004'.'.png');
+
                 $this->model_barang->insert($data);
-                
-               
                 $this->session->setFlashdata('pesan_barang', 'Barang baru berhasil ditambahkan!');
                 return redirect()->to(base_url('/suplai/barang'));
-                
-        
+       
     }
 
     public function ubah(){
@@ -447,11 +471,12 @@ class Barang extends BaseController{
                     'numeric' => 'Stok barang harus angka!'
                     ]
                 ],
-                'deskripsi_barangE' => [
-                    'label'  => 'Deskripsi Barang',
-                    'rules'  => 'required',
+                'edit_gambar' => [
+                    'rules'  => 'max_size[edit_gambar,3072]|is_image[edit_gambar]|mime_in[edit_gambar,image/jpg,image/jpeg,image/png]',
                     'errors' => [
-                    'required' => 'Dskripsi barang harus diisi!'
+                    'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
+                    'is_image' => 'Format file yang anda upload bukan gambar!',
+                    'mime_in' => 'Format gambar yang diperbolehkan JPG, JPEG, dan PNG!'
                     ]
                 ]
             ])) {
@@ -501,8 +526,16 @@ class Barang extends BaseController{
                     $this->model_penyuplai->set('nama', $sop)->insert();
                     $sup = $this->db->insertID(); 
                 }
-                
-                
+
+                $edit_gambar = $this->request->getFile('edit_gambar');
+
+                if($edit_gambar->getError() == 4){
+                    $nama_gambar = $this->request->getPost('gambar_lama');
+                }else{
+                    $nama_gambar = time().'.'.$edit_gambar->guessExtension();
+			        $edit_gambar->move('admin/assets/barang/', $nama_gambar);
+                    unlink('admin/assets/barang/'. $this->request->getPost('gambar_lama'));
+                }
                 
                 $data = array(
                     'nama' => $nama_barang,
@@ -515,6 +548,7 @@ class Barang extends BaseController{
                     'harga_anggota' => $this->request->getPost('harga_anggotaE'),
                     'stok' => $this->request->getPost('stok_barangE'),
                     'deskripsi' => $this->request->getPost('deskripsi_barangE'),
+                    'gambar' => $nama_gambar,
                     'tanggal_update' => date('Y-m-d H:i:s')
                 );
                 
@@ -523,13 +557,19 @@ class Barang extends BaseController{
 
                 $this->session->setFlashdata('pesan_barang', 'Barang berhasil diedit!');
                 return redirect()->to(base_url('/suplai/barang'));
-                
-       
     }
 
-    
-    public function hapus(){     
+    public function hapus(){
             $id_barang = $this->request->getPost('id_barangH');  
+
+            $hapus = $this->model_barang->select('gambar, qr')->asArray()->where('id', $id_barang)->first();
+
+            if($hapus['gambar'] != 'default.jpg'){
+                unlink('admin/assets/barang/'. $hapus['gambar']);
+            }
+            if($hapus['qr']){
+                unlink('admin/assets/qr/'. $hapus['qr']);
+            }
             $this->model_barang->delete($id_barang);
             $this->session->setFlashdata('hapus_barang', 'Barang berhasil dihapus!');
             return redirect()->to(base_url('/suplai/barang'));

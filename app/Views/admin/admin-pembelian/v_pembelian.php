@@ -34,8 +34,8 @@
         <div class="col-lg-12" id="purgeall">
           <!-- <//?php echo form_open(base_url().'/fitur/kasir/tambah_transaksi_sementara', $form_pembelian);    ?> -->
           <form action="<?php echo base_url().'/fitur/kasir/tambah_transaksi_sementara'; ?>" name="formPembelian" class="formPembelian" id="formPembelian" method="post" accept-charset="utf-8">
-         
-          <?php echo form_input($hidden_kode_transaksi); ?>
+         <input type="hidden" name="role_id_tambah_transaksi" value="<?php echo $role_id_jenis_kasir;?>">
+       
           <div class="card card-primary">
             <input type="hidden" id="csrf_kasir" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
             <?php if($keranjang):  ?>
@@ -55,6 +55,17 @@
 
             </div>
             <div class="card-body">
+
+            <?php if($validation->hasError('k_qty')):  ?>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>
+                  <?php echo $validation->showError('k_qty'); ?>
+                </strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <?php endif;  ?>
 
               <div class="table-responsive">
                 <table class="table">
@@ -107,10 +118,10 @@
                       <th colspan="3">Jumlah uang</th>
                       <th colspan="1"></th>
                       <th colspan="2">
-                        <input type="number" name="jumlah_uang" id="jumlah_uang" class="form-control jumlah_uang">
-                        <!-- <//?php echo ($validation->showError('jumlah_uang')) ? 'is-invalid' : ''; ?> -->
+                        <input type="number" id="jumlah_uang" name="jumlah_uang" class="form-control jumlah_uang <?php echo ($validation->showError('jumlah_uang')) ? 'is-invalid' : ''; ?>">
+                       <!-- id= jumlah uang -->
                         <div class="invalid-feedback">
-                          <!-- <//?php echo $validation->showError('jumlah_uang'); ?> -->
+                          <?php echo $validation->showError('jumlah_uang'); ?>
                         </div>
                       </th>
 
@@ -119,9 +130,11 @@
                       <th colspan="3">Kembalian</th>
                       <th colspan="1"></th>
                       <th colspan="2">
-                        <input type="text" name="kembalian" id="kembalian" readonly="" class="form-control">
-                        <!-- <//?php echo ($validation->showError('kembalian')) ? 'is-invalid' : ''; ?> -->
-
+                        <input type="text" readonly="" name="kembalian" id="kembalian" class="form-control <?php echo ($validation->showError('kembalian')) ? 'is-invalid' : ''; ?>">
+                   
+                        <div class="invalid-feedback">
+                          <?php echo $validation->showError('kembalian'); ?>
+                        </div>
 
                         <label class="text-danger" id="notif-kembalian">
 
@@ -290,7 +303,7 @@
                       <input min="1" id="qty_barang" name="k_qty" oninput="this.value = Math.abs(this.value)" type="number"
                         class="form-control" id="inlineFormInputGroup2">
                       <div class="input-group-append">
-                        <div class="input-group-text" id="qty2">...</div>
+                        <div class="input-group-text" id="qty2"></div>
                         <input type="hidden" id="qty3" />
                       </div>
                     </div>

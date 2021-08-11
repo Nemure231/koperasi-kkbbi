@@ -12,42 +12,7 @@ class Model_detail_transaksi extends Model{
     protected $table = 'detail_transaksi';
     protected $allowedFields = [
         'kode', 'user_id', 'role_id', 'total_harga', 'total_qty', 
-        'jumlah_uang','penyuplai_id', 'status', 'kembalian', 'tt_nama_penerima', 'tt_telepon_penerima', 'tanggal'];
-    
-
-    public function AutoKodeTransaksi($kode_jenis_kasir){
-        date_default_timezone_set("Asia/Jakarta");
-        $id_user = $this->session->get('id_user');
-        $this->db->transStart();
-        $query = $this->db->table('detail_transaksi')
-            ->select('RIGHT(detail_transaksi.kode,3) as kode', FALSE)
-            ->orderBy('kode', 'DESC')
-            ->limit(1)->get()->getRowArray();
-
-            if (count($query) <> 0) {
-                //$query2 = $query->get()->getRowArray();
-                $kode= intval($query['kode']) + 1;
-            }else{
-                $kode =1;
-            }
-       
-        // $kode1 = $this->db->table('tb_kode_transaksi')
-        //                     ->select('huruf_kode_transaksi, jumlah_angka')
-        //                     ->get()->getRowArray();
-    
-            $batas= str_pad($kode, ""."3"."","0", STR_PAD_LEFT);
-            $bulan = date('dmy');
-            $random = rand(1, 1000);
-            $kodetampil= "".'TSK'."" .$kode_jenis_kasir.$id_user.$bulan.$batas;
-            return $kodetampil;
-            
-        $this->db->transComplete();
-    }
-
-
-
-
-
+        'jumlah_uang','penyuplai_id', 'status', 'kembalian', 'tanggal'];
 
 
 
@@ -113,11 +78,36 @@ class Model_detail_transaksi extends Model{
     public function GetAllBarangKeluarMingguCari($awal_minggu, $akhir_minggu) {
 
         date_default_timezone_set("Asia/Jakarta");
+       
+        $builder = $this->db->table('detail_transaksi');
+        $builder->select('detail_transaksi.tanggal as tanggal, user.role_id as tt_role_id, user.nama as nama_pengirim_barang,
+        detail_transaksi.kembalian as tt_kembalian, user.nama as tt_nama_penerima, role.nama as role,
+        detail_transaksi.kode as tt_kode_transaksi, barang.nama as nama_barang, transaksi.qty as t_qty, 
+        transaksi.harga as t_harga, detail_transaksi.total_harga as tt_total_harga, detail_transaksi.jumlah_uang as tt_jumlah_uang,
+        harga_konsumen, harga_anggota');
+        $builder->join('transaksi', 'transaksi.detail_transaksi_id = detail_transaksi.id');
+        $builder->join('barang', 'barang.id = transaksi.barang_id');
+        $builder->join('penyuplai', 'penyuplai.id = detail_transaksi.penyuplai_id');
+        $builder->join('user', 'user.id = penyuplai.user_id');
+        $builder->join('role', 'role.id = user.role_id');
+        $builder->where('user.role_id', 5);
+        $builder->orWhere('user.role_id', 4);
+        $builder->where('DATE(detail_transaksi.tanggal)>=', $awal_minggu);
+        $builder->where('DATE(detail_transaksi.tanggal)<=', $akhir_minggu);
+        $builder->orderBy('detail_transaksi.kode', 'ASC');
+        $query = $builder->get()->getResultArray();
+        return $query;
+    }
+
+
+    public function GetAllBarangKeluarMinguCari($awal_minggu, $akhir_minggu) {
+
+        date_default_timezone_set("Asia/Jakarta");
         // $day= date('d');
         // $month= date('m');
         // $years= date('Y');
         $builder = $this->db->table('detail_transaksi');
-        $builder->select('detail_transaksi.tanggal as tanggal, tt_role_id, penyuplai.nama as nama_pengirim_barang,
+        $builder->select('detail_transaksi.tanggal as tanggal, tt_role_id, user.nama as nama_pengirim_barang,
         detail_transaksi.kembalian as tt_kembalian, user.nama as nama, role.nama as role,
         detail_transaksi.kode as tt_kode_transaksi, tt_nama_penerima, barang.nama as nama_barang, transaksi.qty as t_qty, 
         transaksi.harga as t_harga, detail_transaksi.total_harga as tt_total_harga, detail_transaksi.jumlah_uang as tt_jumlah_uang,
@@ -127,7 +117,7 @@ class Model_detail_transaksi extends Model{
         $builder->join('role', 'role.id = detail_transaksi.tt_role_id');
         $builder->join('user', 'user.id = detail_transaksi.user_id');
         $builder->join('penyuplai', 'penyuplai.id = barang.penyuplai_id');
-        $builder->where('detail_transaksi.id>', 1);
+        // $builder->where('detail_transaksi.id>', 1);
         $builder->where('DATE(detail_transaksi.tanggal)>=', $awal_minggu);
         $builder->where('DATE(detail_transaksi.tanggal)<=', $akhir_minggu);
         $builder->orderBy('detail_transaksi.kode', 'ASC');
@@ -140,7 +130,7 @@ class Model_detail_transaksi extends Model{
         date_default_timezone_set("Asia/Jakarta");
         $builder = $this->db->table('detail_transaksi');
         $builder->select('detail_transaksi.tanggal as tanggal, tt_role_id, barang.stok as stok_barang,
-        penyuplai.nama as nama_pengirim_barang, detail_transaksi.kembalian as tt_kembalian, user.nama as nama, role.nama as role,
+        user.nama as nama_pengirim_barang, detail_transaksi.kembalian as tt_kembalian, user.nama as nama, role.nama as role,
         detail_transaksi.kode as tt_kode_transaksi, tt_nama_penerima, barang.nama as nama_barang, detail_transaksi.total_harga
         as tt_total_harga, detail_transaksi.jumlah_uang as tt_jumlah_uang, harga_konsumen, harga_anggota');
         $builder->selectSUM('transaksi.qty', 't_qty');

@@ -1,13 +1,6 @@
 const flashDataInvoice = $('.flash-data-invoice-utang-hapus').data('flashdata');
 if (flashDataInvoice) {
-   // Swal.fire({
-   //    title: 'Berhasil',
-   //    hideClass: {
-   //       popup: 'animate__animated animate__fadeOutUp animate__fast'
-   //    },
-   //    text: ' ' + flashDataInvoice,
-   //    icon: 'success'
-   // });
+   
 
    iziToast.success({
       title: 'Berhasil!',
@@ -66,6 +59,19 @@ $(document).ready(function () {
       $('#id_user').val(id_user);
       $('#id_penyuplai').val(id_penyuplai);
       $('#modal-konfirm').modal('show');
+
+
+   });
+
+
+   $('table').on('click', '.tombol-beritahu', function () {
+      var id_user = $(this).data('id_user');
+      var id_penyuplai = $(this).data('id_penyuplai');
+
+      
+      $('#id_user_beritahu').val(id_user);
+      $('#id_penyuplai_beritahu').val(id_penyuplai);
+      $('#modal-beritahu').modal('show');
 
 
    });

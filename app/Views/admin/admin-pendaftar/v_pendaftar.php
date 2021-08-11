@@ -82,6 +82,7 @@
 
                       <th>Bukti</th>
                       <th>Konfirm</th>
+                      <th>Beritahu</th>
 
 
 
@@ -114,35 +115,42 @@
                         <?php echo $p['tanggal']; ?>
                       </td>
 
-                      <?php if($p['status_konfirmasi'] == 2): ?>
+                     
                       <td class="text-center">
+                      <?php if($p['status_konfirmasi'] == 2): ?>
+
+
+                        <?php endif; ?>
+
+                        <?php if($p['status_konfirmasi'] == 1): ?>
+                     
+
+
+                     <div class="chocolat-parent">
+                       <a href="<?php echo base_url().'/admin/assets/bukti_transfer/'. $p['bukti'] ?>"
+                         class="chocolat-image bukti-href" title="Pratinjau foto">
+                         <div class="text-center">
+                           <img alt="Foto kosong"
+                             src="<?php echo base_url().'/admin/assets/bukti_transfer/'. $p['bukti'] ?>"
+                             class="img-fluid bukti-img" style="width: 100x; height: 100px; object-fit: cover;">
+                         </div>
+                       </a>
+                     </div>
+                   
+                   <?php endif; ?>
 
 
 
                       </td>
-                      <?php endif; ?>
-                      <?php if($p['status_konfirmasi'] == 1): ?>
-                      <td>
+                     
+                
 
-
-                        <div class="chocolat-parent">
-                          <a href="<?php echo base_url().'/admin/assets/bukti_transfer/'. $p['bukti'] ?>"
-                            class="chocolat-image bukti-href" title="Pratinjau foto">
-                            <div class="text-center">
-                              <img alt="Foto kosong"
-                                src="<?php echo base_url().'/admin/assets/bukti_transfer/'. $p['bukti'] ?>"
-                                class="img-fluid bukti-img" style="width: 100x; height: 100px; object-fit: cover;">
-                            </div>
-                          </a>
-                        </div>
-                      </td>
-                      <?php endif; ?>
-
-                      <?php if($p['status_konfirmasi'] == 1): ?>
+                     
 
 
 
                       <td class="text-right">
+                      <?php if($p['status_konfirmasi'] == 1): ?>
                         <?php if($p['bukti']): ?>
 
 
@@ -156,14 +164,10 @@
 
 
                         <?php endif; ?>
+                        <?php endif; ?>
 
-                      </td>
-
-
-                      <?php endif; ?>
-
-                      <?php if($p['status_konfirmasi'] == 2): ?>
-                      <td>
+                        <?php if($p['status_konfirmasi'] == 2): ?>
+                      
                         <form action="<?php echo base_url().'/fitur/pendaftar/konfirm-offline' ?>" method="post"
                           accept-charset="utf-8">
                           <?php echo csrf_field(); ?>
@@ -182,8 +186,22 @@
 
                         </form>
 
-                      </td>
+                      
                       <?php endif; ?>
+
+                      </td>
+
+                          <td>
+                      <a href="javascript:void(0)" class="btn btn-info tombol-beritahu"
+                      data-id_user="<?php echo $p['id_user']; ?>"
+                          data-id_penyuplai="<?php echo $p['id_penyuplai']; ?>">Beritahu</a>
+                        </td>
+
+
+
+
+
+                     
 
                       <td>
                         <a href="javascript:void(0)" class="btn btn-info tombol-pendaftar"
@@ -338,7 +356,7 @@
 
               <div class="form-group text-left">
                 <label>Jumlah Uang</label>
-                <input class="form-control" id="biaya" name="biaya" value="">
+                <input type="number" class="form-control" id="biaya" name="biaya" value="">
               </div>
 
 
@@ -350,6 +368,51 @@
           <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
           <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
           <button type="submit" class="btn btn-block btn-primary">Konfirmasi</button>
+
+
+        </div>
+        <?php echo form_close(); ?>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-beritahu" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info">
+        <h5 class="modal-title text-light">Pemberitahuan</h5>
+        <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><i style="font-size: 24px;" class="fas fa-10x fa-times"></i></span>
+        </button>
+      </div>
+      <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
+      <form action="<?php echo base_url().'/fitur/pendaftar/beritahu' ?>" class="btn btn-block" method="post"
+        accept-charset="utf-8">
+        <?php echo csrf_field(); ?>
+        <input type="hidden" name="id_user_beritahu" id="id_user_beritahu" value="">
+        <input type="hidden" name="id_penyuplai_beritahu" id="id_penyuplai_beritahu" value="">
+  
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="form-group text-left">
+                <label>Pesan</label>
+                <textarea class="form-control" style="min-height:145px;"  name="pesan" value="" aria-describedby="teks-pembantu-tolak" placeholder="Pesan ini digunakan untuk mengingatkan anggota sudah melewatkan konfirmasi selama seminggu, pastikan untuk menulis pemberitahuan yang jelas, sopan, dan tidak menyinggung ...."></textarea>
+                <small id="tekt-pembantu-tolak" class="form-text text-muted teks-alasan"></small>
+              </div>
+
+
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
+          <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
+          <button type="submit" class="btn btn-block btn-info">Kirim</button>
 
 
         </div>

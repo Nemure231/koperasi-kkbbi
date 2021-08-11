@@ -198,9 +198,8 @@
         </div>
 
       </div>
-      <div class="modal-footer" id="yahaloo">
-        <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
-        <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
+      <div class="modal-footer">
+       
         <?php echo form_open(base_url().'/pengaturan/menu/hapus', $form_hapus_menu);    ?>
         <?php echo form_input($hidden_hapus_menu_id); ?>
         <?php echo csrf_field(); ?>

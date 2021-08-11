@@ -26,7 +26,7 @@
               
                   <div class="form-group">
                     <div class="d-block">
-                      <label for="sandi">E-mail</label>
+                      <label for="sandi">Surel</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <div class="input-group-text">
@@ -75,7 +75,7 @@
             </div>
             
             <div class="simple-footer">
-              Copyright &copy; Stisla 2018
+              Copyright &copy; KKBBI 2021
             </div>
           </div>
         </div>

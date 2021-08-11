@@ -25,7 +25,7 @@ class Pengguna extends BaseController{
 	
         
 	
-		$user = $this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
+		$user = $this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, alamat, role.nama as role')->asArray()
 						->join('role', 'role.id = user.role_id')
 						->where('surel', $email)
 						->first();

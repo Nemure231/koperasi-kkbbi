@@ -37,12 +37,12 @@ class Pendaftaran extends BaseController{
 		
 		$data = [
 			'title' => 'Pendaftaran',
-			'user' => $this->model_user->select('user.id as id_user,
-				user.nama as nama, surel as email, telepon, gambar,
-				alamat, role.nama as role')->asArray()
-				->join('role', 'role.id = user.role_id')
+			'user' => $this->model_user->select('user.nama as nama')->asArray()
 				->where('surel', $email)
 				->first(),
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')
+				->asArray()
+				->where('id_toko', 1)->first(),
 			'konfirmasi' => $konfirm['status'] ?? NULL,
 			'validation' => $this->validation,
 			'session' => $this->session,
@@ -59,7 +59,6 @@ class Pendaftaran extends BaseController{
 
 	public function tambah(){
 
-
 		if(!$this->validate([
 			'nama' => [
 				'rules'  => 'required',
@@ -68,20 +67,20 @@ class Pendaftaran extends BaseController{
 				]
 			],
 			'telepon' => [
-				'rules'  => 'required|numeric|is_unique[user.telepon]|
-					greater_than[0]|greater_than_equal_to[100000]',
+				'rules'  => 'required|numeric|is_unique[user.telepon]|greater_than[0]',
 				'errors' => [
 					'required' => 'Harus diisi!',
 					'numeric' => 'Harus angka!',
-					'is_unique' => 'Nomor itu sudah pernah didaftarkan!'
+					'is_unique' => 'Sudah pernah terdaftar sebelumnya!',
+					'greater_than' => 'Harus diisi!'
 				]
 			],
 			'surel' => [
 				'rules'  => 'required|valid_email|is_unique[user.surel]',
 				'errors' => [
 					'required' => 'Harus disi!',
-					'valid_emsil' => 'Harus berformat surel!',
-					'is_unique' => 'Surel itu sudah pernah didaftarkan!'
+					'valid_emsil' => 'Format surel tidak benar!',
+					'is_unique' => 'Sudah pernah terdaftar sebelumnya!'
 				
 				]
 			],
@@ -95,16 +94,17 @@ class Pendaftaran extends BaseController{
 			'no_ktp' => [
 				'rules'  => 'required|numeric|greater_than[0]',
 				'errors' => [
-				'required' => 'Harus diisi!'
+				'required' => 'Harus diisi!',
+				'numeric' => 'Harus angka!',
+				'greater_than' => 'Harus diisi!'
 				
 				]
 			],
 			'bank' => [
-				'rules'  => 'required_with[atas_nama,no_rekening]
-					|permit_empty|in_list[BCA,BRI,MANDIRI]',
+				'rules'  => 'required_with[atas_nama,no_rekening]|permit_empty|in_list[BCA,BRI,MANDIRI]',
 				'errors' => [
-					'numeric' => 'Harus angka!',
-					'required_with' => 'Harus diisi saat Atas Nama atau
+					'in_list' => 'Pilihan bank tidak sesuai!',
+					'required_with' => 'Harus dipilih saat Atas Nama atau
 						No Rekening ikut diisi!'
 				
 				]
@@ -112,17 +112,15 @@ class Pendaftaran extends BaseController{
 			'atas_nama' => [
 				'rules'  => 'required_with[no_rekening,bank]|permit_empty',
 				'errors' => [
-					'numeric' => 'Harus angka!',
-					'required_with' => 'Harus diisi saat No 
-					Rekening atau Bank ikut diisi!'
+					'required_with' => 'Harus diisi saat No Rekening atau Bank ikut diisi!'
 				
 				]
 			],
 			'no_rekening' => [
-				'rules'  => 'required_with[atas_nama,bank]|numeric
-					|permit_empty|greater_than[0]|numeric',
+				'rules'  => 'required_with[atas_nama,bank]|numeric|permit_empty|greater_than[0]|numeric',
 				'errors' => [
 				'numeric' => 'Harus angka!',
+				'greater_than' => 'Harus diisi!',
 				'required_with' => 'Harus diisi saat Atas Nama atau Bank ikut diisi!'
 				
 				]
@@ -137,7 +135,8 @@ class Pendaftaran extends BaseController{
 			'sandi' => [
                 'rules'  => 'required|min_length[8]',
                 'errors' => [
-                    'required' => 'Harus diisi!'
+                    'required' => 'Harus diisi!',
+					'min_length' => 'Tidak boleh kurang dari 8 karakter!'
                     
             	]
             ],
@@ -186,14 +185,12 @@ class Pendaftaran extends BaseController{
 
 		$this->model_penyuplai->insert($penyuplai);
 		$penyuplai_id = $this->db->insertID();
-
 		$pendaftaran = [
 			'penyuplai_id'=> $penyuplai_id,
-			'kode' => 'PND'.$user_id.'5'.date('jny'),
+			'kode' => 'PND'.'5'.$user_id,
 			'biaya' => 0,
 			'status' => 0
-			];
-
+		];
 		$this->model_pendaftaran->insert($pendaftaran);
 		$this->session->setFlashdata('pesan_pendaftaran',
 		'<div class="alert alert-success">Pendaftaran berhasil! 

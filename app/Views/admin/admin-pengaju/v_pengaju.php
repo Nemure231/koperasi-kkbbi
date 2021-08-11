@@ -372,7 +372,7 @@
 <div class="modal fade" id="modal-tolak" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header bg-primary">
+      <div class="modal-header bg-danger">
         <h5 class="modal-title text-light">Penolakan Barang</h5>
         <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true"><i style="font-size: 24px;" class="fas fa-10x fa-times"></i></span>
@@ -405,7 +405,7 @@
         <div class="modal-footer">
           <!-- untuk mengirimkan ke database ci otomatis akan mengirimkannya jika typenya kita beri submit -->
           <!-- <a id="btn-simpan-hapus" class="btn btn-block btn-danger"><h6>Ya, hapus</h6></a> -->
-          <button type="submit" class="btn btn-block btn-primary">Kirim</button>
+          <button type="submit" class="btn btn-block btn-danger">Kirim</button>
 
 
         </div>

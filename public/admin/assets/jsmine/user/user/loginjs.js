@@ -41,8 +41,8 @@ $(document).ready(function () {
         messages: {
             email: {
                 required: "Harus diisi!",
-                email: "Format e-mail tidak benar!",
-                regex: "Format e-mail tidak benar!"
+                email: "Format surel tidak benar!",
+                regex: "Format surel tidak benar!"
             },
             sandi: {
                 required: "Harus diisi!"

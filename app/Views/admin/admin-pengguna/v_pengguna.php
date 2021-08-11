@@ -2,7 +2,6 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/css/animate.min.css' ?>">
 <!-- Main Content -->
-<div class="flash-data" data-flashdata="<?php echo $session->getFlashdata('pesan')  ?>"></div>
 <div class="flash-data-input" data-flashdatainput="<?php echo $session->getFlashdata('pesan_pengguna')  ?>"></div>
 <div class="main-content">
   <section class="section">
@@ -10,13 +9,15 @@
       <h1><?php echo esc($title); ?></h1>
     </div>
 
-    <div class="section-body prpr">
+    <div class="section-body">
+
+    <?php echo $session->getFlashdata('pesan');  ?>
 
       <div class="row mt-sm-4">
         <div class="col-12 col-md-12 col-lg-5">
           <div class="card profile-widget card-primary">
             <div class="profile-widget-header">
-              <img alt="image" src="<?php echo base_url('admin/assets/profile').'/'. $user['gambar']; ?>"
+              <img alt="image" src="<?php echo base_url('admin/assets/profile').'/'. 'default.png'; ?>"
                 class="rounded-circle profile-widget-picture">
               <!-- <div class="profile-widget-items">
                 <div class="profile-widget-item">

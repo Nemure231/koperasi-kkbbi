@@ -49,6 +49,7 @@ $(document).ready(function () {
 
    });
 
+ 
    
    $('table').on('click', '.tombolEditMerek' ,function () {
       var id_merek = $(this).data('id_merek');

@@ -48,20 +48,20 @@ if (flashDataHKALL) {
    });
 }
 
-const flashDataSalah = $('.errors').html();
-if (flashDataSalah) {
+// const flashDataSalah = $('.errors').html();
+// if (flashDataSalah) {
 
-   Swal.fire({
-      title: 'Gagal',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      html: ' ' + flashDataSalah,
-      icon: 'error'
-   });
+//    Swal.fire({
+//       title: 'Gagal',
+//       hideClass: {
+//          popup: 'animate__animated animate__fadeOutUp animate__fast'
+//       },
+//       html: ' ' + flashDataSalah,
+//       icon: 'error'
+//    });
 
-   //$('#modalBuku').modal('show');
-}
+//    //$('#modalBuku').modal('show');
+// }
 
 const flashDataTran = $('.flash-data-transaksi').data('flashdata');
 if (flashDataTran) {
@@ -87,61 +87,9 @@ if (flashDataInvoice) {
    });
 }
 
-const flashDataUtang = $('.flash-data-utang').data('flashdata');
-// var base = window.location.origin;
-var getUrl = window.location;
-var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-if (flashDataUtang) {
-   Swal.fire({
-      title: 'Berhasil',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      text: ' ' + flashDataUtang,
-      icon: 'success',
-      footer: '<a href="' + baseUrl + '/public/fitur/utang' + '">Lihat daftar utang.</a>'
-   });
-}
-
 
 $(document).ready(function () {
 
-
-
-   $("#formPembelian").validate({
-      rules: {
-         jumlah_uang: {
-            number: true,
-            required: true,
-            //notEqual: '0',
-            normalizer: function (value) {
-               return $.trim(value);
-            },
-         },
-         kembalian: {
-            min: 0,
-            number: true,
-            required: true,
-            normalizer: function (value) {
-               return $.trim(value);
-            },
-         }
-      },
-      messages: {
-         jumlah_uang: {
-            required: "Harus diisi!",
-            //notEqual: "Tidak boleh nol atau minus!",
-            number: "Harus angka!"
-         },
-         kembalian: {
-            required: "Harus diisi!",
-            number: "Harus angka!",
-            min: "Kembalian kurang!"
-            //minlength: "Terlalu pendek, kata sandi yang anda daftarkan sebelumnya memiliki 6 huruf atau lebih!"
-         },
-
-      },
-   });
 
 
 
@@ -153,7 +101,6 @@ $(document).ready(function () {
       var harga = $('#k_harga_barang').val();
       $('#harga_barang').val(harga * qty);
       $('#qty2').text(stok - qty);
-      // $('#qty3').val(stok - qty);
 
 
       if(Number(qty) > Number(stok)){
@@ -224,29 +171,52 @@ $(document).ready(function () {
       $('#modalPembelian').modal('show');
       $('.role_idE').val(role_jenis_kasir);
 
+      // $.ajax({
+      //    url: 'kasir/reset_csrf',
+      //    method: "GET",
+      //    data: '',
+      //    headers: {
+      //       'X-Requested-With': 'XMLHttpRequest'
+      //    },
+      //    dataType: 'json',
+      //    success: function (res) {
+      //       $('#csrf_jenis_kasir').val(res.csrf_hash);
+      //       $('#csrf_kasir').val(res.csrf_hash);
+      //       $('#csrf_detail_barang').val(res.csrf_hash);
+      //       $('#csrf_detail_qr').val(res.csrf_hash);
+      //       $('#csrf_keranjang').val(res.csrf_hash);
+      //       $('#csrf_hapus_barang').val(res.csrf_hash);
+      //       $('#csrf_hapus_keranjang').val(res.csrf_hash);
+
+      //    }
+      // });
+
+   });
+
+   function ajax_qr_barang(kode_barang) {
+      var csrfName = $('#csrf_detail_qr').attr('name'); // CSRF Token name
+      var csrfHash = $('#csrf_detail_qr').val(); // CSRF hash
+      var jenkas = $('#jen_kas').val();
+
       $.ajax({
-         url: 'kasir/reset_csrf',
-         method: "GET",
-         data: '',
+         url: 'kasir/tambah_keranjang_qr',
+         data: {
+            [csrfName]: csrfHash,
+            qode_barang: kode_barang,
+            jen_kas: jenkas,
+         },
          headers: {
             'X-Requested-With': 'XMLHttpRequest'
          },
-         // type: "post",
+         method: "POST",
          dataType: 'json',
          success: function (res) {
-            // alert(res.csrf_hash);
-            $('#csrf_jenis_kasir').val(res.csrf_hash);
-            $('#csrf_kasir').val(res.csrf_hash);
-            $('#csrf_detail_barang').val(res.csrf_hash);
-            $('#csrf_detail_qr').val(res.csrf_hash);
-            $('#csrf_keranjang').val(res.csrf_hash);
-            $('#csrf_hapus_barang').val(res.csrf_hash);
-            $('#csrf_hapus_keranjang').val(res.csrf_hash);
+            window.location.reload(true);
+            // location.reload();
 
          }
       });
-
-   });
+   }
 
    let scanner = new Instascan.Scanner({
       video: document.getElementById('preview')
@@ -303,30 +273,7 @@ $(document).ready(function () {
 
    });
 
-   function ajax_qr_barang(kode_barang) {
-      var csrfName = $('#csrf_detail_qr').attr('name'); // CSRF Token name
-      var csrfHash = $('#csrf_detail_qr').val(); // CSRF hash
-      var jenkas = $('#jen_kas').val();
-
-      $.ajax({
-         url: 'kasir/tambah_keranjang_qr',
-         data: {
-            [csrfName]: csrfHash,
-            qode_barang: kode_barang,
-            jen_kas: jenkas,
-         },
-         headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-         },
-         method: "POST",
-         dataType: 'json',
-         success: function (res) {
-            location.reload();
-            location.reload();
-
-         }
-      });
-   }
+   
 
 
    function ajax_kode_barang(kode_barang) {

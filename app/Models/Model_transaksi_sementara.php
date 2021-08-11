@@ -10,27 +10,19 @@ class Model_transaksi_sementara extends Model
 		$this->db = \Config\Database::connect();
 		$this->request = \Config\Services::request();
 		$this->session = \Config\Services::session();
-	 }
-	 
-	protected $table                = 'transaksi_sementara';
-	protected $primaryKey           = 'id_transaksi_sementara';
-	protected $allowedFields        = [
-	'ts_barang_id','ts_qty','ts_harga','ts_user_id','ts_role_id',
-	'ts_kode_transaksi','ts_jumlah_uang','ts_kembalian','ts_uri',
-	'ts_nama_pengutang','ts_nomor_pengutang','ts_status_transaksi','ts_tanggal_sementara'];
+	}
 
 
-	public function HapusAllInvoiceAdmin($kode, $uri){
+	public function HapusAllInvoiceAdmin($id){
         $id_user = $this->session->get('id_user');
         $this->db->transStart();
-        $builder1 = $this->db->table('transaksi_sementara');
-        $builder1->select('ts_barang_id, ts_qty');
-        $builder1->where('ts_kode_transaksi', $kode);
-        $builder1->join('barang', 'barang.id_barang = transaksi_sementara.ts_barang_id');
-        //$builder1->groupBy('k_kode_keranjang');
+
+        $builder1 = $this->db->table('transaksi');
+        $builder1->select('transaksi.barang_id as ts_barang_id, transaksi.qty as ts_qty');
+        $builder1->where('transaksi.detail_transaksi_id', $id);
+        $builder1->join('detail_transaksi', 'detail_transaksi.id = transaksi.detail_transaksi_id');
+        $builder1->join('barang', 'barang.id = transaksi.barang_id');
         $query = $builder1->get()->getResultArray();
-        //dd($query);
-        
         foreach ($query as  $qt2):
             $data[] = array(
                 'qty' =>  $qt2['ts_qty'],
@@ -38,16 +30,17 @@ class Model_transaksi_sementara extends Model
             );
             $qty = $qt2['ts_qty'];
             $idb = $qt2['ts_barang_id'];
-            $qtyesc = $this->db->escapeString($qty);
-            $idbesc = $this->db->escapeString($idb);
-            $stok = $this->db->query("update barang set stok_barang=stok_barang+'$qtyesc' where id_barang='$idbesc'");
+            $stok = $this->db->query("update barang set stok=stok+'$qty' where id='$idb'");
         endforeach;
 
-        $builder = $this->db->table('transaksi_sementara');
-        $builder->where('ts_status_transaksi', 1);
-        $builder->where('ts_uri', $uri);
-        $builder->delete();
+        $this->db->table('detail_transaksi')
+                ->where('status', 2)
+                ->where('id', $id)
+                ->delete();
 
+        $this->db->table('transaksi')
+                ->where('detail_transaksi_id', $id)
+                ->delete();
         $this->db->transComplete();
 
         

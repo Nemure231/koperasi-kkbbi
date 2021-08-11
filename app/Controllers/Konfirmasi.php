@@ -34,10 +34,12 @@ class Konfirmasi extends BaseController{
 		$data = [
 			'title' => 'Konfirmasi',
 			'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as 
-				email, telepon, gambar, alamat, role.nama as role')->asArray()
+				email, telepon, alamat, role.nama as role')->asArray()
 				->join('role', 'role.id = user.role_id')
 				->where('surel', $email)
 				->first(),
+			'toko' => $this->model_toko->select('alamat_toko, telepon_toko, deskripsi_toko, email_toko, logo_toko')->asArray()
+				->where('id_toko', 1)->first(),
 			'status_pendaftaran' => $this->model_user->select('pendaftaran.status as status, 
 				pendaftaran.kode as kode, pendaftaran.bukti as bukti,
 				pendaftaran.id as id_pendaftaran')->asArray()
@@ -91,13 +93,12 @@ class Konfirmasi extends BaseController{
 	public function unggah(){
 		if(!$this->validate([
 			'bukti' => [
-				'rules'  => 'uploaded[bukti]|max_size[bukti,3072]|
-					is_image[bukti]|mime_in[bukti,image/jpg,image/jpeg,image/png]',
+				'rules'  => 'uploaded[bukti]|max_size[bukti,3072]|is_image[bukti]|mime_in[bukti,image/jpg,image/jpeg,image/png]',
 				'errors' => [
-				'max_size' => 'Ukuran sambar tidak boleh lebih dari 1MB!',
+				'max_size' => 'Ukuran foto tidak boleh lebih dari 3MB!',
 				'uploaded' => 'Harus diunggah!',
-				'is_image' => 'Format file yang anda upload bukan gambar!',
-				'mime_in' => 'Format gambar yang diperbolehkan JPG, JEPG, dan PNG!'
+				'is_image' => 'Format foto salah!',
+				'mime_in' => 'Format yang diperbolehkan hanya JPG, JPEG, dan PNG!'
 				]
 			]
 
@@ -167,7 +168,7 @@ class Konfirmasi extends BaseController{
 		$this->email->setTo($sekretaris['surel']);
 		$this->email->setSubject('KKBBI: Konfirmasi - '.$anggota['nama']);
 		$this->email->setMessage(email_notifikasi($sekretaris, ''.$anggota['nama'].
-		'baru saja mengunggah bukti transfer untuk konfirmasi pendaftaran online!', $toko, 'Konfirmasi'));
+		' baru saja mengunggah bukti transfer untuk konfirmasi pendaftaran online!', $toko, 'Konfirmasi'));
 		if ($this->email->send()) {
 			return true;
 		}else{

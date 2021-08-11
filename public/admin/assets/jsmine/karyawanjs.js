@@ -81,27 +81,11 @@ $(document).ready(function () {
    $("#usus").DataTable();
    $('#swal2-content ul li').css("color", "#dc3545");
 
-
-   $('.rum').on('click', function () {
-
-      //$('#is_active').attr('name', 'is_active');
-      if(this.checked){
-         //$('#is_active').val('1');
-         $('#is_active').attr('name', 'is_active');
-         $('#is_active1').attr('name', '');
-      }else{
-         //$('#is_active1').val('2');
-         $('#is_active1').attr('name', 'is_active');
-         $('#is_active').attr('name', '');
-      }
-	});
-
    $('#tombolTambahUser').click(function () {
       $('#judulKaryawan').html("Tambah Karyawan");
       $('#modalKaryawan').modal('show');
       $('#role_id').select2({dropdownParent: $('#modalKaryawan')});
       
-
    });
 
    //GET UPDATE
@@ -110,53 +94,30 @@ $(document).ready(function () {
       var nama = $(this).data('nama');
       var email = $(this).data('email');
       var notel = $(this).data('telepon');
-      var foto = $(this).data('gambar');
-      var alamat = $(this).data('alamat');
+      var alamat = $(this).data('alamat')
       var aktif = $(this).data('is_active');
       var role = $(this).data('role_id');
-      var getUrl = window.location;
-      var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
       $('#judulKaryawanE').html("Ubah Karyawan");
-      // $('#formEditKaryawan').attr("action", "toko/editkaryawan/" + id);
-      $('#imgE').attr("src", baseUrl + "/public/admin/assets/profile/" + foto);
-      $('#img-labelE').text(foto);
       $('#user_id').val(id);
       $('#namaE').val(nama);
       $('#emailE').val(email);
       $('#teleponE').val(notel);
       $('#alamatE').val(alamat);
       $('#role_idE').val(role);
-      $('#gambarE_lama').val(foto);
-      //var bud = $('#is_activeE').val(aktif);
+   
+
 
       if(aktif == 1){
-         $('#is_activeE').attr("checked", "");
-         $('#is_activeE').removeAttr("nuk");
-         $('#is_activeE').attr('name', 'is_activeE');
-         $('#is_activeE1').removeAttr('name');
+         $('#is_activeE').prop("checked", true);
+
       }else if(aktif == 2){
-         $('#is_activeE').attr("nuk", "");
-         $('#is_activeE').removeAttr("checked");
-         $('#is_activeE1').attr('name', 'is_activeE');
-         $('#is_activeE').removeAttr('name');
+         $('#is_activeE').prop("checked", false);
       }
       $('#modalKaryawanE').modal('show');
       $('#role_idE').select2({dropdownParent: $('#modalKaryawanE')});
    });
 
-   $('.cekE').on('click', function () {
 
-      //$('#is_active').attr('name', 'is_active');
-      if(this.checked){
-         $('#is_activeE').attr('name', 'is_activeE');
-         $('#is_activeE1').attr('name', '');
-      }else{
-         //$('#is_active1').val('2');
-         $('#is_activeE1').attr('name', 'is_activeE');
-         $('#is_activeE').attr('name', '');
-      }
-   });
-  
 
 });
 

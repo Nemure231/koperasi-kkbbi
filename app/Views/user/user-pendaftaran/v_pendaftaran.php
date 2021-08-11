@@ -40,7 +40,7 @@
                       </div>
                     </div>
 
-                    <div class="form-group col-lg-6 col-md-6">
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
                       <label>No HP/WA</label>
                       <input type="text" name="telepon" id="telepon" class="form-control <?php echo ($validation->hasError('telepon')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('telepon', '', TRUE); ?>">
                       <div class="invalid-feedback">
@@ -48,7 +48,7 @@
                       </div>
                     </div>
 
-                    <div class="form-group col-lg-6 col-md-6">
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
                       <label>Surel</label>
                       <input type="text" name="surel" id="surel" class="form-control <?php echo ($validation->hasError('surel')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('surel', '', TRUE); ?>">
                       <div class="invalid-feedback">
@@ -56,7 +56,7 @@
                       </div>
                     </div>
 
-                    <div class="form-group col-lg-6 col-md-6">
+                    <div class="form-group  col-sm-6 col-lg-6 col-md-6">
                       <label>Sandi</label>
                       <input type="password" name="sandi" id="sandi" class="form-control <?php echo ($validation->hasError('sandi')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('pekerjaan', '', TRUE); ?>">
                       <div class="invalid-feedback">
@@ -64,7 +64,7 @@
                       </div>
                     </div>
 
-                    <div class="form-group col-lg-6 col-md-6">
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
                       <label>Ulang Sandi</label>
                       <input type="password" name="ulang_sandi" id="ulang_sandi" class="form-control <?php echo ($validation->hasError('ulang_sandi')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('no_ktp', '', TRUE); ?>">
                       <div class="invalid-feedback">
@@ -89,7 +89,7 @@
                 <div class="col-lg-6">
 
                   <div class="row">
-                  <div class="form-group col-lg-6 col-md-6">
+                  <div class="form-group col-sm-6 col-lg-6 col-md-6">
                       <label>Pekerjaan</label>
                       <input type="text" name="pekerjaan" id="pekerjaan" class="form-control <?php echo ($validation->hasError('pekerjaan')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('pekerjaan', '', TRUE); ?>">
                       <div class="invalid-feedback">
@@ -97,15 +97,15 @@
                       </div>
                     </div>
 
-                    <div class="form-group col-lg-6 col-md-6">
-                      <label>No KTP</label>
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
+                      <label>NIK</label>
                       <input type="text" name="no_ktp" id="no_ktp" class="form-control <?php echo ($validation->hasError('no_ktp')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('no_ktp', '', TRUE); ?>">
                       <div class="invalid-feedback">
                         <?php echo $validation->showError('no_ktp'); ?>
                       </div>
                     </div>
 
-                    <div class="form-group col-lg-4 col-md-4">
+                    <div class="form-group col-lg-4 col-md-4 col-sm-12">
                       <label>No Rekening<small class="text-info"> (Opsional)</small></label>
                       <input type="text" name="no_rekening" id="no_rekening" class="form-control <?php echo ($validation->hasError('no_rekening')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('no_rekening', '', TRUE); ?>" >
                      
@@ -114,16 +114,23 @@
                       </div>
                     </div>
 
-                    <div class="form-group col-lg-4 col-md-4">
-                      <label>Bank<small  class="text-info"> (Opsional)</small></label>
-                      <input type="text" name="bank" id="bank" class="form-control <?php echo ($validation->hasError('bank')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('bank', '', TRUE); ?>" >
-                     
+                    <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                      <label>Bank<small class="text-info"> (Opsional)</small></label>
+    
+                        <select class="custom-select <?php echo ($validation->hasError('bank')) ? 'is-invalid' : ''; ?>" name="bank" value="<?php echo set_value('bank', '', TRUE); ?>" >
+                          <option value="">--Pilih--</option>
+                          <option value="BCA">BCA</option>
+                          <option value="BCA">BRI</option>
+                          <option value="BCA">MANDIRI</option>
+
+                          
+                        </select>
                       <div class="invalid-feedback">
                         <?php echo $validation->showError('bank'); ?>
                       </div>
                     </div>
 
-                    <div class="form-group col-lg-4 col-md-4">
+                    <div class="form-group col-lg-4 col-md-4 col-sm-6">
                       <label>Atas Nama<small  class="text-info"> (Opsional)</small></label>
                       <input type="text" name="atas_nama" id="atas_nama" class="form-control <?php echo ($validation->hasError('atas_nama')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('atas_nama', '', TRUE); ?>">
                      
@@ -132,7 +139,7 @@
                       </div>
                     </div>
 
-                    <div class="form-group col-lg-12">
+                    <div class="form-group col-12">
                           <label>Alamat</label>
                           <textarea name="alamat" id="alamat" class="form-control <?php echo ($validation->hasError('alamat')) ? 'is-invalid' : ''; ?>"><?php echo set_value('alamat', '', TRUE); ?></textarea>
                           <div class="invalid-feedback">

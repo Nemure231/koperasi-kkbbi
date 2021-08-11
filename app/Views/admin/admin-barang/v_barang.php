@@ -1,7 +1,8 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/css/animate.min.css' ?>">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/css/datatabel-boot4.min.css' ?>">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'/admin/assets/modules/datatables/Responsive-2.2.1/css/responsive.bootstrap4.min.css' ?>">
-
+<link rel="stylesheet" type="text/css"
+  href="<?php echo base_url().'/admin/assets/modules/chocolat/dist/css/chocolat.css' ?>">
 
 <!-- Main Content -->
 
@@ -50,6 +51,7 @@ width:100%!important;
                       <th data-priority="4">Harga Konsumen</th>
                       <th data-priority="5">Harga Anggota</th>
                       <th data-priority="6">Stok</th>
+                    
                 
                      
                       <th >Tanggal Input</th>
@@ -73,6 +75,8 @@ width:100%!important;
                       <td><?php echo $b['harga_konsumen']; ?></td>
                       <td><?php echo $b['harga_anggota']; ?></td>
                       <td class="text-center"><?php echo $b['stok_barang']; ?></td>
+                     
+                     
                     
                       <td><?php echo $b['tanggal']; ?></td>
                       <td><?php echo $b['tanggal_update']; ?></td>
@@ -90,12 +94,22 @@ width:100%!important;
                           data-harga_anggota="<?php echo $b['harga_anggota'];?>"
                           data-deskripsi_barang="<?php echo $b['deskripsi_barang'];?>"
                           data-harga_pokok="<?php echo $b['harga_pokok']; ?>"
+                          data-gambar="<?php echo $b['nama_gambar'];?>"
+                         
                           >
                           <i class="fas fa-pencil-alt"></i></a>
                         <a href="javascript:void(0)" id="tombolHapusBarang" class="btn mb-3 btn-danger tombolHapusBarang"
                           data-id_barang="<?php echo $b['id_barang'];?>">
                           <i class="fas fa-trash"></i>
-                        </a>    
+                        </a>
+                        
+                        <a href="javascript:void(0)" class="btn mb-3 btn-info tombolLihatGambar"
+                        data-gambar="<?php echo $b['nama_gambar']; ?>"
+                          data-qr="<?php echo $b['qr']; ?>"
+                          
+                          >
+                          <i class="fas fa-qrcode"></i>
+                        </a>   
                       </td>
                       
                     </tr>
@@ -160,11 +174,9 @@ width:100%!important;
   </section>
 </div>
 
-
-
 <!-- Modal -->
 <div class="modal fade" id="modalTambahBarang"  role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
         <h5 class="modal-title text-light">Tambah Barang</h5>
@@ -173,19 +185,36 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/suplai/barang/tambah', $form_tambah_barang);    ?>
-      <?php echo form_input($hidden_kode_barang); ?>
-      <?php echo csrf_field(); ?>
+      <?php echo form_open_multipart(base_url().'/suplai/barang/tambah', $form_tambah_barang);    ?>
+      
+      
       <div class="modal-body">
         <div class="row">
+          <div class="col-lg-4 text-center">
+          
+                  <div class="row">
+                    <div class="col-lg-12 mb-2">
+                    <img src="<?php echo base_url('admin/assets/barang').'/'. 'default.jpg' ?>"
+                      class="img-thumbnail img-prev" id="gambar" style="height: 310px; width: 220px; object-fit:cover;">
+                    
+        
+                    </div>
+                    <div class="col-sm-12 col-md-8 col-lg-12">
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="input_gambar" name="gambar"
+                          onchange="previewImg()">
+                          
+                        <label class="custom-file-label text-left" for="Sampulbuku">Pilih gambar</label>
+                      </div>
+                    </div>
+                  </div>
+                
+        
+          </div>
     
 
-          <div class="col-lg-6">
+          <div class="col-lg-4">
             <div class="row">
-                <div class="form-group">
-                    <!--// name dan id ini berhubungan dengan semua data yang diambil dengan result array $data['menu'] -->
-                    <?php echo form_input($hidden_kode_barang); ?>
-                  </div>
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label>Nama Barang</label>
@@ -239,7 +268,7 @@ width:100%!important;
             </div>
           </div>
 
-          <div class="col-lg-6">
+          <div class="col-lg-4">
             <div class="row">
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Harga Konsumen</label>
@@ -283,7 +312,7 @@ width:100%!important;
 
 <!-- Modal -->
 <div class="modal fade" id="modalEditBarang" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
         <h5 class="modal-title text-light">Edit Barang</h5>
@@ -292,7 +321,7 @@ width:100%!important;
         </button>
       </div>
       <!-- form action adalah tempat di mana fungsinya berasal, misal tambah menu ini berasal dari controler menu di fungsi index -->
-      <?php echo form_open(base_url().'/suplai/barang/ubah', $form_edit_barang);    ?>
+      <?php echo form_open_multipart(base_url().'/suplai/barang/ubah', $form_edit_barang);    ?>
       <input type="hidden" name="_method" value="PUT" />
       <?php echo csrf_field(); ?>
       <?php echo form_input($hidden_id_barangE); ?>
@@ -301,8 +330,29 @@ width:100%!important;
      
       <div class="modal-body">
         <div class="row">
+
+        <div class="col-lg-4 text-center">
+          
+          <div class="row">
+            <div class="col-lg-12 mb-2">
+            <img src="<?php echo base_url('admin/assets/barang').'/'. 'default.jpg' ?>"
+              class="img-thumbnail edit_gambar" style="height: 310px; width: 220px; object-fit:cover;">
+            </div>
+            <div class="col-sm-12 col-md-8 col-lg-12">
+              <div class="custom-file">
+                <input type="hidden" id="gambar_lama" name="gambar_lama">
+                <input type="file" class="custom-file-input" id="input_edit_gambar" name="edit_gambar"
+                  onchange="previewImgEdit()">
+                  
+                <label class="custom-file-label text-left edit-label-gambar">Pilih gambar</label>
+              </div>
+            </div>
+          </div>
         
-          <div class="col-lg-6">
+
+          </div>
+        
+          <div class="col-lg-4">
             <div class="row">
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
@@ -356,7 +406,7 @@ width:100%!important;
             </div>
           </div>
 
-          <div class="col-lg-6">
+          <div class="col-lg-4">
             <div class="row">
               <div class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label>Harga Konsumen</label>
@@ -443,6 +493,33 @@ width:100%!important;
           <?php echo form_input($hidden_id_barangH); ?>
           <button type="submit" class="btn btn-danger">Ya, hapus!</button>
         <?php echo form_close(); ?>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalLihatGambar" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div id="judbuk" class="modal-header bg-info">
+        <h5 class="modal-title text-dark">Gambar QR</h5>
+        <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><i style="font-size: 24px;" class="fas fa-10x fa-times"></i></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+        
+
+          <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+          <img class="img-thumbnail" id="tampil-qr" style="height: 340px; width: 320px; object-fit:cover;">
+                    
+           
+            </div>
+        </div>
 
       </div>
 

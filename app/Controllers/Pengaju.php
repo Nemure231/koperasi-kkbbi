@@ -37,12 +37,9 @@ class Pengaju extends BaseController{
         
             'title' => 'Pengaju',
             'nama_menu_utama' => 'Pembelian',
-            'user' 	=> 	$this->model_user->select('user.id as id_user,
-                user.nama as nama, surel as email, telepon, gambar,
-                alamat, role.nama as role')->asArray()
-				->join('role', 'role.id = user.role_id')
-				->where('surel', $email)
-				->first(),
+            'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
+            ->where('surel', $email)
+            ->first(),
             'menu' => 	$this->model_user_menu->select('id_menu, menu')
                 ->asArray()
                 ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
@@ -149,7 +146,7 @@ class Pengaju extends BaseController{
         $id_pengajuan = $this->request->getPost('id_pengajuan');
         $this->model_pengajuan->set('status', 1)->where('id', $id_pengajuan)->update();
 
-        $this->_sendEmail($anggota, 'Selamat, berdasarkan hasilkeputusan rapat
+        $this->_sendEmail($anggota, 'Selamat, berdasarkan hasil keputusan rapat
         yang dilakukan oleh Ketua Umum, kami memutuskan 
         untuk menerima pengajuan barang Anda. Anda diberi waktu satu minggu mulai dari
         sekarang untuk mengirim barang tersebut ke koperasi. Untuk melihat detail riwayat pengajuan, 

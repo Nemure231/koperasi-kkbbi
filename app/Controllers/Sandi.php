@@ -24,12 +24,10 @@ class Sandi extends BaseController{
 		$role = $this->session->get('role_id');
 		$email = $this->session->get('email');
 	
-
 		$data = [
 		'title' => 'Ubah Sandi',
 		'nama_menu_utama' => 'Profil',
-		'user' 	=> 	$this->model_user->select('user.id as id_user, user.nama as nama, surel as email, telepon, gambar, alamat, role.nama as role')->asArray()
-						->join('role', 'role.id = user.role_id')
+		'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
 						->where('surel', $email)
 						->first(),
 		'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
@@ -49,32 +47,28 @@ class Sandi extends BaseController{
 
 	public function ubah(){
 
-
 		if(!$this->validate([
 			'katasandi_sebelum' => [
 				'label'  => 'Kata sandi sebelum',
 				'rules'  => 'required|trim',
 				'errors' => [
-					'required' => 'Harus diisi harus diisi!'
+					'required' => 'Harus diisi!'
 
 				]
 			],
 			'katasandi_baru' => [
 				'label'  => 'Sandi Baru',
-				'rules'  => 'required|trim|min_length[6]|matches[katasandi_baru1]',
+				'rules'  => 'required|min_length[8]',
 				'errors' => [
 					'required' => 'Harus diisi!',
-					'matches' => '',
 					'min_length' => 'Terlalu pendek!'
 				]
 			],
 			'katasandi_baru1' => [
 				'label'  => 'Sandi Ulangi',
-				'rules'  => 'required|trim|min_length[6]|matches[katasandi_baru]',
+				'rules'  => 'matches[katasandi_baru]',
 				'errors' => [
-					'required' => 'Harus diisi!',
 					'matches' => 'Harus sesuai dengan kata sandi baru!',
-					'min_length' => ''
 				]
 			]
 

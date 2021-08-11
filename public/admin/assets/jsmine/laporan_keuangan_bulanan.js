@@ -17,6 +17,30 @@
 
 $(document).ready(function () {
 
+	$('#tombol-tambah').click(function () {
+		$('#modal-muncul').modal('show');
+  
+	 });
+
+
+	 $('#tambah-input').click(function () {
+
+		tampil = `<div class="form-group col-lg-6">
+					<label>Nama Pengeluaran</label>
+					<input type="text" name="nama_pengeluaran[]" class="form-control"></input>
+				</div>
+				<div class="form-group col-lg-6">
+					<label>Total Pengeluaran</label>
+					<input type="number" name="total_pengeluaran[]" class="form-control"></input>
+				</div>`;
+		
+
+		$('#tampil-input').append(tampil);
+		
+  
+	 });
+  
+
 
     $('#cari_bulan').datepicker({
 		format: "mm",

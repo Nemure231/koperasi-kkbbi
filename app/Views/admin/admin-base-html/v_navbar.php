@@ -11,7 +11,7 @@
         </form>
         <ul class="navbar-nav navbar-right">
           <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-            <img alt="image" src="<?php echo base_url('admin/assets/profile').'/'. $user['gambar']; ?>" class="rounded-circle mr-1">
+            <img alt="image" src="<?php echo base_url('admin/assets/profile').'/'. 'default.png'; ?>" class="rounded-circle mr-1">
             <div class="d-sm-none d-lg-inline-block namo"><?php echo $user['nama'];  ?></div></a>
             <div class="dropdown-menu dropdown-menu-right">
               <a href="<?php echo base_url().'/pengguna' ?>" class="dropdown-item has-icon">
@@ -26,12 +26,12 @@
       </nav>
 
 
-         <!-- Modal -->
+<!-- Modal -->
 <div class="modal fade" id="modal-logout" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div id="judbuk" class="modal-header">
-        <h5 class="modal-title text-light" id="judulBukuHapus"></h5>
+        <h5 class="modal-title text-danger"></h5>
         <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true"><i style="font-size: 24px;" class="fas fa-10x fa-times"></i></span>
         </button>
@@ -44,9 +44,12 @@
               <div class="card-body">
                 <div class="empty-state" data-height="80">
                   <div class="empty-state-icon bg-danger">
-                  <i class="fa fa-power-off"></i>
+                    <i class="fas fa-question"></i>
                   </div>
-                  <h2>Yakin ingin keluar?</h2>
+                  <h2>Yakin ingin logout?</h2>
+                  <p class="lead">
+                   
+                  </p>
                 </div>
               </div>
             </div>
@@ -55,13 +58,14 @@
 
       </div>
       <div class="modal-footer">
-           <form method="POST" action="<?php echo base_url().'/logout' ?>" accept-charset="utf-8">
-           <?php echo csrf_field(); ?>
 
-        <!-- <a href="<//?php echo base_url().'/logout' ?>" class="btn btn-block btn-danger"><h6>Ya!</h6></a> -->
-        ,<button type="submit" class="btn btn-block btn-danger">Ya!</button>
-          </form>
-        
+
+        <form method="POST" action="<?php echo base_url().'/logout' ?>" class="btn btn-block" accept-charset="utf-8">
+           <?php echo csrf_field(); ?>
+          
+          <button type="submit" class="btn btn-danger">Ya!</button>
+</form>
+
       </div>
 
     </div>

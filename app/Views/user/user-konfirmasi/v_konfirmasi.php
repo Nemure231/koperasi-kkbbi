@@ -80,14 +80,14 @@
       <?php endif; ?>
 
       <?php if($status_pendaftaran['status'] == 1): ?>
-      <div class="col-12 col-md-6 col-lg-8">
+      <div class="col-12 col-md-8 col-lg-8">
         <div class="card card-primary">
           <div class="card-header">
             <h4>Unggah foto bukti transfer</h4>
           </div>
           <div class="card-body">
             <div class="row d-flex justify-content-center">
-              <div class="col-lg-12 mb-3">
+              <div class="col-12 mb-3">
               <?php if($status_pendaftaran['bukti'] == NULL): ?>
               Setelah Anda berhasil mengunggah bukti transfer, Anda tidak dapat mengganti pilihan konfirmasi.
               <?php endif; ?>
@@ -105,7 +105,7 @@
               </div>
               
              
-              <div class="col-lg-6 mb-3">
+              <div class="col-6">
                 <form action="<?php echo base_url().'/konfirmasi/unggah-bukti' ?>" class="mb-2" enctype="multipart/form-data" method="post"
                 accept-charset="utf-8">
                 <?php echo csrf_field(); ?>
@@ -171,7 +171,7 @@
         </div>
       </div>
       <?php if($status_pendaftaran['bukti'] == NULL): ?>
-      <div class="col-12 col-md-6 col-lg-4">
+      <div class="col-md-4 col-lg-4">
         <div class="card card-primary">
           <div class="card-header">
             <h4 class="text-right">Ganti pilihan konfirmasi
@@ -213,7 +213,7 @@
 
       </div>
       <?php else: ?>
-      <div class="col-lg-4">
+      <div class="col-lg-4 col-md-4">
         <div class="card card-primary">
           <div class="card-header">
             <h4 class="text-right">Informasi

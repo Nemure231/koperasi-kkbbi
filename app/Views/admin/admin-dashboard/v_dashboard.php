@@ -33,7 +33,7 @@
 
               </div>
               <div class="card-footer text-right">
-                <a href="<?php echo base_url().'/laporan/masuk/harian' ?>">Lihat selengkapnya &rarr;</a>
+                <a href="<?php echo base_url().'/laporan/masuk' ?>">Lihat selengkapnya &rarr;</a>
               </div>
             </div>
           </div>
@@ -58,7 +58,7 @@
                   ?>
               </div>
               <div class="card-footer text-right">
-                <a href="<?php echo base_url().'/laporan/masuk/bulanan' ?>">Lihat selengkapnya &rarr;</a>
+                <a href="<?php echo base_url().'/laporan/masuk' ?>">Lihat selengkapnya &rarr;</a>
               </div>
             </div>
           </div>
@@ -85,7 +85,7 @@
                 ?>
               </div>
               <div class="card-footer text-right">
-                <a href="<?php echo base_url().'/laporan/masuk/tahunan' ?>">Lihat selengkapnya &rarr;</a>
+                <a href="<?php echo base_url().'/laporan/masuk' ?>">Lihat selengkapnya &rarr;</a>
               </div>
 
             </div>
@@ -96,18 +96,7 @@
           <div class="card">
             <div class="card-header">
               <h4>Statistik Summary Barang Masuk</h4>
-              <div class="card-header-action">
-                     
-                      <div class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle">Lihat selengkapnya</a>
-                        <div class="dropdown-menu">
-                          <a href="<?php echo base_url().'/laporan/summary/tanggal' ?>" class="dropdown-item has-icon"><i class="fas fa-calendar-week"></i>Summary Tanggal</a>
-                          <a href="<?php echo base_url().'/laporan/summary/bulan' ?>" class="dropdown-item has-icon"><i class="fas fa-calendar-alt"></i>Summary Bulan</a>
-                          <a href="<?php echo base_url().'/laporan/summary/tahun' ?>" class="dropdown-item has-icon"><i class="far fa-calendar-alt"></i>Summary Tahun</a>
-                        </div>
-                      </div>
-                    </div>
-            </div>
+              </div>
             <div class="card-body">
               <ul class="nav nav-pills" id="myTab3" role="tablist">
                 <li class="nav-item">

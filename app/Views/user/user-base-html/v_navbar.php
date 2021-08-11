@@ -2,7 +2,7 @@
     <div class="main_menu">
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container box_1620">
-          <a class="navbar-brand logo_h" href="<?php echo base_url().'/' ?>"><img style="width: 80px; height: 80px; object-fit: cover;" src="<?php echo base_url('user/assets/logo').'/'. 'kkbbi.png' ?>" alt=""></a>
+          <a class="navbar-brand logo_h" href="<?php echo base_url().'/' ?>"><img style="width: 80px; height: 80px; object-fit: cover;" src="<?php echo base_url('admin/assets/toko').'/'. $toko['logo_toko'] ?>" alt=""></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -23,6 +23,16 @@
                     echo 'active';
                   }elseif($title == 'Kategori Produk'){
                     echo 'active';
+                  }elseif($title == 'Detail Kategori'){
+                    echo 'active';
+                  }elseif($title == 'Merek Produk'){
+                    echo 'active';
+                  }elseif($title == 'Detail Merek'){
+                    echo 'active';
+                  }elseif($title == 'Penyuplai Produk'){
+                    echo 'active';
+                  }elseif($title == 'Detail Penyuplai'){
+                    echo 'active';
                   }
                 
                 
@@ -33,13 +43,15 @@
                   aria-expanded="false">Produk</a>
                 <ul class="dropdown-menu">
                   <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/produk' ?>">Daftar Produk</a>                 
-                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/jenis' ?>">Kategori Produk</a>
+                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/kategori' ?>">Kategori Produk</a>
+                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/merek' ?>">Merek Produk</a>
+                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/penyuplai' ?>">Penyuplai Produk</a>
                     
                 </ul>
 							</li>
 
-              <li class="nav-item submenu dropdown 
-                <?php 
+              <!-- <li class="nav-item submenu dropdown 
+                </?php 
                   if($title == 'Informasi'){
                     echo 'active';
                   }elseif($title == 'Tentang Kami'){
@@ -51,10 +63,10 @@
                 <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                   aria-expanded="false">Informasi</a>
                 <ul class="dropdown-menu">
-                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/tantang-kami' ?>">Tantang Kami</a>                 
-                  <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/lokasi' ?>">Lokasi</a>
+                  <li class="nav-item"><a class="nav-link" href="</?php echo base_url().'/tantang-kami' ?>">Tantang Kami</a>                 
+                  <li class="nav-item"><a class="nav-link" href="</?php echo base_url().'/lokasi' ?>">Lokasi</a>
                 </ul>
-							</li>
+							</li> -->
               
               
               
@@ -109,7 +121,7 @@
                   
                   ">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                      aria-expanded="false"><img alt="image" src="<?php echo base_url('admin/assets/profile').'/'. $user['gambar']; ?>" style="height: 45px; width: 45px;" class="rounded-circle mr-1"></a>
+                      aria-expanded="false"><img alt="image" src="<?php echo base_url('admin/assets/profile').'/'. 'default.png'; ?>" style="height: 45px; width: 45px;" class="rounded-circle mr-1"></a>
                     
                     <ul class="dropdown-menu">
                       <li class="nav-item"><a class="nav-link" href="<?php echo base_url().'/profil'?>"><i class="ti-user"></i> <?php echo $user['nama']; ?></a>

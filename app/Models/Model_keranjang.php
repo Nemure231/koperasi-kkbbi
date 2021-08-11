@@ -17,25 +17,33 @@ class Model_keranjang extends Model{
 
     public function TambahKeranjangAdmin(){
 
+        $barang_id = $this->request->getPost('k_barang_id');
+
+        if($barang_id == 5){
+            $harga = $this->db->table('barang')
+                ->select('harga_anggota as harga')
+                ->where('id', $barang_id)->get()
+                ->getRowArray();
+        }else{
+            $harga = $this->db->table('barang')
+            ->select('harga_anggota as harga')
+            ->where('id', $barang_id)->get()
+            ->getRowArray();
+        }
+
         $id = $this->session->get('id_user');
-
         $qty = $this->request->getPost('k_qty');
-
         $remmin = str_replace("-", "", $qty);
         $remplus = str_replace("+", "", $remmin);
-		
-        $bukuid = $this->request->getPost('k_barang_id');
-        //$roleid = $this->request->getPost('k_role_id');
         $harga = $this->request->getPost('k_harga_barang');
 		$random = rand('1', '1000000000');
 		$data = array(
-			'barang_id' => $bukuid,
+			'barang_id' => $barang_id,
             'qty' =>  $remplus,
             'harga'=> $harga,
             'user_id' => $id,
-			'kode' => ''.$random.'' . ''.$id.'' . ''.$bukuid.''
+			'kode' => ''.$random.'' . ''.$id.'' . ''.$barang_id.''
         );
-        $status = false;
     
         $this->db->transStart();
         $builder = $this->db->table('keranjang');
@@ -43,22 +51,9 @@ class Model_keranjang extends Model{
 
         $qty = $data['qty'];
         $idb = $data['barang_id'];
-
-        $qtyesc = $this->db->escapeString($qty);
-        $idbesc = $this->db->escapeString($idb);
-
-    
-        $stok = $this->db->query("update barang set stok=stok-'$qtyesc' where id='$idbesc'");
-        //$escape = $this->db->escapeString($stok);
+        $stok = $this->db->query("update barang set stok=stok-'$qty' where id='$idb'");
         $this->db->transComplete();
 
-        // $arr = array('success' => $status, 'data' => '');
-        // if($data){
-        //    $status = true;
-        //    $this->session->setFlashdata('pesan_pembelian', 'Produk berhasil ditambahkan ke keranjang!');
-        //    return $arr = array('status' => $status, 'data' => $data);
-        // }
-        
     }
 
     public function TambahKeranjangAdminQr(){

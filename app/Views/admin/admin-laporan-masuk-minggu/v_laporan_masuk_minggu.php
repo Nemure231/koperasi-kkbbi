@@ -31,44 +31,7 @@
             <?php echo csrf_field(); ?>
               <div class="row">
                 <div class="col-lg-6 mb-3">
-                  <div class="row">
-                    <div class="col-lg-12">
-                    <div class="section-title mt-0">Petunjuk</div>  
-                  </div>
-                    <div class="col-6">
-                      <div class="list-group" id="list-tab" role="tablist">
-                        <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
-                          href="#list-home" role="tab">Minggu pertama</a>
-                        <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
-                          href="#list-profile" role="tab">Minggu Kedua</a>
-                        <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list"
-                          href="#list-messages" role="tab">Minggu Ketiga</a>
-                        <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list"
-                          href="#list-settings" role="tab">Minggu Keempat</a>
-                      </div>
-                    </div>
-                    <div class="col-6 text-justify">
-                      <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active" id="list-home" role="tabpanel"
-                          aria-labelledby="list-home-list">
-                          Jika ingin melihat data minggu pertama, pilihlah tanggal 1 sampai 7
-                        </div>
-                        <div class="tab-pane fade" id="list-profile" role="tabpanel"
-                          aria-labelledby="list-profile-list">
-                          Jika ingin melihat data minggu pertama, pilihlah tanggal 8 sampai 14
-                        </div>
-                        <div class="tab-pane fade" id="list-messages" role="tabpanel"
-                          aria-labelledby="list-messages-list">
-                          Jika ingin melihat data minggu pertama, pilihlah tanggal 15 sampai 21
-                        </div>
-                        <div class="tab-pane fade" id="list-settings" role="tabpanel"
-                          aria-labelledby="list-settings-list">
-                          Jika ingin melihat data minggu pertama, pilihlah tanggal 22 sampai 28
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
+             
 
                 </div>
                 <div class="col-lg-6">
@@ -105,7 +68,7 @@
                 </div>
                 <div class="col-8">
 
-                  <h3 class="text-center">Laporan Barang Masuk Mingguan</h3>
+                  <h3 class="text-center">Laporan Riwayat Barang Masuk</h3>
                   <h3 class="text-center"><?php echo $toko['nama_toko']; ?></h3>
                   <h5 class="text-center"><?php echo $toko['alamat_toko']; ?></h5>
                   <h5 class="text-center mb-5">HP: <?php echo $toko['telepon_toko']; ?></h5>

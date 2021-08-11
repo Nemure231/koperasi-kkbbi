@@ -30,12 +30,9 @@ class Pendaftar extends BaseController{
         $data = [        
             'title' => 'Pendaftar',
             'nama_menu_utama' => 'Pendaftaran',
-            'user' 	=> 	$this->model_user->select('user.id as id_user,
-                user.nama as nama, surel as email,
-                telepon, gambar, alamat, role.nama as role')->asArray()
-				->join('role', 'role.id = user.role_id')
-				->where('surel', $email)
-				->first(),
+            'user' 	=> 	$this->model_user->select('user.nama as nama')->asArray()
+            ->where('surel', $email)
+            ->first(),
             'menu' 	=> 	$this->model_user_menu->select('id_menu, menu')->asArray()
                 ->join('user_access_menu', 'user_access_menu.menu_id = user_menu.id_menu')
                 ->where('user_access_menu.role_id =', $role)
@@ -89,10 +86,13 @@ class Pendaftar extends BaseController{
     public function konfirm_online(){
         if(!$this->validate([
             'biaya' => [
-                'rules'  => 'required|numeric|greater_than[0]|greater_than_equal_to[100000]',
+                'rules'  => 'required|numeric|alpha_numeric|greater_than[0]|greater_than_equal_to[100000]',
                 'errors' => [
                 'required' => 'Jumlah uang harus disi!',
-                'numeric' =>  'Jumlah uang harus angka!'
+                'greater_than' => 'Jumlah uang harus disi!',
+                'greater_than_equal_to' => 'Jumlah uang kurang!',
+                'numeric' =>  'Jumlah uang harus angka!',
+                'alpha_numeric' =>  'Jumlah uang harus angka!',
                 ]
             ]
             
@@ -113,12 +113,25 @@ class Pendaftar extends BaseController{
         ->join('user', 'user.id = penyuplai.user_id') 
         ->first();
 
-        $this->_sendEmail($pendaftaran);
+        $this->_sendEmail($pendaftaran, 'kuitansi');
         $this->session->setFlashdata('pesan_sukses', 'Transaksi berhasil disimpan!');
         return redirect()->to(base_url('/fitur/pendaftar'));
     }
 
-    public function _sendEmail($pendaftaran){
+
+    public function beritahu(){
+        $id_user = $this->request->getPost('id_user_beritahu');
+        $surel = $this->model_user->select('surel, nama')->asArray()->where('id', $id_user)->first();
+        $data = [
+            'nama' => $surel['nama'],
+            'surel' => $surel['surel'],
+            'pesan' => htmlspecialchars($this->request->getPost('pesan'), ENT_QUOTES),
+        ];
+        $this->_sendEmail($data, 'pesan');
+        $this->session->setFlashdata('pesan_sukses', 'Pemberitahuan berhasil dikirim!');
+        return redirect()->to(base_url('/fitur/pendaftar'));
+    }
+    public function _sendEmail($pendaftaran, $tipe){
 		$config =[
             'protocol'  => 'smtp',
             'SMTPHost' => 'smtp.gmail.com',
@@ -142,8 +155,16 @@ class Pendaftar extends BaseController{
 		$this->email->initialize($config);
         $this->email->setFrom('karol.web980@gmail.com', 'Karol Web');
         $this->email->setTo($pendaftaran['surel']);
-        $this->email->setSubject('KKBBI: Kuitansi');
-        $this->email->setMessage(email_kuitansi_pendaftar($pendaftaran, $pembayaran, $toko));
+        if($tipe == 'kuitansi'){
+            $this->email->setSubject('KKBBI: Kuitansi');
+            $this->email->setMessage(email_kuitansi_pendaftar($pendaftaran, $pembayaran, $toko));
+        }
+
+        if($tipe == 'pesan'){
+            $this->email->setSubject('KKBBI: Konfirmasi');
+            $this->email->setMessage(email_notifikasi($pendaftaran, $pendaftaran['pesan'], $toko, 'Konfirmasi'));
+        }
+
         if ($this->email->send()) {
             return true;
 		}else{
