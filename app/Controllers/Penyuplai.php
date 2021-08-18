@@ -77,9 +77,10 @@ class Penyuplai extends BaseController
         
 	    if(!$this->validate([
 			'nama' => [
-				'rules'  => 'required',
+				'rules'  => 'required|is_unique[user.nama]',
 				'errors' => [
-					'required' => 'Nama harus diisi!'
+					'required' => 'Nama penyuplai harus diisi!',
+                    'is_unique' => 'Nama penyuplai sudah ada!'
 				]
 			],
 			'telepon' => [
@@ -108,7 +109,7 @@ class Penyuplai extends BaseController
 				]
 			],
 			'no_ktp' => [
-				'rules'  => 'required|numeric|greater_than[0]',
+				'rules'  => 'required|numeric|greater_than[0]|is_unique[penyuplai.no_ktp]',
 				'errors' => [
 				'required' => 'NIK harus diisi!',
 				'numeric' => 'NIK harus angka!',
@@ -133,10 +134,9 @@ class Penyuplai extends BaseController
 				]
 			],
 			'no_rekening' => [
-				'rules'  => 'required_with[atas_nama,bank]|numeric|permit_empty|greater_than[0]|numeric',
+				'rules'  => 'required_with[atas_nama,bank]|numeric',
 				'errors' => [
 				'numeric' => 'Harus angka!',
-				'greater_than' => 'Tidak boleh 0!',
 				'required_with' => 'No rekening harus diisi saat Atas Nama atau Bank ikut diisi!'
 				
 				]
@@ -219,11 +219,10 @@ class Penyuplai extends BaseController
 
             if(!$this->validate([
                 'edit_nama' => [
-                    'label'  => 'Nama Supplier',
                     'rules'  =>  'required|is_unique[user.nama,id,'.$id_user.']',
                     'errors' => [
-                    'required' => 'Nama supplier harus diisi!',
-                    'is_unique' => 'Nama supplier sudah ada!'
+                    'required' => 'Nama penyuplai harus diisi!',
+                    'is_unique' => 'Nama penyuplai sudah ada!'
                     ]
                 ],
                 'edit_telepon' => [
@@ -239,7 +238,7 @@ class Penyuplai extends BaseController
                     'rules'  => 'required|valid_email|is_unique[user.surel,id,'.$id_user.']',
                     'errors' => [
                         'required' => 'Surel harus disi!',
-                        'valid_emsil' => 'Surel harus berformat surel!',
+                        'valid_emsil' => 'Format surel salah!',
                         'is_unique' => 'Surel itu sudah pernah didaftarkan!'
                     
                     ]
@@ -252,7 +251,7 @@ class Penyuplai extends BaseController
                     ]
                 ],
                 'edit_no_ktp' => [
-                    'rules'  => 'required|numeric|greater_than[0]',
+                    'rules'  => 'required|numeric|greater_than[0]|is_unique[penyuplai.no_ktp,id,'.$id_user.']',
                     'errors' => [
                     'required' => 'NIK harus diisi!',
                     'numeric' => 'NIK harus angka!',
@@ -276,10 +275,9 @@ class Penyuplai extends BaseController
                     ]
                 ],
                 'edit_no_rekening' => [
-                    'rules'  => 'required_with[edit_atas_nama,edit_bank]|numeric|permit_empty|greater_than[0]|numeric',
+                    'rules'  => 'required_with[edit_atas_nama,edit_bank]|numeric',
                     'errors' => [
                     'numeric' => 'Harus angka!',
-                    'greater_than' => 'Tidak boleh 0!',
                     'required_with' => 'No rekening harus diisi saat Atas Nama atau Bank ikut diisi!'
                     
                     ]
@@ -325,7 +323,12 @@ class Penyuplai extends BaseController
     public function hapus(){
 
         $id_supplier = $this->request->getPost('id_supplierH');
+
+        $id_user = $this->model_penyuplai->select('user_id')->asArray()
+            ->where('id', $id_supplier)
+            ->first();
         $this->model_penyuplai->delete($id_supplier);
+        $this->model_user->delete($id_user);
         $this->session->setFlashdata('pesan_hapus_supplier', 'Supplier berhasil dihapus!');
         return redirect()->to(base_url('/suplai/penyuplai'));
         

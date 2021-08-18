@@ -178,8 +178,9 @@ class Submenu extends BaseController{
                 $mu = $menu_utama;
             }else{
                 $utama_data= [
+                    'menu_id' => $me,
                     'nama_menu_utama' => $menu_utama,
-                    'menu_id' => $me
+                    'ikon_menu_utama' => ''
                 ];
                 $this->model_menu_utama->insert($utama_data);
                 $mu = $this->db->insertID();

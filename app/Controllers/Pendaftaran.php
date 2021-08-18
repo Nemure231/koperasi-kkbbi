@@ -117,7 +117,7 @@ class Pendaftaran extends BaseController{
 				]
 			],
 			'no_rekening' => [
-				'rules'  => 'required_with[atas_nama,bank]|numeric|permit_empty|greater_than[0]|numeric',
+				'rules'  => 'numeric|required_with[atas_nama,bank]|greater_than[0]',
 				'errors' => [
 				'numeric' => 'Harus angka!',
 				'greater_than' => 'Harus diisi!',
@@ -197,7 +197,6 @@ class Pendaftaran extends BaseController{
 		Silakan periksa surel anda untuk melakukan verifikasi!</div>');
 		$this->_sendEmail($user, $token, $pendaftaran, 'verify');
 		return redirect()->to(base_url('pendaftaran'));
-	
 	}
 
 	public function _sendEmail($user, $token, $pendaftaran, $tipe){

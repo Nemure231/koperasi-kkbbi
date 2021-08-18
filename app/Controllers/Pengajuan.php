@@ -323,9 +323,7 @@ class Pengajuan extends BaseController{
         $this->email->setFrom('karol.web980@gmail.com', 'Karol Web');
         $this->email->setTo($sekretaris['surel']);
 		$this->email->setSubject('KKBBI: Pengajuan - '.$anggota['nama']);
-		$this->email->setMessage(email_notifikasi($sekretaris,
-			''.$anggota['nama'].' baru saja mengajukan barang!',
-			$toko, 'Pengajuan'));
+		$this->email->setMessage(email_notifikasi($sekretaris,''.$anggota['nama'].' baru saja mengajukan barang!',$toko, 'Pengajuan'));
       
         if ($this->email->send()) {
             return true;

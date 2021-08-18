@@ -287,7 +287,8 @@ class Kasir extends BaseController{
                 barang.id as id_barang, barang.stok as stok_barang,
                 satuan.nama as nama_satuan, merek.nama as nama_merek')
                 ->select('harga_konsumen as harga')->asArray()
-                ->where('barang.id >', 0)
+                // ->where('barang.id >', 0)
+                ->where('barang.status', 1)
                 ->where('harga_konsumen >', 0)
                 ->where('kode', $kode_barang)
                 ->join('satuan', 'satuan.id = barang.satuan_id')
@@ -298,7 +299,8 @@ class Kasir extends BaseController{
                 barang.id as id_barang, barang.stok as stok_barang,
                 satuan.nama as nama_satuan, merek.nama as nama_merek')
                 ->select('harga_anggota as harga')->asArray()
-                ->where('barang.id >', 0)
+                // ->where('barang.id >', 0)
+                ->where('barang.status', 1)
                 ->where('harga_anggota >', 0)
                 ->where('kode', $kode_barang)
                 ->join('satuan', 'satuan.id = barang.satuan_id')

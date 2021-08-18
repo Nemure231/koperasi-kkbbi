@@ -219,7 +219,7 @@
 
               <div class="form-group col-sm-12 col-md-12 col-lg-6">
                 <label>No Rekening</label>
-                <input type="number" class="form-control" name="no_rekening"
+                <input min="0" type="number" class="form-control" name="no_rekening"
                   value="<?php echo set_value('no_rekening', ''); ?>">
               </div>
 
@@ -340,7 +340,7 @@
 
               <div class="form-group col-sm-12 col-md-12 col-lg-6">
                 <label>No Rekening</label>
-                <input type="number" class="form-control" name="edit_no_rekening" id="edit_no_rekening">
+                <input min="0" type="number" class="form-control" name="edit_no_rekening" id="edit_no_rekening">
               </div>
 
               <div class="form-group col-sm-12 col-md-12 col-lg-6">

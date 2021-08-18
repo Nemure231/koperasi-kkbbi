@@ -11,7 +11,7 @@ class Model_barang_masuk extends Model{
     protected $table = 'barang_masuk';
     // protected $primaryKey = 'id_barang_masuk';
     protected $allowedFields = [
-        'barang_id', 'penyuplai_id', 'pengajuan_id', 'jumlah', 
+        'user_id','barang_id', 'penyuplai_id', 'pengajuan_id', 'jumlah', 
         'harga_pokok', 'total_harga_pokok','status', 'tanggal'
     ];
 
@@ -81,6 +81,7 @@ class Model_barang_masuk extends Model{
         $builder->join('penyuplai', 'penyuplai.id = barang_masuk.penyuplai_id');
         $builder->join('user', 'user.id = penyuplai.user_id');
         $builder->join('barang', 'barang.id = barang_masuk.barang_id');
+        $builder->where('barang_masuk.status', 1);
         $builder->where('DATE(barang_masuk.tanggal)>=', $awal_minggu);
         $builder->where('DATE(barang_masuk.tanggal)<=', $akhir_minggu);
         $query = $builder->get()->getResultArray();

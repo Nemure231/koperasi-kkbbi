@@ -90,6 +90,7 @@ class Model_detail_transaksi extends Model{
         $builder->join('penyuplai', 'penyuplai.id = detail_transaksi.penyuplai_id');
         $builder->join('user', 'user.id = penyuplai.user_id');
         $builder->join('role', 'role.id = user.role_id');
+        $builder->where('detail_transaksi.status', 1);
         $builder->where('user.role_id', 5);
         $builder->orWhere('user.role_id', 4);
         $builder->where('DATE(detail_transaksi.tanggal)>=', $awal_minggu);

@@ -107,7 +107,7 @@
 
                     <div class="form-group col-lg-4 col-md-4 col-sm-12">
                       <label>No Rekening<small class="text-info"> (Opsional)</small></label>
-                      <input type="text" name="no_rekening" id="no_rekening" class="form-control <?php echo ($validation->hasError('no_rekening')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('no_rekening', '', TRUE); ?>" >
+                      <input type="number" name="no_rekening" id="no_rekening" class="form-control <?php echo ($validation->hasError('no_rekening')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('no_rekening', '', TRUE); ?>" >
                      
                       <div class="invalid-feedback">
                         <?php echo $validation->showError('no_rekening'); ?>
@@ -120,8 +120,8 @@
                         <select class="custom-select <?php echo ($validation->hasError('bank')) ? 'is-invalid' : ''; ?>" name="bank" value="<?php echo set_value('bank', '', TRUE); ?>" >
                           <option value="">--Pilih--</option>
                           <option value="BCA">BCA</option>
-                          <option value="BCA">BRI</option>
-                          <option value="BCA">MANDIRI</option>
+                          <option value="BRI">BRI</option>
+                          <option value="MANDIRI">MANDIRI</option>
 
                           
                         </select>

@@ -154,7 +154,7 @@
                           <td></td>
                         </tr>
                         <tr>
-                          <th scope="row">Pendaftarn</th>
+                          <th scope="row">Pendaftaran</th>
                           <?php $pendaftar = $session->getFlashdata('pesan_data')['total_pendaftaran'] ?? 0; ?>
                           <td><?php echo 'Rp.'.number_format($pendaftar, 0,",","."); ?></td>
                           <td></td>
