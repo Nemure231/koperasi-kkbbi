@@ -101,12 +101,14 @@
                   <?php $stokm = $session->getFlashdata('pesan_data')['stok'] ?? $stok; ?>
 
                     <?php if($stokm):  ?>
+                      <input type="hidden" id="csrf_riwayat_masuk" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+                      <input type="hidden" id="csrf_riwayat_keluar" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                       <table class="table">
                       <thead>
                         <tr>
                           <th scope="col">#</th>
                           <th scope="col">Nama</th>
-                          <th scope="col">Stok Sebelum</th>
+                          <th scope="col">Stok Masuk</th>
                           <th scope="col">Stok Terjual</th>
                           <th scope="col">Sisa</th>
                         </tr>
@@ -120,8 +122,8 @@
                           <?php  echo $i;?>
                           </th>
                           <td><?php  echo $s['nama'];?></td>
-                          <td><?php  echo $s['stok_sebelum'];?></td>
-                          <td><?php  echo $s['stok_terjual'];?></td>
+                          <td><a href="javascript:void(0)" data-id_barang="<?php echo $s['id_barang'];?>" class="text-dark tombol-lihat-riwayat-masuk"><?php echo $s['stok_sebelum'];?></a></td>
+                          <td><a href="javascript:void(0)" data-id_barang="<?php echo $s['id_barang'];?>" class="text-dark tombol-lihat-riwayat-keluar"><?php echo $s['stok_terjual'];?></a></td>
                           <?php  $sisa = $s['stok_sebelum'] - $s['stok_terjual'];?>
                           <td style="<?php echo ($sisa == 0) ? ' -webkit-print-color-adjust: exact; background-color: #fc544b !important; color: white;' : ''; ?>"><?php  echo $sisa;?></td>
 
@@ -170,4 +172,84 @@
 
     </div>
   </section>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-lihat-riwayat-masuk" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light">Riwayat masuk</h5>
+        <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    
+      <div class="modal-body">
+        <div class="row">
+
+        <table class="table" id="tabel-riwayat-masuk">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Stok</th>
+                          <th scope="col">Tanggal Masuk</th>
+                          
+                        </tr>
+                      </thead>
+                      <tbody id="tampil-riwayat-masuk">
+                    
+                       
+                       
+                      </tbody>
+                    </table>
+         
+
+        </div>
+      </div>
+      <div class="modal-footer">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-lihat-riwayat-keluar" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light">Riwayat keluar</h5>
+        <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    
+      <div class="modal-body">
+        <div class="row">
+
+        <table class="table" id="tabel-riwayat-keluar">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Stok</th>
+                          <th scope="col">Tanggal keluar</th>
+                          
+                        </tr>
+                      </thead>
+                      <tbody id="tampil-riwayat-keluar">
+                    
+                       
+                       
+                      </tbody>
+                    </table>
+         
+
+        </div>
+      </div>
+      <div class="modal-footer">
+
+      </div>
+    </div>
+  </div>
 </div>

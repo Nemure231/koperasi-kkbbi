@@ -14,7 +14,6 @@ use App\Models\Model_barang_masuk;
 class LaporanStok extends BaseController{
 
     public function __construct(){
-
         $this->model_user_menu = new Model_user_menu();
 		$this->model_user = new Model_user();
         $this->model_barang =  new Model_barang();
@@ -36,8 +35,8 @@ class LaporanStok extends BaseController{
         $role = $this->session->get('role_id');
         $email = $this->session->get('email');
 
-        $data = $this->model_barang->select('barang.nama as nama, barang.id as id_barang, stok as stok_sebelum')
-        // ->selectSUM('barang_masuk.jumlah', 'stok_sebelum')
+        $data = $this->model_barang->select('barang.nama as nama, barang.id as id_barang')
+        ->selectSUM('barang_masuk.jumlah', 'stok_sebelum')
         ->asArray()
         ->where('barang_masuk.status', 1)
         ->where('barang.status', 1)
@@ -123,6 +122,31 @@ class LaporanStok extends BaseController{
             'admin/admin-laporan-stok/v_js_laporan_stok',
             $data
         );
+    }
+
+    public function stok_masuk(){
+
+        $id_barang = $this->request->getPost('id_barang');
+        $barang=$this->model_barang_masuk->select('barang_masuk.tanggal as tanggal_masuk, barang_masuk.jumlah as stok_masuk')
+            ->asArray()
+            ->where('barang_masuk.barang_id', $id_barang)
+			->where('barang_masuk.status', 1)
+            ->orderBy('barang_masuk.tanggal', 'DESC')
+            ->findAll();
+        echo json_encode(['data' => $barang, 'csrf_hash' => csrf_hash()]);
+    }
+
+    public function stok_keluar(){
+
+        $id_barang = $this->request->getPost('id_barang');
+        $barang=$this->model_transaksi->select('detail_transaksi.tanggal as tanggal_keluar, qty as stok_keluar')
+            ->asArray()
+            ->where('barang_id', $id_barang)
+			->where('status', 1)
+            ->join('detail_transaksi', 'detail_transaksi.id = transaksi.detail_transaksi_id')
+            ->orderBy('tanggal', 'DESC')
+            ->findAll();
+        echo json_encode(['data' => $barang, 'csrf_hash' => csrf_hash()]);
     }
 
     public function cari(){

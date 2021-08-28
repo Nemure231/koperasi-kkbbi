@@ -190,6 +190,8 @@ $routes->group('laporan', function($routes){
 	$routes->post('keuangan-bulanan/tambah', 'LaporanKeuangan::tambah');
 
 	$routes->get('stok', 'LaporanStok::index', ['filter' => 'cek_akses']);
+	$routes->post('stok/stok_masuk', 'LaporanStok::stok_masuk');
+	$routes->post('stok/stok_keluar', 'LaporanStok::stok_keluar');
 	$routes->post('stok/cari', 'LaporanStok::cari');
 
 });

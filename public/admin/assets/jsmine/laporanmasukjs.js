@@ -408,8 +408,6 @@ $(document).ready(function () {
             var idm = barang[i].id_barang;
 
             var rus = `<option value="` + idm + `">` + tambah + `</option>`;
-            self.rules.push(rus);
-            
           });
 
           let pengirim = res.data1;
