@@ -63,6 +63,7 @@ class Role extends BaseController{
                 'class' => 'form-control role'
             ],
         ];
+
 		
         tampilan_admin('admin/admin-role/v_role', 'admin/admin-role/v_js_role', $data);
     }

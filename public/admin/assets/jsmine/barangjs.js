@@ -47,19 +47,23 @@ if (flashData) {
       icon: 'success'
    });
 
-} else if (flashDataSalah) {
+} 
 
-   Swal.fire({
-      title: 'Gagal',
-      hideClass: {
-         popup: 'animate__animated animate__fadeOutUp animate__fast'
-      },
-      html: ' ' + flashDataSalah,
-      icon: 'error'
-   });
+// else if (flashDataSalah) {
 
-   //$('#modalBuku').modal('show');
-} else if (flashDataHapus) {
+//    Swal.fire({
+//       title: 'Gagal',
+//       hideClass: {
+//          popup: 'animate__animated animate__fadeOutUp animate__fast'
+//       },
+//       html: ' ' + flashDataSalah,
+//       icon: 'error'
+//    });
+
+//    //$('#modalBuku').modal('show');
+// }
+
+if (flashDataHapus) {
 
    Swal.fire({
       title: 'Berhasil',
@@ -204,7 +208,6 @@ $(document).ready(function () {
          );
       }
 
-
    });
 
 
@@ -213,13 +216,7 @@ $(document).ready(function () {
    $('#supplier_id').select2({tags: true});
    $('#kategori_id').select2({tags: true});
 
-
-
-
-
-
-
-   $('#swal2-content ul li').css("color", "#dc3545");
+   // $('#swal2-content ul li').css("color", "#dc3545");
 
    $('#tombolTambahBarang').click(function () {
       //$('#btn-simpan').val("tambah-menu");
@@ -280,9 +277,12 @@ $(document).ready(function () {
          tags: true
       });
 
+      localStorage.setItem("simpan_nama_barang", nama_barang);
+
       $('#modalEditBarang').modal('show');
 
    });
+
 
    $('table').on('click', '.tombolHapusBarang', function () {
 
@@ -300,11 +300,40 @@ $(document).ready(function () {
       var qr = $(this).data('qr');
       var getUrl = window.location;
       var baseUrl = getUrl.protocol + "///" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-      // $('#tampil-gambar').attr("src", baseUrl + "/public/admin/assets/barang/" + gambar);
       $('#tampil-qr').attr("src", baseUrl + "/public/admin/assets/qr/" + qr);
       $('#modalLihatGambar').modal('show');
    });
 
- 
+   var create_validation = $('.create-validation').text();
+   if(create_validation != 0){
+      $('#modalTambahBarang').modal('show');
+   }
+
+   var edit_validation = $('.edit-validation').text();
+   if(edit_validation != 0){
+      $('#modalEditBarang').modal('show');
+
+      $('#merek_idE').select2({
+         dropdownParent: $('#modalEditBarang'),
+         tags: true   
+      });
+      $('#satuan_idE').select2({
+         dropdownParent: $('#modalEditBarang'),
+         tags: true
+      });
+      $('#kategori_idE').select2({
+         dropdownParent: $('#modalEditBarang'),
+         tags: true
+      });
+      $('#supplier_idE').select2({
+         dropdownParent: $('#modalEditBarang'),
+         tags: true
+      });
+
+      var nama_barang = localStorage.getItem("simpan_nama_barang");
+      $('#nama_barangE').attr('placeholder', nama_barang);
+      
+
+   }
 
 });

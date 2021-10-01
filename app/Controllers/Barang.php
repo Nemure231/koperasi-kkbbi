@@ -86,111 +86,10 @@ class Barang extends BaseController{
                         ->findAll(),
             'validation' => $this->validation,
             'session' => $this->session,
+            'req_gambar' => $this->request,
             'form_tambah_barang' => ['id' => 'formTambahBarang', 'name'=>'formTambahBarang'],
             'form_edit_barang' =>  ['id' => 'formEditBarang', 'name'=>'formEditBarang'],
             'form_hapus_barang' =>  ['id' => 'formHapusBarang', 'name'=>'formHapusBarang', 'class' => 'btn btn-block'],
-            'input_nama_barang' => [
-                'type' => 'text',
-                'name' => 'nama_barang',
-                'id' => 'nama_barang',
-                'value' => ''.$nama_barang.'',
-                'class' => 'form-control',
-                'autofocus' => ''
-            ],
-            'input_harga_pokok' => [
-                'type' => 'number',
-                'name' => 'harga_pokok',
-                'id' => 'harga_pokok',
-                'value' => ''.$harga_pokok.'',
-                'class' => 'form-control'
-            
-            ],
-            'input_harga_konsumen' => [
-                'type' => 'number',
-                'name' => 'harga_konsumen',
-                'id' => 'harga_konsumen',
-                'value' => ''.$harga_konsumen.'',
-                'class' => 'form-control'
-            
-            ],
-            'input_harga_anggota' => [
-                'type' => 'number',
-                'name' => 'harga_anggota',
-                'id' => 'harga_anggota',
-                'value' => ''.$harga_anggota.'',
-                'class' => 'form-control'
-                
-            ],
-            'input_stok' => [
-                'type' => 'number',
-                'name' => 'stok_barang',
-                'id' => 'stok_barang',
-                'value' => ''.$stok_barang.'',
-                'class' => 'form-control'
-            ],
-            'input_deskripsi' => [
-                'type' => 'number',
-                'name' => 'deskripsi_barang',
-                'id' => 'deskripsi_barang',
-                'value' => ''.$deskripsi_barang.'',
-                'class' => 'form-control',
-                'style' => 'min-height:145px;'
-            ],
-            'hidden_id_barangE' => [
-                'type' => 'hidden',
-                'name' => 'id_barangE',
-                'id' => 'id_barangE',
-                'class' => 'form-control',
-                'autofocus' => ''
-            ],
-            'input_nama_barangE' => [
-                'type' => 'text',
-                'name' => 'nama_barangE',
-                'id' => 'nama_barangE',
-                'class' => 'form-control nama_barangE',
-                'autofocus' => ''
-            ],
-            'hidden_nama_barang_old' => [
-                'type' => 'hidden',
-                'name' => 'nama_barang_old',
-                'id' => 'nama_barang_old',
-                'class' => 'form-control',
-                'autofocus' => ''
-            ],
-            'input_harga_pokokE' => [
-                'type' => 'number',
-                'name' => 'harga_pokokE',
-                'id' => 'harga_pokokE',
-                'class' => 'form-control'
-            
-            ],
-            'input_harga_konsumenE' => [
-                'type' => 'number',
-                'name' => 'harga_konsumenE',
-                'id' => 'harga_konsumenE',
-                'class' => 'form-control'
-            
-            ],
-            'input_harga_anggotaE' => [
-                'type' => 'number',
-                'name' => 'harga_anggotaE',
-                'id' => 'harga_anggotaE',
-                'class' => 'form-control'
-                
-            ],
-            'input_stokE' => [
-                'type' => 'number',
-                'name' => 'stok_barangE',
-                'id' => 'stok_barangE',
-                'class' => 'form-control'
-            ],
-            'input_deskripsiE' => [
-                'type' => 'number',
-                'name' => 'deskripsi_barangE',
-                'id' => 'deskripsi_barangE',
-                'class' => 'form-control',
-                'style' => 'min-height:145px;'
-            ],
             'hidden_id_barangH' => [
                 'type' => 'hidden',
                 'name' => 'id_barangH',
@@ -388,19 +287,14 @@ class Barang extends BaseController{
 
     public function ubah(){
 
-        $old = $this->request->getPost('nama_barang_old');
-        $new = $this->request->getPost('nama_barangE');
 
-        $rules_nama = 'required';
+        $id = $this->request->getPost('id_barangE');
 
-        if($old != $new){
-            $rules_nama =  'required|is_unique[barang.nama]';
-        }
 
             if(!$this->validate([
                 'nama_barangE' => [
                     'label'  => 'Nama Barang',
-                    'rules'  => $rules_nama,
+                    'rules'  =>  'required|is_unique[barang.nama,id,'.$id.']',
                     'errors' => [
                     'required' => 'Nama barang harus diisi!',
                     'is_unique' => 'Nama barang sudah ada!'
@@ -487,7 +381,7 @@ class Barang extends BaseController{
 
 
                 date_default_timezone_set("Asia/Jakarta");
-                $id = $this->request->getPost('id_barangE');
+              
                 $nama_barang = htmlspecialchars($this->request->getPost('nama_barangE'), ENT_QUOTES);
                 
                 

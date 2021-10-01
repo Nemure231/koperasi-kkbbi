@@ -107,7 +107,7 @@
 
                     <div class="form-group col-lg-4 col-md-4 col-sm-12">
                       <label>No Rekening<small class="text-info"> (Opsional)</small></label>
-                      <input type="number" name="no_rekening" id="no_rekening" class="form-control <?php echo ($validation->hasError('no_rekening')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('no_rekening', '', TRUE); ?>" >
+                      <input type="number" name="no_rekening" oninput="this.value = Math.abs(this.value)" id="no_rekening" class="form-control <?php echo ($validation->hasError('no_rekening')) ? 'is-invalid' : ''; ?>" value="<?php echo set_value('no_rekening', 0, TRUE); ?>" >
                      
                       <div class="invalid-feedback">
                         <?php echo $validation->showError('no_rekening'); ?>
