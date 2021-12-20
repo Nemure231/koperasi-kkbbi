@@ -1,3 +1,11 @@
+## Login
+
+web koperasi saat magang
+
+email login; admin@kkbbi.com
+pass login; 12345678
+
+
 # CodeIgniter 4 Application Starter
 
 ## What is CodeIgniter?
